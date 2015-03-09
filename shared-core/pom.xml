@@ -8,7 +8,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>edumon-shared-code</artifactId>
+    <artifactId>edumon-shared-core</artifactId>
     <name>EduMon shared core</name>
 
     <dependencies>
