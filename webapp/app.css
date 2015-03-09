@@ -1,0 +1,55 @@
+html {
+  height: 100%; }
+
+body {
+  background-color: #EEEEEE;
+  height: 100%; }
+
+#screen {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; }
+  #screen #timepanel {
+    height: 100px;
+    display: flex;
+    flex-direction: row; }
+    #screen #timepanel #logo h1 {
+      font-size: 80px;
+      margin: 0px; }
+    #screen #timepanel #timeline {
+      flex-grow: 1; }
+      #screen #timepanel #timeline .progress {
+        border-radius: 5px;
+        height: 40px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        margin-left: 20px;
+        margin-right: 10px; }
+  #screen #maincontainer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row; }
+    #screen #maincontainer #buttonpanel {
+      width: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; }
+      #screen #maincontainer #buttonpanel #playbox, #screen #maincontainer #buttonpanel #actionbox {
+        margin: 0px;
+        text-align: center; }
+        #screen #maincontainer #buttonpanel #playbox a, #screen #maincontainer #buttonpanel #actionbox a {
+          margin: 5px; }
+      #screen #maincontainer #buttonpanel #actionbox {
+        flex-grow: 1; }
+    #screen #maincontainer #centerpanel {
+      flex-grow: 1; }
+    #screen #maincontainer #feedpanel {
+      width: 200px; }
+
+.panel {
+  margin: 5px;
+  background-color: #FFFFFF; }
+
+/*# sourceMappingURL=app.css.map */
