@@ -1,0 +1,83 @@
+html {
+	height: 100%;
+}
+
+body {
+	background-color: #EEEEEE;
+	height: 100%;
+}
+
+$timepanel_height: 100px;
+$timeprogress_height: 40px;
+
+#screen {
+	height: 100%;
+	width:  100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+
+	#timepanel {
+		height: $timepanel_height;
+		display: flex;
+		flex-direction: row;
+
+		#logo {
+			h1 {
+				font-size: $timepanel_height * 0.8;
+				margin: 0px;
+			}
+		}
+
+		#timeline {
+			flex-grow: 1;
+			 
+			.progress {
+				border-radius: 5px;
+				height: $timeprogress_height;
+				margin-top:    ($timepanel_height - $timeprogress_height) / 2;
+				margin-bottom: ($timepanel_height - $timeprogress_height) / 2;
+				margin-left: 20px;
+				margin-right: 10px;
+			}
+		}
+	}
+
+	#maincontainer {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: row;
+
+		#buttonpanel {
+			width:100px;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+
+			#playbox {
+				margin: 0px;
+				text-align: center;
+
+				a {
+					margin: 5px;
+				}
+			}
+
+			#actionbox {
+				@extend #playbox;
+				flex-grow: 1;
+			}
+		}
+		#centerpanel {
+			flex-grow: 1;
+		}
+		#feedpanel {
+			width:200px;
+		}
+	}
+}
+
+.panel {
+	margin: 5px;
+	background-color: #FFFFFF;
+}
