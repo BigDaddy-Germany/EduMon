@@ -14,9 +14,11 @@ import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import org.cubyte.edumon.core.protocol.DisconnectReason;
 import org.cubyte.edumon.core.protocol.ServerConnection;
 import org.cubyte.edumon.core.protocol.message.Packet;
+import org.cubyte.edumon.core.protocol.message.data.SentMessage;
 import org.cubyte.edumon.core.protocol.message.receiver.MessageReceiver;
 
 import javax.net.ssl.SSLContext;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
 
@@ -120,5 +122,20 @@ public class Client
     public ChannelFuture sendMessage(Packet packet)
     {
         return this.connection.sendMessage(packet);
+    }
+
+    public static void main(String[] args)
+    {
+        Client c = new Client();
+
+        try
+        {
+            c.connect(new InetSocketAddress("localhost", 8080));
+            c.sendMessage(Packet.create(new SentMessage("It's me!", "test")));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }

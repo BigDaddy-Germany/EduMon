@@ -55,9 +55,7 @@ public class HandshakeHandler extends SimpleChannelInboundHandler<Object>
         }
         else if (object instanceof Packet)
         {
-            Message message = ((Packet)object).getData();
-
-            this.close(ctx.channel());
+            handleMessage((Packet) object);
         }
     }
 
@@ -112,14 +110,8 @@ public class HandshakeHandler extends SimpleChannelInboundHandler<Object>
         }
 
         System.out.println("User connected: " + ctx.channel().remoteAddress().toString());
-        this.loginTimeout = ctx.executor().schedule(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                close(ctx.channel());
-            }
-        }, 2, TimeUnit.SECONDS);
+
+        ctx.channel().pipeline().remove(this).addLast(new ClientConnection(server, handshaker));
     }
 
     private void close(Channel ch)

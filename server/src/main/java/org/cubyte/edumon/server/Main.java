@@ -16,7 +16,7 @@ public class Main
         TrustManagement.registerTrustManager(new DummyTrustManager());
         Router router = new Router();
         Server server = new Server(router);
-        server.setSslContext(ProtocolUtil.loadSslContext());
+        //server.setSslContext(ProtocolUtil.loadSslContext());
 
         int port = 8080;
         if (args.length > 0)

@@ -5,7 +5,13 @@ import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import org.cubyte.edumon.core.protocol.AbstractConnection;
 import org.cubyte.edumon.core.protocol.DisconnectReason;
+import org.cubyte.edumon.core.protocol.message.Message;
 import org.cubyte.edumon.core.protocol.message.Packet;
+import org.cubyte.edumon.core.protocol.message.data.SentMessage;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ClientConnection extends AbstractConnection
 {
@@ -32,6 +38,11 @@ public class ClientConnection extends AbstractConnection
     @Override
     protected void handleMessage(ChannelHandlerContext ctx, Packet packet)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Message m = packet.getData();
+        if (m instanceof SentMessage)
+        {
+            SentMessage sm = (SentMessage) m;
+            System.out.println(sm.getName() + " -> " + sm.getMessage());
+        }
     }
 }

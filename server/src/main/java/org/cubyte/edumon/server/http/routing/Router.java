@@ -2,7 +2,7 @@ package org.cubyte.edumon.server.http.routing;
 
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponse;
-import org.cubyte.edumon.server.http.ChatRequest;
+import org.cubyte.edumon.server.http.WebRequest;
 import org.cubyte.edumon.server.http.RequestHandler;
 
 import java.util.Iterator;
@@ -43,7 +43,7 @@ public class Router
         return route;
     }
 
-    public HttpResponse execute(ChatRequest request) throws UnknownRouteException
+    public HttpResponse execute(WebRequest request) throws UnknownRouteException
     {
         LinkedList<Route> routeList = this.routes.get(request.getMethod());
         if (routeList == null)

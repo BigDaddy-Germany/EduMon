@@ -8,14 +8,14 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-public class ChatRequest
+public class WebRequest
 {
     private final FullHttpRequest request;
     private final ClientConnection connection;
     private final String path;
     private final Map<String, List<String>> urlParameters;
 
-    public ChatRequest(FullHttpRequest request, ClientConnection connection)
+    public WebRequest(FullHttpRequest request, ClientConnection connection)
     {
         this.request = request;
 
