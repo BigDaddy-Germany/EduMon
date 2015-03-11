@@ -9,6 +9,9 @@ body {
 
 $timepanel_height: 100px;
 $timeprogress_height: 40px;
+$hourdisplay_height: 30px;
+$timeprogress_font: 24px;
+$hourdisplay_font: 24px;
 
 #screen {
 	height: 100%;
@@ -32,13 +35,64 @@ $timeprogress_height: 40px;
 		#timeline {
 			flex-grow: 1;
 			 
-			.progress {
+			#progressdisplay {
 				border-radius: 5px;
 				height: $timeprogress_height;
-				margin-top:    ($timepanel_height - $timeprogress_height) / 2;
-				margin-bottom: ($timepanel_height - $timeprogress_height) / 2;
+				margin-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+				margin-bottom: 0px;
 				margin-left: 20px;
 				margin-right: 10px;
+			}
+
+			#hourdisplay {
+				height: $hourdisplay_height;
+				margin-top: 0px;
+				margin-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+				margin-left: 20px;
+				margin-right: 10px;
+				overflow: hidden;
+				font-size: 0px;
+
+				.hour {
+					display: inline-block;
+					font-size: $hourdisplay_font;
+					height: 100%;
+					padding: 0px;
+					text-align: right;
+
+					&:first-child {
+						text-align: left;
+					}
+				}
+			}
+
+			.progress-bar {
+				line-height: $timeprogress_height;
+				font-size: $timeprogress_font;
+				text-align: center;
+				overflow: visible;
+			}
+		}
+
+		#currentbox {
+			#currentstate {
+				height: $timeprogress_height;
+				margin-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+				margin-bottom: 0px;
+				margin-left: 0px;
+				margin-right: 10px;
+			}
+
+			#currenttime {
+				height: $hourdisplay_height;
+				margin-top: 0px;
+				margin-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+				margin-left: 0px;
+				margin-right: 10px;
+				line-height: $timeprogress_height;
+				font-size: $timeprogress_font;
+				text-align: left;
+				font-weight: bold;
 			}
 		}
 	}

@@ -31,14 +31,32 @@
 				<h1><i class="mdi-action-android"></i>EduMon</h1>
 			</div>
 			<div id="timeline">
-					<div class="progress progress-striped">
-						<div class="progress-bar progress-bar-warning" style="width:60%;"></div>
-						<div class="progress-bar progress-bar-success" style="width:10%;"></div>
-						<div class="progress-bar progress-bar-warning" style="width:30%;"></div>
+					<div id="progressdisplay" class="progress progress-striped">
+						<div class="progress-bar progress-bar-warning" style="width:20%;">20min</div>
+						<div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
+						<div class="progress-bar progress-bar-warning" style="width:30%;">30min</div>
+						<div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
+						<div class="progress-bar progress-bar-warning active" style="width:30%;">30min</div>
 					</div>
+					<div id="hourdisplay">
+						<span class="hour" style="width:10%;">9:00</span>
+						<span class="hour" style="width:10%;">9:20</span>
+						<span class="hour" style="width:10%;">9:30</span>
+						<span class="hour" style="width:30%;">10:00</span>
+						<span class="hour" style="width:10%;">10:10</span>
+						<span class="hour" style="width:30%;"></span>
+					</div>
+
 					<!--<i class="mdi-av-play-circle-fill"></i>-->
 			</div>
-
+			<div id="currentbox">
+					<div id="currentstate">
+						Vorlesung läuft
+					</div>
+					<div id="currenttime">
+						10:40
+					</div>
+			</div>
 		</div>
 
 		<div id="maincontainer">
@@ -48,7 +66,6 @@
 						<h3 class="panel-title">Vorlesung</h3>
 					</div>
 					<div class="panel-body">
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-play-arrow"></a><br>
 						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-pause"></a><br>
 						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-stop"></a><br>
 					</div>
