@@ -18,6 +18,9 @@ body {
     #screen #timepanel #logo h1 {
       font-size: 80px;
       margin: 0px; }
+      #screen #timepanel #logo h1 img {
+        height: 80px;
+        border-radius: 5px; }
     #screen #timepanel #timeline {
       flex-grow: 1;
       padding-top: 15px;

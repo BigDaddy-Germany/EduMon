@@ -29,6 +29,11 @@ $hourdisplay_font: 20px;
 			h1 {
 				font-size: $timepanel_height * 0.8;
 				margin: 0px;
+
+				img {
+					height: $timepanel_height * 0.8;
+					border-radius: 5px;
+				}
 			}
 		}
 
