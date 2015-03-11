@@ -19,28 +19,27 @@ body {
       font-size: 80px;
       margin: 0px; }
     #screen #timepanel #timeline {
-      flex-grow: 1; }
+      flex-grow: 1;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      padding-left: 20px;
+      padding-right: 0px; }
       #screen #timepanel #timeline #progressdisplay {
         border-radius: 5px;
         height: 40px;
-        margin-top: 15px;
-        margin-bottom: 0px;
-        margin-left: 20px;
-        margin-right: 10px; }
+        margin: 0px; }
       #screen #timepanel #timeline #hourdisplay {
         height: 30px;
-        margin-top: 0px;
-        margin-bottom: 15px;
-        margin-left: 20px;
-        margin-right: 10px;
+        margin: 0px;
         overflow: hidden;
         font-size: 0px; }
         #screen #timepanel #timeline #hourdisplay .hour {
           display: inline-block;
-          font-size: 24px;
+          font-size: 20px;
           height: 100%;
           padding: 0px;
-          text-align: right; }
+          text-align: right;
+          vertical-align: top; }
           #screen #timepanel #timeline #hourdisplay .hour:first-child {
             text-align: left; }
       #screen #timepanel #timeline .progress-bar {
@@ -48,22 +47,24 @@ body {
         font-size: 24px;
         text-align: center;
         overflow: visible; }
-    #screen #timepanel #currentbox #currentstate {
-      height: 40px;
-      margin-top: 15px;
-      margin-bottom: 0px;
-      margin-left: 0px;
-      margin-right: 10px; }
-    #screen #timepanel #currentbox #currenttime {
-      height: 30px;
-      margin-top: 0px;
-      margin-bottom: 15px;
-      margin-left: 0px;
-      margin-right: 10px;
-      line-height: 40px;
-      font-size: 24px;
-      text-align: left;
-      font-weight: bold; }
+    #screen #timepanel #currentbox {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      padding-left: 0px;
+      padding-right: 10px; }
+      #screen #timepanel #currentbox #currentstate {
+        height: 40px;
+        margin: 0px;
+        line-height: 40px;
+        font-size: 40px;
+        text-align: center; }
+      #screen #timepanel #currentbox #currenttime {
+        height: 30px;
+        margin: 0px;
+        line-height: 30px;
+        font-size: 30px;
+        text-align: left;
+        font-weight: bold; }
   #screen #maincontainer {
     flex-grow: 1;
     display: flex;

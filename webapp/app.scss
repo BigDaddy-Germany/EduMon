@@ -11,7 +11,7 @@ $timepanel_height: 100px;
 $timeprogress_height: 40px;
 $hourdisplay_height: 30px;
 $timeprogress_font: 24px;
-$hourdisplay_font: 24px;
+$hourdisplay_font: 20px;
 
 #screen {
 	height: 100%;
@@ -34,22 +34,20 @@ $hourdisplay_font: 24px;
 
 		#timeline {
 			flex-grow: 1;
+			padding-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-left: 20px;
+			padding-right: 0px;
 			 
 			#progressdisplay {
 				border-radius: 5px;
 				height: $timeprogress_height;
-				margin-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
-				margin-bottom: 0px;
-				margin-left: 20px;
-				margin-right: 10px;
+				margin: 0px;
 			}
 
 			#hourdisplay {
 				height: $hourdisplay_height;
-				margin-top: 0px;
-				margin-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
-				margin-left: 20px;
-				margin-right: 10px;
+				margin: 0px;
 				overflow: hidden;
 				font-size: 0px;
 
@@ -59,6 +57,7 @@ $hourdisplay_font: 24px;
 					height: 100%;
 					padding: 0px;
 					text-align: right;
+					vertical-align: top;
 
 					&:first-child {
 						text-align: left;
@@ -75,22 +74,24 @@ $hourdisplay_font: 24px;
 		}
 
 		#currentbox {
+			padding-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-left: 0px;
+			padding-right: 10px;
+
 			#currentstate {
 				height: $timeprogress_height;
-				margin-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
-				margin-bottom: 0px;
-				margin-left: 0px;
-				margin-right: 10px;
+				margin: 0px;
+				line-height: $timeprogress_height;
+				font-size: $timeprogress_height;
+				text-align: center;
 			}
 
 			#currenttime {
 				height: $hourdisplay_height;
-				margin-top: 0px;
-				margin-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
-				margin-left: 0px;
-				margin-right: 10px;
-				line-height: $timeprogress_height;
-				font-size: $timeprogress_font;
+				margin: 0px;
+				line-height: $hourdisplay_height;
+				font-size: $hourdisplay_height;
 				text-align: left;
 				font-weight: bold;
 			}
