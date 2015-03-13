@@ -1,98 +1,95 @@
 package org.cubyte.edumon.core.protocol;
 
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.*;
+import org.cubyte.edumon.core.protocol.message.Message;
 import org.cubyte.edumon.core.protocol.message.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.codec.http.websocketx.CloseWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.PingWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.PongWebSocketFrame;
-import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 
 public abstract class AbstractConnection extends SimpleChannelInboundHandler<Object>
 {
-    private ChannelHandlerContext context = null;
+    private final Channel channel;
 
-    protected ChannelHandlerContext getContext()
-    {
-        return this.context;
+    public AbstractConnection(Channel channel) {
+        this.channel = channel;
     }
 
-    public ChannelFuture sendMessage(Packet packet)
-    {
-        if (this.context == null)
-        {
-            throw new IllegalStateException("The channel has not been added yet!");
-        }
-        return this.context.channel().writeAndFlush(packet);
+    protected Channel channel() {
+        return this.channel;
     }
 
-    public boolean isConnected()
-    {
-        return this.context.channel().isOpen();
+    public boolean isConnected() {
+        return channel().isOpen();
     }
 
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception
-    {
-        this.context = ctx;
-    }
-
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception
-    {
-        if (msg instanceof WebSocketFrame)
-        {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+        if (msg instanceof WebSocketFrame) {
             this.handleWebSocketFrame(ctx, (WebSocketFrame)msg);
-        }
-        else if (msg instanceof Packet)
-        {
+        } else if (msg instanceof Packet) {
             this.handleMessage(ctx, (Packet)msg);
         }
     }
 
-    protected void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame)
-    {
-        if (frame instanceof PingWebSocketFrame)
-        {
+    protected void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) {
+        if (frame instanceof PingWebSocketFrame) {
             System.out.println("Received ping");
-        }
-        else if (frame instanceof PongWebSocketFrame)
-        {
+        } else if (frame instanceof PongWebSocketFrame) {
             System.out.println("Received pong");
-        }
-        else if (frame instanceof CloseWebSocketFrame)
-        {
+        } else if (frame instanceof CloseWebSocketFrame) {
             System.out.println("Received close: " + ((CloseWebSocketFrame)frame).reasonText());
             ctx.channel().close();
-        }
-        else
-        {
+        } else {
             System.err.println("Unexpected frame: " + frame.getClass().getName());
+            if (frame instanceof TextWebSocketFrame) {
+                System.out.println(((TextWebSocketFrame) frame).text());
+            }
         }
     }
 
-    public void ping(ByteBuf data)
-    {
-        this.context.channel().writeAndFlush(new PingWebSocketFrame(data));
+    public ChannelFuture ping(ByteBuf data) {
+        return sendData(new PingWebSocketFrame(data));
     }
 
-    public void ping()
-    {
-        this.context.channel().writeAndFlush(new PingWebSocketFrame());
+    public ChannelFuture ping() {
+        return sendData(new PingWebSocketFrame());
     }
 
-    public void pong(ByteBuf data)
-    {
-        this.context.channel().writeAndFlush(new PongWebSocketFrame(data));
+    public ChannelFuture pong(ByteBuf data) {
+        return sendData(new PongWebSocketFrame(data));
     }
 
-    public void pong()
-    {
-        this.context.channel().writeAndFlush(new PongWebSocketFrame());
+    public ChannelFuture pong() {
+        return sendData(new PongWebSocketFrame());
     }
 
+    protected ChannelFuture sendData(Object data) {
+        return channel().writeAndFlush(data);
+    }
+
+    public ChannelFuture sendPacket(Packet packet) {
+        return sendData(packet);
+    }
+
+    public ChannelFuture sendMessage(Message message) {
+        return sendPacket(Packet.create(message));
+    }
 
     protected abstract void handleMessage(ChannelHandlerContext ctx, Packet packet);
+
+    protected abstract ChannelFuture closeWith(int reason, String message);
+
+    public ChannelFuture disconnect(int reason, String message) {
+        if (reason >= 4000 && reason < 5000) {
+            throw new IllegalArgumentException("The code must be between 4000-4999");
+        }
+        return closeWith(reason, message);
+    }
+
+    public ChannelFuture disconnect(DisconnectReason reason, String message) {
+        return closeWith(reason.getCode(), message);
+    }
 }

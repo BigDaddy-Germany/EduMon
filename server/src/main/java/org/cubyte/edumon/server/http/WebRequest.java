@@ -2,7 +2,7 @@ package org.cubyte.edumon.server.http;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.*;
-import org.cubyte.edumon.server.ClientConnection;
+import org.cubyte.edumon.server.ServerToClientConnection;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.Map;
 public class WebRequest
 {
     private final FullHttpRequest request;
-    private final ClientConnection connection;
+    private final ServerToClientConnection connection;
     private final String path;
     private final Map<String, List<String>> urlParameters;
 
-    public WebRequest(FullHttpRequest request, ClientConnection connection)
+    public WebRequest(FullHttpRequest request, ServerToClientConnection connection)
     {
         this.request = request;
 
@@ -36,7 +36,7 @@ public class WebRequest
         return this.request.getMethod();
     }
 
-    public ClientConnection getConnection()
+    public ServerToClientConnection getConnection()
     {
         return connection;
     }

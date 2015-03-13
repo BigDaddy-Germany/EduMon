@@ -13,6 +13,11 @@ import javax.net.ssl.SSLEngine;
 
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel>
 {
+    static final String HTTP_CODEC_NAME     = "http-codec";
+    static final String AGGREGATOR_NAME     = "aggregator";
+    static final String MESSAGE_CODEC_NAME  = "message-codec";
+    static final String HANDLER_NAME        = "handler";
+
     private final Server server;
 
     public ServerChannelInitializer(Server server)
@@ -34,9 +39,9 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel>
                 pipeline.addLast("ssl", new SslHandler(sslEngine));
             }
         }
-        pipeline.addLast("http-codec", new HttpServerCodec());
-        pipeline.addLast("message-codec", new MessageCodec());
-        pipeline.addLast("aggregator", new HttpObjectAggregator(8192));
-        pipeline.addLast("handler", new HandshakeHandler(this.server));
+        pipeline.addLast(HTTP_CODEC_NAME, new HttpServerCodec());
+        pipeline.addLast(MESSAGE_CODEC_NAME, new MessageCodec());
+        pipeline.addLast(AGGREGATOR_NAME, new HttpObjectAggregator(8192));
+        pipeline.addLast(HANDLER_NAME, new ServerHandshakeHandler(this.server));
     }
 }

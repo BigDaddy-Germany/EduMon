@@ -43,8 +43,7 @@ public class Router
         return route;
     }
 
-    public HttpResponse execute(WebRequest request) throws UnknownRouteException
-    {
+    public HttpResponse execute(WebRequest request) throws UnknownRouteException {
         LinkedList<Route> routeList = this.routes.get(request.getMethod());
         if (routeList == null)
         {
@@ -72,5 +71,10 @@ public class Router
             }
         }
         throw new UnknownRouteException("No route found for " + path + " and method " + request.getMethod().name());
+    }
+
+    @Override
+    public String toString() {
+        return "Router{routes=" + routes + '}';
     }
 }

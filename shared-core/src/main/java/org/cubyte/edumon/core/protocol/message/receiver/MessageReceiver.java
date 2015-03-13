@@ -6,20 +6,21 @@ import org.cubyte.edumon.core.protocol.message.Packet;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class MessageReceiver
 {
-    private Map<Integer, LinkedList<MessageHandler>> handlerMap = new HashMap<>();
+    private Map<Integer, List<MessageHandler>> handlerMap = new HashMap<>();
 
     private synchronized void addHandler(int type, MessageHandler handler)
     {
-        LinkedList<MessageHandler> handlers = this.handlerMap.get(type);
+        List<MessageHandler> handlers = this.handlerMap.get(type);
         if (handlers == null)
         {
             this.handlerMap.put(type, handlers = new LinkedList<MessageHandler>());
         }
-        handlers.addLast(handler);
+        handlers.add(handler);
     }
 
     public synchronized void handleMessage(Class<? extends Message> type, MessageHandler handler)
@@ -45,7 +46,7 @@ public class MessageReceiver
 
     private void removeHandler(int t, MessageHandler handler)
     {
-        LinkedList<MessageHandler> handlers = this.handlerMap.get(t);
+        List<MessageHandler> handlers = this.handlerMap.get(t);
         if (handlers != null)
         {
             handlers.remove(handler);
@@ -57,7 +58,7 @@ public class MessageReceiver
         int t = DataTypes.getIntType(packet.getData().getClass());
         assert t >= 0 : "Unknown message: " + packet.getData().getClass().getName();
 
-        LinkedList<MessageHandler> handlers = this.handlerMap.get(t);
+        List<MessageHandler> handlers = this.handlerMap.get(t);
         if (handlers == null)
         {
             return false;
