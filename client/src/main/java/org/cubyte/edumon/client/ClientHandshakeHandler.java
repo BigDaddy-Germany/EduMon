@@ -46,12 +46,13 @@ public class ClientHandshakeHandler extends SimpleChannelInboundHandler<Object> 
         if (!handShaker.isHandshakeComplete()) {
             try {
                 handShaker.finishHandshake(ch, (FullHttpResponse) msg);
-                handshakeFuture.setSuccess();
 
                 this.connection = new ClientToServerConnection(ch, this.receiver);
                 final ChannelPipeline pipeline = ch.pipeline();
                 pipeline.remove(this);
                 pipeline.addLast(this.connection);
+
+                handshakeFuture.setSuccess();
 
                 System.out.println("WebSocket Client connected and handshake completed!");
             } catch (Throwable t) {
