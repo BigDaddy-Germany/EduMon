@@ -87,7 +87,24 @@ body {
     #screen #maincontainer #centerpanel {
       flex-grow: 1; }
     #screen #maincontainer #feedpanel {
-      width: 200px; }
+      width: 300px;
+      display: flex;
+      flex-direction: column; }
+      #screen #maincontainer #feedpanel .panel-body {
+        flex-grow: 1;
+        position: relative; }
+        #screen #maincontainer #feedpanel .panel-body #alertcontainer {
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          overflow-y: scroll;
+          padding: 5px; }
+          #screen #maincontainer #feedpanel .panel-body #alertcontainer .alert {
+            margin-bottom: 10px; }
+      #screen #maincontainer #feedpanel .panel-footer {
+        text-align: right; }
 
 .panel {
   margin: 5px;
