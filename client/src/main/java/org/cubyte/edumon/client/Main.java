@@ -27,15 +27,22 @@ public class Main {
         GlobalScreen.addNativeMouseListener(mouseListener);
         GlobalScreen.addNativeMouseMotionListener(mouseListener);
 
+        final GlobalMicListener micListener = new GlobalMicListener();
+
         final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            int keystrokes;
+            int mouseclicks;
+            int mousedistance;
+            int micLevel;
             @Override
             public void run() {
-                int keystrokes = keyListener.fetchStrokes();
-                int mouseclicks = mouseListener.fetchClicks();
-                int mousedistance = mouseListener.fetchDistance();
+                keystrokes = keyListener.fetchStrokes();
+                mouseclicks = mouseListener.fetchClicks();
+                mousedistance = mouseListener.fetchDistance();
+                micLevel = micListener.fetchLevel();
                 // TODO: send data
-                System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance);
+                System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance + "l: " + micLevel);
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
