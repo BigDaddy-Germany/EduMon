@@ -34,7 +34,7 @@ public class Main {
             int keystrokes;
             int mouseclicks;
             int mousedistance;
-            int micLevel;
+            double micLevel;
             @Override
             public void run() {
                 keystrokes = keyListener.fetchStrokes();
@@ -42,7 +42,7 @@ public class Main {
                 mousedistance = mouseListener.fetchDistance();
                 micLevel = micListener.fetchLevel();
                 // TODO: send data
-                System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance + "l: " + micLevel);
+                System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance + " l: " + micLevel);
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
