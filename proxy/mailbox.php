@@ -37,7 +37,8 @@
 
 	header('Access-Control-Allow-Origin: *');
 	header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-	header('Content-type: application/javascript; charset=utf-8');
+    header('Access-Control-Allow-Credentials: true');
+	header('Content-type: application/json; charset=utf-8');
 	
 	session_start();
 	
