@@ -13,6 +13,10 @@ $hourdisplay_height: 30px;
 $timeprogress_font: 24px;
 $hourdisplay_font: 20px;
 
+$tdgrad_color_low:    #4CAF50;
+$tdgrad_color_medium: #FF5722;
+$tdgrad_color_high:   #F44336;
+
 @mixin hflex {
 	display: flex;
 	flex-direction: row;
@@ -162,8 +166,18 @@ $hourdisplay_font: 20px;
 						background-color: #FFFFFF;
 
 						td {
-							background-color: #DDDDDD;
+							background: #DDDDDD;
 							margin: 2px;
+						}
+
+						td.activity_low {
+							background: linear-gradient(0deg, $tdgrad_color_low 0%, $tdgrad_color_low 04%, #DDD 06%, #DDD 100%);
+						}
+						td.activity_medium {
+							background: linear-gradient(0deg, $tdgrad_color_medium 0%, $tdgrad_color_medium 42%, #DDD 44%, #DDD 100%);
+						}
+						td.activity_high {
+							background: linear-gradient(0deg, $tdgrad_color_high 0%, $tdgrad_color_high 85%, #DDD 87%, #DDD 100%);
 						}
 					}
 				}
