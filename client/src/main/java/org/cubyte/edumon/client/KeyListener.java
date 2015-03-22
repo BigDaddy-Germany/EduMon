@@ -3,7 +3,7 @@ package org.cubyte.edumon.client;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
-public class GlobalKeyListener implements NativeKeyListener {
+public class KeyListener implements NativeKeyListener {
     private int strokes = 0;
 
     @Override

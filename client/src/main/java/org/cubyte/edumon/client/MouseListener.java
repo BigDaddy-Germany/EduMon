@@ -3,14 +3,14 @@ package org.cubyte.edumon.client;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 
-public class GlobalMouseListener implements NativeMouseInputListener {
+public class MouseListener implements NativeMouseInputListener {
     private int clicks;
     private int distance;
 
     private int oldX;
     private int oldY;
 
-    public GlobalMouseListener() {
+    public MouseListener() {
         this.clicks = 0;
         this.distance = 0;
 

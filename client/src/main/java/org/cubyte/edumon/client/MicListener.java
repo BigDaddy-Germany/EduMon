@@ -4,10 +4,10 @@ import javax.sound.sampled.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GlobalMicListener {
+public class MicListener {
     private TargetDataLine line;
 
-    public GlobalMicListener() {
+    public MicListener() {
         AudioFormat format = new AudioFormat(8000, 16, 1, true, false);
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
         if (!AudioSystem.isLineSupported(info)) {

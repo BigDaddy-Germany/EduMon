@@ -21,13 +21,13 @@ public class Main {
 
             System.exit(1);
         }
-        final GlobalKeyListener keyListener = new GlobalKeyListener();
-        final GlobalMouseListener mouseListener = new GlobalMouseListener();
+        final KeyListener keyListener = new KeyListener();
+        final MouseListener mouseListener = new MouseListener();
         GlobalScreen.addNativeKeyListener(keyListener);
         GlobalScreen.addNativeMouseListener(mouseListener);
         GlobalScreen.addNativeMouseMotionListener(mouseListener);
 
-        final GlobalMicListener micListener = new GlobalMicListener();
+        final MicListener micListener = new MicListener();
 
         final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
