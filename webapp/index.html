@@ -1,174 +1,165 @@
 <!DOCTYPE html>
 <html lang="de">
 	<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
-	<title>EduMon Moderator-WebApp</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+        <title>EduMon Moderator-WebApp</title>
 
-	<!-- Bootstrap -->
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-	<!-- Optional theme -->
-	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">-->
-	<link href="lib/bootstrap/css/ripples.min.css" rel="stylesheet">
-	<link href="lib/bootstrap/css/material-wfont.min.css" rel="stylesheet">
-	<link href="css/app.css" rel="stylesheet">
-
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-    <script src="lib/html5shiv/js/html5shiv.min.js"></script>
-    <script src="lib/respond/js/respond.min.js"></script>
-	<![endif]-->
-
+        <!-- Bootstrap -->
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <!-- Optional theme -->
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">-->
+        <link href="lib/bootstrap/css/ripples.min.css" rel="stylesheet">
+        <link href="lib/bootstrap/css/material-wfont.min.css" rel="stylesheet">
+        <link href="css/app.css" rel="stylesheet">
 	</head>
 	<body>
+        <div id="screen">
+            <div id="timepanel" class="panel mypanel">
+                <div id="logo">
+                    <h1><img src="images/logo.png">EduMon</h1>
+                </div>
+                <div id="timeline">
+                        <div id="progressdisplay" class="progress progress-striped">
+                            <div class="progress-bar progress-bar-warning" style="width:20%;">20min</div>
+                            <div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
+                            <div class="progress-bar progress-bar-warning" style="width:30%;">30min</div>
+                            <div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
+                            <div class="progress-bar progress-bar-warning active" style="width:30%;">30min</div>
+                        </div>
+                        <div id="hourdisplay">
+                            <span class="hour" style="width:10%;">9:00</span>
+                            <span class="hour" style="width:10%;">9:20</span>
+                            <span class="hour" style="width:10%;">9:30</span>
+                            <span class="hour" style="width:30%;">10:00</span>
+                            <span class="hour" style="width:10%;">10:10</span>
+                            <span class="hour" style="width:30%;"></span>
+                        </div>
+                </div>
+                <div id="currentbox">
+                        <div id="currentstate">
+                            <i class="mdi-av-play-circle-outline"></i>
+                        </div>
+                        <div id="currenttime">
+                            10:40
+                        </div>
+                </div>
+            </div>
 
-	<div id="screen">
-		<div id="timepanel" class="panel mypanel">
-			<div id="logo">
-				<h1><img src="images/logo.png">EduMon</h1>
-			</div>
-			<div id="timeline">
-					<div id="progressdisplay" class="progress progress-striped">
-						<div class="progress-bar progress-bar-warning" style="width:20%;">20min</div>
-						<div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
-						<div class="progress-bar progress-bar-warning" style="width:30%;">30min</div>
-						<div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
-						<div class="progress-bar progress-bar-warning active" style="width:30%;">30min</div>
-					</div>
-					<div id="hourdisplay">
-						<span class="hour" style="width:10%;">9:00</span>
-						<span class="hour" style="width:10%;">9:20</span>
-						<span class="hour" style="width:10%;">9:30</span>
-						<span class="hour" style="width:30%;">10:00</span>
-						<span class="hour" style="width:10%;">10:10</span>
-						<span class="hour" style="width:30%;"></span>
-					</div>
-			</div>
-			<div id="currentbox">
-					<div id="currentstate">
-						<i class="mdi-av-play-circle-outline"></i>
-					</div>
-					<div id="currenttime">
-						10:40
-					</div>
-			</div>
-		</div>
+            <div id="maincontainer">
+                <div id="buttonpanel" class="panel mypanel">
+                    <div id="playbox" class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Vorlesung</h3>
+                        </div>
+                        <div class="panel-body">
+                            <a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-pause"></a><br>
+                            <a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-stop"></a><br>
+                        </div>
+                    </div>
+                    <div id="actionbox" class="panel panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Aktionen</h3>
+                        </div>
+                        <div class="panel-body">
+                            <a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-shuffle"></a><br>
+                            <a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-thumbs-up-down"></a><br>
+                            <a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-stars"></a><br>
+                            <a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-settings"></a><br>
+                        </div>
+                    </div>
+                </div>
 
-		<div id="maincontainer">
-			<div id="buttonpanel" class="panel mypanel">
-				<div id="playbox" class="panel panel-info">
-					<div class="panel-heading">
-						<h3 class="panel-title">Vorlesung</h3>
-					</div>
-					<div class="panel-body">
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-pause"></a><br>
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-stop"></a><br>
-					</div>
-				</div>
-				<div id="actionbox" class="panel panel-info">
-					<div class="panel-heading">
-						<h3 class="panel-title">Aktionen</h3>
-					</div>
-					<div class="panel-body">
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-shuffle"></a><br>
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-thumbs-up-down"></a><br>
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-stars"></a><br>
-						<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-settings"></a><br>
-					</div>
-				</div>
-			</div>
+                <div id="centerpanel" class="panel mypanel">
 
-			<div id="centerpanel" class="panel mypanel">
+                    <div id="room">
+                        <div id="seatscontainer">
+                            <table id="seats">
+                                <tr>
+                                    <td class="activity_low">Sitz</td><td class="activity_medium">Sitz</td><td class="activity_high">Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                                <tr>
+                                    <td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                                <tr>
+                                    <td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                                <tr>
+                                    <td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                                <tr>
+                                    <td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                                <tr>
+                                    <td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                                <tr>
+                                    <td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="frontdesk">
+                            Pult
+                        </div>
+                    </div>
 
-				<div id="room">
-					<div id="seatscontainer">
-						<table id="seats">
-							<tr>
-								<td class="activity_low">Sitz</td><td class="activity_medium">Sitz</td><td class="activity_high">Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-							<tr>
-								<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-							<tr>
-								<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-							<tr>
-								<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-							<tr>
-								<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-							<tr>
-								<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-							<tr>
-								<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-							</tr>
-						</table>
-					</div>
-					<div id="frontdesk">
-						Pult
-					</div>
-				</div>
-			
-			</div>
+                </div>
 
-			<div id="feedpanel"   class="panel panel-default mypanel">
-				<div class="panel-heading">Newsfeed</div>
-				<div class="panel-body">
-					<div id="alertcontainer">
-						<div class="alert alert-dismissable alert-danger">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4>Mikrofonalarm</h4>
-							<p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
-						</div>
-						<div class="alert alert-dismissable alert-warning">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4>Viel Getippe</h4>
-							<p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
-						</div>
-						<div class="alert alert-dismissable alert-danger">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4>Mikrofonalarm</h4>
-							<p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
-						</div>
-						<div class="alert alert-dismissable alert-warning">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4>Viel Getippe</h4>
-							<p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
-						</div>
-						<div class="alert alert-dismissable alert-danger">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4>Mikrofonalarm</h4>
-							<p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
-						</div>
-						<div class="alert alert-dismissable alert-warning">
-							<button type="button" class="close" data-dismiss="alert">×</button>
-							<h4>Viel Getippe</h4>
-							<p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
-						</div>
-					</div>
-				</div>
-				<div class="panel-footer">6 neue Nachrichten</div>
-			</div>
-		</div>
-	</div>
+                <div id="feedpanel"   class="panel panel-default mypanel">
+                    <div class="panel-heading">Newsfeed</div>
+                    <div class="panel-body">
+                        <div id="alertcontainer">
+                            <div class="alert alert-dismissable alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <h4>Mikrofonalarm</h4>
+                                <p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
+                            </div>
+                            <div class="alert alert-dismissable alert-warning">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <h4>Viel Getippe</h4>
+                                <p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
+                            </div>
+                            <div class="alert alert-dismissable alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <h4>Mikrofonalarm</h4>
+                                <p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
+                            </div>
+                            <div class="alert alert-dismissable alert-warning">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <h4>Viel Getippe</h4>
+                                <p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
+                            </div>
+                            <div class="alert alert-dismissable alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <h4>Mikrofonalarm</h4>
+                                <p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
+                            </div>
+                            <div class="alert alert-dismissable alert-warning">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                <h4>Viel Getippe</h4>
+                                <p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">6 neue Nachrichten</div>
+                </div>
+            </div>
+        </div>
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="lib/jquery/js/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
-	<script src="lib/bootstrap/js/ripples.min.js"></script>
-	<script src="lib/bootstrap/js/material.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			$.material.init();
-		});
-	</script>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="lib/jquery/js/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/bootstrap/js/ripples.min.js"></script>
+        <script src="lib/bootstrap/js/material.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $.material.init();
+            });
+        </script>
 
-	</body>
+        </body>
 </html>
