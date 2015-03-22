@@ -25,7 +25,7 @@ public class MessageTest {
             message2 = mapper.readValue(json, Message.class);
             assertEquals(message1, message2);
         } catch (IOException e) {
-            assert true;
+            assert false;
         }
     }
 }
