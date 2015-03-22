@@ -1,5 +1,8 @@
 package org.cubyte.edumon.client;
 
+import org.cubyte.edumon.client.messaging.MessageFactory;
+import org.cubyte.edumon.client.messaging.MessageQueue;
+import org.cubyte.edumon.client.messaging.messagebodies.Sensordata;
 import org.cubyte.edumon.client.sensorlistener.KeyListener;
 import org.cubyte.edumon.client.sensorlistener.MicListener;
 import org.cubyte.edumon.client.sensorlistener.MouseListener;
@@ -32,6 +35,9 @@ public class Main {
 
         final MicListener micListener = new MicListener();
 
+        final MessageQueue messageQueue = new MessageQueue("");
+        final MessageFactory messageFactory = new MessageFactory(0, "jonas", "mod", "160C");
+
         final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             int keystrokes;
@@ -44,8 +50,14 @@ public class Main {
                 mouseclicks = mouseListener.fetchClicks();
                 mousedistance = mouseListener.fetchDistance();
                 micLevel = micListener.fetchLevel();
-                // TODO: send data
-                System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance + " l: " + micLevel);
+
+                messageQueue.queue(messageFactory.create(new Sensordata(keystrokes, mousedistance, mouseclicks, micLevel)));
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                messageQueue.send();
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
