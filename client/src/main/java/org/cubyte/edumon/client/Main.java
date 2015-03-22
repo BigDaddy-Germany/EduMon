@@ -1,5 +1,8 @@
 package org.cubyte.edumon.client;
 
+import org.cubyte.edumon.client.messaging.MessageFactory;
+import org.cubyte.edumon.client.messaging.MessageQueue;
+import org.cubyte.edumon.client.messaging.messagebodies.Sensordata;
 import org.cubyte.edumon.client.sensorlistener.KeyListener;
 import org.cubyte.edumon.client.sensorlistener.MicListener;
 import org.cubyte.edumon.client.sensorlistener.MouseListener;
@@ -16,14 +19,14 @@ public class Main {
     public static void main(String[] args) {
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);
-        try {
+        /*try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException e) {
             System.err.println("There was a problem registering the native hook.");
             System.err.println(e.getMessage());
 
             System.exit(1);
-        }
+        }*/
         final KeyListener keyListener = new KeyListener();
         final MouseListener mouseListener = new MouseListener();
         GlobalScreen.addNativeKeyListener(keyListener);
@@ -31,6 +34,9 @@ public class Main {
         GlobalScreen.addNativeMouseMotionListener(mouseListener);
 
         final MicListener micListener = new MicListener();
+
+        final MessageQueue messageQueue = new MessageQueue("");
+        final MessageFactory messageFactory = new MessageFactory(0, "jonas", "mod", "160C");
 
         final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
@@ -44,6 +50,9 @@ public class Main {
                 mouseclicks = mouseListener.fetchClicks();
                 mousedistance = mouseListener.fetchDistance();
                 micLevel = micListener.fetchLevel();
+
+                messageQueue.queque(messageFactory.create(new Sensordata(keystrokes, mousedistance, mouseclicks, micLevel)));
+                messageQueue.send();
                 // TODO: send data
                 System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance + " l: " + micLevel);
             }

@@ -7,3 +7,4 @@
 /*/target
 *.iml
 /target/MANIFEST.MF
+*.db
