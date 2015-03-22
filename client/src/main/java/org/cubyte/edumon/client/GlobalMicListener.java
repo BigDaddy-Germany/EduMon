@@ -1,6 +1,8 @@
 package org.cubyte.edumon.client;
 
 import javax.sound.sampled.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GlobalMicListener {
     private TargetDataLine line;
@@ -20,44 +22,30 @@ public class GlobalMicListener {
         line.start();
     }
 
-    public double calculateRMSLevel(byte[] audioData)
-    { // audioData might be buffered data read from a data line
-        int length = audioData.length;
-        long lSum = 0;
-        for(int i=0; i<length; i++)
-            lSum = lSum + audioData[i];
-
-        if (lSum == 0) {
-            return 0;
+    public double fetchLevel() {
+        ArrayList<Byte> audioData = new ArrayList<>();
+        int available = line.available();
+        while(available > 0) {
+            byte[] data = new byte[available];
+            line.read(data, 0, data.length);
+            for (byte b: data) {
+                audioData.add(b);
+            }
+            available = line.available();
         }
-        double dAvg = lSum / length;
+        line.flush();
 
-        double sumMeanSquare = 0d;
-        for(int j=0; j<audioData.length; j++)
-            sumMeanSquare = sumMeanSquare + Math.pow(audioData[j] - dAvg, 2d);
-
-        double averageMeanSquare = sumMeanSquare / audioData.length;
-        return (Math.pow(averageMeanSquare,0.5d) + 0.5);
+        return calculateLevel(audioData);
     }
 
-    public double fetchLevel() {
-        int available = line.available();
-        if (available == 0) {
-            return 0;
+    private float calculateLevel(List<Byte> buffer) {
+        int maxLevel = 0;
+        int level = 0;
+        for (int i = 0; i < buffer.size(); i += 2) {
+            level += (buffer.get(i + 1) << 8) | buffer.get(i);
+            maxLevel = Math.max(maxLevel, (buffer.get(i + 1) << 8) | buffer.get(i));
         }
-        byte[] data = new byte[available];
-        double[] amplitude = new double[available];
-        double level = 0;
-
-        line.read(data, 0, data.length);
-
-        if (data[0] < 0) data[0] += 256;
-        for (int i = 0; i < available - 1; i++) {
-            if (data[i + 1] < 0) data[i + 1] += 256;
-            amplitude[i] = (double) (data[i + 1] << 8 | data[i] & 0xFF) / 32767.0;
-            level += amplitude[i];
-        }
-        //return calculateRMSLevel(data);
-        return level;
+        //return (float) maxLevel / Short.MAX_VALUE;
+        return (float) (level / Short.MAX_VALUE) / (buffer.size() / 2);
     }
 }
