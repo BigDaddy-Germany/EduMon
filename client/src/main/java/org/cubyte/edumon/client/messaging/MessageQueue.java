@@ -31,7 +31,6 @@ public class MessageQueue {
             try {
                 mapper.writeValue(writer, message);
             } catch (IOException e) {
-                jsonString += writer.toString() + ",";
                 //TODO
             }
             jsonString += writer.toString() + ",";
@@ -55,7 +54,7 @@ public class MessageQueue {
         //TODO throw Events
     }
 
-    public void queque(Message message) {
+    public void queue(Message message) {
         quequedMessages.add(message);
     }
 

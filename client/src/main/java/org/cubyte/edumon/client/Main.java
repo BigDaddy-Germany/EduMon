@@ -19,14 +19,14 @@ public class Main {
     public static void main(String[] args) {
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);
-        /*try {
+        try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException e) {
             System.err.println("There was a problem registering the native hook.");
             System.err.println(e.getMessage());
 
             System.exit(1);
-        }*/
+        }
         final KeyListener keyListener = new KeyListener();
         final MouseListener mouseListener = new MouseListener();
         GlobalScreen.addNativeKeyListener(keyListener);
@@ -51,10 +51,13 @@ public class Main {
                 mousedistance = mouseListener.fetchDistance();
                 micLevel = micListener.fetchLevel();
 
-                messageQueue.queque(messageFactory.create(new Sensordata(keystrokes, mousedistance, mouseclicks, micLevel)));
+                messageQueue.queue(messageFactory.create(new Sensordata(keystrokes, mousedistance, mouseclicks, micLevel)));
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
                 messageQueue.send();
-                // TODO: send data
-                System.out.println("k: " + keystrokes + " c: " + mouseclicks + " d: " + mousedistance + " l: " + micLevel);
             }
         }, 0, 1, TimeUnit.SECONDS);
     }

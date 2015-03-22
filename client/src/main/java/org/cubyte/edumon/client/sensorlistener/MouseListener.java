@@ -43,7 +43,7 @@ public class MouseListener implements NativeMouseInputListener {
         oldX = x;
         oldY = y;
 
-        distance += (int) Math.sqrt(dx * dx + dy * dy);
+        distance += (int) Math.sqrt(dx * dx + dy * dy); //TODO normalize to screendiagonal
     }
 
     @Override

@@ -66,8 +66,6 @@ public class Message {
     @JsonDeserialize(converter = IntegerToTypeConverter.class)
     public final Type type;
     public final int id;
-    //@JsonSerialize(converter = DateToLongConverter.class)
-    //@JsonDeserialize(converter = LongToDateConverter.class)
     public final Date time;
     public final String from;
     public final String to;
@@ -75,19 +73,9 @@ public class Message {
     public final MessageBody body;
 
     @JsonCreator
-    public Message(@JsonProperty("type") Type type, @JsonProperty("id") int id, @JsonProperty("time") Date time,
-                   @JsonProperty("from") String from, @JsonProperty("to") String to, @JsonProperty("room") String room,
+    public Message(@JsonProperty("id") int id, @JsonProperty("time") Date time, @JsonProperty("from") String from,
+                   @JsonProperty("to") String to, @JsonProperty("room") String room,
                    @JsonProperty("body") MessageBody body) {
-        this.type = type;
-        this.id = id;
-        this.time = time;
-        this.from = from;
-        this.to = to;
-        this.room = room;
-        this.body = body;
-    }
-
-    public Message(int id, Date time, String from, String to, String room, MessageBody body) {
         this.type = Type.getType(body.getClass());
         this.id = id;
         this.time = time;
@@ -126,32 +114,33 @@ public class Message {
         }
     }
 
-    public static class LongToDateConverter implements Converter<Long, Date> {
-        @Override
-        public Date convert(Long aLong) {
-            return new Date(aLong);
-        }
-        @Override
-        public JavaType getInputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(Long.class);
-        }
-        @Override
-        public JavaType getOutputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(Date.class);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Message message = (Message) o;
+
+        if (id != message.id) return false;
+        if (!body.equals(message.body)) return false;
+        if (!from.equals(message.from)) return false;
+        if (!room.equals(message.room)) return false;
+        if (!time.equals(message.time)) return false;
+        if (!to.equals(message.to)) return false;
+        if (type != message.type) return false;
+
+        return true;
     }
-    public static class DateToLongConverter implements Converter<Date, Long> {
-        @Override
-        public Long convert(Date date) {
-            return date.getTime();
-        }
-        @Override
-        public JavaType getInputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(Date.class);
-        }
-        @Override
-        public JavaType getOutputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(Long.class);
-        }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + id;
+        result = 31 * result + time.hashCode();
+        result = 31 * result + from.hashCode();
+        result = 31 * result + to.hashCode();
+        result = 31 * result + room.hashCode();
+        result = 31 * result + body.hashCode();
+        return result;
     }
 }

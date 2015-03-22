@@ -17,4 +17,31 @@ public class Sensordata extends MessageBody {
         this.mclicks = mclicks;
         this.volume = volume;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Sensordata that = (Sensordata) o;
+
+        if (keys != that.keys) return false;
+        if (mclicks != that.mclicks) return false;
+        if (mdist != that.mdist) return false;
+        if (Double.compare(that.volume, volume) != 0) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = keys;
+        result = 31 * result + mdist;
+        result = 31 * result + mclicks;
+        temp = Double.doubleToLongBits(volume);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
