@@ -1,4 +1,4 @@
-package org.cubyte.edumon.client;
+package org.cubyte.edumon.client.messaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ning.http.client.AsyncCompletionHandler;

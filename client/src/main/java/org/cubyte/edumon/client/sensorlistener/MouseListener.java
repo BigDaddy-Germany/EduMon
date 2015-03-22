@@ -1,4 +1,4 @@
-package org.cubyte.edumon.client;
+package org.cubyte.edumon.client.sensorlistener;
 
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;

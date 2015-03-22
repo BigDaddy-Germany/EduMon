@@ -1,4 +1,4 @@
-package org.cubyte.edumon.client;
+package org.cubyte.edumon.client.sensorlistener;
 
 import javax.sound.sampled.*;
 import java.util.ArrayList;

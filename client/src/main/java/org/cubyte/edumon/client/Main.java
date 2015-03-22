@@ -1,5 +1,8 @@
 package org.cubyte.edumon.client;
 
+import org.cubyte.edumon.client.sensorlistener.KeyListener;
+import org.cubyte.edumon.client.sensorlistener.MicListener;
+import org.cubyte.edumon.client.sensorlistener.MouseListener;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
