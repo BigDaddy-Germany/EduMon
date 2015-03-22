@@ -1,0 +1,24 @@
+[
+	{
+		"type" : 99,
+		"id" : 1234,
+		"time" : 1427045251,
+		"from" : "MODERATOR",
+		"to" : "sljk1n9coc37mv1aj8votd6241",
+		"room" : "160C",
+		"body" : [
+			{ "hashtag" : "yolo" }
+		]
+	},
+	{
+		"type" : 99,
+		"id" : 345322345,
+		"time" : 1427045251,
+		"from" : "MODERATOR",
+		"to" : "BROADCAST",
+		"room" : "160C",
+		"body" : [
+			{ "hashtag" : "yolo" }
+		]
+	}
+]
