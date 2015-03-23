@@ -8,7 +8,7 @@ public class Position {
     public final int y;
 
     @JsonCreator
-    public Position(@JsonProperty("width") int x, @JsonProperty("height") int y) {
+    public Position(@JsonProperty("x") int x, @JsonProperty("y") int y) {
         this.x = x;
         this.y = y;
     }
