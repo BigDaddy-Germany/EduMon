@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.cubyte</groupId>
     <artifactId>edumon-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>EduMon Client</name>
     <description>Monitor and improve educational sessions</description>
     <url>https://github.com/BigDaddy-Germany/EduMon</url>
@@ -60,6 +61,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.7</jdkVersion>
+        <mainClass>org.cubyte.edumon.client.Main</mainClass>
+        <iconFile>${basedir}/icon</iconFile>
+        <linuxName>${project.build.finalName}-linux</linuxName>
+        <windowsName>${project.build.finalName}-windows.exe</windowsName>
+        <osxName>${project.build.finalName}-osx</osxName>
     </properties>
 
     <repositories>
@@ -102,7 +108,7 @@
     </dependencies>
 
     <build>
-        <defaultGoal>clean install</defaultGoal>
+        <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,14 +130,144 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.3</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.skife.maven</groupId>
+                <artifactId>really-executable-jar-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <programFile>${linuxName}</programFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>really-executable-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.4</version>
+                <configuration>
+                    <dontWrapJar>false</dontWrapJar>
+                    <headerType>gui</headerType>
+                    <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
+                    <outfile>${project.build.directory}/${windowsName}</outfile>
+                    <chdir>.</chdir>
+                    <priority>normal</priority>
+                    <downloadUrl>http://java.com/download</downloadUrl>
+                    <stayAlive>false</stayAlive>
+                    <restartOnCrash>false</restartOnCrash>
+                    <!--<icon>${iconFile}.ico</icon>-->
+                    <singleInstance>
+                        <mutexName>${project.artifactId}</mutexName>
+                        <windowTitle>${project.name}</windowTitle>
+                    </singleInstance>
+                    <jre>
+                        <minVersion>${jdkVersion}.0</minVersion>
+                        <jdkPreference>preferJre</jdkPreference>
+                        <runtimeBits>64/32</runtimeBits>
+                    </jre>
+                    <versionInfo>
+                        <fileVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</fileVersion>
+                        <txtFileVersion>${project.version}</txtFileVersion>
+                        <fileDescription>${project.description}</fileDescription>
+                        <copyright>${}asdasda</copyright>
+                        <productVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</productVersion>
+                        <txtProductVersion>${project.version}</txtProductVersion>
+                        <productName>EduMon</productName>
+                        <companyName>BigDaddy</companyName>
+                        <internalName>EduMon</internalName>
+                        <originalFilename>${windowsName}</originalFilename>
+                    </versionInfo>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <configuration>
+                    <mainClass>${mainClass}</mainClass>
+                    <buildDirectory>${project.build.directory}</buildDirectory>
+                    <bundleName>${project.build.finalName}</bundleName>
+                    <jvmVersion>${jdkVersion}+</jvmVersion>
+                    <!--<iconFile>${iconFile}.icns</iconFile>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <executions>
+                    <execution>
+                        <id>osx-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${project.build.finalName}-osx</finalName>
+                            <descriptor>${basedir}/src/assembly/osx-package.xml</descriptor>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archiveBaseDirectory>.</archiveBaseDirectory>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
