@@ -48,16 +48,30 @@
 	EduMon.prototype.init = function(){
 		var self = this;
 
-		this.messenger.start();
-
-		this.debug("EduMon initiated");
 		this.debug("*** All Glory to the EduMon! ***")
+
+		this.messenger.start();
 	};
 
 
 	/* Eingehende Pakete behandeln */
 	EduMon.prototype.handleIncomingPacket = function(event){
 		this.debug(event);
+	}
+
+
+	EduMon.prototype.sendDemo = function(typenumber){
+		var self = this;
+
+		jQuery.getJSON("js/demoDataOut.json",function(data){
+				self.sendPacket(data["demo_type_"+typenumber]);
+		});
+	}
+
+
+	/* Paket verschicken */
+	EduMon.prototype.sendPacket = function(packet){
+		this.messenger.sendEvent(packet);
 	}
 
 
