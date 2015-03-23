@@ -29,7 +29,7 @@ setInterval(function() {
     var toBeSent = outgoing;
     outgoing = [];
 
-    var req = createRequest('data.json');
+    var req = createRequest('demoDataIn.json');
 
     function onError() {
         console.log("Failed to send events to server, requeuing...");
