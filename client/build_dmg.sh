@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# Based on: https://serverhorror.wordpress.com/2011/02/26/create-dmg-images-for-os-x-on-linux/
+#
+
 app_path="${1?No app source path given}"
 app_name="$(basename "$app_path" | sed -r "s/\.app$//g")"
 
