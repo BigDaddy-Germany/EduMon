@@ -1,0 +1,10 @@
+.idea/*
+!.idea/codeStyleSettings.xml
+/*.xml
+!/pom.xml
+/*/*.xml
+!/*/pom.xml
+/*/target
+*.iml
+/target/MANIFEST.MF
+*.db
