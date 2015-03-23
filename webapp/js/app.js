@@ -76,6 +76,12 @@
 	}
 
 
+	/* Configure message worker */
+	EduMon.prototype.configureWorker = function(new_url){
+		this.messenger.sendEvent({command:"config",url:new_url});
+	}
+
+
 	window.EduMon = new EduMon();
 
 })();
