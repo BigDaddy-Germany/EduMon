@@ -1,0 +1,226 @@
+html {
+	height: 100%;
+}
+
+body {
+	background-color: #EEEEEE;
+	height: 100%;
+}
+
+$timepanel_height: 100px;
+$timeprogress_height: 40px;
+$hourdisplay_height: 30px;
+$timeprogress_font: 24px;
+$hourdisplay_font: 20px;
+
+$tdgrad_color_low:    #4CAF50;
+$tdgrad_color_medium: #FF5722;
+$tdgrad_color_high:   #F44336;
+
+@mixin hflex {
+	display: flex;
+	flex-direction: row;
+}
+
+@mixin vflex {
+	display: flex;
+	flex-direction: column;
+}
+
+#screen {
+	height: 100%;
+	width:  100%;
+	overflow: hidden;
+	@include vflex;
+
+	#timepanel {
+		height: $timepanel_height;
+		@include hflex;
+
+		#logo {
+			white-space: nowrap;
+				vertical-align: middle;
+
+			h1 {
+				font-size: $timepanel_height * 0.6;
+				margin: 0px;
+				height: 100%;
+				padding-top: $timepanel_height * 0.1;
+				padding-bottom: $timepanel_height * 0.1;
+
+				img {
+					height: $timepanel_height * 0.8;
+					border-radius: 5px;
+				}
+			}
+		}
+
+		#timeline {
+			flex-grow: 1;
+			padding-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-left: 20px;
+			padding-right: 0px;
+			 
+			#progressdisplay {
+				border-radius: 5px;
+				height: $timeprogress_height;
+				margin: 0px;
+			}
+
+			#hourdisplay {
+				height: $hourdisplay_height;
+				margin: 0px;
+				overflow: hidden;
+				font-size: 0px;
+
+				.hour {
+					display: inline-block;
+					font-size: $hourdisplay_font;
+					height: 100%;
+					padding: 0px;
+					text-align: right;
+					vertical-align: top;
+
+					&:first-child {
+						text-align: left;
+					}
+				}
+			}
+
+			.progress-bar {
+				line-height: $timeprogress_height;
+				font-size: $timeprogress_font;
+				text-align: center;
+				overflow: visible;
+			}
+		}
+
+		#currentbox {
+			padding-top:    ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
+			padding-left: 0px;
+			padding-right: 10px;
+
+			#currentstate {
+				height: $timeprogress_height;
+				margin: 0px;
+				line-height: $timeprogress_height;
+				font-size: $timeprogress_height;
+				text-align: center;
+			}
+
+			#currenttime {
+				height: $hourdisplay_height;
+				margin: 0px;
+				line-height: $hourdisplay_height;
+				font-size: $hourdisplay_height;
+				text-align: left;
+				font-weight: bold;
+			}
+		}
+	}
+
+	#maincontainer {
+		flex-grow: 1;
+		@include hflex;
+
+		#buttonpanel {
+			width:100px;
+			@include vflex;
+			justify-content: flex-start;
+
+			#playbox {
+				margin: 0px;
+				text-align: center;
+
+				a {
+					margin: 5px;
+				}
+			}
+
+			#actionbox {
+				@extend #playbox;
+				flex-grow: 1;
+			}
+		}
+
+		#centerpanel {
+			flex-grow: 1;
+			@include vflex;
+
+			#room {
+				flex-grow: 1;
+				width: 100%;
+				padding: 10px;
+				@include vflex;
+
+				#seatscontainer {
+					flex-grow: 1;
+
+					#seats {
+						width: 100%;
+						height: 100%;
+						border-spacing: 10px;
+						border-collapse: separate;
+						background-color: #FFFFFF;
+
+						td {
+							background: #DDDDDD;
+							margin: 2px;
+						}
+
+						td.activity_low {
+							background: linear-gradient(0deg, $tdgrad_color_low 0%, $tdgrad_color_low 04%, #DDD 06%, #DDD 100%);
+						}
+						td.activity_medium {
+							background: linear-gradient(0deg, $tdgrad_color_medium 0%, $tdgrad_color_medium 42%, #DDD 44%, #DDD 100%);
+						}
+						td.activity_high {
+							background: linear-gradient(0deg, $tdgrad_color_high 0%, $tdgrad_color_high 85%, #DDD 87%, #DDD 100%);
+						}
+					}
+				}
+
+				#frontdesk {
+					width: 100%;
+					height: 100px;
+					background-color: #DDDDDD;
+				}
+			}
+		}
+
+		#feedpanel {
+			width:300px;
+			@include vflex;
+
+			.panel-body {
+				flex-grow: 1;
+				position: relative;
+
+				#alertcontainer {
+					position: absolute;
+					top: 0;
+					right: 0;
+					left: 0;
+					bottom: 0;
+					overflow-y: scroll;
+					padding: 5px;
+
+					.alert {
+						margin-bottom: 10px;
+					}
+				}
+			}
+
+			.panel-footer {
+				text-align: right;
+			}
+		}
+	}
+}
+
+.panel {
+	margin: 5px;
+	background-color: #FFFFFF;
+}
