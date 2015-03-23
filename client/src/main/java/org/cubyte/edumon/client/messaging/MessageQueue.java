@@ -1,28 +1,26 @@
 package org.cubyte.edumon.client.messaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ning.http.client.AsyncCompletionHandler;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.Response;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class MessageQueue {
     private CopyOnWriteArrayList<Message> queuedMessages;
-    private AsyncHttpClient asyncHttpClient;
+    private CloseableHttpClient httpClient;
     private String serverAddress;
     private ObjectMapper mapper;
 
     public MessageQueue(String serverAddress) {
         queuedMessages = new CopyOnWriteArrayList<>();
-        AsyncHttpClientConfig config = new AsyncHttpClientConfig.Builder().setConnectTimeout(1000).setReadTimeout(1000).build();
-        asyncHttpClient = new AsyncHttpClient(config);
+        httpClient = HttpClients.createDefault();
         this.serverAddress = serverAddress;
         mapper = new ObjectMapper();
     }
@@ -35,7 +33,7 @@ public class MessageQueue {
             try {
                 mapper.writeValue(writer, queuedMessages.get(i));
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace(System.err);
             }
             jsonString += writer.toString() + ((i == queueSize - 1) ? "" : ",");
             writer.flush();
@@ -44,27 +42,27 @@ public class MessageQueue {
         try {
             writer.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace(System.err);
         }
-        queuedMessages.clear();
+        queuedMessages.clear(); //TODO only clear if messages can be sent
 
+        HttpPost post = new HttpPost(serverAddress);
         try {
-            Future<ArrayList<Message>> future = asyncHttpClient.preparePost(serverAddress).addFormParam("messages", jsonString).execute(new RetrievedMessagesHandler());
-            ArrayList<Message> messages = future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            System.out.println(e.getMessage());
+            post.setEntity(new StringEntity(jsonString));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace(System.err);
         }
+        CloseableHttpResponse response;
+        try {
+            response = httpClient.execute(post);
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+        }
+
         //TODO throw Events
     }
 
     public void queue(Message message) {
         queuedMessages.add(message);
-    }
-
-    private class RetrievedMessagesHandler extends AsyncCompletionHandler<ArrayList<Message>> {
-        @Override
-        public ArrayList<Message> onCompleted(Response response) throws Exception {
-            return null;
-        }
     }
 }

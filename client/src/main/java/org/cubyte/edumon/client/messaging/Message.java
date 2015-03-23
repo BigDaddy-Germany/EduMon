@@ -36,7 +36,7 @@ public class Message {
                     Type.toClassMap.put(type, clazz);
                     Type.classToTypeMap.put(clazz, type);
                 } catch (ClassNotFoundException e) {
-                    //TODO
+                    e.printStackTrace(System.err);
                 }
             }
         }
