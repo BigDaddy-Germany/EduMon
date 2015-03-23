@@ -1,7 +1,8 @@
 /* Message-Worker communicates with the message server */
 
 //config
-var url = "demoDataIn.json";
+var show_debug = true;
+var url = "demoDataEmpty.json";
 var outgoing = [];
 var interval = 1000;
 var requests_failed = 0;
@@ -20,15 +21,16 @@ function createRequest() {
 
 
 /* Handle call for action from main app */
-onmessage = function(e) {
+onmessage = function(input) {
 	//Configuration command
-	if ("command" in e){
-		if (e.command=="config"){
-			url = e.url;
+	if ("command" in input.data){
+		if (input.data.command=="config"){
+			url = input.data.url;
+			if (show_debug) console.log("Worker config: URL "+url);
 		}
 	//Packet to queue
 	} else {
-		outgoing.push(e.data);
+		outgoing.push(input.data);
 	}
 };
 
