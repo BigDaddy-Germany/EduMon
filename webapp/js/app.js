@@ -2,7 +2,12 @@
 
 	/* Constructor */
 	function EduMon() {
+		var self = this;
 		this.show_debug = true;
+
+		this.messenger = new Messenger(function(event){
+			self.handleIncomingPacket(event);
+		});
 
 		this.debug("EduMon created");
 	};
@@ -18,11 +23,16 @@
 
 	/* Nachrichten-Handling */
 	function Messenger(eventCallback){
-		var w = new Worker('js/app.worker.js');
+		var w;
+		var c = eventCallback;
 
-		w.onmessage = function(e) {
-			eventCallback(e.data);
-		};
+		this.start = function(){
+			w = new Worker('js/app.worker.js');
+
+			w.onmessage = function(e) {
+				c(e.data);
+			};
+		}
 
 		this.sendEvent = function(event) {
 			w.postMessage(event);
@@ -38,9 +48,7 @@
 	EduMon.prototype.init = function(){
 		var self = this;
 
-		this.messenger = new Messenger(function(event){
-			self.handleIncomingPacket(event);
-		});
+		this.messenger.start();
 
 		this.debug("EduMon initiated");
 		this.debug("*** All Glory to the EduMon! ***")
