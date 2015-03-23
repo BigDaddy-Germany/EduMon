@@ -13,7 +13,7 @@
 	};
 
 
-	/* Debugausgabe in die Konsole */
+	/* Debug output to JS console */
 	EduMon.prototype.debug = function(msg){
 		if (this.show_debug){
 			console.log(msg);
@@ -21,7 +21,7 @@
 	};
 
 
-	/* Nachrichten-Handling */
+	/* Packet handling */
 	function Messenger(eventCallback){
 		var w;
 		var c = eventCallback;
@@ -44,7 +44,7 @@
 	};
 
 
-	/* EduMon starten */
+	/* EduMon startup */
 	EduMon.prototype.init = function(){
 		var self = this;
 
@@ -54,12 +54,13 @@
 	};
 
 
-	/* Eingehende Pakete behandeln */
+	/* Handle incoming packets */
 	EduMon.prototype.handleIncomingPacket = function(event){
-		this.debug(event);
+		//this.debug(event);
 	}
 
 
+	/* [DEV] Send demo packet */
 	EduMon.prototype.sendDemo = function(typenumber){
 		var self = this;
 
@@ -69,7 +70,7 @@
 	}
 
 
-	/* Paket verschicken */
+	/* Queue packet for sending */
 	EduMon.prototype.sendPacket = function(packet){
 		this.messenger.sendEvent(packet);
 	}
