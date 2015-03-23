@@ -5,6 +5,7 @@ var show_debug = true;
 var url = "demoDataEmpty.json";
 var outgoing = [];
 var interval = 1000;
+var timer = undefined;
 var requests_failed = 0;
 
 
@@ -24,10 +25,23 @@ function createRequest() {
 onmessage = function(input) {
 	//Configuration command
 	if ("command" in input.data){
-		if (input.data.command=="config"){
-			url = input.data.url;
-			if (show_debug) console.log("Worker config: URL "+url);
+
+		if (input.data.command==="config"){
+			url = input.data.url || "demoDataEmpty.json";
+			interval = input.data.interval || 1000;
+
+		} else if(input.data.command==="start") {
+			if (timer !== undefined){
+				clearInterval(timer);
+				console.log("Queue processing already started!");
+			}
+			timer = setInterval(sendQueue,interval);
+
+		} else if(input.data.command==="stop") {
+				clearInterval(timer);
+				timer = undefined;
 		}
+
 	//Packet to queue
 	} else {
 		outgoing.push(input.data);
@@ -47,8 +61,8 @@ function handleEvent(event) {
 }
 
 
-/* Continuous sending of queued packets */
-setInterval(function() {
+/* Send queued packets */
+function sendQueue() {
     var toBeSent = outgoing;
     outgoing = [];
 
@@ -70,5 +84,4 @@ setInterval(function() {
     req.onerror = onError;
 	req.onload = onLoad;
     req.send(JSON.stringify(toBeSent));
-
-}, interval);
+}

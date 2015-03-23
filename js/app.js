@@ -23,22 +23,18 @@
 
 	/* Packet handling */
 	function Messenger(eventCallback){
-		var w;
-		var c = eventCallback;
-
-		this.start = function(){
-			w = new Worker('js/app.worker.js');
-
+		var w = new Worker('js/app.worker.js');
 			w.onmessage = function(e) {
 				c(e.data);
 			};
-		}
+
+		var c = eventCallback;
 
 		this.sendEvent = function(event) {
 			w.postMessage(event);
 		};
 
-		this.stop = function() {
+		this.kill = function() {
 			w.terminate();
 		};
 	};
@@ -50,7 +46,7 @@
 
 		this.debug("*** All Glory to the EduMon! ***")
 
-		this.messenger.start();
+		this.commandWorker({command:"start"});
 	};
 
 
@@ -72,13 +68,13 @@
 
 	/* Queue packet for sending */
 	EduMon.prototype.sendPacket = function(packet){
-		this.messenger.sendEvent(packet);
+		this.commandWorker(packet);
 	}
 
 
-	/* Configure message worker */
-	EduMon.prototype.configureWorker = function(new_url){
-		this.messenger.sendEvent({command:"config",url:new_url});
+	/* Command message worker */
+	EduMon.prototype.commandWorker = function(cmd){
+		this.messenger.sendEvent(cmd);
 	}
 
 
