@@ -2,7 +2,7 @@ package org.cubyte.edumon.client;
 
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
-import org.cubyte.edumon.client.messaging.messagebodies.Sensordata;
+import org.cubyte.edumon.client.messaging.messagebodies.SensorData;
 import org.cubyte.edumon.client.sensorlistener.KeyListener;
 import org.cubyte.edumon.client.sensorlistener.MicListener;
 import org.cubyte.edumon.client.sensorlistener.MouseListener;
@@ -51,7 +51,7 @@ public class Main {
                 mousedistance = mouseListener.fetchDistance();
                 micLevel = micListener.fetchLevel();
 
-                messageQueue.queue(messageFactory.create(new Sensordata(keystrokes, mousedistance, mouseclicks, micLevel)));
+                messageQueue.queue(messageFactory.create(new SensorData(keystrokes, mousedistance, mouseclicks, micLevel)));
             }
         }, 0, 1, TimeUnit.SECONDS);
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {

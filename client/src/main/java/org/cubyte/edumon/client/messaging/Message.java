@@ -14,12 +14,14 @@ import java.util.HashMap;
 
 public class Message {
     public enum Type {
-        NAMELIST,
-        MYNAMEANDSEAT,
-        LOGINSUCCESS,
-        SENSORDATA,
-        THUMBFEEDBACK,
-        BREAKREQUEST,
+        NAME_LIST,
+        WHO_AM_I,
+        LOGIN_FEEDBACK,
+        SENSOR_DATA,
+        THUMB_REQUEST,
+        THUMB_FEEDBACK,
+        THUMB_RESULT,
+        BREAK_REQUEST,
         NONE;
 
         private static final HashMap<Type, Class<? extends MessageBody>> toClassMap = new HashMap<>();
@@ -30,7 +32,11 @@ public class Message {
             for(Type type: Type.values()) {
                 if (type == Type.NONE) {continue;}
                 typeString = type.toString().toLowerCase();
-                typeString = typeString.substring(0, 1).toUpperCase() + typeString.substring(1).toLowerCase();
+                String[] split = typeString.split("_");
+                typeString = "";
+                for (String string: split) {
+                    typeString += string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+                }
                 try {
                     Class<? extends MessageBody> clazz = (Class<? extends MessageBody>) Class.forName("org.cubyte.edumon.client.messaging.messagebodies." + typeString);
                     Type.toClassMap.put(type, clazz);
@@ -39,10 +45,6 @@ public class Message {
                     e.printStackTrace(System.err);
                 }
             }
-        }
-
-        public static Class<? extends MessageBody> getClass(String string) {
-            return toClassMap.get(Type.valueOf(string));
         }
 
         public static Class<? extends MessageBody> getClass(int i) {
@@ -121,15 +123,8 @@ public class Message {
 
         Message message = (Message) o;
 
-        if (id != message.id) return false;
-        if (!body.equals(message.body)) return false;
-        if (!from.equals(message.from)) return false;
-        if (!room.equals(message.room)) return false;
-        if (!time.equals(message.time)) return false;
-        if (!to.equals(message.to)) return false;
-        if (type != message.type) return false;
-
-        return true;
+        return id == message.id && body.equals(message.body) && from.equals(message.from) &&
+                room.equals(message.room) && time.equals(message.time) && to.equals(message.to) && type == message.type;
     }
 
     @Override

@@ -3,14 +3,14 @@ package org.cubyte.edumon.client.messaging.messagebodies;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Sensordata implements MessageBody {
+public class SensorData implements MessageBody {
     public final int keys;
     public final int mdist;
     public final int mclicks;
     public final double volume;
 
     @JsonCreator
-    public Sensordata(@JsonProperty("keys") int keys, @JsonProperty("mdist") int mdist,
+    public SensorData(@JsonProperty("keys") int keys, @JsonProperty("mdist") int mdist,
                       @JsonProperty("mclicks") int mclicks, @JsonProperty("volume") double volume) {
         this.keys = keys;
         this.mdist = mdist;
@@ -23,14 +23,10 @@ public class Sensordata implements MessageBody {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Sensordata that = (Sensordata) o;
+        SensorData that = (SensorData) o;
 
-        if (keys != that.keys) return false;
-        if (mclicks != that.mclicks) return false;
-        if (mdist != that.mdist) return false;
-        if (Double.compare(that.volume, volume) != 0) return false;
-
-        return true;
+        return keys == that.keys && mclicks == that.mclicks &&
+                mdist == that.mdist && Double.compare(that.volume, volume) == 0;
     }
 
     @Override
