@@ -1,10 +1,7 @@
-.idea/*
-!.idea/codeStyleSettings.xml
-/*.xml
-!/pom.xml
+/.idea/*
+!/.idea/codeStyleSettings.xml
 /*/*.xml
 !/*/pom.xml
 /*/target
 *.iml
-/target/MANIFEST.MF
-*.db
+Thumbs.db

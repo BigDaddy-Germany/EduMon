@@ -47,10 +47,12 @@ public class Main {
         final MessageQueue messageQueue = new MessageQueue("http://vps2.code-infection.de/edumon/mailbox.php", ROOM);
 
         // temporary
-        final MessageFactory messageFactoryMod = new MessageFactory(0, "MODERATOR", "Jonas Dann", ROOM);
+        final MessageQueue messageQueueMod = new MessageQueue("http://vps2.code-infection.de/edumon/mailbox.php", ROOM, true);
+        final MessageFactory messageFactoryMod = new MessageFactory(0, "MODERATOR", "BROADCAST", ROOM);
         List<String> list = new ArrayList<>();
         list.add("Jonas Dann");
-        messageQueue.queue(messageFactoryMod.create(new NameList(list, ROOM, new Dimensions(5, 5))));
+        messageQueueMod.queue(messageFactoryMod.create(new NameList(list, ROOM, new Dimensions(5, 5))));
+        messageQueueMod.send();
         // temporary
 
         messageQueue.send();
