@@ -3,14 +3,14 @@
 	/* Constructor */
 	function EduMon() {
 		var self = this;
-		this.show_debug = true;
-		this.session_id = ""; //necessary?
+		this.show_debug = true; //show debug messages in javascript console
+		this.session_id = ""; //session id assinged by message server //TODO: necessary?
 
-		this.messenger = new Messenger(function(event){
+		this.messenger = new Messenger(function(event){ //messenger class instance
 			self.handleIncomingData(event);
 		});
 
-		this.debug("EduMon created");
+		this.debug("EduMon awakening...");
 	};
 
 
@@ -22,19 +22,20 @@
 	};
 
 
-	/* Packet handling */
+	/* Packet handling - Messager class connects with message worker */
 	function Messenger(eventCallback){
-		var w = new Worker('js/app.worker.js');
+		var c = eventCallback;
+		var w = new Worker('js/app.messageworker.js');
 			w.onmessage = function(e) {
 				c(e.data);
 			};
 
-		var c = eventCallback;
-
+		/* Send command to message worker */
 		this.sendEvent = function(event) {
 			w.postMessage(event);
 		};
 
+		/* Destroy message worker */
 		this.kill = function() {
 			w.terminate();
 		};
@@ -51,6 +52,7 @@
 
 	/* Handle incoming data */
 	EduMon.prototype.handleIncomingData = function(event){
+		//Process packets received by message server
 		if ("inbox" in event && event.inbox.length > 0){
 			this.debug("Received packet[s]:");
 			this.debug(event.inbox);
@@ -59,12 +61,14 @@
 			}
 		}
 
+		//Handle any errors
 		if ("errorMessages" in event && event.errorMessages.length > 0){
 			for (var i = 0; i < event.errorMessages.length; ++i) {
 				this.debug(event.errorMessages[i]);
 			}
 		}
 
+		//Save session id assigned by message server
 		if ("clientId" in event){
 			this.session_id = event.clientId;
 		}
@@ -73,6 +77,7 @@
 
 	/* Process packet */
 	EduMon.prototype.processPacket = function(event){
+		//TODO to be implemented
 	}
 
 
@@ -88,12 +93,12 @@
 
 	/* Queue packet for sending */
 	EduMon.prototype.sendPacket = function(packet){
-		this.commandWorker(packet);
+		this.cmdConnection(packet);
 	}
 
 
 	/* Command message worker */
-	EduMon.prototype.commandWorker = function(cmd){
+	EduMon.prototype.cmdConnection = function(cmd){
 		this.messenger.sendEvent(cmd);
 	}
 
