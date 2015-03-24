@@ -39,10 +39,13 @@
 	*/
 
 
-	header('Access-Control-Allow-Origin: *');
-	header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-    header('Access-Control-Allow-Credentials: true');
-	header('Content-type: application/json; charset=utf-8');
+    if (isset($_SERVER['HTTP_origin'])) {
+        $url = parse_url($_SERVER['HTTP_origin']);
+        header('Access-Control-Allow-Origin: ' . $url['host']);
+        header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+        header('Access-Control-Allow-Credentials: true');
+    }
+header('Content-type: application/json; charset=utf-8');
 	
 	session_start();
 	
