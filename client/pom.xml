@@ -7,7 +7,7 @@
     <artifactId>edumon-client</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>EduMon Client</name>
+    <name>EduMon</name>
     <description>Monitor and improve educational sessions</description>
     <url>https://github.com/BigDaddy-Germany/EduMon</url>
     <inceptionYear>2015</inceptionYear>
@@ -109,6 +109,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
+        <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
