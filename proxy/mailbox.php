@@ -3,11 +3,14 @@
 	
 		This is the mailbox of edumon. Please access it as follows and remeber to hold the session!
 		
-		Your request needs to contain the following POST data:
+		Your request needs to contain the following GET data:
 		
 			- room [String] : The room, inside which you are at the moment
 			- moderatorPassphrase [String] : If you want to authenticate as a moderator, you have to send this passphase (needed only once in a session, to log off, just send an incorrect passphrase)
-			- outbox [Array] an array of packages you want to send. It needs the following fields and types:
+		
+		All packages you want to send should be in the BODY as a JSON Array:
+		
+			- each element of this array has to contain the following fields:
 				- type [int] : the package's type
 				- id [int] : the package's id
 				- time [int] : the packages timestamp
@@ -16,7 +19,8 @@
 				- room [String] : the room you are in
 				- body [Array] : the packages body
 		
-		The following data will be returned as JSON:
+		
+		An object containing the following fields will be returned as JSON:
 		
 			- inbox [Array] : All Packages which are stored for you. They contain the following fields: 
 				- type [int] : the package's type
@@ -49,7 +53,7 @@
 		die('No database available. Did you set up the system correctly?');
 	}
 	
-	if (!isset($_POST['room']) or !is_string($_POST['room'])) {
+	if (!isset($_GET['room']) or !is_string($_GET['room'])) {
 		die('Please select a valid room.');
 	}
 	
@@ -59,14 +63,14 @@
 	$stmt->execute();
 	
 	// check whether this client is the moderator
-	if (isset($_POST['moderatorPassphrase'])) {
+	if (isset($_GET['moderatorPassphrase'])) {
 		if (!($passphrase = file_get_contents(dirname(__FILE__).'/.htedumonpassword'))) {
 			die('No password file available. Did you set up the system correctly?');
 		} else {
 			$passphrase = trim($passphrase);
 		}
 		
-		$_SESSION['isModerator'] = ($passphrase == $_POST['moderatorPassphrase']);
+		$_SESSION['isModerator'] = ($passphrase == $_GET['moderatorPassphrase']);
 		
 	} elseif (!isset($_SESSION['isModerator'])) {
 		$_SESSION['isModerator'] = false;
@@ -80,19 +84,11 @@
 	}
 	
 	// check, whether there are packages to send
-	$outbox = array();
 	
-	if (isset($_POST['outbox'])) {
-		$outbox = json_decode($_POST['outbox'], true);
-		
-		if ($outbox == null) {
-			$errorMessages[] = 'Couldn\'nt parse given JSON.';
-			$outbox = array();
-		}
-	}
+	$outbox = json_decode(file_get_contents('php://input'), true);
 	
 	// at least one entry? we have to send some packages
-	if (count($outbox) > 0) {
+	if (is_array($outbox) and count($outbox) > 0) {
 		foreach ($outbox as $key => $package) {
 			// check package header on a basic level
 			
@@ -163,8 +159,8 @@
 			}
 			
 			// send packages only to own room
-			if ($package['room'] != $_POST['room']) {
-				$errorMessages[] = 'Only packages inside the room are allowed [You are in room "'.$_POST['room'].'" and wanted to send something to "'.$package['room'].'"] (Package '.$key.').';
+			if ($package['room'] != $_GET['room']) {
+				$errorMessages[] = 'Only packages inside the room are allowed [You are in room "'.$_GET['room'].'" and wanted to send something to "'.$package['room'].'"] (Package '.$key.').';
 				continue;
 			}
 			
@@ -205,7 +201,7 @@
 		$stmt = $db->prepare("select id, to_client, data from packages where room = :room and (id > :lastId and to_client = 'MODERATOR')");
 	}
 	
-	$stmt->bindValue(':room', $_POST['room'], SQLITE3_TEXT);
+	$stmt->bindValue(':room', $_GET['room'], SQLITE3_TEXT);
 	$stmt->bindValue(':lastId', $_SESSION['lastDeliveredPackage'], SQLITE3_INTEGER);
 	
 	$result = $stmt->execute();
