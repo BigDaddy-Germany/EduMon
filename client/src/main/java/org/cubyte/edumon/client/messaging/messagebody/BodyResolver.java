@@ -21,7 +21,7 @@ public class BodyResolver implements TypeIdResolver {
 
     @Override
     public String idFromValue(Object o) {
-        return String.valueOf(Message.Type.getType((Class<? extends MessageBody>)o.getClass()).getIndex());
+        return String.valueOf(Message.Type.getType((Class<? extends MessageBody>)o.getClass()).ordinal());
     }
 
     @Override
