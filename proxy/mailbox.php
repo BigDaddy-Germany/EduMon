@@ -45,7 +45,7 @@
         header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
         header('Access-Control-Allow-Credentials: true');
     }
-header('Content-type: application/json; charset=utf-8');
+	header('Content-type: application/json; charset=utf-8');
 	
 	session_start();
 	
@@ -134,6 +134,7 @@ header('Content-type: application/json; charset=utf-8');
 	if (http_response_code() == 200) {
 	
 		// delete old database entries
+		$stmt = $db->prepare("delete from packages where time < :timestamp");
 		$stmt->bindValue(':timestamp', time()-24*3600, SQLITE3_INTEGER);
 		$stmt->execute();
 
