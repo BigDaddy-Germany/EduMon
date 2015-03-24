@@ -44,9 +44,7 @@
 	EduMon.prototype.init = function(){
 		var self = this;
 
-		this.debug("*** All Glory to the EduMon! ***")
-
-		this.commandWorker({command:"start"});
+		this.debug("*** All Glory to the EduMon! ***");
 	};
 
 
