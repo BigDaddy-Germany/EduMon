@@ -1,11 +1,10 @@
 package org.cubyte.edumon.client.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
@@ -65,7 +64,6 @@ public class Message implements Bullet {
         }
     }
 
-    @JsonSerialize(converter = TypeToIntegerConverter.class)
     public final Type type;
     public final int id;
     public final Date time;
@@ -77,10 +75,10 @@ public class Message implements Bullet {
     public final MessageBody body;
 
     @JsonCreator
-    public Message(@JsonProperty("type") Type type, @JsonProperty("id") int id, @JsonProperty("time") Date time, @JsonProperty("from") String from,
+    public Message(@JsonProperty("id") int id, @JsonProperty("time") Date time, @JsonProperty("from") String from,
                    @JsonProperty("to") String to, @JsonProperty("room") String room,
                    @JsonProperty("body") MessageBody body) {
-        this.type = type;
+        this.type = Type.getType(body.getClass());
         this.id = id;
         this.time = time;
         this.from = from;
@@ -89,14 +87,9 @@ public class Message implements Bullet {
         this.body = body;
     }
 
-    public Message(int id, Date time, String from, String to, String room, MessageBody body) {
-        this.type = Type.getType(body.getClass());
-        this.id = id;
-        this.time = time;
-        this.from = from;
-        this.to = to;
-        this.room = room;
-        this.body = body;
+    @JsonIgnore
+    public Type getType() {
+        return type;
     }
 
     @Override
