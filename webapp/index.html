@@ -104,7 +104,7 @@
 							<input type="button" value="Demo: Start Worker" onclick="EduMon.commandWorker({command:'start'})">
 							<input type="button" value="Demo: Stop Worker" onclick="EduMon.commandWorker({command:'stop'})">
 							<input type="button" value="Demo: Activate data IN" onclick="EduMon.commandWorker({command:'config',url:'demoDataIn.json'})">
-							<input type="button" value="Demo: Kill data IN" onclick="EduMon.commandWorker({command:'config',url:'demoDataEmpty.json'})">
+							<input type="button" value="Demo: Silence data IN" onclick="EduMon.commandWorker({command:'config',url:'demoDataEmpty.json'})">
 							<input type="button" value="Demo: Typ 1 OUT" onclick="EduMon.sendDemo(1)">
 							<input type="button" value="Demo: Typ 3 OUT" onclick="EduMon.sendDemo(3)">
 							<input type="button" value="Demo: Typ 5 OUT" onclick="EduMon.sendDemo(5)">
@@ -167,6 +167,7 @@
             $(document).ready(function() {
                 $.material.init();
 				EduMon.init();
+				EduMon.commandWorker({command:"config",url:"demoDataEmpty.json",room:"160C",moderatorPassphrase:"alohomora"});
             });
         </script>
 

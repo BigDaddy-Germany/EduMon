@@ -2,7 +2,9 @@
 
 //config
 var show_debug = true;
-var url = "demoDataEmpty.json";
+var url = "localhost";
+var room = encodeURIComponent("42A");
+var moderatorPassphrase = encodeURIComponent("secretpassword");
 var outgoing = [];
 var interval = 1000;
 var timer = undefined;
@@ -12,7 +14,7 @@ var requests_failed = 0;
 /* Create a JSON-POST-HTTP-Request */
 function createRequest() {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', url, true);
+    xhr.open('POST', url+"?room="+room+"&moderatorPassphrase="+moderatorPassphrase,true);
     xhr.withCredentials = true;
     xhr.contentType = 'application/json';
     xhr.accepts = 'application/json';
@@ -27,8 +29,10 @@ onmessage = function(input) {
 	if ("command" in input.data){
 
 		if (input.data.command==="config"){
-			url = input.data.url || "demoDataEmpty.json";
-			interval = input.data.interval || 1000;
+			if ("url"                 in input.data) url = input.data.url;
+			if ("room"                in input.data) room = encodeURIComponent(input.data.room);
+			if ("moderatorPassphrase" in input.data) moderatorPassphrase = encodeURIComponent(input.data.moderatorPassphrase);
+			if ("interval"            in input.data) interval = input.data.interval;
 
 		} else if(input.data.command==="start") {
 			if (timer !== undefined){
