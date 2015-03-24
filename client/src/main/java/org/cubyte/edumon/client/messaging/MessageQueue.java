@@ -2,20 +2,15 @@ package org.cubyte.edumon.client.messaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.cubyte.edumon.client.eventsystem.Revolver;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessageQueue extends Revolver<Message> {
@@ -80,6 +75,7 @@ public class MessageQueue extends Revolver<Message> {
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
             sessionId = response.getFirstHeader("Set-Cookie").getValue().substring(10, 36);
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             Message[] messages = mapper.readValue(response.getEntity().getContent(), Message[].class); //TODO handle error messages
             for (Message message: messages) {
                 load(message);
