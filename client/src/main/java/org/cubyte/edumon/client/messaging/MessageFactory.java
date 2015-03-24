@@ -5,7 +5,7 @@ import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 import java.util.Date;
 
 public class MessageFactory {
-    public int id;
+    public int id; //TODO Atomic Integer
     public final String from;
     public final String to;
     public final String room;

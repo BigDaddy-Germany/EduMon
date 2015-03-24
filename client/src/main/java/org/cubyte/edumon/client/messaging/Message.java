@@ -2,12 +2,15 @@ package org.cubyte.edumon.client.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
 import org.cubyte.edumon.client.eventsystem.Bullet;
+import org.cubyte.edumon.client.messaging.messagebody.BodyResolver;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.util.Date;
@@ -69,6 +72,8 @@ public class Message implements Bullet {
     public final String from;
     public final String to;
     public final String room;
+    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
+    @JsonTypeIdResolver(BodyResolver.class)
     public final MessageBody body;
 
     @JsonCreator
