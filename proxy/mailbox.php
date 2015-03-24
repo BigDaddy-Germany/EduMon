@@ -163,8 +163,8 @@
 				
 				// needed field types
 				$packageValidation = array(
-					'integer' => array('type', 'id', 'time'),
-					'string' => array('from', 'to', 'room'),
+					'integer' => array('id', 'time'),
+					'string' => array('type', 'from', 'to', 'room'),
 					'array' => array('body')
 				);
 				
