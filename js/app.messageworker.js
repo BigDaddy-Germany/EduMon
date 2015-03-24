@@ -52,15 +52,9 @@ onmessage = function(input) {
 };
 
 
-/* Process incoming paket[-array] */
+/* Forward incoming data to main app */
 function handleEvent(event) {
-    if (event instanceof Array) {
-        for (var i = 0; i < event.length; ++i) {
-            postMessage(event[i]);
-        }
-    } else {
-        postMessage(event);
-    }
+	postMessage(event);
 }
 
 
