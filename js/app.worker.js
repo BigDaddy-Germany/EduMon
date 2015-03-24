@@ -14,11 +14,10 @@ var requests_failed = 0;
 /* Create a JSON-POST-HTTP-Request */
 function createRequest() {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', url+"?room="+room+"&moderatorPassphrase="+moderatorPassphrase,true);
+    xhr.open("POST", url+"?room="+room+"&moderatorPassphrase="+moderatorPassphrase,true);
     xhr.withCredentials = true;
-    xhr.contentType = 'application/json';
-    xhr.accepts = 'application/json';
-    xhr.dataType = 'json';
+    xhr.setRequestHeader("Content-type","text/plain; charset=UTF-8"); //forged to force cross-site request of the "simple" type
+    xhr.setRequestHeader("Accept","application/json");
     return xhr;
 }
 
@@ -75,6 +74,7 @@ function sendQueue() {
     function onError() {
 		requests_failed++;
         outgoing = outgoing.concat(toBeSent);
+		if (show_debug) console.log("Request failed ("+toBeSent.length+" packets waiting)");
     }
 
     function onLoad() {
