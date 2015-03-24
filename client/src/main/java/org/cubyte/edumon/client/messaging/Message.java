@@ -7,13 +7,16 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
-import org.cubyte.edumon.client.messaging.messagebodies.MessageBody;
+import org.cubyte.edumon.client.eventsystem.Bullet;
+import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.util.Date;
 import java.util.HashMap;
 
-public class Message {
+public class Message implements Bullet {
     public enum Type {
+        // Don't change the order of the elements!!!
+        NONE,
         NAME_LIST,
         WHO_AM_I,
         LOGIN_FEEDBACK,
@@ -21,8 +24,7 @@ public class Message {
         THUMB_REQUEST,
         THUMB_FEEDBACK,
         THUMB_RESULT,
-        BREAK_REQUEST,
-        NONE;
+        BREAK_REQUEST;
 
         private static final HashMap<Type, Class<? extends MessageBody>> toClassMap = new HashMap<>();
         private static final HashMap<Class<? extends MessageBody>, Type> classToTypeMap = new HashMap<>();
@@ -38,7 +40,7 @@ public class Message {
                     typeString += string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
                 }
                 try {
-                    Class<? extends MessageBody> clazz = (Class<? extends MessageBody>) Class.forName("org.cubyte.edumon.client.messaging.messagebodies." + typeString);
+                    Class<? extends MessageBody> clazz = (Class<? extends MessageBody>) Class.forName("org.cubyte.edumon.client.messaging.messagebody." + typeString);
                     Type.toClassMap.put(type, clazz);
                     Type.classToTypeMap.put(clazz, type);
                 } catch (ClassNotFoundException e) {
@@ -48,7 +50,7 @@ public class Message {
         }
 
         public static Class<? extends MessageBody> getClass(int i) {
-            return toClassMap.get(Type.values()[i - 1]);
+            return toClassMap.get(Type.values()[i]);
         }
 
         public static Type getType(Class<? extends MessageBody> clazz) {
@@ -56,16 +58,11 @@ public class Message {
         }
 
         public static Type getType(int i) {
-            return Type.values()[i - 1];
-        }
-
-        public int getIndex() {
-            return this.ordinal() + 1;
+            return Type.values()[i];
         }
     }
 
     @JsonSerialize(converter = TypeToIntegerConverter.class)
-    @JsonDeserialize(converter = IntegerToTypeConverter.class)
     public final Type type;
     public final int id;
     public final Date time;
@@ -75,9 +72,19 @@ public class Message {
     public final MessageBody body;
 
     @JsonCreator
-    public Message(@JsonProperty("id") int id, @JsonProperty("time") Date time, @JsonProperty("from") String from,
+    public Message(@JsonProperty("type") Type type, @JsonProperty("id") int id, @JsonProperty("time") Date time, @JsonProperty("from") String from,
                    @JsonProperty("to") String to, @JsonProperty("room") String room,
                    @JsonProperty("body") MessageBody body) {
+        this.type = type;
+        this.id = id;
+        this.time = time;
+        this.from = from;
+        this.to = to;
+        this.room = room;
+        this.body = body;
+    }
+
+    public Message(int id, Date time, String from, String to, String room, MessageBody body) {
         this.type = Type.getType(body.getClass());
         this.id = id;
         this.time = time;
@@ -87,24 +94,15 @@ public class Message {
         this.body = body;
     }
 
-    public static class IntegerToTypeConverter implements Converter<Integer, Type> {
-        @Override
-        public Type convert(Integer i) {
-            return Type.getType(i);
-        }
-        @Override
-        public JavaType getInputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(Integer.class);
-        }
-        @Override
-        public JavaType getOutputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(Type.class);
-        }
+    @Override
+    public Class getBulletClass() {
+        return body.getClass();
     }
+
     public static class TypeToIntegerConverter implements Converter<Type, Integer> {
         @Override
         public Integer convert(Type type) {
-            return type.getIndex();
+            return type.ordinal();
         }
         @Override
         public JavaType getInputType(TypeFactory typeFactory) {

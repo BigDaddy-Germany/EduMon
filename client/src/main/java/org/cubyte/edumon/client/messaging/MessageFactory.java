@@ -1,6 +1,6 @@
 package org.cubyte.edumon.client.messaging;
 
-import org.cubyte.edumon.client.messaging.messagebodies.MessageBody;
+import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.util.Date;
 

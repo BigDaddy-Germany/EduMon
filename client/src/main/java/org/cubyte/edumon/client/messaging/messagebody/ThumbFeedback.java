@@ -1,4 +1,4 @@
-package org.cubyte.edumon.client.messaging.messagebodies;
+package org.cubyte.edumon.client.messaging.messagebody;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
