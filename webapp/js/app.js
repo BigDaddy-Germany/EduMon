@@ -4,9 +4,10 @@
 	function EduMon() {
 		var self = this;
 		this.show_debug = true;
+		this.session_id = ""; //necessary?
 
 		this.messenger = new Messenger(function(event){
-			self.handleIncomingPacket(event);
+			self.handleIncomingData(event);
 		});
 
 		this.debug("EduMon created");
@@ -48,9 +49,30 @@
 	};
 
 
-	/* Handle incoming packets */
-	EduMon.prototype.handleIncomingPacket = function(event){
-		//this.debug(event);
+	/* Handle incoming data */
+	EduMon.prototype.handleIncomingData = function(event){
+		if ("inbox" in event && event.inbox.length > 0){
+			this.debug("Received packet[s]:");
+			this.debug(event.inbox);
+			for (var i = 0; i < event.inbox.length; ++i) {
+				this.processPacket(event.inbox[i]);
+			}
+		}
+
+		if ("errorMessages" in event && event.errorMessages.length > 0){
+			for (var i = 0; i < event.errorMessages.length; ++i) {
+				this.debug(event.errorMessages[i]);
+			}
+		}
+
+		if ("clientId" in event){
+			this.session_id = event.clientId;
+		}
+	}
+
+
+	/* Process packet */
+	EduMon.prototype.processPacket = function(event){
 	}
 
 
