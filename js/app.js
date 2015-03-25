@@ -6,11 +6,39 @@
 		this.show_debug = true; //show debug messages in javascript console
 		this.session_id = ""; //session id assinged by message server //TODO: necessary?
 
-		this.messenger = new Messenger(function(event){ //messenger class instance
-			self.handleIncomingData(event);
-		});
+		/* Packet handling - Messager class connects with message worker */
+		this.Messenger = (function(){
+			//private vars
+			var _cback, _worker;
+
+			//private methods
+			function _eventCallback(event){
+				self.handleIncomingData(event);
+			};
+
+			//public vars & methods
+			return {
+				/* Constructor */
+				"init": function(){
+					_cback = _eventCallback;
+					_worker = new Worker('js/app.messageworker.js');
+					_worker.onmessage = function(e) {
+						_eventCallback(e.data);
+					};
+				},
+					/* Send command to message worker */
+					"sendEvent": function(event){
+						_worker.postMessage(event);
+					},
+					/* Destroy message worker */
+					"kill": function(){
+						_worker.terminate();
+					}
+			};
+		}());
 
 		this.debug("EduMon awakening...");
+		this.Messenger.init();
 	};
 
 
@@ -19,26 +47,6 @@
 		if (this.show_debug){
 			console.log(msg);
 		}
-	};
-
-
-	/* Packet handling - Messager class connects with message worker */
-	function Messenger(eventCallback){
-		var c = eventCallback;
-		var w = new Worker('js/app.messageworker.js');
-			w.onmessage = function(e) {
-				c(e.data);
-			};
-
-		/* Send command to message worker */
-		this.sendEvent = function(event) {
-			w.postMessage(event);
-		};
-
-		/* Destroy message worker */
-		this.kill = function() {
-			w.terminate();
-		};
 	};
 
 
@@ -86,7 +94,7 @@
 		var self = this;
 
 		jQuery.getJSON("js/demoDataOut.json",function(data){
-				self.sendPacket(data["demo_type_"+typenumber]);
+			self.sendPacket(data["demo_type_"+typenumber]);
 		});
 	}
 
@@ -99,7 +107,7 @@
 
 	/* Command message worker */
 	EduMon.prototype.cmdConnection = function(cmd){
-		this.messenger.sendEvent(cmd);
+		this.Messenger.sendEvent(cmd);
 	}
 
 
