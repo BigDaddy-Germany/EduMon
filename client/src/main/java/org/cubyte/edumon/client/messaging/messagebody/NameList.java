@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.cubyte.edumon.client.messaging.messagebody.util.Dimensions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NameList implements MessageBody {
-    public final List<String> names;
+    public final ArrayList<String> names;
     public final String room;
     public final Dimensions dimensions;
 
     @JsonCreator
-    public NameList(@JsonProperty("names") List<String> names, @JsonProperty("room") String room, @JsonProperty("dimensions") Dimensions dimensions) {
+    public NameList(@JsonProperty("names") ArrayList<String> names, @JsonProperty("room") String room, @JsonProperty("dimensions") Dimensions dimensions) {
         this.names = names;
         this.room = room;
         this.dimensions = dimensions;

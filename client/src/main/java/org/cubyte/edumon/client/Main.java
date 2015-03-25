@@ -1,6 +1,5 @@
 package org.cubyte.edumon.client;
 
-import org.cubyte.edumon.client.messaging.Message;
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
@@ -15,7 +14,6 @@ import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,14 +26,14 @@ public class Main {
 
         Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
         logger.setLevel(Level.WARNING);
-        /*try {
+        try {
             GlobalScreen.registerNativeHook();
         } catch (NativeHookException e) {
             System.err.println("There was a problem registering the native hook.");
             System.err.println(e.getMessage());
 
             System.exit(1);
-        }*/
+        }
         final KeyListener keyListener = new KeyListener();
         final MouseListener mouseListener = new MouseListener();
         GlobalScreen.addNativeKeyListener(keyListener);
@@ -49,16 +47,16 @@ public class Main {
         // temporary
         final MessageQueue messageQueueMod = new MessageQueue("http://vps2.code-infection.de/edumon/mailbox.php", ROOM, true);
         final MessageFactory messageFactoryMod = new MessageFactory(0, "MODERATOR", "BROADCAST", ROOM);
-        List<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
         messageQueueMod.queue(messageFactoryMod.create(new NameList(list, ROOM, new Dimensions(5, 5))));
         messageQueueMod.send();
         // temporary
 
         messageQueue.send();
-        Message nameList = messageQueue.unload(); //TODO what is when no namelist is on the server?
+        //TODO what is when no namelist is on the server?
 
-        final MessageFactory messageFactory = new MessageFactory(0, "Jonas Dann", "MODERATOR", ROOM);
+        final MessageFactory messageFactory = new MessageFactory(0, messageQueue.getSessionId(), "MODERATOR", ROOM);
 
         messageQueue.queue(messageFactory.create(new WhoAmI("Jonas Dann", new Position(1, 1))));
         messageQueue.send();

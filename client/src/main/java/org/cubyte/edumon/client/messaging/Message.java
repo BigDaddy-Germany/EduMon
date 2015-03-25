@@ -1,19 +1,14 @@
 package org.cubyte.edumon.client.messaging;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
 import org.cubyte.edumon.client.eventsystem.Bullet;
-import org.cubyte.edumon.client.messaging.messagebody.BodyResolver;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class Message implements Bullet {
     public enum Type {
@@ -62,16 +57,44 @@ public class Message implements Bullet {
         public static Type getType(int i) {
             return Type.values()[i];
         }
+
+        public static Class<? extends MessageBody> getClass(List<String> fields) {
+            Type type = Type.NONE;
+            boolean isType;
+            for (Type currType: Type.values()) {
+                isType = true;
+                if (currType != Type.NONE) {
+                    for (String field : fields) {
+                        try {
+                            toClassMap.get(currType).getField(field);
+                        } catch (NoSuchFieldException e) {
+                            isType = false;
+                            break;
+                        }
+                    }
+                } else {
+                    continue;
+                }
+                if (isType) {
+                    type = currType;
+                    break;
+                }
+            }
+            if (type == Type.NONE) {
+                return null;
+            }
+            return toClassMap.get(type);
+        }
     }
 
+    @JsonSerialize(converter = TypeToStringConverter.class)
     public final Type type;
     public final int id;
+    @JsonSerialize(converter = DateToIntegerConverter.class)
     public final Date time;
     public final String from;
     public final String to;
     public final String room;
-    @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
-    @JsonTypeIdResolver(BodyResolver.class)
     public final MessageBody body;
 
     @JsonCreator
@@ -97,14 +120,29 @@ public class Message implements Bullet {
         return body.getClass();
     }
 
-    public static class TypeToIntegerConverter implements Converter<Type, Integer> {
+    public static class TypeToStringConverter implements Converter<Type, String> {
         @Override
-        public Integer convert(Type type) {
-            return type.ordinal();
+        public String convert(Type type) {
+            return String.valueOf(type.ordinal());
         }
         @Override
         public JavaType getInputType(TypeFactory typeFactory) {
             return typeFactory.constructType(Type.class);
+        }
+        @Override
+        public JavaType getOutputType(TypeFactory typeFactory) {
+            return typeFactory.constructType(String.class);
+        }
+    }
+
+    public static class DateToIntegerConverter implements Converter<Date, Integer> {
+        @Override
+        public Integer convert(Date date) {
+            return Math.round(date.getTime() / 1000);
+        }
+        @Override
+        public JavaType getInputType(TypeFactory typeFactory) {
+            return typeFactory.constructType(Date.class);
         }
         @Override
         public JavaType getOutputType(TypeFactory typeFactory) {
@@ -120,14 +158,13 @@ public class Message implements Bullet {
         Message message = (Message) o;
 
         return id == message.id && body.equals(message.body) && from.equals(message.from) &&
-                room.equals(message.room) && time.equals(message.time) && to.equals(message.to) && type == message.type;
+                room.equals(message.room) && to.equals(message.to) && type == message.type;
     }
 
     @Override
     public int hashCode() {
         int result = type.hashCode();
         result = 31 * result + id;
-        result = 31 * result + time.hashCode();
         result = 31 * result + from.hashCode();
         result = 31 * result + to.hashCode();
         result = 31 * result + room.hashCode();
