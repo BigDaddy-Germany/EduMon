@@ -1,29 +1,33 @@
-[
-	{
-		"type":2, "id":1, "time":1427052100, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
-		"body":{
-			"name":"Max Mustermann",
-			"seat":{"x":3, "y":1}
+{
+	"inbox":[
+		{
+			"type":2, "id":1, "time":1427052100, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+			"body":{
+				"name":"Max Mustermann",
+				"seat":{"x":3, "y":1}
+			}
+		},
+		{
+			"type":4, "id":2, "time":1427052200, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+			"body":{
+				"keys":10,
+				"mdist":1.5,
+				"mclicks":20,
+				"volume":0.42
+			}
+		},
+		{
+			"type":6, "id":3, "time":1427052300, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+			"body":{
+				"id":23,
+				"thumb":0.23
+			}
+		},
+		{
+			"type":8, "id":4, "time":1427052400, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+			"body":{}
 		}
-	},
-	{
-		"type":4, "id":2, "time":1427052200, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
-		"body":{
-			"keys":10,
-			"mdist":1.5,
-			"mclicks":20,
-			"volume":0.42
-		}
-	},
-	{
-		"type":6, "id":3, "time":1427052300, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
-		"body":{
-			"id":23,
-			"thumb":0.23
-		}
-	},
-	{
-		"type":8, "id":4, "time":1427052400, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
-		"body":{}
-	}
-]
+	],
+	"errorMessages":[],
+	"clientId":"MODERATOR"
+}
