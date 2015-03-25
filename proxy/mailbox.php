@@ -46,6 +46,7 @@
 	}
 	header('Content-type: application/json; charset=utf-8');
 
+	session_name('PHPSESSID');
 	session_start();
 
 	$errorMessages = array();
