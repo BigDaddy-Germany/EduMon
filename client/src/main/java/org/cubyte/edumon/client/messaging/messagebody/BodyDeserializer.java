@@ -36,7 +36,6 @@ public class BodyDeserializer extends StdDeserializer<MessageBody> {
         if (messageBodyClass == null) {
             return null;
         }
-        MessageBody body = mapper.readValue(root.traverse(), messageBodyClass);
-        return body;
+        return mapper.readValue(root.traverse(), messageBodyClass);
     }
 }
