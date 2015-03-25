@@ -3,24 +3,26 @@ package org.cubyte.edumon.client.sensorlistener;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 
-public class MouseListener implements NativeMouseInputListener {
-    private int clicks;
-    private int distance;
+import java.util.concurrent.atomic.AtomicInteger;
 
-    private int oldX;
-    private int oldY;
+public class MouseListener implements NativeMouseInputListener {
+    private AtomicInteger clicks;
+    private AtomicInteger distance;
+
+    private AtomicInteger oldX;
+    private AtomicInteger oldY;
 
     public MouseListener() {
-        this.clicks = 0;
-        this.distance = 0;
+        this.clicks = new AtomicInteger(0);
+        this.distance = new AtomicInteger(0);
 
-        this.oldX = 0;
-        this.oldY = 0;
+        this.oldX = new AtomicInteger(0);
+        this.oldY = new AtomicInteger(0);
     }
 
     @Override
     public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) {
-        clicks++;
+        clicks.incrementAndGet();
     }
 
     @Override
@@ -37,13 +39,13 @@ public class MouseListener implements NativeMouseInputListener {
     public void nativeMouseMoved(NativeMouseEvent nativeMouseEvent) {
         int x = nativeMouseEvent.getX();
         int y = nativeMouseEvent.getY();
-        int dx = x - oldX;
-        int dy = y - oldY;
+        int dx = x - oldX.get();
+        int dy = y - oldY.get();
 
-        oldX = x;
-        oldY = y;
+        oldX.set(x);
+        oldY.set(y);
 
-        distance += (int) Math.sqrt(dx * dx + dy * dy); //TODO normalize to screendiagonal
+        distance.addAndGet((int) Math.sqrt(dx * dx + dy * dy)); //TODO normalize to screendiagonal
     }
 
     @Override
@@ -52,13 +54,10 @@ public class MouseListener implements NativeMouseInputListener {
     }
 
     public int fetchClicks() {
-        int c = clicks;
-        clicks = 0;
-        return c;
+        return clicks.getAndSet(0);
     }
+
     public int fetchDistance() {
-        int d = distance;
-        distance = 0;
-        return d;
+        return distance.getAndSet(0);
     }
 }

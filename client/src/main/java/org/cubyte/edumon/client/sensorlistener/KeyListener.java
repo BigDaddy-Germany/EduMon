@@ -3,12 +3,14 @@ package org.cubyte.edumon.client.sensorlistener;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class KeyListener implements NativeKeyListener {
-    private int strokes = 0;
+    private AtomicInteger strokes = new AtomicInteger(0);
 
     @Override
     public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
-        strokes++;
+        strokes.incrementAndGet();
     }
 
     @Override
@@ -22,8 +24,6 @@ public class KeyListener implements NativeKeyListener {
     }
 
     public int fetchStrokes() {
-        int s = strokes;
-        strokes = 0;
-        return s;
+        return strokes.getAndSet(0);
     }
 }
