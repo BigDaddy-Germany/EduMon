@@ -12,19 +12,25 @@ import java.util.*;
 
 public class Message implements Bullet {
     public enum Type {
-        // Don't change the order of the elements!!!
-        NONE,
-        NAME_LIST,
-        WHO_AM_I,
-        LOGIN_FEEDBACK,
-        SENSOR_DATA,
-        THUMB_REQUEST,
-        THUMB_FEEDBACK,
-        THUMB_RESULT,
-        BREAK_REQUEST;
+        // Don't change the order of the elements!!! //TODO use index
+        NONE(0),
+        NAME_LIST(1),
+        WHO_AM_I(2),
+        LOGIN_FEEDBACK(3),
+        SENSOR_DATA(4),
+        THUMB_REQUEST(5),
+        THUMB_FEEDBACK(6),
+        THUMB_RESULT(7),
+        BREAK_REQUEST(8);
+
+        private int index;
 
         private static final HashMap<Type, Class<? extends MessageBody>> toClassMap = new HashMap<>();
         private static final HashMap<Class<? extends MessageBody>, Type> classToTypeMap = new HashMap<>();
+
+        private Type(int index) {
+            this.index = index;
+        }
 
         static {
             String typeString;
@@ -87,9 +93,8 @@ public class Message implements Bullet {
         }
     }
 
-    @JsonSerialize(converter = TypeToStringConverter.class)
+    @JsonSerialize(converter = TypeToIntegerConverter.class)
     public final Type type;
-    public final int id;
     @JsonSerialize(converter = DateToIntegerConverter.class)
     public final Date time;
     public final String from;
@@ -98,11 +103,10 @@ public class Message implements Bullet {
     public final MessageBody body;
 
     @JsonCreator
-    public Message(@JsonProperty("id") int id, @JsonProperty("time") Date time, @JsonProperty("from") String from,
+    public Message(@JsonProperty("time") Date time, @JsonProperty("from") String from,
                    @JsonProperty("to") String to, @JsonProperty("room") String room,
                    @JsonProperty("body") MessageBody body) {
         this.type = Type.getType(body.getClass());
-        this.id = id;
         this.time = time;
         this.from = from;
         this.to = to;
@@ -120,10 +124,10 @@ public class Message implements Bullet {
         return body.getClass();
     }
 
-    public static class TypeToStringConverter implements Converter<Type, String> {
+    public static class TypeToIntegerConverter implements Converter<Type, Integer> {
         @Override
-        public String convert(Type type) {
-            return String.valueOf(type.ordinal());
+        public Integer convert(Type type) {
+            return type.ordinal();
         }
         @Override
         public JavaType getInputType(TypeFactory typeFactory) {
@@ -131,7 +135,7 @@ public class Message implements Bullet {
         }
         @Override
         public JavaType getOutputType(TypeFactory typeFactory) {
-            return typeFactory.constructType(String.class);
+            return typeFactory.constructType(Integer.class);
         }
     }
 
@@ -157,14 +161,13 @@ public class Message implements Bullet {
 
         Message message = (Message) o;
 
-        return id == message.id && body.equals(message.body) && from.equals(message.from) &&
+        return body.equals(message.body) && from.equals(message.from) &&
                 room.equals(message.room) && to.equals(message.to) && type == message.type;
     }
 
     @Override
     public int hashCode() {
         int result = type.hashCode();
-        result = 31 * result + id;
         result = 31 * result + from.hashCode();
         result = 31 * result + to.hashCode();
         result = 31 * result + room.hashCode();

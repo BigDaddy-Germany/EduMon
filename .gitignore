@@ -4,5 +4,6 @@
 !/*/pom.xml
 /*/target
 *.iml
+MANIFEST.MF
 Thumbs.db
 /client/.idea/*

@@ -83,6 +83,7 @@ public class MessageQueue extends Revolver<Message> {
             for (Message message: jsonResponse.inbox) {
                 load(message);
             }
+            System.out.println(jsonResponse.errorMessages);
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
