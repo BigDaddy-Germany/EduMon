@@ -18,15 +18,14 @@ then
 	exit 1
 fi
 
-set -x
-
 dd if=/dev/zero "of=$dmg_path" bs=1M "count=$dmg_size"
 label=$(sed -r "s/\s/_/g" <<< "$app_name")
 label=$(sed -r "s/^(.{,27}).*$/\1/g" <<< "$label")
 hformat -l "$label" "$dmg_path"
 mount_point="$(mktemp -d)"
 mount -t hfs -o loop "$dmg_path" "$mount_point"
-cp -R "$app_path" "$mount_point"
+cp -v -R "$app_path" "$mount_point"
+cp -v "$(dirname "$(readlink -f "$0")")/Applications" "$mount_point/Applications"
 ls -l "$mount_point"
 umount "$mount_point"
 rm -R "$mount_point"
