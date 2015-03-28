@@ -12,6 +12,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.eventsystem.Revolver;
 import org.cubyte.edumon.client.messaging.messagebody.BodyDeserializer;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
@@ -20,27 +21,27 @@ import java.io.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessageQueue extends Revolver<Message> {
+    private Main owner;
+
     private CopyOnWriteArrayList<Message> queuedMessages;
     private CloseableHttpClient httpClient;
     private CookieStore cookieStore;
-    private String serverAddress;
-    private String room;
     private String sessionId;
-    private boolean mod;
+    private boolean isModerator;
     private ObjectMapper mapper;
 
-    public MessageQueue(String serverAddress, String room) {
-        this(serverAddress, room, false);
+    public MessageQueue(Main owner) {
+        this(owner, false);
     }
 
-    public MessageQueue(String serverAddress, String room, boolean mod) {
+    public MessageQueue(Main owner, boolean isModerator) {
+        this.owner = owner;
+
         this.queuedMessages = new CopyOnWriteArrayList<>();
         this.cookieStore = new BasicCookieStore();
         this.httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-        this.serverAddress = serverAddress;
-        this.room = room;
         this.sessionId = "";
-        this.mod = mod;
+        this.isModerator = isModerator;
         SimpleModule module = new SimpleModule("CustomBodyDeserializer", new Version(1, 0, 0, null));
         module.addDeserializer(MessageBody.class, new BodyDeserializer());
         this.mapper = new ObjectMapper();
@@ -48,7 +49,7 @@ public class MessageQueue extends Revolver<Message> {
         this.mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
-    public void send() /*TODO throws cannotSendException*/ {
+    public void send() {
         int queueSize = queuedMessages.size();
         String jsonString = "";
         if (queueSize > 0) {
@@ -70,15 +71,14 @@ public class MessageQueue extends Revolver<Message> {
                 System.err.println(e.getMessage());
             }
         }
-        queuedMessages.clear(); //TODO only clear if messages can be sent
 
-        String address = serverAddress + "?room=" + room;
-        if (mod) {address += "&moderatorPassphrase=alohomora";}
+        String address = owner.getServer() + "?room=" + owner.getRoom();
+        if (isModerator) {address += "&moderatorPassphrase=alohomora";}
         HttpPost post = new HttpPost(address);
         post.setEntity(new StringEntity(jsonString, ContentType.create("application/json", "utf-8")));
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
-            Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class); //TODO handle error messages
+            Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
             sessionId = jsonResponse.clientId;
             for (Message message: jsonResponse.inbox) {
                 load(message);
@@ -88,7 +88,9 @@ public class MessageQueue extends Revolver<Message> {
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
+            return;
         }
+        queuedMessages.clear();
     }
 
     public void queue(Message message) {

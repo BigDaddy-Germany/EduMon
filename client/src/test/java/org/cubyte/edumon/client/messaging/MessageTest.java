@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.cubyte.edumon.client.ClientConfig;
+import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.messaging.messagebody.*;
 import org.cubyte.edumon.client.messaging.messagebody.util.Dimensions;
 import org.junit.Test;
@@ -25,8 +27,8 @@ public class MessageTest {
         StringWriter writer = new StringWriter();
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
-        String room = "160C";
-        Message message1 = new MessageFactory(new MessageQueue("test", room), "Mod", room).create(new NameList(list, room, new Dimensions(5, 5)));
+        Main main = new Main(new ClientConfig("http://vps2.code-infection.de/edumon/mailbox.php", "160C"), null);
+        Message message1 = new MessageFactory(main, "Mod").create(new NameList(list, "160C", new Dimensions(5, 5)));
         Message message2;
         String json;
 

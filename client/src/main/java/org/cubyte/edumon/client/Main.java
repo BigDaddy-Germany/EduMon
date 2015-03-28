@@ -1,7 +1,9 @@
 package org.cubyte.edumon.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
+import org.cubyte.edumon.client.messaging.messagebody.BreakRequest;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
 import org.cubyte.edumon.client.messaging.messagebody.SensorData;
 import org.cubyte.edumon.client.messaging.messagebody.WhoAmI;
@@ -17,7 +19,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,19 +29,47 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    private String Room = "160C"; // TODO Set room in login
+    private static final String CONFIG = "config";
+    private static final String TRAY_ICON = "./client/src/main/resources/SystemtrayIcon.png";
+
     private final KeyListener keyListener;
     private final MouseListener mouseListener;
     private final MicListener micListener;
     private final MessageQueue messageQueue;
     private final MessageFactory messageFactory;
+    private TrayIcon trayIcon;
+    private final ClientConfig clientConfig;
 
     public Main() {
         keyListener = new KeyListener();
         mouseListener = new MouseListener();
         micListener = new MicListener();
-        messageQueue = new MessageQueue("http://vps2.code-infection.de/edumon/mailbox.php", Room); // TODO load server and room from config
-        messageFactory = new MessageFactory(messageQueue, "MODERATOR", Room);
+        final ObjectMapper mapper = new ObjectMapper();
+        clientConfig = new ClientConfig("", "");
+        try {
+            ClientConfig config = mapper.readValue(new File(CONFIG), ClientConfig.class);
+            clientConfig.server = config.server;
+            clientConfig.room = config.room;
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        messageQueue = new MessageQueue(this);
+        messageFactory = new MessageFactory(this, "MODERATOR");
+        try {
+            trayIcon = new TrayIcon(ImageIO.read(new File(TRAY_ICON)));
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public Main(ClientConfig config, TrayIcon icon) {
+        keyListener = new KeyListener();
+        mouseListener = new MouseListener();
+        micListener = new MicListener();
+        clientConfig = config;
+        messageQueue = new MessageQueue(this);
+        messageFactory = new MessageFactory(this, "MODERATOR");
+        trayIcon = icon;
     }
 
     public static void main(String[] args) {
@@ -49,12 +78,18 @@ public class Main {
         main.addAppToSystemTray();
 
         // temporary
-        final MessageQueue messageQueueMod = new MessageQueue("http://vps2.code-infection.de/edumon/mailbox.php", main.Room, true);
-        final MessageFactory messageFactoryMod = new MessageFactory(messageQueueMod, "BROADCAST", main.Room);
+        final Main mainMod = new Main(new ClientConfig("http://vps2.code-infection.de/edumon/mailbox.php", "160C"), null);
+        final MessageQueue messageQueueMod = new MessageQueue(mainMod, true);
+        final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
-        messageQueueMod.queue(messageFactoryMod.create(new NameList(list, main.Room, new Dimensions(5, 5))));
+        messageQueueMod.queue(messageFactoryMod.create(new NameList(list, "160C", new Dimensions(5, 5))));
         messageQueueMod.send();
+
+        if ("".equals(main.getServer()))
+            main.setServer("http://vps2.code-infection.de/edumon/mailbox.php");
+        if ("".equals(main.getRoom()))
+            main.setRoom("160C");
         // temporary
 
         main.messageQueue.send();
@@ -64,10 +99,7 @@ public class Main {
         main.messageQueue.send();
 
         main.registerSensorListeners();
-
-        final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-        scheduledExecutorService.scheduleAtFixedRate(new SensorFetcher(main), 0, 1, TimeUnit.SECONDS);
-        scheduledExecutorService.scheduleAtFixedRate(new MessageSender(main), 0, 1, TimeUnit.SECONDS);
+        main.scheduleExecutors();
     }
 
     private void registerSensorListeners() {
@@ -93,17 +125,11 @@ public class Main {
             return;
         }
         final PopupMenu popup = new PopupMenu();
-        final TrayIcon trayIcon;
-        try {
-            trayIcon = new TrayIcon(ImageIO.read(new File("./client/src/main/resources/SystemtrayIcon.png")));
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return;
-        }
         final SystemTray tray = SystemTray.getSystemTray();
 
         MenuItem breakRequestItem = new MenuItem("Pausenanfrage senden");
-        MenuItem optionsItem = new MenuItem("Einstellungen");
+        breakRequestItem.addActionListener(new BreakRequestListener());
+        MenuItem optionsItem = new MenuItem("Einstellungen"); // TODO add listener
         MenuItem exitItem = new MenuItem("Anwendung schließen");
         exitItem.addActionListener(new ExitListener());
 
@@ -123,52 +149,84 @@ public class Main {
         }
     }
 
-    private static class SensorFetcher implements Runnable {
-        private final Main owner;
+    private void scheduleExecutors() {
+        final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new SensorFetcher(), 0, 1, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new MessageSender(), 0, 1, TimeUnit.SECONDS);
+    }
 
+    public MessageQueue getQueue() {
+        return messageQueue;
+    }
+
+    public String getServer() {
+        return clientConfig.server;
+    }
+
+    public String getRoom() {
+        return clientConfig.room;
+    }
+
+    private void setServer(String server) {
+        clientConfig.server = server;
+    }
+
+    private void setRoom(String room) {
+        clientConfig.room = room;
+    }
+
+    private class SensorFetcher implements Runnable {
         private int keystrokes;
         private int mouseclicks;
-        private int mousedistance;
+        private double mousedistance;
         private double micLevel;
-
-        public SensorFetcher(Main owner) {
-            this.owner = owner;
-        }
 
         @Override
         public void run() {
-            keystrokes = owner.keyListener.fetchStrokes();
-            mouseclicks = owner.mouseListener.fetchClicks();
-            mousedistance = owner.mouseListener.fetchDistance();
-            micLevel = owner.micListener.fetchLevel();
+            keystrokes = keyListener.fetchStrokes();
+            mouseclicks = mouseListener.fetchClicks();
+            mousedistance = mouseListener.fetchDistance();
+            micLevel = micListener.fetchLevel();
 
-            owner.messageQueue.queue(owner.messageFactory.create(new SensorData(keystrokes, mousedistance, mouseclicks, micLevel)));
+            messageQueue.queue(messageFactory.create(new SensorData(keystrokes, mousedistance, mouseclicks, micLevel)));
         }
     }
 
-    private static class MessageSender implements Runnable {
-        private final Main owner;
-
-        public MessageSender(Main owner) {
-            this.owner = owner;
+    private void exit() {
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(CONFIG), clientConfig);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException e) {
+            System.err.println(e.getMessage());
+        }
+        System.runFinalization();
+        System.exit(0);
+    }
 
+    private class MessageSender implements Runnable {
         @Override
         public void run() {
-            owner.messageQueue.send();
+            messageQueue.send();
+        }
+    }
+
+    private class BreakRequestListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            messageQueue.queue(messageFactory.create(new BreakRequest()));
+            trayIcon.displayMessage("Hallo", "Du hast eine Pausenanfrage gesendet", TrayIcon.MessageType.INFO); // TODO maybe do it as Popup
         }
     }
 
     private class ExitListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent event) {
-            try {
-                GlobalScreen.unregisterNativeHook();
-            } catch (NativeHookException e) {
-                System.err.println(e.getMessage());
-            }
-            System.runFinalization();
-            System.exit(0);
+            exit();
         }
     }
 }

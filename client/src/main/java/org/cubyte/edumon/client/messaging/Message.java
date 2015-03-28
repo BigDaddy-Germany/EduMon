@@ -25,6 +25,7 @@ public class Message implements Bullet {
 
         private int index;
 
+        private static final Type[] orderedTypes = new Type[9];
         private static final HashMap<Type, Class<? extends MessageBody>> toClassMap = new HashMap<>();
         private static final HashMap<Class<? extends MessageBody>, Type> classToTypeMap = new HashMap<>();
 
@@ -35,6 +36,7 @@ public class Message implements Bullet {
         static {
             String typeString;
             for(Type type: Type.values()) {
+                orderedTypes[type.index] = type;
                 if (type == Type.NONE) {continue;}
                 typeString = type.toString().toLowerCase();
                 String[] split = typeString.split("_");
@@ -53,7 +55,7 @@ public class Message implements Bullet {
         }
 
         public static Class<? extends MessageBody> getClass(int i) {
-            return toClassMap.get(Type.values()[i]);
+            return toClassMap.get(getType(i));
         }
 
         public static Type getType(Class<? extends MessageBody> clazz) {
@@ -61,7 +63,7 @@ public class Message implements Bullet {
         }
 
         public static Type getType(int i) {
-            return Type.values()[i];
+            return orderedTypes[i];
         }
 
         public static Class<? extends MessageBody> getClass(List<String> fields) {
@@ -112,11 +114,6 @@ public class Message implements Bullet {
         this.to = to;
         this.room = room;
         this.body = body;
-    }
-
-    @JsonIgnore
-    public Type getType() {
-        return type;
     }
 
     @Override

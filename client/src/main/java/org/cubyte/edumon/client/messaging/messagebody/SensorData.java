@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SensorData implements MessageBody {
     public final int keys;
-    public final int mdist;
+    public final double mdist;
     public final int mclicks;
     public final double volume;
 
     @JsonCreator
-    public SensorData(@JsonProperty("keys") int keys, @JsonProperty("mdist") int mdist,
+    public SensorData(@JsonProperty("keys") int keys, @JsonProperty("mdist") double mdist,
                       @JsonProperty("mclicks") int mclicks, @JsonProperty("volume") double volume) {
         this.keys = keys;
         this.mdist = mdist;
@@ -34,7 +34,8 @@ public class SensorData implements MessageBody {
         int result;
         long temp;
         result = keys;
-        result = 31 * result + mdist;
+        temp = Double.doubleToLongBits(mdist);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + mclicks;
         temp = Double.doubleToLongBits(volume);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

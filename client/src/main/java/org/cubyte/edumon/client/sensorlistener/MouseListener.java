@@ -3,21 +3,28 @@ package org.cubyte.edumon.client.sensorlistener;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseInputListener;
 
+import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MouseListener implements NativeMouseInputListener {
     private AtomicInteger clicks;
-    private AtomicInteger distance;
+    private double distance;
 
     private AtomicInteger oldX;
     private AtomicInteger oldY;
 
+    private double screenDiagonal;
+
     public MouseListener() {
         this.clicks = new AtomicInteger(0);
-        this.distance = new AtomicInteger(0);
 
         this.oldX = new AtomicInteger(0);
         this.oldY = new AtomicInteger(0);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double screenWidth = screenSize.getWidth();
+        double screenHeight = screenSize.getHeight();
+        screenDiagonal = Math.sqrt(screenWidth * screenWidth + screenHeight * screenHeight);
     }
 
     @Override
@@ -45,7 +52,7 @@ public class MouseListener implements NativeMouseInputListener {
         oldX.set(x);
         oldY.set(y);
 
-        distance.addAndGet((int) Math.sqrt(dx * dx + dy * dy)); //TODO normalize to screendiagonal
+        distance += (Math.sqrt(dx * dx + dy * dy) / screenDiagonal);
     }
 
     @Override
@@ -57,7 +64,9 @@ public class MouseListener implements NativeMouseInputListener {
         return clicks.getAndSet(0);
     }
 
-    public int fetchDistance() {
-        return distance.getAndSet(0);
+    public double fetchDistance() {
+        double dist = distance;
+        distance = 0;
+        return dist;
     }
 }
