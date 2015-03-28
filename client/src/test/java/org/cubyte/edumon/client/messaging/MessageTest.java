@@ -23,11 +23,11 @@ public class MessageTest {
         mapper.registerModule(module);
         mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
         StringWriter writer = new StringWriter();
-        //Message message1 = new MessageFactory(0, "Jonas", "Mod", "160C").create(new SensorData(12, 1673, 3, 0.87));
-        //Message message1 = new MessageFactory(0, "Jonas", "Mod", "160C").create(new BreakRequest());
+        //Message message1 = new MessageFactory("Jonas", "Mod", "160C").create(new SensorData(12, 1673, 3, 0.87));
+        //Message message1 = new MessageFactory("Jonas", "Mod", "160C").create(new BreakRequest());
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
-        Message message1 = new MessageFactory(0, "Jonas", "Mod", "160C").create(new NameList(list, "160C", new Dimensions(5, 5)));
+        Message message1 = new MessageFactory("Jonas", "Mod", "160C").create(new NameList(list, "160C", new Dimensions(5, 5)));
         Message message2;
         String json;
 

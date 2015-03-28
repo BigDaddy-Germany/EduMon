@@ -17,7 +17,7 @@ public class MicListener {
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format);
         } catch (LineUnavailableException e) {
-            //TODO
+            e.printStackTrace(System.err);
         }
         line.start();
     }

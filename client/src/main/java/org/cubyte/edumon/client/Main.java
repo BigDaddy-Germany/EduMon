@@ -13,6 +13,7 @@ import org.cubyte.edumon.client.sensorlistener.MouseListener;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -46,7 +47,7 @@ public class Main {
 
         // temporary
         final MessageQueue messageQueueMod = new MessageQueue("http://vps2.code-infection.de/edumon/mailbox.php", ROOM, true);
-        final MessageFactory messageFactoryMod = new MessageFactory(0, "MODERATOR", "BROADCAST", ROOM);
+        final MessageFactory messageFactoryMod = new MessageFactory("MODERATOR", "BROADCAST", ROOM);
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
         messageQueueMod.queue(messageFactoryMod.create(new NameList(list, ROOM, new Dimensions(5, 5))));
@@ -56,7 +57,7 @@ public class Main {
         messageQueue.send();
         //TODO what is when no namelist is on the server?
 
-        final MessageFactory messageFactory = new MessageFactory(0, messageQueue.getSessionId(), "MODERATOR", ROOM);
+        final MessageFactory messageFactory = new MessageFactory(messageQueue.getSessionId(), "MODERATOR", ROOM);
 
         messageQueue.queue(messageFactory.create(new WhoAmI("Jonas Dann", new Position(1, 1))));
         messageQueue.send();
@@ -84,4 +85,44 @@ public class Main {
             }
         }, 0, 1, TimeUnit.SECONDS);
     }
+
+    /*private void addAppToSystemTray() {
+        if (!SystemTray.isSupported()) {
+            // TODO Show window with message "System tray not supported" and "Breakrequest", "Options" and "Exit" Buttons
+            return;
+        }
+        final PopupMenu popup = new PopupMenu();
+        final TrayIcon trayIcon = new TrayIcon(createImage("images/bulb.gif", "tray icon"));
+        final SystemTray tray = SystemTray.getSystemTray();
+
+        MenuItem aboutItem = new MenuItem("About");
+        CheckboxMenuItem cb1 = new CheckboxMenuItem("Set auto size");
+        CheckboxMenuItem cb2 = new CheckboxMenuItem("Set tooltip");
+        Menu displayMenu = new Menu("Display");
+        MenuItem errorItem = new MenuItem("Error");
+        MenuItem warningItem = new MenuItem("Warning");
+        MenuItem infoItem = new MenuItem("Info");
+        MenuItem noneItem = new MenuItem("None");
+        MenuItem exitItem = new MenuItem("Exit");
+
+        popup.add(aboutItem);
+        popup.addSeparator();
+        popup.add(cb1);
+        popup.add(cb2);
+        popup.addSeparator();
+        popup.add(displayMenu);
+        displayMenu.add(errorItem);
+        displayMenu.add(warningItem);
+        displayMenu.add(infoItem);
+        displayMenu.add(noneItem);
+        popup.add(exitItem);
+
+        trayIcon.setPopupMenu(popup);
+
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            System.out.println("TrayIcon could not be added.");
+        }
+    }*/
 }
