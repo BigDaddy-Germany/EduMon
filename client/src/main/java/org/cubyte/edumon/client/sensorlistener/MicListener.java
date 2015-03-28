@@ -11,13 +11,15 @@ public class MicListener {
         AudioFormat format = new AudioFormat(8000, 16, 1, true, false);
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
         if (!AudioSystem.isLineSupported(info)) {
-            //TODO
+            //TODO print message in system tray or something like that
+            System.err.println("Microphone input is not supported.");
+            return;
         }
         try {
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format);
         } catch (LineUnavailableException e) {
-            e.printStackTrace(System.err);
+            System.err.println(e.getMessage());
         }
         line.start();
     }

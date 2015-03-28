@@ -67,7 +67,7 @@ public class MessageQueue extends Revolver<Message> {
             try {
                 writer.close();
             } catch (IOException e) {
-                e.printStackTrace(System.err);
+                System.err.println(e.getMessage());
             }
         }
         queuedMessages.clear(); //TODO only clear if messages can be sent
@@ -83,9 +83,11 @@ public class MessageQueue extends Revolver<Message> {
             for (Message message: jsonResponse.inbox) {
                 load(message);
             }
-            System.out.println(jsonResponse.errorMessages);
+            for (String errorMessage: jsonResponse.errorMessages) {
+                System.err.println(errorMessage);
+            }
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            System.err.println(e.getMessage());
         }
     }
 
