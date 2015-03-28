@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,8 +28,7 @@ public class MessageTest {
         StringWriter writer = new StringWriter();
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
-        Main main = new Main(new ClientConfig("http://vps2.code-infection.de/edumon/mailbox.php", "160C"), null);
-        Message message1 = new MessageFactory(main, "Mod").create(new NameList(list, "160C", new Dimensions(5, 5)));
+        Message message1 = new Message(new Date(), "daosdoiage345sdfbv", "MODERATOR", "160C", new NameList(list, "160C", new Dimensions(5, 5)));
         Message message2;
         String json;
 
