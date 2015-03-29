@@ -161,14 +161,19 @@
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
         <script src="lib/bootstrap/js/ripples.min.js"></script>
         <script src="lib/bootstrap/js/material.min.js"></script>
-        <script src="js/app.js"></script>
+        <script src="js/EduMon.js"></script>
+        <script src="js/EduMon.Messenger.js"></script>
+        <script src="js/EduMon.Data.js"></script>
+        <script src="js/EduMon.CSV.js"></script>
         <script>
             $(document).ready(function() {
                 $.material.init();
+            });
+			$(window).load(function(){
 				EduMon.init();
 				EduMon.cmdConnection({command:"config",url:"http://vps2.code-infection.de/edumon/mailbox.php",room:"160C",moderatorPassphrase:"alohomora"});
-            });
-        </script>
+			});
+		</script>
 
         </body>
 </html>
