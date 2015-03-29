@@ -1,8 +1,28 @@
 /**
+ * Class to represent a student
+ * @param {String} studentName the student's name
+ * @param {String} group the group, the student is in
+ */
+function Student(studentName, group) {
+	this.studentName = studentName;
+	this.group = group;
+}
+
+/**
+ * Class to represent a course
+ * @param {String} courseName A name to identify the course
+ * @param {Student[]} students An array of all students inside the course
+ */
+function Course(courseName, students) {
+	this.courseName = courseName;
+	this.students = students;
+}
+
+/**
  * Parses a given CSV String and returns it as an Array
- * @param csvString The String, which should be parsed
- * @param {char} [separator=,] The CSV field separator
- * @param {char} [delimiter=;] The CSV field delimiter
+ * @param {String} csvString The String, which should be parsed
+ * @param {String} [separator=,] The CSV field separator
+ * @param {String} [delimiter=;] The CSV field delimiter
  * @returns {Array} A nested array containing all rows and fields
  */
 function parseCsv(csvString, separator, delimiter) {
@@ -77,6 +97,39 @@ function parseCsv(csvString, separator, delimiter) {
 
 	return csvArray;
 }
+
+/**
+ * Creates a course from a given CSV String
+ * @param {String} courseName the name, the new created course should get
+ * @param {String} csvString A String containing the CSV to import
+ * @param {String} [separator] The field separator of the CSV
+ * @param {String} [delimiter] The field delimiter of the CSV
+ * @param {Boolean} [headerLine=false] Does the CSV contain a header line?
+ * @param {int} [positionName=0] on which position is the name field?
+ * @param {int} [positionTeam=1] on which position is the team field?
+ * @returns {Course} The generated course
+ */
+function createCourseFromCsv(courseName, csvString, separator, delimiter, headerLine, positionName, positionTeam) {
+	headerLine = headerLine || false;
+	positionName = positionName || 0;
+	positionTeam = positionTeam || 1;
+
+	var students = [];
+	var parsedCsv = parseCsv(csvString, separator, delimiter);
+
+	parsedCsv.forEach(function(csvLine) {
+		// skip first line, if headerLine is true
+		if (headerLine) {
+			headerLine = false;
+		} else {
+			students.push(new Student(csvLine[positionName], csvLine[positionTeam]));
+		}
+	});
+
+	return new Course(courseName, students);
+}
+
+
 
 (function() {
 
