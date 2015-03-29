@@ -1,3 +1,65 @@
+/* CSV parser for CSV import of users */
+function parseCsv(csvString, separator, delimiter) {
+	var csvArray = [];				// will be returned later
+	var row = 0, col = 0;			// Where am I?
+	var inQuotes = false;			// Am I inside quotes?
+
+	separator = separator || ',';
+	delimiter = delimiter || '"';
+
+	for (var charNum = 0; charNum < csvString.length; ++charNum) {
+		var char = csvString[charNum];
+		var nextChar = csvString[charNum + 1];
+
+		csvArray[row] = csvArray[row] || [];
+		csvArray[row][col] = csvArray[row][col] || '';
+
+		if (inQuotes) {
+
+			if (char == nextChar && char == delimiter) {
+				csvArray[row][col] += char;
+				++charNum;
+				continue;
+			}
+
+			if (char == delimiter) {
+				inQuotes = false;
+				continue;
+			}
+
+			csvArray[row][col] += char;
+
+		} else {
+
+			if (char == separator) {
+				++col;
+				continue;
+			}
+
+			// windows uses \r\n -> two chars
+			if (char == '\r' && nextChar == '\n') {
+				++charNum;
+			}
+			if (char == '\r' || char == '\n') {
+				++row;
+				col = 0;
+				continue;
+			}
+
+			if (char == delimiter) {
+				inQuotes = true;
+				continue;
+			}
+
+			if (char != ' ' && char != '\t') {
+				csvArray[row][col] += char;
+			}
+		}
+	}
+
+	return csvArray;
+}
+
 (function() {
 
 	/* Packet handling - Messager class connects with message worker */
@@ -22,7 +84,7 @@
 		/* Destroy message worker */
 		this.kill = function(){
 			_worker.terminate();
-		}
+		};
 
 
 		////////////////////Constructor
@@ -77,7 +139,7 @@
 
 			//Handle any errors
 			if ("errorMessages" in event && event.errorMessages.length > 0){
-				for (var i = 0; i < event.errorMessages.length; ++i) {
+				for (i = 0; i < event.errorMessages.length; ++i) {
 					that.debug(event.errorMessages[i]);
 				}
 			}
