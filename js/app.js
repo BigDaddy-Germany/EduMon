@@ -1,57 +1,75 @@
-/* CSV parser for CSV import of users */
+/**
+ * Parses a given CSV String and returns it as an Array
+ * @param csvString The String, which should be parsed
+ * @param {char} [separator=,] The CSV field separator
+ * @param {char} [delimiter=;] The CSV field delimiter
+ * @returns {Array} A nested array containing all rows and fields
+ */
 function parseCsv(csvString, separator, delimiter) {
 	var csvArray = [];				// will be returned later
 	var row = 0, col = 0;			// Where am I?
 	var inQuotes = false;			// Am I inside quotes?
 
-	separator = separator || ',';
-	delimiter = delimiter || '"';
+	separator = separator || ',';	// field separator, default ','
+	delimiter = delimiter || '"';	// field separator, default '"'
 
+	// go over all chars
 	for (var charNum = 0; charNum < csvString.length; ++charNum) {
+		// we need the current char every time
 		var char = csvString[charNum];
+		// sometimes, we also need the next char to make a decision (windows line break, escape chars)
 		var nextChar = csvString[charNum + 1];
 
-		csvArray[row] = csvArray[row] || [];
-		csvArray[row][col] = csvArray[row][col] || '';
+		csvArray[row] = csvArray[row] || [];			// create new row, if needed
+		csvArray[row][col] = csvArray[row][col] || '';	// create new col, if needed
 
 		if (inQuotes) {
+			// we are inside a quoted field
 
 			if (char == nextChar && char == delimiter) {
+				// we got an escaped delimiter char (e.g. double quotes)
 				csvArray[row][col] += char;
-				++charNum;
+				++charNum;	// ignore next char
 				continue;
 			}
 
 			if (char == delimiter) {
+				// we are not inside quotes, anymore
 				inQuotes = false;
 				continue;
 			}
 
+			// By default, add next char to field
 			csvArray[row][col] += char;
 
 		} else {
+			// we are not inside a quoted field
 
 			if (char == separator) {
+				// got a separator? next col
 				++col;
 				continue;
 			}
 
-			// windows uses \r\n -> two chars
 			if (char == '\r' && nextChar == '\n') {
+				// windows uses \r\n -> two chars -> skip next char
 				++charNum;
 			}
 			if (char == '\r' || char == '\n') {
+				// linebreak indicates new row, starting at col 0
 				++row;
 				col = 0;
 				continue;
 			}
 
 			if (char == delimiter) {
+				// got a delimiter char? start new quoted field
 				inQuotes = true;
 				continue;
 			}
 
 			if (char != ' ' && char != '\t') {
+				// everything, which is no blank or tab can be added to the field
 				csvArray[row][col] += char;
 			}
 		}
