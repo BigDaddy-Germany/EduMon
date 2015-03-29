@@ -35,9 +35,105 @@
 	 *
 	 *
 	 * Unless you are the moderator, your client id is your SESSION_ID.
+	 *
+	 *
+	 * If you want to set up the system or reset it, please delete the files .htedumondatabase and .htedumonpassword
+	 * from your server (located in the same folder as this script) and access mailbox.php?setup. Afterwards, follow
+	 * the given instructions.
 	 */
 
+	define('PW_FILE', '.htedumonpassword');
+	define('DB_FILE', '.htedumondatabase');
 
+	// if the .htedumon* files don't exist and the user accesses mailbox.php?setup, we will start the system's setup
+	if (isset($_GET['setup']) and !file_exists(dirname(__FILE__).'/'.DB_FILE) and !file_exists(dirname(__FILE__).'/'.PW_FILE)) {
+
+		?>
+		<!DOCTYPE HTML>
+		<html>
+		<head>
+			<meta charset="utf-8">
+			<title>Set up your EduMon Message Server</title>
+		</head>
+		<body>
+		<?php
+
+		if (!is_writable(dirname(__FILE__))) {
+
+			// no access to write folder
+			?>
+			<h1>Error</h1>
+			<p>It seems, as if EduMon cannot write to the folder, it is located in...</p>
+			<?php
+
+		} elseif (!isset($_POST['passphrase'])) {
+
+			// initial page
+			?>
+			<h1>Setup</h1>
+			<p>Welcome to EduMon's Setup page. Please enter the passphrase, you want to use: </p>
+
+			<form action="" method="post">
+				<input type="password" name="passphrase">
+
+				<h2>Start Setup</h2>
+
+				<p>In order to create the database and to start the system, please cklick on the following button:</p>
+				<input type="submit" name="submit" value="Start Setup">
+			</form>
+			<?php
+
+		} else {
+
+			// Create the two needed files
+
+			// password file at first
+			$handle = fopen(dirname(__FILE__).'/'.PW_FILE, 'w+');
+			fwrite($handle, trim($_POST['passphrase']));
+			fclose($handle);
+
+			// now, the database
+			$db = new SQLite3(dirname(__FILE__) . '/'.DB_FILE, SQLITE3_OPEN_CREATE | SQLITE3_OPEN_READWRITE);
+
+			$db->exec("CREATE TABLE 'packages' (
+					'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+					'room' TEXT NOT NULL,
+					'to_client' TEXT NOT NULL,
+					'time' INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+					'data' TEXT NOT NULL
+				)
+			");
+
+			?>
+			<h1>Finished</h1>
+			<p>Congratulations! Your setup was successful. You are now able to use EduMon.</p>
+			<p>Please notice the following points:</p>
+			<ul>
+				<li>
+					To re-enter this setup and set a new master passphrase, you can just delete the files
+					<i><?php echo DB_FILE.'</i> and <i>'.PW_FILE; ?></i>
+				</li>
+				<li>
+					To change your passphrase, you can just edit the file <i><?php echo PW_FILE; ?></i>
+				</li>
+			</ul>
+			<?php
+
+		}
+
+		?>
+		</body>
+		</html>
+		<?php
+
+
+		die();
+	}
+
+
+
+
+	// if no setup is performed, we will just do the normal mailbox stuff
 	if (isset($_SERVER['HTTP_ORIGIN'])) {
 		$url = parse_url($_SERVER['HTTP_ORIGIN']);
 		header('Access-Control-Allow-Origin: ' . $url['scheme'] . '://' . $url['host']);
@@ -53,7 +149,7 @@
 
 // try to get access to the database
 	try {
-		$db = new SQLite3(dirname(__FILE__) . '/.htedumondatabase', SQLITE3_OPEN_READWRITE);
+		$db = new SQLite3(dirname(__FILE__) . '/'.DB_FILE, SQLITE3_OPEN_READWRITE);
 
 		// check table packages to be available in the right structure
 		if ($stmt = @$db->prepare('PRAGMA table_info(packages)')) {
@@ -94,7 +190,7 @@
 			}
 
 		} else {
-			$errorMessages[] = 'Error while accessing the database. [' . $db->lastErrorMsg() . ']';
+			$errorMessages[] = 'Error while accessing the database.';
 			http_response_code(500);
 		}
 
@@ -111,7 +207,7 @@
 
 // check whether this client is the moderator
 	if (isset($_GET['moderatorPassphrase'])) {
-		if (!($passphrase = @file_get_contents(dirname(__FILE__) . '/.htedumonpassword'))) {
+		if (!($passphrase = @file_get_contents(dirname(__FILE__) . '/'.PW_FILE))) {
 			$errorMessages[] = 'No password file available. Did you set up the system correctly?';
 			http_response_code(500);
 		} else {
