@@ -14,11 +14,19 @@ window.EduMon.Gui = new function Gui() {
 		that.updateFeedCountView();
 		$("#alertcontainer")
 			.prepend($("<div/>",{class:"alert alert-dismissable alert-"+type})
+					.css("opacity","0")
+					.slideDown(300,function(){
+						$(this).animate({opacity:1},200);
+					})
 					.append($("<button/>",{type:"button",class:"close"}).text("x")
 						.one("click",function(e){
 							countFeedMessages--;
 							that.updateFeedCountView();
-							$(this).parent().hide();
+							$(this).parent()
+							.css("visibility","hidden")
+							.slideUp(200,function(){
+								$(this).remove();
+							});
 						}))
 					.append($("<h4/>").text(title))
 					.append($("<p/>").html(message))
@@ -26,6 +34,6 @@ window.EduMon.Gui = new function Gui() {
 	};
 
 	this.updateFeedCountView = function updateFeedCountView() {
-		$("#feedcounter").text(countFeedMessages+" Nachricht"+(countFeedMessages!==1?"en":""));
+		$("#feedcounter").html("<span class=\"badge\">"+countFeedMessages+"</span> Nachricht"+(countFeedMessages!==1?"en":""));
 	}
 };
