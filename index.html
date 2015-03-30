@@ -116,40 +116,9 @@
                 <div id="feedpanel"   class="panel panel-default mypanel">
                     <div class="panel-heading">Newsfeed</div>
                     <div class="panel-body">
-                        <div id="alertcontainer">
-                            <div class="alert alert-dismissable alert-danger">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <h4>Mikrofonalarm</h4>
-                                <p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
-                            </div>
-                            <div class="alert alert-dismissable alert-warning">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <h4>Viel Getippe</h4>
-                                <p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
-                            </div>
-                            <div class="alert alert-dismissable alert-danger">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <h4>Mikrofonalarm</h4>
-                                <p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
-                            </div>
-                            <div class="alert alert-dismissable alert-warning">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <h4>Viel Getippe</h4>
-                                <p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
-                            </div>
-                            <div class="alert alert-dismissable alert-danger">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <h4>Mikrofonalarm</h4>
-                                <p>Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.</p>
-                            </div>
-                            <div class="alert alert-dismissable alert-warning">
-                                <button type="button" class="close" data-dismiss="alert">×</button>
-                                <h4>Viel Getippe</h4>
-                                <p>Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.</p>
-                            </div>
-                        </div>
+                        <div id="alertcontainer"></div>
                     </div>
-                    <div class="panel-footer">6 neue Nachrichten</div>
+                    <div class="panel-footer" id="feedcounter"></div>
                 </div>
             </div>
         </div>
@@ -165,12 +134,17 @@
         <script src="js/EduMon.Messenger.js"></script>
         <script src="js/EduMon.Data.js"></script>
         <script src="js/EduMon.CSV.js"></script>
+        <script src="js/EduMon.Gui.js"></script>
         <script>
             $(document).ready(function() {
                 $.material.init();
             });
 			$(window).load(function(){
 				EduMon.init();
+				EduMon.Gui.showFeedMessage("info","Willkommen!","EduMon stets zu Diensten :)");
+				EduMon.Gui.showFeedMessage("danger","Mikrofonalarm","Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.");
+				EduMon.Gui.showFeedMessage("success","Umfrage gestartet","Umfrage #1 wurde erfolgreich gestartet.");
+				EduMon.Gui.showFeedMessage("warning","Tippsturm","Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.");
 				EduMon.cmdConnection({command:"config",url:"http://vps2.code-infection.de/edumon/mailbox.php",room:"160C",moderatorPassphrase:"alohomora"});
 			});
 		</script>
