@@ -1,4 +1,4 @@
-window.EduMon.CSV = new function CSV(){
+window.EduMon.CSV = new function CSV() {
 	var that = this;
 
 	/**
@@ -91,7 +91,7 @@ window.EduMon.CSV = new function CSV(){
 	 * @param {Boolean} [headerLine=false] Does the CSV contain a header line?
 	 * @param {int} [positionName=0] on which position is the name field?
 	 * @param {int} [positionTeam=1] on which position is the team field?
-	 * @returns {Course} The generated course
+	 * @returns {window.EduMon.Data.Course} The generated course
 	 */
 	this.createCourseFromCsv = function createCourseFromCsv(courseName, csvString, separator, delimiter, headerLine, positionName, positionTeam) {
 		headerLine = headerLine || false;
@@ -101,12 +101,12 @@ window.EduMon.CSV = new function CSV(){
 		var students = [];
 		var parsedCsv = that.parseCsv(csvString, separator, delimiter);
 
-		parsedCsv.forEach(function(csvLine) {
+		parsedCsv.forEach(function (csvLine) {
 			// skip first line, if headerLine is true
 			if (headerLine) {
 				headerLine = false;
 			} else {
-				students.push(new Student(csvLine[positionName], csvLine[positionTeam]));
+				students.push(new EduMon.Data.Student(csvLine[positionName], csvLine[positionTeam]));
 			}
 		});
 
