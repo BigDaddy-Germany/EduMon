@@ -4,38 +4,32 @@ window.EduMon = new EduMon();
 function EduMon() {
 	var that = this;
 
-	////////////////////private vars
-	var session_id = ""; //session id assinged by message server //TODO: necessary?
+	var sessionId = ""; //session id assinged by message server TODO necessary?
 
-	////////////////////public vars
-	this.show_debug = true; //show debug messages in javascript console
-
-	////////////////////private methods
-
-	////////////////////public methods
+	this.debugging = true; //show debug messages in javascript console
 
 	/* EduMon startup */
 	this.init = function(){
 		that.debug("*** All Glory to the EduMon! ***");
 		that.debug("EduMon awakening...");
-		that.messenger = new EduMon.Messenger(this.handleIncomingData);
+		that.messenger = new EduMon.Messenger(handleIncomingData);
 	};
 
 
 	/* Debug output to JS console */
 	this.debug = function(msg){
-		if (that.show_debug){
+		if (that.debugging){
 			console.log(msg);
 		}
 	};
 
 
 	/* Handle incoming data */
-	this.handleIncomingData = function(event){
+	var handleIncomingData = function(event){
 		//Process packets received by message server
 		if ("inbox" in event && event.inbox.length > 0){
 			for (var i = 0; i < event.inbox.length; ++i) {
-				that.processPacket(event.inbox[i]);
+				processPacket(event.inbox[i]);
 			}
 		}
 
@@ -48,13 +42,13 @@ function EduMon() {
 
 		//Save session id assigned by message server
 		if ("clientId" in event){
-			that.session_id = event.clientId;
+			sessionId = event.clientId;
 		}
 	};
 
 
 	/* Process packet */
-	this.processPacket = function(packet){
+	var processPacket = function(packet){
 		//TODO to be implemented
 		that.debug("Received packet:");
 		that.debug(packet);
@@ -69,6 +63,7 @@ function EduMon() {
 	};
 
 
+	// TODO wrapping the wrapping wrapper that wraps a worker (say that 10 times in a row without mistakes!)
 	/* Queue packet for sending */
 	this.sendPacket = function(packet){
 		that.cmdConnection(packet);

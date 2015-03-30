@@ -1,4 +1,4 @@
-window.EduMon.Data = new function Data(){
+window.EduMon.Data = new function Data() {
 	/**
 	 * Class to represent a student
 	 * @param {String} studentName the student's name
@@ -18,4 +18,4 @@ window.EduMon.Data = new function Data(){
 		this.courseName = courseName;
 		this.students = students;
 	};
-}
+};
