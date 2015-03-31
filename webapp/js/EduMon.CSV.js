@@ -106,10 +106,10 @@ window.EduMon.CSV = new function CSV() {
 			if (headerLine) {
 				headerLine = false;
 			} else {
-				students.push(new EduMon.Data.Student(csvLine[positionName], csvLine[positionTeam]));
+				students.push(EduMon.Data.Student(csvLine[positionName], csvLine[positionTeam]));
 			}
 		});
 
-		return new EduMon.Data.Course(courseName, students);
+		return EduMon.Data.Course(courseName, students);
 	};
 };

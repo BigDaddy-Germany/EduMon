@@ -148,6 +148,7 @@ $tdgrad_color_high:   #F44336;
 		#centerpanel {
 			flex-grow: 1;
 			@include vflex;
+			position: relative;
 
 			#room {
 				flex-grow: 1;
@@ -186,6 +187,44 @@ $tdgrad_color_high:   #F44336;
 					width: 100%;
 					height: 100px;
 					background-color: #DDDDDD;
+				}
+			}
+
+			#actioncontainer {
+				display: block;
+				position: absolute;
+				top: 30px;
+				left: 30px;
+				right: 30px;
+				bottom: 130px;
+				font-size: 0;
+				overflow-x: hidden;
+				overflow-y: auto;
+				text-align: center;
+
+				&::before { /* full-height ghost element for easy vertical centering */
+					content:'';
+					display: inline-block;
+					height: 100%;
+					vertical-align: middle;
+				}
+
+				#actionwindow {
+					display: inline-block;
+					font-size: 19px;
+					max-width: 800px;
+					min-height: 100px;
+					min-width: 300px;
+					width: auto;
+					margin: auto;
+
+					.modal-header {
+						text-align: left;
+					}
+
+					.modal-body {
+						text-align: left;
+					}
 				}
 			}
 		}
