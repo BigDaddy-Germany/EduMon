@@ -102,14 +102,19 @@
 							<input type="button" value="Demo: Typ 5 OUT" onclick="EduMon.sendDemo(5)">
 							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
 							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
 						</div>
 					</div>
 
-					<div id="dialogcontainer">
-						<div id="dialogwindow">
-							<div id="dialogcontent"></div>
+					<div id="layercontainer">
+						<div id="dialogcontainer">
+							<div id="dialogwindow">
+								<div id="dialogcontent"></div>
+							</div>
 						</div>
 					</div>
+
+					<ul id="toastlist"></ul>
 
 				</div>
 
@@ -139,6 +144,8 @@
 				EduMon.Gui.showFeedMessage("success","Umfrage gestartet","Umfrage #1 wurde erfolgreich gestartet.");
 				EduMon.Gui.showFeedMessage("warning","Tippsturm","Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.");
 				EduMon.cmdConnection({command:"config",url:"http://vps2.code-infection.de/edumon/mailbox.php",room:"160C",moderatorPassphrase:"alohomora"});
+				EduMon.Gui.showToast("Hallo Welt! Dies ist ein Testtoast...");
+				EduMon.Gui.showToast("Lorem ipsum :)");
 			});
 		</script>
 

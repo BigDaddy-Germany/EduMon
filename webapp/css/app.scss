@@ -205,47 +205,82 @@ $tdgrad_color_high:   #F44336;
 				}
 			}
 
-			#dialogcontainer {
+
+			#layercontainer {
 				display: none;
 				position: absolute;
-				top: 20px;
-				left: 20px;
-				right: 20px;
-				bottom: 120px;
-				font-size: 0;
-				overflow-x: hidden;
-				overflow-y: auto;
-				text-align: center;
+				top: 0px;
+				left: 0px;
+				right: 0px;
+				bottom: 110px;
+				overflow: hidden;
 
-				&::before { /* full-height ghost element for easy vertical centering */
-					content:'';
-					display: inline-block;
-					height: 100%;
-					vertical-align: middle;
-					width:0px;
-				}
-
-				#dialogwindow {
-					display: inline-block;
-					font-size: 19px;
-					max-width: 800px;
-					min-height: 100px;
-					min-width: 300px;
-					width: auto;
-					background-color: white;
-					border-radius: 2px;
-					border: 0px none;
-					box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.80);
-					padding: 10px;
+				#dialogcontainer {
+					display: none;
+					position: absolute;
+					top: 20px;
+					left: 20px;
+					right: 20px;
+					bottom: 10px;
+					font-size: 0;
+					overflow-x: hidden;
+					overflow-y: auto;
 					text-align: center;
-					vertical-align: middle;
-					margin-top: 20px;
-					margin-bottom: 20px;
 
-					#dialogcontent {
-						text-align: left;
+					&::before { /* full-height ghost element for easy vertical centering */
+						content:'';
+						display: inline-block;
+						height: 100%;
+						vertical-align: middle;
+						width:0px;
+					}
+
+					#dialogwindow {
+						display: inline-block;
+						font-size: 19px;
+						max-width: 800px;
+						min-height: 100px;
+						min-width: 300px;
+						width: auto;
+						background-color: #FFFFFF;
+						border-radius: 2px;
+						border: 0px none;
+						box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.80);
+						padding: 10px;
+						text-align: center;
+						vertical-align: middle;
+						margin-top: 20px;
+						margin-bottom: 20px;
+
+						#dialogcontent {
+							text-align: left;
+						}
 					}
 				}
+			}
+
+			ul#toastlist {
+				position: absolute;
+				bottom: 120px;
+				left: 10px;
+				padding: 0px;
+				list-style-type: none;
+
+				li > div {
+					display: inline-block;
+					width: auto;
+					background-color: #000000;
+					color: #EEEEEE;
+					border-radius: 10px;
+					border: 0px none;
+					box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.50);
+					margin-top: 10px;
+					height: 40px;
+					padding: 5px 10px 5px 10px;
+					font-size: 20px;
+					cursor: pointer;
+				}
+
 			}
 		}
 
