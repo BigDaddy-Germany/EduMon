@@ -38,8 +38,16 @@ window.EduMon.Gui = new function Gui() {
 	};
 
 	this.showDialog = function showDialog(dialogid) {
-		$("#dialogcontent").html("");
-		$("#dialogcontainer").fadeIn(200);
-		$("#dialogcontent").load("dialogs/"+dialogid+".html");
+		$("#dialogcontent").empty();
+		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
+			$("#dialogcontainer").fadeIn(200);
+			$("#dialogcontainer").scrollTop(0);
+		});
+	};
+
+	this.closeDialog = function closeDialog(dialogid) {
+		$("#dialogcontainer").fadeOut(200,function(){
+			$("#dialogcontent").empty();
+		});
 	};
 };
