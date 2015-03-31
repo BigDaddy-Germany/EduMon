@@ -29,8 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
-    private static final String CONFIG = "config";
-    private static final String TRAY_ICON = "./client/src/main/resources/SystemtrayIcon.png";
+    private static final String TRAY_ICON = "/SystemtrayIcon.png";
 
     private final KeyListener keyListener;
     private final MouseListener mouseListener;
@@ -39,37 +38,34 @@ public class Main {
     private final MessageFactory messageFactory;
     private TrayIcon trayIcon;
     private final ClientConfig clientConfig;
+    private final File appData;
 
     public Main() {
         keyListener = new KeyListener();
         mouseListener = new MouseListener();
         micListener = new MicListener();
+        String separator = File.separator;
+        if ("\\".equals(separator)) {
+            appData = new File(System.getenv("APPDATA") + separator + "EduMon" + separator + "config");
+        } else {
+            appData = new File(System.getProperty("user.home") + separator + ".EduMon" + separator + "config");
+        }
         final ObjectMapper mapper = new ObjectMapper();
         clientConfig = new ClientConfig("", "");
         try {
-            ClientConfig config = mapper.readValue(new File(CONFIG), ClientConfig.class);
+            ClientConfig config = mapper.readValue(appData, ClientConfig.class); // TODO create dir
             clientConfig.server = config.server;
             clientConfig.room = config.room;
-        } catch (IOException e) {
+        } catch(IOException e) {
             System.err.println(e.getMessage());
         }
         messageQueue = new MessageQueue(this);
         messageFactory = new MessageFactory(this, "MODERATOR");
         try {
-            trayIcon = new TrayIcon(ImageIO.read(new File(TRAY_ICON)));
+            trayIcon = new TrayIcon(ImageIO.read(Main.class.getResourceAsStream(TRAY_ICON)));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-    }
-
-    public Main(ClientConfig config, TrayIcon icon) {
-        keyListener = new KeyListener();
-        mouseListener = new MouseListener();
-        micListener = new MicListener();
-        clientConfig = config;
-        messageQueue = new MessageQueue(this);
-        messageFactory = new MessageFactory(this, "MODERATOR");
-        trayIcon = icon;
     }
 
     public static void main(String[] args) {
@@ -78,7 +74,7 @@ public class Main {
         main.addAppToSystemTray();
 
         // temporary
-        final Main mainMod = new Main(new ClientConfig("http://vps2.code-infection.de/edumon/mailbox.php", "160C"), null);
+        final Main mainMod = new Main();
         final MessageQueue messageQueueMod = new MessageQueue(mainMod, true);
         final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");
         ArrayList<String> list = new ArrayList<>();
@@ -195,7 +191,7 @@ public class Main {
     private void exit() {
         final ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(new File(CONFIG), clientConfig);
+            mapper.writeValue(appData, clientConfig);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
