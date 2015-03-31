@@ -8,13 +8,13 @@ window.EduMon.Data = new function Data() {
 		return {
 			studentName: studentName,
 			group: group
-		}
+		};
 	};
 
 	/**
 	 * Creates a new course object
 	 * @param {String} courseName A name to identify the course
-	 * @param {int[]} students An array of all students (idx) in the course
+	 * @param {int[]} students An array of all students (IDs) in the course
 	 */
 	this.Course = function Course(courseName, students) {
 		return {
@@ -34,6 +34,59 @@ window.EduMon.Data = new function Data() {
 			roomName: roomName,
 			width: width,
 			height: height
+		};
+	};
+
+	/**
+	 * Creates a new lecture object
+	 * @param {String} lectureName the lecture's display name
+	 * @param {int} room the room's ID
+	 * @param {int} course the course's ID
+	 */
+	this.Lecture = function Lecture(lectureName, room, course) {
+		return {
+			lectureName: lectureName,
+			room: room,
+			course: course
+		};
+	};
+
+	/**
+	 * Creates a current lecture object containing the real data (not only IDs)
+	 * @param {int} lectureId the lecture's ID
+	 * @returns {{
+	 * 				lectureName: {String},
+	 * 				room: {
+	 * 					roomName: {String},
+	 * 					width: {int},
+	 * 					height: {int}
+	 * 				},
+	 * 				course: {
+	 * 					courseName: {String},
+	 * 					students: {Array({
+	 * 						studentName: {String},
+	 * 						group: {String}
+	 *	 				})}
+	 *	 			}
+	 *	 		}}
+	 */
+	this.createCurrentLecture = function createCurrentLecture(lectureId) {
+		var lectureObject = window.EduMon.Prefs.lectures[lectureId];
+		var roomObject = window.EduMon.Prefs.rooms[lectureObject.room];
+		var courseObject = window.EduMon.Prefs.courses[lectureObject.course];
+
+		var students = [];
+
+		courseObject.students.forEach(function(studentId) {
+			students.push(window.EduMon.Prefs.students[studentId]);
+		});
+
+		courseObject.students = students;
+
+		return {
+			lectureName: lectureObject.lectureName,
+			room: roomObject,
+			course: courseObject
 		};
 	};
 };
