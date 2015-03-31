@@ -1,4 +1,16 @@
-<h4>Actionfenster</h4>
-<p contenteditable="true">Hier kommt ein Formular oder so.</p>
-<button type="button" class="btn btn-default">Geh weg</button>
-<button type="button" class="btn btn-primary">Danke!</button>
+<h4>Lorem Ipsum</h4>
+<p contenteditable="true">
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+</p>
+<button id="loremcancel" type="button" class="btn btn-default">Abbruch</button>
+<button id="loremaccept" type="button" class="btn btn-primary">Ich akzeptiere die genannten Bedingungen</button>
+<script>
+$(document).ready(function(){
+		$("#loremcancel").click(function(){
+			EduMon.Gui.closeDialog();
+			});
+		$("#loremaccept").click(function(){
+			EduMon.Gui.closeDialog();
+			});
+		});
+</script>
