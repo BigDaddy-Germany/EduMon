@@ -134,42 +134,69 @@ body {
           width: 100%;
           height: 100px;
           background-color: #DDDDDD; }
-      #screen #maincontainer #centerpanel #dialogcontainer {
+      #screen #maincontainer #centerpanel #layercontainer {
         display: none;
         position: absolute;
-        top: 20px;
-        left: 20px;
-        right: 20px;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 110px;
+        overflow: hidden; }
+        #screen #maincontainer #centerpanel #layercontainer #dialogcontainer {
+          display: none;
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          right: 20px;
+          bottom: 10px;
+          font-size: 0;
+          overflow-x: hidden;
+          overflow-y: auto;
+          text-align: center; }
+          #screen #maincontainer #centerpanel #layercontainer #dialogcontainer::before {
+            /* full-height ghost element for easy vertical centering */
+            content: '';
+            display: inline-block;
+            height: 100%;
+            vertical-align: middle;
+            width: 0px; }
+          #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow {
+            display: inline-block;
+            font-size: 19px;
+            max-width: 800px;
+            min-height: 100px;
+            min-width: 300px;
+            width: auto;
+            background-color: #FFFFFF;
+            border-radius: 2px;
+            border: 0px none;
+            box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+            margin-top: 20px;
+            margin-bottom: 20px; }
+            #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent {
+              text-align: left; }
+      #screen #maincontainer #centerpanel ul#toastlist {
+        position: absolute;
         bottom: 120px;
-        font-size: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        text-align: center; }
-        #screen #maincontainer #centerpanel #dialogcontainer::before {
-          /* full-height ghost element for easy vertical centering */
-          content: '';
+        left: 10px;
+        padding: 0px;
+        list-style-type: none; }
+        #screen #maincontainer #centerpanel ul#toastlist li > div {
           display: inline-block;
-          height: 100%;
-          vertical-align: middle;
-          width: 0px; }
-        #screen #maincontainer #centerpanel #dialogcontainer #dialogwindow {
-          display: inline-block;
-          font-size: 19px;
-          max-width: 800px;
-          min-height: 100px;
-          min-width: 300px;
           width: auto;
-          background-color: white;
-          border-radius: 2px;
+          background-color: #000000;
+          color: #EEEEEE;
+          border-radius: 10px;
           border: 0px none;
-          box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.8);
-          padding: 10px;
-          text-align: center;
-          vertical-align: middle;
-          margin-top: 20px;
-          margin-bottom: 20px; }
-          #screen #maincontainer #centerpanel #dialogcontainer #dialogwindow #dialogcontent {
-            text-align: left; }
+          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.5);
+          margin-top: 10px;
+          height: 40px;
+          padding: 5px 10px 5px 10px;
+          font-size: 20px;
+          cursor: pointer; }
     #screen #maincontainer #feedpanel {
       width: 300px;
       display: flex;

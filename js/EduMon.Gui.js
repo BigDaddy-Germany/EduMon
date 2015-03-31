@@ -40,6 +40,7 @@ window.EduMon.Gui = new function Gui() {
 	this.showDialog = function showDialog(dialogid) {
 		$("#dialogcontent").empty();
 		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
+			$("#layercontainer").show();
 			$("#dialogcontainer").fadeIn(200);
 			$("#dialogcontainer").scrollTop(0);
 		});
@@ -48,6 +49,20 @@ window.EduMon.Gui = new function Gui() {
 	this.closeDialog = function closeDialog(dialogid) {
 		$("#dialogcontainer").fadeOut(200,function(){
 			$("#dialogcontent").empty();
+			$("#layercontainer").hide();
 		});
+	};
+
+	this.showToast = function showToast(message) {
+		$("#toastlist")
+			.prepend($("<li/>")
+					.append($("<div/>").text(message))
+					.one("click",function(e){
+						$(this).remove();
+					})
+					.delay(2000)
+					.fadeOut(1000,function(){
+						$(this).remove();
+					}));
 	};
 };
