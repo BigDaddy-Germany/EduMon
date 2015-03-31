@@ -5,14 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
         <title>EduMon Moderator-WebApp</title>
-
-        <!-- Bootstrap -->
-        <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-        <!-- Optional theme -->
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">-->
-        <link href="lib/bootstrap/css/ripples.min.css" rel="stylesheet">
-        <link href="lib/bootstrap/css/material-wfont.min.css" rel="stylesheet">
         <link href="css/app.css" rel="stylesheet">
 	</head>
 	<body>
@@ -40,7 +33,7 @@
                 </div>
                 <div id="currentbox">
                         <div id="currentstate">
-                            <i class="mdi-av-play-circle-outline"></i>
+                            <i class="glyphicon glyphicon-play-circle"></i>
                         </div>
                         <div id="currenttime">
                             10:40
@@ -55,8 +48,8 @@
 							<h3 class="panel-title">Vorlesung</h3>
 						</div>
 						<div class="panel-body">
-							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-pause"></a><br>
-							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-stop"></a><br>
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-pause"></a><br>
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-stop"></a><br>
 						</div>
 					</div>
 					<div id="actionbox" class="panel panel-info">
@@ -64,10 +57,10 @@
 							<h3 class="panel-title">Aktionen</h3>
 						</div>
 						<div class="panel-body">
-							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-av-shuffle"></a><br>
-							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-thumbs-up-down"></a><br>
-							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-stars"></a><br>
-							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised mdi-action-settings"></a><br>
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-random"></a><br>
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-thumbs-up"></a><br>
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-star"></a><br>
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-cog"></a><br>
 						</div>
 					</div>
 				</div>
@@ -130,22 +123,15 @@
 			</div>
 		</div>
 
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="lib/jquery/js/jquery.min.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <!-- Latest compiled and minified JavaScript -->
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-        <script src="lib/bootstrap/js/ripples.min.js"></script>
-        <script src="lib/bootstrap/js/material.min.js"></script>
+
         <script src="js/EduMon.js"></script>
         <script src="js/EduMon.Messenger.js"></script>
         <script src="js/EduMon.Data.js"></script>
         <script src="js/EduMon.CSV.js"></script>
         <script src="js/EduMon.Gui.js"></script>
         <script>
-            $(document).ready(function() {
-                $.material.init();
-            });
 			$(window).load(function(){
 				EduMon.init();
 				EduMon.Gui.showFeedMessage("info","Willkommen!","EduMon stets zu Diensten :)");

@@ -3,8 +3,19 @@ html {
 
 body {
   background-color: #EEEEEE;
-  height: 100%; }
+  height: 100%;
+  font-family: 'Roboto', sans-serif; }
 
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local("Roboto"), local("Roboto-Regular"), url(../fonts/RobotoNormal400.woff) format("woff"); }
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local("Roboto Bold"), local("Roboto-Bold"), url(../fonts/RobotoBold700.woff) format("woff"); }
 #screen {
   height: 100%;
   width: 100%;
@@ -23,7 +34,8 @@ body {
         margin: 0px;
         height: 100%;
         padding-top: 10px;
-        padding-bottom: 10px; }
+        padding-bottom: 10px;
+        font-weight: bold; }
         #screen #timepanel #logo h1 img {
           height: 80px;
           border-radius: 5px; }
