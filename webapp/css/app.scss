@@ -5,6 +5,20 @@ html {
 body {
 	background-color: #EEEEEE;
 	height: 100%;
+	font-family: 'Roboto', sans-serif;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'), url(../fonts/RobotoNormal400.woff) format('woff');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(../fonts/RobotoBold700.woff) format('woff');
 }
 
 $timepanel_height: 100px;
@@ -47,6 +61,7 @@ $tdgrad_color_high:   #F44336;
 				height: 100%;
 				padding-top: $timepanel_height * 0.1;
 				padding-bottom: $timepanel_height * 0.1;
+				font-weight: bold;
 
 				img {
 					height: $timepanel_height * 0.8;
