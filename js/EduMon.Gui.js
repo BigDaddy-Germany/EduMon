@@ -35,5 +35,11 @@ window.EduMon.Gui = new function Gui() {
 
 	this.updateFeedCountView = function updateFeedCountView() {
 		$("#feedcounter").html("<span class=\"badge\">"+countFeedMessages+"</span> Nachricht"+(countFeedMessages!==1?"en":""));
-	}
+	};
+
+	this.showDialog = function showDialog(dialogid) {
+		$("#dialogcontent").html("");
+		$("#dialogcontainer").fadeIn(200);
+		$("#dialogcontent").load("dialogs/"+dialogid+".html");
+	};
 };

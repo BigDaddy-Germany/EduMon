@@ -108,24 +108,13 @@
 							<input type="button" value="Demo: Typ 3 OUT" onclick="EduMon.sendDemo(3)">
 							<input type="button" value="Demo: Typ 5 OUT" onclick="EduMon.sendDemo(5)">
 							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
+							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
 						</div>
 					</div>
 
-					<div id="actioncontainer" class="modal">
-						<div id="actionwindow" class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-									<h4 class="modal-title">Actionfenster</h4>
-								</div>
-								<div class="modal-body" contenteditable="true">
-									<p>Hier kommt ein Formular oder so.</p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-default" data-dismiss="modal">Geh weg</button>
-									<button type="button" class="btn btn-primary">Danke!</button>
-								</div>
-							</div>
+					<div id="dialogcontainer">
+						<div id="dialogwindow">
+							<div id="dialogcontent"></div>
 						</div>
 					</div>
 
