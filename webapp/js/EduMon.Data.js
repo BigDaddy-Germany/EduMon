@@ -63,11 +63,9 @@ window.EduMon.Data = new function Data() {
 	 * 				},
 	 * 				course: {
 	 * 					courseName: {String},
-	 * 					students: {Array({
-	 * 						studentName: {String},
-	 * 						group: {String}
-	 *	 				})}
-	 *	 			}
+	 * 					students: Array({int})
+	 *	 			},
+	 *	 			activeStudents: {}
 	 *	 		}}
 	 */
 	this.createCurrentLecture = function createCurrentLecture(lectureId) {
@@ -75,18 +73,23 @@ window.EduMon.Data = new function Data() {
 		var roomObject = window.EduMon.Prefs.rooms[lectureObject.room];
 		var courseObject = window.EduMon.Prefs.courses[lectureObject.course];
 
-		var students = [];
-
-		courseObject.students.forEach(function(studentId) {
-			students.push(window.EduMon.Prefs.students[studentId]);
-		});
-
-		courseObject.students = students;
-
 		return {
 			lectureName: lectureObject.lectureName,
 			room: roomObject,
-			course: courseObject
+			course: courseObject,
+			activeStudents: {
+				/*
+					[SESSID]:
+						{
+							studentName: {String},
+							group: {String},
+							seat: {x: {int}, y: {int}},
+							[enhance me]
+						},
+				 	[SESSID2]:
+				 		{...}
+				 */
+			}
 		};
 	};
 };
