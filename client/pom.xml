@@ -215,7 +215,7 @@
                         <fileVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</fileVersion>
                         <txtFileVersion>${project.version}</txtFileVersion>
                         <fileDescription>${project.description}</fileDescription>
-                        <copyright>${}asdasda</copyright>
+                        <copyright>GPLv3</copyright>
                         <productVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</productVersion>
                         <txtProductVersion>${project.version}</txtProductVersion>
                         <productName>EduMon</productName>
@@ -230,45 +230,6 @@
                         <goals>
                             <goal>launch4j</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>sh.tak.appbundler</groupId>
-                <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.0.1</version>
-                <configuration>
-                    <mainClass>${mainClass}</mainClass>
-                    <buildDirectory>${project.build.directory}</buildDirectory>
-                    <bundleName>${project.build.finalName}</bundleName>
-                    <jvmVersion>${jdkVersion}+</jvmVersion>
-                    <!--<iconFile>${iconFile}.icns</iconFile>-->
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.3</version>
-                <executions>
-                    <execution>
-                        <id>osx-package</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>${project.build.finalName}-osx</finalName>
-                            <descriptor>${basedir}/src/assembly/osx-package.xml</descriptor>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <archiveBaseDirectory>.</archiveBaseDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
