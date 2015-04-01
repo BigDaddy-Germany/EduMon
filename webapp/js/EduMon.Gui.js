@@ -2,6 +2,7 @@ window.EduMon.Gui = new function Gui() {
 	var that = this;
 
 	var countFeedMessages = 0;
+	var dialogOpened = 0;
 
 	/**
 	 * Add message to newsfeed
@@ -38,18 +39,38 @@ window.EduMon.Gui = new function Gui() {
 	};
 
 	this.showDialog = function showDialog(dialogid) {
+		if (this.dialogOpened){
+			throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
+			return;
+		}
+		this.dialogOpened = 1;
 		$("#dialogcontent").empty();
+		this.blockDialog(1);
+		$("#layercontainer").show();
+		$("#dialogcontainer").fadeIn(200);
 		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
-			$("#layercontainer").show();
-			$("#dialogcontainer").fadeIn(200);
 			$("#dialogcontainer").scrollTop(0);
+			that.blockDialog(0);
 		});
 	};
 
-	this.closeDialog = function closeDialog(dialogid) {
-		$("#dialogcontainer").fadeOut(200,function(){
-			$("#dialogcontent").empty();
+	this.switchDialog = function switchDialog(dialogid) {
+		this.blockDialog(1);
+		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
+			$("#dialogcontainer").scrollTop(0);
+			that.blockDialog(0);
+		});
+	};
+
+	this.blockDialog = function setDialogBlock(blocked) {
+		//TODO show/hide some kind of loading overlay to indicate activity and prevent further input
+	};
+
+	this.closeDialog = function closeDialog() {
+		$("#dialogcontainer").fadeOut(100,function(){
 			$("#layercontainer").hide();
+			$("#dialogcontent").empty();
+			that.dialogOpened = 0;
 		});
 	};
 
