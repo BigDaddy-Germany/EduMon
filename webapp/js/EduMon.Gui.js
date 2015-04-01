@@ -42,6 +42,22 @@ window.EduMon.Gui = new function Gui() {
 	};
 
 	/**
+	 * Performs the AJAX request for dialog content. [Deduplicating code in showDialog() and switchDialog()]
+	 * @param {String} dialogid [see showDialog()]
+	 */
+	var loadDialog = function loadDialog(dialogid) {
+		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(response, status, xhr){
+			if (status==="success"){
+				$("#dialogcontainer").scrollTop(0);
+				that.setDialogBlock(0);
+			} else {
+				that.closeDialog();
+				throw "loadDialog() fehlgeschlagen";
+			}
+		});
+	}
+
+	/**
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
 	 */
@@ -52,13 +68,10 @@ window.EduMon.Gui = new function Gui() {
 		}
 		this.dialogOpened = 1;
 		$("#dialogcontent").empty();
-		this.blockDialog(1);
+		this.setDialogBlock(1);
 		$("#layercontainer").show();
 		$("#dialogcontainer").fadeIn(200);
-		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
-			$("#dialogcontainer").scrollTop(0);
-			that.blockDialog(0);
-		});
+		loadDialog(dialogid);
 	};
 
 	/**
@@ -70,22 +83,21 @@ window.EduMon.Gui = new function Gui() {
 			throw "No dialog currently open to switch from. Use openDialog() instead";
 			return;
 		}
-		this.blockDialog(1);
-		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
-			$("#dialogcontainer").scrollTop(0);
-			that.blockDialog(0);
-		});
+		this.setDialogBlock(1);
+		loadDialog(dialogid);
 	};
 
 	/**
 	 * Display or hide the loading/busy indicator of the dialog
 	 * @param {Boolean} blocked Set to 1 for display and 0 to hide the blocker
 	 */
-	this.blockDialog = function setDialogBlock(blocked) {
+	this.setDialogBlock = function setDialogBlock(blocked) {
 		if (blocked){
+			$("#loadingbox").hide().delay(500).fadeIn(500);
 			$("#loadinglayer").show();
 		} else {
 			$("#loadinglayer").hide();
+			$("#loadingbox").stop();
 		}
 	};
 
