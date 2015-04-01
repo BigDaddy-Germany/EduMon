@@ -6,13 +6,13 @@
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 </p>
 <footer>
-	<button id="loremcancel" type="button" class="btn btn-default">Abbruch</button>
+	<button id="loreminfo" type="button" class="btn btn-default">Impressum</button>
 	<button id="loremaccept" type="button" class="btn btn-primary">Ich akzeptiere die genannten Bedingungen</button>
 </footer>
 <script>
 $(document).ready(function(){
-		$("#loremcancel").click(function(){
-			EduMon.Gui.closeDialog();
+		$("#loreminfo").click(function(){
+			EduMon.Gui.switchDialog("dummy2");
 			});
 		$("#loremaccept").click(function(){
 			EduMon.Gui.closeDialog();
