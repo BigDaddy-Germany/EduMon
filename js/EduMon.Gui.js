@@ -63,7 +63,11 @@ window.EduMon.Gui = new function Gui() {
 	};
 
 	this.blockDialog = function setDialogBlock(blocked) {
-		//TODO show/hide some kind of loading overlay to indicate activity and prevent further input
+		if (blocked){
+			$("#loadinglayer").show();
+		} else {
+			$("#loadinglayer").hide();
+		}
 	};
 
 	this.closeDialog = function closeDialog() {
