@@ -34,10 +34,17 @@ window.EduMon.Gui = new function Gui() {
 					);
 	};
 
+	/**
+	 * Refresh the "n Messages"-Counter in the newsfeed panel
+	 */
 	this.updateFeedCountView = function updateFeedCountView() {
 		$("#feedcounter").html("<span class=\"badge\">"+countFeedMessages+"</span> Nachricht"+(countFeedMessages!==1?"en":""));
 	};
 
+	/**
+	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
+	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
+	 */
 	this.showDialog = function showDialog(dialogid) {
 		if (this.dialogOpened){
 			throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
@@ -54,7 +61,15 @@ window.EduMon.Gui = new function Gui() {
 		});
 	};
 
+	/**
+	 * Switch from the current dialog to another
+	 * @param {String} dialogid [see showDialog()]
+	 */
 	this.switchDialog = function switchDialog(dialogid) {
+		if (!this.dialogOpened){
+			throw "No dialog currently open to switch from. Use openDialog() instead";
+			return;
+		}
 		this.blockDialog(1);
 		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(){
 			$("#dialogcontainer").scrollTop(0);
@@ -62,6 +77,10 @@ window.EduMon.Gui = new function Gui() {
 		});
 	};
 
+	/**
+	 * Display or hide the loading/busy indicator of the dialog
+	 * @param {Boolean} blocked Set to 1 for display and 0 to hide the blocker
+	 */
 	this.blockDialog = function setDialogBlock(blocked) {
 		if (blocked){
 			$("#loadinglayer").show();
@@ -70,6 +89,9 @@ window.EduMon.Gui = new function Gui() {
 		}
 	};
 
+	/**
+	 * Close the active dialog
+	 */
 	this.closeDialog = function closeDialog() {
 		$("#dialogcontainer").fadeOut(100,function(){
 			$("#layercontainer").hide();
@@ -78,6 +100,10 @@ window.EduMon.Gui = new function Gui() {
 		});
 	};
 
+	/**
+	 * Display a toast notification that disappears after a little while
+	 * @param {String} message Message to be displayed
+	 */
 	this.showToast = function showToast(message) {
 		$("#toastlist")
 			.prepend($("<li/>")
