@@ -8,3 +8,4 @@ MANIFEST.MF
 Thumbs.db
 /client/.idea/*
 /config
+.sass-cache

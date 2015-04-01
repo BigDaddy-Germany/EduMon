@@ -31,6 +31,9 @@ $tdgrad_color_low:    #4CAF50;
 $tdgrad_color_medium: #FF5722;
 $tdgrad_color_high:   #F44336;
 
+$dialog_padding: 10px;
+$dialog_border_radius: 10px;
+
 @mixin hflex {
 	display: flex;
 	flex-direction: row;
@@ -226,6 +229,8 @@ $tdgrad_color_high:   #F44336;
 					overflow-x: hidden;
 					overflow-y: auto;
 					text-align: center;
+					background-color: rgba(0, 0, 0, 0.50);
+					box-shadow: 0px 0px 7px 7px rgba(100,100,100,1);
 
 					&::before { /* full-height ghost element for easy vertical centering */
 						content:'';
@@ -237,16 +242,15 @@ $tdgrad_color_high:   #F44336;
 
 					#dialogwindow {
 						display: inline-block;
-						font-size: 19px;
 						max-width: 800px;
 						min-height: 100px;
 						min-width: 300px;
 						width: auto;
 						background-color: #FFFFFF;
-						border-radius: 2px;
+						border-radius: $dialog_border_radius;
 						border: 0px none;
 						box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.80);
-						padding: 10px;
+						padding: $dialog_padding;
 						text-align: center;
 						vertical-align: middle;
 						margin-top: 20px;
@@ -254,6 +258,50 @@ $tdgrad_color_high:   #F44336;
 
 						#dialogcontent {
 							text-align: left;
+							font-size: 16px;
+
+							header {
+								display: block;
+								background-color: #F1F1F1;
+								border-color: #DDDDDD;
+								border-top-left-radius:  $dialog_border_radius;
+								border-top-right-radius: $dialog_border_radius;
+								padding: 10px;
+								text-align: left;
+								margin-top: -$dialog_padding;
+								margin-left: -$dialog_padding;
+								margin-right: -$dialog_padding;
+								margin-bottom: 10px;
+								overflow: auto;
+
+								h2 {
+									font-size: 25px;
+									color: #222222;
+									font-weight: bold;
+									margin: 0px;
+									float: left;
+								}
+
+								h3 {
+									font-size: 20px;
+									color: #333333;
+									font-style: italic;
+									margin: 5px 0px 0px 0px;
+									float: right;
+								}
+
+							}
+
+							footer {
+								display: block;
+								text-align: right;
+								border-top: 2px solid #DDDDDD;
+								padding: 10px;
+								margin-top: 10px;
+								margin-left: -$dialog_padding;
+								margin-right: -$dialog_padding;
+								margin-bottom: -$dialog_padding;
+							}
 						}
 					}
 				}

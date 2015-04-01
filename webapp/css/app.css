@@ -152,7 +152,9 @@ body {
           font-size: 0;
           overflow-x: hidden;
           overflow-y: auto;
-          text-align: center; }
+          text-align: center;
+          background-color: rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px 7px 7px #646464; }
           #screen #maincontainer #centerpanel #layercontainer #dialogcontainer::before {
             /* full-height ghost element for easy vertical centering */
             content: '';
@@ -162,13 +164,12 @@ body {
             width: 0px; }
           #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow {
             display: inline-block;
-            font-size: 19px;
             max-width: 800px;
             min-height: 100px;
             min-width: 300px;
             width: auto;
             background-color: #FFFFFF;
-            border-radius: 2px;
+            border-radius: 10px;
             border: 0px none;
             box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.8);
             padding: 10px;
@@ -177,7 +178,42 @@ body {
             margin-top: 20px;
             margin-bottom: 20px; }
             #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent {
-              text-align: left; }
+              text-align: left;
+              font-size: 16px; }
+              #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent header {
+                display: block;
+                background-color: #F1F1F1;
+                border-color: #DDDDDD;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                padding: 10px;
+                text-align: left;
+                margin-top: -10px;
+                margin-left: -10px;
+                margin-right: -10px;
+                margin-bottom: 10px;
+                overflow: auto; }
+                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent header h2 {
+                  font-size: 25px;
+                  color: #222222;
+                  font-weight: bold;
+                  margin: 0px;
+                  float: left; }
+                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent header h3 {
+                  font-size: 20px;
+                  color: #333333;
+                  font-style: italic;
+                  margin: 5px 0px 0px 0px;
+                  float: right; }
+              #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent footer {
+                display: block;
+                text-align: right;
+                border-top: 2px solid #DDDDDD;
+                padding: 10px;
+                margin-top: 10px;
+                margin-left: -10px;
+                margin-right: -10px;
+                margin-bottom: -10px; }
       #screen #maincontainer #centerpanel ul#toastlist {
         position: absolute;
         bottom: 120px;
