@@ -9,16 +9,16 @@ body {
 }
 
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Roboto'), local('Roboto-Regular'), url(../fonts/RobotoNormal400.woff) format('woff');
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto'), local('Roboto-Regular'), url(../fonts/RobotoNormal400.woff) format('woff');
 }
 @font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Roboto Bold'), local('Roboto-Bold'), url(../fonts/RobotoBold700.woff) format('woff');
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Roboto Bold'), local('Roboto-Bold'), url(../fonts/RobotoBold700.woff) format('woff');
 }
 
 $timepanel_height: 100px;
@@ -56,7 +56,7 @@ $dialog_border_radius: 10px;
 
 		#logo {
 			white-space: nowrap;
-				vertical-align: middle;
+			vertical-align: middle;
 
 			h1 {
 				font-size: $timepanel_height * 0.6;
@@ -79,7 +79,7 @@ $dialog_border_radius: 10px;
 			padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
 			padding-left: 20px;
 			padding-right: 0px;
-			 
+
 			#progressdisplay {
 				border-radius: 5px;
 				height: $timeprogress_height;
@@ -242,6 +242,7 @@ $dialog_border_radius: 10px;
 
 					#dialogwindow {
 						display: inline-block;
+						position: relative;
 						max-width: 800px;
 						min-height: 100px;
 						min-width: 300px;
@@ -255,6 +256,50 @@ $dialog_border_radius: 10px;
 						vertical-align: middle;
 						margin-top: 20px;
 						margin-bottom: 20px;
+
+						#loadinglayer {
+							display: none;
+							position: absolute;
+							top: 0px;
+							left: 0px;
+							right: 0px;
+							bottom: 0px;
+							border-radius: $dialog_border_radius;
+							background-color: rgba(255, 255, 255, 0.80);
+
+							#loadingbox{
+								position: absolute;
+								width: 144px;
+								height: 32px;
+								top: 50%;
+								margin-top: -16px;
+								left: 50%;
+								margin-left: -72px;
+
+								& > div {
+									background-color:#FFFFFF;
+									float:left;
+									height:32px;
+									margin: 0px 8px 0px 8px;
+									width:32px;
+									animation-name:bounce_loadingcircle;
+									animation-duration:0.6s;
+									animation-iteration-count:infinite;
+									animation-direction:normal;
+									border-radius:21px;
+								}
+
+								#loadingcircle_1{ animation-delay:0.12s; }
+								#loadingcircle_2{ animation-delay:0.28s; }
+								#loadingcircle_3{ animation-delay:0.36s; }
+
+								@keyframes bounce_loadingcircle{
+									0%{}
+									50%{background-color:#000000}
+									100%{}
+								}
+							}
+						}
 
 						#dialogcontent {
 							text-align: left;

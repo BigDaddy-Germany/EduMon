@@ -164,6 +164,7 @@ body {
             width: 0px; }
           #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow {
             display: inline-block;
+            position: relative;
             max-width: 800px;
             min-height: 100px;
             min-width: 300px;
@@ -177,6 +178,43 @@ body {
             vertical-align: middle;
             margin-top: 20px;
             margin-bottom: 20px; }
+            #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer {
+              display: none;
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              right: 0px;
+              bottom: 0px;
+              border-radius: 10px;
+              background-color: rgba(255, 255, 255, 0.8); }
+              #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox {
+                position: absolute;
+                width: 144px;
+                height: 32px;
+                top: 50%;
+                margin-top: -16px;
+                left: 50%;
+                margin-left: -72px; }
+                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox > div {
+                  background-color: #FFFFFF;
+                  float: left;
+                  height: 32px;
+                  margin: 0px 8px 0px 8px;
+                  width: 32px;
+                  animation-name: bounce_loadingcircle;
+                  animation-duration: 0.6s;
+                  animation-iteration-count: infinite;
+                  animation-direction: normal;
+                  border-radius: 21px; }
+                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_1 {
+                  animation-delay: 0.12s; }
+                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_2 {
+                  animation-delay: 0.28s; }
+                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_3 {
+                  animation-delay: 0.36s; }
+@keyframes bounce_loadingcircle {
+  50% {
+    background-color: #000000; } }
             #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent {
               text-align: left;
               font-size: 16px; }
