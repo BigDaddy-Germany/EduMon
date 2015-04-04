@@ -103,6 +103,7 @@
 							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
 							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
 							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
+							<input type="button" value="Demo: Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);})">
 						</div>
 					</div>
 
@@ -117,6 +118,15 @@
 										<div id="loadingcircle_3"></div>
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="popupcontainer">
+							<div id="popupwindow">
+								<header id="popupheader">
+									<h3 id="popuptitle"></h3>
+								</header>
+								<p id="popupmessage"></p>
+								<footer id="popupfooter"></footer>
 							</div>
 						</div>
 					</div>

@@ -3,6 +3,14 @@ window.EduMon.Gui = new function Gui() {
 
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
+	var popupOpened = 0;
+	var popupCallback;
+	var defaultButtons = {
+		"yes":    {text:"Ja",       value:"yes",   class:"success"},
+		"no":     {text:"Nein",     value:"no",    class:"danger" },
+		"ok":     {text:"OK",       value:"ok",    class:"primary"},
+		"cancel": {text:"Abbrechen",value:"cancel",class:"default"}
+	};
 
 	/**
 	 * Add message to newsfeed
@@ -12,7 +20,7 @@ window.EduMon.Gui = new function Gui() {
 	 */
 	this.showFeedMessage = function showFeedMessage(type, title, message) {
 		countFeedMessages++;
-		that.updateFeedCountView();
+		this.updateFeedCountView();
 		$("#alertcontainer")
 			.prepend($("<div/>",{class:"alert alert-dismissable alert-"+type})
 					.css("opacity","0")
@@ -62,14 +70,17 @@ window.EduMon.Gui = new function Gui() {
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
 	 */
 	this.showDialog = function showDialog(dialogid) {
-		if (this.dialogOpened){
+		if (dialogOpened){
 			throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
 			return;
 		}
-		this.dialogOpened = 1;
+		dialogOpened = 1;
 		$("#dialogcontent").empty();
 		this.setDialogBlock(1);
 		$("#layercontainer").show();
+		if (!popupOpened){
+			$("#popupcontainer").hide();
+		}
 		$("#dialogcontainer").fadeIn(200);
 		loadDialog(dialogid);
 	};
@@ -79,7 +90,7 @@ window.EduMon.Gui = new function Gui() {
 	 * @param {String} dialogid [see showDialog()]
 	 */
 	this.switchDialog = function switchDialog(dialogid) {
-		if (!this.dialogOpened){
+		if (!dialogOpened){
 			throw "No dialog currently open to switch from. Use openDialog() instead";
 			return;
 		}
@@ -106,9 +117,11 @@ window.EduMon.Gui = new function Gui() {
 	 */
 	this.closeDialog = function closeDialog() {
 		$("#dialogcontainer").fadeOut(100,function(){
-			$("#layercontainer").hide();
+			if (!popupOpened){
+				$("#layercontainer").hide();
+			}
 			$("#dialogcontent").empty();
-			that.dialogOpened = 0;
+			dialogOpened = 0;
 		});
 	};
 
@@ -128,4 +141,52 @@ window.EduMon.Gui = new function Gui() {
 						$(this).remove();
 					}));
 	};
+
+	/**
+	 * Display a popup box
+	 * @param {String} title Popup title
+	 * @param {String} message Message to be displayed
+	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
+	 * @param {Function} callback Function to be called on button click, will be given button value as parameter
+	 */
+	this.showPopup = function showPopup(title, message, buttons, callback) {
+		if (popupOpened){
+			throw "Cannot open another popup. The current one has to be closed first";
+			return;
+		}
+		popupOpened = 1;
+		$("#layercontainer").show();
+		$("#popuptitle").text(title);
+		$("#popupmessage").text(message);
+		$("#popupfooter").empty();
+		for (var i = 0; i < buttons.length; i++){
+			if ((typeof (buttons[i])==="string") && (buttons[i] in defaultButtons)){
+				buttons[i] = defaultButtons[buttons[i]];
+			}
+			$("#popupfooter").append(
+					$("<button/>",{type:"button"})
+					.addClass("btn btn-"+buttons[i].class)
+					.text(buttons[i].text)
+					.data("returnvalue",buttons[i].value)
+					);
+		}
+		popupCallback = callback || function(){};
+		$("#popupfooter button").one("click",function(){
+			that.closePopup();
+			popupCallback($(this).data("returnvalue"));
+		});
+		$("#popupcontainer").show();
+	};
+
+	/**
+	 * Closes the popup box
+	 */
+	this.closePopup = function closePopup() {
+		$("#popupcontainer").hide();
+		if (!dialogOpened){
+			$("#layercontainer").hide();
+		}
+		popupOpened = 0;
+	};
+
 };

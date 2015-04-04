@@ -252,6 +252,55 @@ body {
                 margin-left: -10px;
                 margin-right: -10px;
                 margin-bottom: -10px; }
+        #screen #maincontainer #centerpanel #layercontainer #popupcontainer {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          right: 20px;
+          bottom: 10px;
+          background-color: rgba(0, 0, 0, 0.5);
+          box-shadow: 0px 0px 7px 7px #646464; }
+          #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow {
+            max-width: 500px;
+            min-height: 100px;
+            min-width: 300px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center; }
+            #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupheader {
+              display: block;
+              background-color: #F1F1F1;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+              padding: 5px;
+              text-align: left;
+              margin-top: -10px;
+              margin-left: -10px;
+              margin-right: -10px;
+              margin-bottom: 20px;
+              overflow: auto; }
+              #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupheader #popuptitle {
+                font-size: 17px;
+                font-weight: bold;
+                color: #333333;
+                margin: 3px 0px 0px 10px; }
+            #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupmessage {
+              font-size: 16px;
+              text-align: center; }
+            #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupfooter {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-around;
+              align-items: center;
+              margin-top: 20px; }
+              #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupfooter button {
+                flex-basis: 80px; }
       #screen #maincontainer #centerpanel ul#toastlist {
         position: absolute;
         bottom: 120px;
