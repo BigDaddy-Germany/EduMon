@@ -350,6 +350,68 @@ $dialog_border_radius: 10px;
 						}
 					}
 				}
+
+				#popupcontainer {
+					@include hflex;
+					justify-content: center;
+					align-items: center;
+					position: absolute;
+					top: 20px;
+					left: 20px;
+					right: 20px;
+					bottom: 10px;
+					background-color: rgba(0, 0, 0, 0.50);
+					box-shadow: 0px 0px 7px 7px rgba(100,100,100,1);
+
+					#popupwindow {
+						max-width: 500px;
+						min-height: 100px;
+						min-width: 300px;
+						background-color: #FFFFFF;
+						border-radius: $dialog_border_radius;
+						border: 1px solid black;
+						padding: $dialog_padding;
+						text-align: center;
+
+						#popupheader {
+							display: block;
+							background-color: #F1F1F1;
+							border-top-left-radius:  $dialog_border_radius;
+							border-top-right-radius: $dialog_border_radius;
+							padding: 5px;
+							text-align: left;
+							margin-top: -$dialog_padding;
+							margin-left: -$dialog_padding;
+							margin-right: -$dialog_padding;
+							margin-bottom: 20px;
+							overflow: auto;
+
+							#popuptitle {
+								font-size: 17px;
+								font-weight: bold;
+								color: #333333;
+								margin: 3px 0px 0px 10px;
+							}
+
+						}
+
+						#popupmessage {
+							font-size: 16px;
+							text-align: center;
+						}
+
+						#popupfooter {
+							@include hflex;
+							justify-content: space-around;
+							align-items: center;
+							margin-top: 20px;
+
+							button {
+								flex-basis: 80px;
+							}
+						}
+					}
+				}
 			}
 
 			ul#toastlist {

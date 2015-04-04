@@ -3,6 +3,7 @@ window.EduMon.Gui = new function Gui() {
 
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
+	var popupOpened = 0;
 
 	/**
 	 * Add message to newsfeed
@@ -128,4 +129,16 @@ window.EduMon.Gui = new function Gui() {
 						$(this).remove();
 					}));
 	};
+
+	/**
+	 */
+	this.showPopup = function showPopup(title, message, buttons) {
+		this.popupOpened = 1;
+		$("#layercontainer").show();
+		$("#popuptitle").text(title);
+		$("#popupmessage").text(message);
+		$("#popupcontainer").show();
+	};
+
+
 };
