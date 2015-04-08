@@ -1,0 +1,39 @@
+html {
+	height: 100%;
+}
+
+body {
+	background-color: #EEEEEE;
+	height: 100%;
+	font-family: 'Roboto', sans-serif;
+}
+
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto'), local('Roboto-Regular'), url(../fonts/RobotoNormal400.woff) format('woff');
+}
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	src: local('Roboto Bold'), local('Roboto-Bold'), url(../fonts/RobotoBold700.woff) format('woff');
+}
+
+#screen {
+	height: 100%;
+	width:  100%;
+	overflow: hidden;
+	@include vflex;
+
+	#maincontainer {
+		flex-grow: 1;
+		@include hflex;
+	}
+}
+
+.panel {
+	margin: 5px;
+	background-color: #FFFFFF;
+}

@@ -22,326 +22,340 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column; }
-  #screen #timepanel {
-    height: 100px;
-    display: flex;
-    flex-direction: row; }
-    #screen #timepanel #logo {
-      white-space: nowrap;
-      vertical-align: middle; }
-      #screen #timepanel #logo h1 {
-        font-size: 60px;
-        margin: 0px;
-        height: 100%;
-        padding-top: 10px;
-        padding-bottom: 10px;
-        font-weight: bold; }
-        #screen #timepanel #logo h1 img {
-          height: 80px;
-          border-radius: 5px; }
-    #screen #timepanel #timeline {
-      flex-grow: 1;
-      padding-top: 15px;
-      padding-bottom: 15px;
-      padding-left: 20px;
-      padding-right: 0px; }
-      #screen #timepanel #timeline #progressdisplay {
-        border-radius: 5px;
-        height: 40px;
-        margin: 0px; }
-      #screen #timepanel #timeline #hourdisplay {
-        height: 30px;
-        margin: 0px;
-        overflow: hidden;
-        font-size: 0px; }
-        #screen #timepanel #timeline #hourdisplay .hour {
-          display: inline-block;
-          font-size: 20px;
-          height: 100%;
-          padding: 0px;
-          text-align: right;
-          vertical-align: top; }
-          #screen #timepanel #timeline #hourdisplay .hour:first-child {
-            text-align: left; }
-      #screen #timepanel #timeline .progress-bar {
-        line-height: 40px;
-        font-size: 24px;
-        text-align: center;
-        overflow: visible; }
-    #screen #timepanel #currentbox {
-      padding-top: 15px;
-      padding-bottom: 15px;
-      padding-left: 0px;
-      padding-right: 10px; }
-      #screen #timepanel #currentbox #currentstate {
-        height: 40px;
-        margin: 0px;
-        line-height: 40px;
-        font-size: 40px;
-        text-align: center; }
-      #screen #timepanel #currentbox #currenttime {
-        height: 30px;
-        margin: 0px;
-        line-height: 30px;
-        font-size: 30px;
-        text-align: left;
-        font-weight: bold; }
   #screen #maincontainer {
     flex-grow: 1;
     display: flex;
     flex-direction: row; }
-    #screen #maincontainer #buttonpanel {
-      width: 100px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start; }
-      #screen #maincontainer #buttonpanel #playbox, #screen #maincontainer #buttonpanel #actionbox {
-        margin: 0px;
-        text-align: center; }
-        #screen #maincontainer #buttonpanel #playbox a, #screen #maincontainer #buttonpanel #actionbox a {
-          margin: 5px; }
-      #screen #maincontainer #buttonpanel #actionbox {
-        flex-grow: 1; }
-    #screen #maincontainer #centerpanel {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative; }
-      #screen #maincontainer #centerpanel #room {
-        flex-grow: 1;
-        width: 100%;
-        padding: 10px;
-        display: flex;
-        flex-direction: column; }
-        #screen #maincontainer #centerpanel #room #seatscontainer {
-          flex-grow: 1; }
-          #screen #maincontainer #centerpanel #room #seatscontainer #seats {
-            width: 100%;
-            height: 100%;
-            border-spacing: 10px;
-            border-collapse: separate;
-            background-color: #FFFFFF; }
-            #screen #maincontainer #centerpanel #room #seatscontainer #seats td {
-              background: #DDDDDD;
-              margin: 2px; }
-            #screen #maincontainer #centerpanel #room #seatscontainer #seats td.activity_low {
-              background: linear-gradient(0deg, #4CAF50 0%, #4CAF50 4%, #DDD 6%, #DDD 100%); }
-            #screen #maincontainer #centerpanel #room #seatscontainer #seats td.activity_medium {
-              background: linear-gradient(0deg, #FF5722 0%, #FF5722 42%, #DDD 44%, #DDD 100%); }
-            #screen #maincontainer #centerpanel #room #seatscontainer #seats td.activity_high {
-              background: linear-gradient(0deg, #F44336 0%, #F44336 85%, #DDD 87%, #DDD 100%); }
-        #screen #maincontainer #centerpanel #room #frontdesk {
-          width: 100%;
-          height: 100px;
-          background-color: #DDDDDD; }
-      #screen #maincontainer #centerpanel #layercontainer {
-        display: none;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 110px;
-        overflow: hidden; }
-        #screen #maincontainer #centerpanel #layercontainer #dialogcontainer {
-          display: none;
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          right: 20px;
-          bottom: 10px;
-          font-size: 0;
-          overflow-x: hidden;
-          overflow-y: auto;
-          text-align: center;
-          background-color: rgba(0, 0, 0, 0.5);
-          box-shadow: 0px 0px 7px 7px #646464; }
-          #screen #maincontainer #centerpanel #layercontainer #dialogcontainer::before {
-            /* full-height ghost element for easy vertical centering */
-            content: '';
-            display: inline-block;
-            height: 100%;
-            vertical-align: middle;
-            width: 0px; }
-          #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow {
-            display: inline-block;
-            position: relative;
-            max-width: 800px;
-            min-height: 100px;
-            min-width: 300px;
-            width: auto;
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            border: 0px none;
-            box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            text-align: center;
-            vertical-align: middle;
-            margin-top: 20px;
-            margin-bottom: 20px; }
-            #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer {
-              display: none;
-              position: absolute;
-              top: 0px;
-              left: 0px;
-              right: 0px;
-              bottom: 0px;
-              border-radius: 10px;
-              background-color: rgba(255, 255, 255, 0.8); }
-              #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox {
-                position: absolute;
-                width: 144px;
-                height: 32px;
-                top: 50%;
-                margin-top: -16px;
-                left: 50%;
-                margin-left: -72px; }
-                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox > div {
-                  background-color: #FFFFFF;
-                  float: left;
-                  height: 32px;
-                  margin: 0px 8px 0px 8px;
-                  width: 32px;
-                  animation-name: bounce_loadingcircle;
-                  animation-duration: 0.6s;
-                  animation-iteration-count: infinite;
-                  animation-direction: normal;
-                  border-radius: 21px; }
-                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_1 {
-                  animation-delay: 0.12s; }
-                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_2 {
-                  animation-delay: 0.28s; }
-                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_3 {
-                  animation-delay: 0.36s; }
-@keyframes bounce_loadingcircle {
-  50% {
-    background-color: #000000; } }
-            #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent {
-              text-align: left;
-              font-size: 16px; }
-              #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent header {
-                display: block;
-                background-color: #F1F1F1;
-                border-color: #DDDDDD;
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-                padding: 10px;
-                text-align: left;
-                margin-top: -10px;
-                margin-left: -10px;
-                margin-right: -10px;
-                margin-bottom: 10px;
-                overflow: auto; }
-                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent header h2 {
-                  font-size: 25px;
-                  color: #222222;
-                  font-weight: bold;
-                  margin: 0px;
-                  float: left; }
-                #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent header h3 {
-                  font-size: 20px;
-                  color: #333333;
-                  font-style: italic;
-                  margin: 5px 0px 0px 0px;
-                  float: right; }
-              #screen #maincontainer #centerpanel #layercontainer #dialogcontainer #dialogwindow #dialogcontent footer {
-                display: block;
-                text-align: right;
-                border-top: 2px solid #DDDDDD;
-                padding: 10px;
-                margin-top: 10px;
-                margin-left: -10px;
-                margin-right: -10px;
-                margin-bottom: -10px; }
-        #screen #maincontainer #centerpanel #layercontainer #popupcontainer {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-items: center;
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          right: 20px;
-          bottom: 10px;
-          background-color: rgba(0, 0, 0, 0.5);
-          box-shadow: 0px 0px 7px 7px #646464; }
-          #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow {
-            max-width: 500px;
-            min-height: 100px;
-            min-width: 300px;
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center; }
-            #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupheader {
-              display: block;
-              background-color: #F1F1F1;
-              border-top-left-radius: 10px;
-              border-top-right-radius: 10px;
-              padding: 5px;
-              text-align: left;
-              margin-top: -10px;
-              margin-left: -10px;
-              margin-right: -10px;
-              margin-bottom: 20px;
-              overflow: auto; }
-              #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupheader #popuptitle {
-                font-size: 17px;
-                font-weight: bold;
-                color: #333333;
-                margin: 3px 0px 0px 10px; }
-            #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupmessage {
-              font-size: 16px;
-              text-align: center; }
-            #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupfooter {
-              display: flex;
-              flex-direction: row;
-              justify-content: space-around;
-              align-items: center;
-              margin-top: 20px; }
-              #screen #maincontainer #centerpanel #layercontainer #popupcontainer #popupwindow #popupfooter button {
-                flex-basis: 80px; }
-      #screen #maincontainer #centerpanel ul#toastlist {
-        position: absolute;
-        bottom: 120px;
-        left: 10px;
-        padding: 0px;
-        list-style-type: none; }
-        #screen #maincontainer #centerpanel ul#toastlist li > div {
-          display: inline-block;
-          width: auto;
-          background-color: #000000;
-          color: #EEEEEE;
-          border-radius: 10px;
-          border: 0px none;
-          box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.5);
-          margin-top: 10px;
-          height: 40px;
-          padding: 5px 10px 5px 10px;
-          font-size: 20px;
-          cursor: pointer; }
-    #screen #maincontainer #feedpanel {
-      width: 300px;
-      display: flex;
-      flex-direction: column; }
-      #screen #maincontainer #feedpanel .panel-body {
-        flex-grow: 1;
-        position: relative; }
-        #screen #maincontainer #feedpanel .panel-body #alertcontainer {
-          position: absolute;
-          top: 0;
-          right: 0;
-          left: 0;
-          bottom: 0;
-          overflow-y: scroll;
-          padding: 5px; }
-          #screen #maincontainer #feedpanel .panel-body #alertcontainer .alert {
-            margin-bottom: 10px; }
-      #screen #maincontainer #feedpanel .panel-footer {
-        text-align: right; }
 
 .panel {
   margin: 5px;
   background-color: #FFFFFF; }
+
+#timepanel {
+  height: 100px;
+  display: flex;
+  flex-direction: row; }
+
+#logo {
+  white-space: nowrap;
+  vertical-align: middle; }
+  #logo h1 {
+    font-size: 60px;
+    margin: 0px;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold; }
+    #logo h1 img {
+      height: 80px;
+      border-radius: 5px; }
+
+#timeline {
+  flex-grow: 1;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  padding-right: 0px; }
+  #timeline #progressdisplay {
+    border-radius: 5px;
+    height: 40px;
+    margin: 0px; }
+  #timeline #hourdisplay {
+    height: 30px;
+    margin: 0px;
+    overflow: hidden;
+    font-size: 0px; }
+    #timeline #hourdisplay .hour {
+      display: inline-block;
+      font-size: 20px;
+      height: 100%;
+      padding: 0px;
+      text-align: right;
+      vertical-align: top; }
+      #timeline #hourdisplay .hour:first-child {
+        text-align: left; }
+  #timeline .progress-bar {
+    line-height: 40px;
+    font-size: 24px;
+    text-align: center;
+    overflow: visible; }
+
+#currentbox {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 0px;
+  padding-right: 10px; }
+  #currentbox #currentstate {
+    height: 40px;
+    margin: 0px;
+    line-height: 40px;
+    font-size: 40px;
+    text-align: center; }
+  #currentbox #currenttime {
+    height: 30px;
+    margin: 0px;
+    line-height: 30px;
+    font-size: 30px;
+    text-align: left;
+    font-weight: bold; }
+
+#buttonpanel {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; }
+
+#playbox, #actionbox {
+  margin: 0px;
+  text-align: center; }
+  #playbox a, #actionbox a {
+    margin: 5px; }
+
+#actionbox {
+  flex-grow: 1; }
+
+#centerpanel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative; }
+  #centerpanel #room {
+    flex-grow: 1;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column; }
+    #centerpanel #room #seatscontainer {
+      flex-grow: 1; }
+    #centerpanel #room #frontdesk {
+      width: 100%;
+      height: 100px;
+      background-color: #DDDDDD; }
+  #centerpanel #layercontainer {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 110px;
+    overflow: hidden; }
+
+#seats {
+  width: 100%;
+  height: 100%;
+  border-spacing: 10px;
+  border-collapse: separate;
+  background-color: #FFFFFF; }
+  #seats td {
+    background: #DDDDDD;
+    margin: 2px; }
+  #seats td.activity_low {
+    background: linear-gradient(0deg, #4CAF50 0%, #4CAF50 4%, #DDD 6%, #DDD 100%); }
+  #seats td.activity_medium {
+    background: linear-gradient(0deg, #FF5722 0%, #FF5722 42%, #DDD 44%, #DDD 100%); }
+  #seats td.activity_high {
+    background: linear-gradient(0deg, #F44336 0%, #F44336 85%, #DDD 87%, #DDD 100%); }
+
+#feedpanel {
+  width: 300px;
+  display: flex;
+  flex-direction: column; }
+  #feedpanel .panel-body {
+    flex-grow: 1;
+    position: relative; }
+  #feedpanel .panel-footer {
+    text-align: right; }
+
+#alertcontainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  padding: 5px; }
+  #alertcontainer .alert {
+    margin-bottom: 10px; }
+
+#dialogcontainer {
+  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 10px;
+  font-size: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 7px 7px #646464; }
+  #dialogcontainer::before {
+    /* full-height ghost element for easy vertical centering */
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    width: 0px; }
+  #dialogcontainer #dialogwindow {
+    display: inline-block;
+    position: relative;
+    max-width: 800px;
+    min-height: 100px;
+    min-width: 300px;
+    width: auto;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: 0px none;
+    box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 20px;
+    margin-bottom: 20px; }
+    #dialogcontainer #dialogwindow #loadinglayer {
+      display: none;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.8); }
+      #dialogcontainer #dialogwindow #loadinglayer #loadingbox {
+        position: absolute;
+        width: 144px;
+        height: 32px;
+        top: 50%;
+        margin-top: -16px;
+        left: 50%;
+        margin-left: -72px; }
+        #dialogcontainer #dialogwindow #loadinglayer #loadingbox > div {
+          background-color: #FFFFFF;
+          float: left;
+          height: 32px;
+          margin: 0px 8px 0px 8px;
+          width: 32px;
+          animation-name: bounce_loadingcircle;
+          animation-duration: 0.6s;
+          animation-iteration-count: infinite;
+          animation-direction: normal;
+          border-radius: 21px; }
+        #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_1 {
+          animation-delay: 0.12s; }
+        #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_2 {
+          animation-delay: 0.28s; }
+        #dialogcontainer #dialogwindow #loadinglayer #loadingbox #loadingcircle_3 {
+          animation-delay: 0.36s; }
+@keyframes bounce_loadingcircle {
+  50% {
+    background-color: #000000; } }
+    #dialogcontainer #dialogwindow #dialogcontent {
+      text-align: left;
+      font-size: 16px; }
+      #dialogcontainer #dialogwindow #dialogcontent header {
+        display: block;
+        background-color: #F1F1F1;
+        border-color: #DDDDDD;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 10px;
+        text-align: left;
+        margin-top: -10px;
+        margin-left: -10px;
+        margin-right: -10px;
+        margin-bottom: 10px;
+        overflow: auto; }
+        #dialogcontainer #dialogwindow #dialogcontent header h2 {
+          font-size: 25px;
+          color: #222222;
+          font-weight: bold;
+          margin: 0px;
+          float: left; }
+        #dialogcontainer #dialogwindow #dialogcontent header h3 {
+          font-size: 20px;
+          color: #333333;
+          font-style: italic;
+          margin: 5px 0px 0px 0px;
+          float: right; }
+      #dialogcontainer #dialogwindow #dialogcontent footer {
+        display: block;
+        text-align: right;
+        border-top: 2px solid #DDDDDD;
+        padding: 10px;
+        margin-top: 10px;
+        margin-left: -10px;
+        margin-right: -10px;
+        margin-bottom: -10px; }
+
+#popupcontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 7px 7px #646464; }
+  #popupcontainer #popupwindow {
+    max-width: 500px;
+    min-height: 100px;
+    min-width: 300px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center; }
+    #popupcontainer #popupwindow #popupheader {
+      display: block;
+      background-color: #F1F1F1;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      padding: 5px;
+      text-align: left;
+      margin-top: -10px;
+      margin-left: -10px;
+      margin-right: -10px;
+      margin-bottom: 20px;
+      overflow: auto; }
+      #popupcontainer #popupwindow #popupheader #popuptitle {
+        font-size: 17px;
+        font-weight: bold;
+        color: #333333;
+        margin: 3px 0px 0px 10px; }
+    #popupcontainer #popupwindow #popupmessage {
+      font-size: 16px;
+      text-align: center; }
+    #popupcontainer #popupwindow #popupfooter {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 20px; }
+      #popupcontainer #popupwindow #popupfooter button {
+        flex-basis: 80px; }
+
+#toastlist {
+  position: absolute;
+  bottom: 120px;
+  left: 10px;
+  padding: 0px;
+  list-style-type: none; }
+  #toastlist li > div {
+    display: inline-block;
+    width: auto;
+    background-color: #000000;
+    color: #EEEEEE;
+    border-radius: 10px;
+    border: 0px none;
+    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    height: 40px;
+    padding: 5px 10px 5px 10px;
+    font-size: 20px;
+    cursor: pointer; }
 
 /*# sourceMappingURL=app.css.map */
