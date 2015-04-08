@@ -1,0 +1,32 @@
+#centerpanel {
+	flex-grow: 1;
+	@include vflex;
+	position: relative;
+
+	#room {
+		flex-grow: 1;
+		width: 100%;
+		padding: 10px;
+		@include vflex;
+
+		#seatscontainer {
+			flex-grow: 1;
+		}
+
+		#frontdesk {
+			width: 100%;
+			height: 100px;
+			background-color: #DDDDDD;
+		}
+	}
+
+	#layercontainer {
+		display: none;
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 110px;
+		overflow: hidden;
+	}
+}

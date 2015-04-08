@@ -1,0 +1,19 @@
+#buttonpanel {
+	width:100px;
+	@include vflex;
+	justify-content: flex-start;
+}
+
+#playbox {
+	margin: 0px;
+	text-align: center;
+
+	a {
+		margin: 5px;
+	}
+}
+
+#actionbox {
+	@extend #playbox;
+	flex-grow: 1;
+}

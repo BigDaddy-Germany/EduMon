@@ -1,0 +1,132 @@
+#dialogcontainer {
+	display: none;
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+	bottom: 10px;
+	font-size: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.50);
+	box-shadow: 0px 0px 7px 7px rgba(100,100,100,1);
+
+	&::before { /* full-height ghost element for easy vertical centering */
+		content:'';
+		display: inline-block;
+		height: 100%;
+		vertical-align: middle;
+		width:0px;
+	}
+
+	#dialogwindow {
+		display: inline-block;
+		position: relative;
+		max-width: 800px;
+		min-height: 100px;
+		min-width: 300px;
+		width: auto;
+		background-color: #FFFFFF;
+		border-radius: $dialog_border_radius;
+		border: 0px none;
+		box-shadow: 0px 1px 30px rgba(0, 0, 0, 0.80);
+		padding: $dialog_padding;
+		text-align: center;
+		vertical-align: middle;
+		margin-top: 20px;
+		margin-bottom: 20px;
+
+		#loadinglayer {
+			display: none;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			border-radius: $dialog_border_radius;
+			background-color: rgba(255, 255, 255, 0.80);
+
+			#loadingbox{
+				position: absolute;
+				width: 144px;
+				height: 32px;
+				top: 50%;
+				margin-top: -16px;
+				left: 50%;
+				margin-left: -72px;
+
+				& > div {
+					background-color:#FFFFFF;
+					float:left;
+					height:32px;
+					margin: 0px 8px 0px 8px;
+					width:32px;
+					animation-name:bounce_loadingcircle;
+					animation-duration:0.6s;
+					animation-iteration-count:infinite;
+					animation-direction:normal;
+					border-radius:21px;
+				}
+
+				#loadingcircle_1{ animation-delay:0.12s; }
+				#loadingcircle_2{ animation-delay:0.28s; }
+				#loadingcircle_3{ animation-delay:0.36s; }
+
+				@keyframes bounce_loadingcircle{
+					0%{}
+					50%{background-color:#000000}
+					100%{}
+				}
+			}
+		}
+
+		#dialogcontent {
+			text-align: left;
+			font-size: 16px;
+
+			header {
+				display: block;
+				background-color: #F1F1F1;
+				border-color: #DDDDDD;
+				border-top-left-radius:  $dialog_border_radius;
+				border-top-right-radius: $dialog_border_radius;
+				padding: 10px;
+				text-align: left;
+				margin-top: -$dialog_padding;
+				margin-left: -$dialog_padding;
+				margin-right: -$dialog_padding;
+				margin-bottom: 10px;
+				overflow: auto;
+
+				h2 {
+					font-size: 25px;
+					color: #222222;
+					font-weight: bold;
+					margin: 0px;
+					float: left;
+				}
+
+				h3 {
+					font-size: 20px;
+					color: #333333;
+					font-style: italic;
+					margin: 5px 0px 0px 0px;
+					float: right;
+				}
+
+			}
+
+			footer {
+				display: block;
+				text-align: right;
+				border-top: 2px solid #DDDDDD;
+				padding: 10px;
+				margin-top: 10px;
+				margin-left: -$dialog_padding;
+				margin-right: -$dialog_padding;
+				margin-bottom: -$dialog_padding;
+			}
+		}
+	}
+}

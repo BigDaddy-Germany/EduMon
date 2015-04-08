@@ -1,0 +1,22 @@
+#toastlist {
+	position: absolute;
+	bottom: 120px;
+	left: 10px;
+	padding: 0px;
+	list-style-type: none;
+
+	li > div {
+		display: inline-block;
+		width: auto;
+		background-color: #000000;
+		color: #EEEEEE;
+		border-radius: 10px;
+		border: 0px none;
+		box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.50);
+		margin-top: 10px;
+		height: 40px;
+		padding: 5px 10px 5px 10px;
+		font-size: 20px;
+		cursor: pointer;
+	}
+}

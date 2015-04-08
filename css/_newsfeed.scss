@@ -1,0 +1,27 @@
+#feedpanel {
+	width:300px;
+	@include vflex;
+
+	.panel-body {
+		flex-grow: 1;
+		position: relative;
+	}
+
+	.panel-footer {
+		text-align: right;
+	}
+}
+
+#alertcontainer {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	overflow-y: scroll;
+	padding: 5px;
+
+	.alert {
+		margin-bottom: 10px;
+	}
+}
