@@ -149,12 +149,6 @@ body {
   #seats td {
     background: #DDDDDD;
     margin: 2px; }
-  #seats td.activity_low {
-    background: linear-gradient(0deg, #4CAF50 0%, #4CAF50 4%, #DDD 6%, #DDD 100%); }
-  #seats td.activity_medium {
-    background: linear-gradient(0deg, #FF5722 0%, #FF5722 42%, #DDD 44%, #DDD 100%); }
-  #seats td.activity_high {
-    background: linear-gradient(0deg, #F44336 0%, #F44336 85%, #DDD 87%, #DDD 100%); }
 
 #feedpanel {
   width: 300px;
