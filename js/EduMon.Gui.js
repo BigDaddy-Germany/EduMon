@@ -11,6 +11,7 @@ window.EduMon.Gui = new function Gui() {
 		"ok":     {text:"OK",       value:"ok",    class:"primary"},
 		"cancel": {text:"Abbrechen",value:"cancel",class:"default"}
 	};
+	var seats = {width: -1, height: -1};
 
 	/**
 	 * Add message to newsfeed
@@ -189,4 +190,28 @@ window.EduMon.Gui = new function Gui() {
 		popupOpened = 0;
 	};
 
+	/**
+	 * Update a seat
+	 * @param {Integer} row Row number from 1 (front desk) to n
+	 * @param {Integer} number Seat number from 1 (at left from moderator view) to n
+	 * @param {Float} activity Seat activity between 0 (dead) and 1 (most active)
+	 * @param {String} content Text to display on the seat (TO BE EXTENDED BY SIO [SEAT INFORMATION OBJECT])
+	 */
+	this.updateSeat = function updateSeat(row, number, activity, content) {
+		if (seats.height===-1) seats.height = $("#seats tbody").children().length;
+		if (seats.width ===-1) seats.width  = $("#seats tbody").children().first().children().length;
+		var seat = $("#seats tbody").children().eq(seats.height-row).children().eq(seats.width-number);
+
+		seat.text(content);
+
+		var colorCoding = {low:"#4CAF50",mid:"#FF5722",high:"#F44336"};
+		var color =                 colorCoding.low;
+		if (activity > 0.3) color = colorCoding.mid;
+		if (activity > 0.6) color = colorCoding.high;
+		
+		var transStart = Math.max(  0, Math.round((activity - 0.01)*100));
+		var transEnd   = Math.min(100, Math.round((activity + 0.01)*100));
+
+		seat.css("background","linear-gradient(0deg, "+color+" 0%, "+color+" "+transStart+"%, #DDD "+transEnd+"%, #DDD 100%");
+	}
 };
