@@ -9,3 +9,4 @@ Thumbs.db
 /client/.idea/*
 /config
 .sass-cache
+/proxy/.ht*
