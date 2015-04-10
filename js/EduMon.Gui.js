@@ -64,7 +64,7 @@ window.EduMon.Gui = new function Gui() {
 				throw "loadDialog() fehlgeschlagen";
 			}
 		});
-	}
+	};
 
 	/**
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
@@ -73,7 +73,6 @@ window.EduMon.Gui = new function Gui() {
 	this.showDialog = function showDialog(dialogid) {
 		if (dialogOpened){
 			throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
-			return;
 		}
 		dialogOpened = 1;
 		$("#dialogcontent").empty();
@@ -93,7 +92,6 @@ window.EduMon.Gui = new function Gui() {
 	this.switchDialog = function switchDialog(dialogid) {
 		if (!dialogOpened){
 			throw "No dialog currently open to switch from. Use openDialog() instead";
-			return;
 		}
 		this.setDialogBlock(1);
 		loadDialog(dialogid);
@@ -153,7 +151,6 @@ window.EduMon.Gui = new function Gui() {
 	this.showPopup = function showPopup(title, message, buttons, callback) {
 		if (popupOpened){
 			throw "Cannot open another popup. The current one has to be closed first";
-			return;
 		}
 		popupOpened = 1;
 		$("#layercontainer").show();
@@ -192,15 +189,16 @@ window.EduMon.Gui = new function Gui() {
 
 	/**
 	 * Update a seat
-	 * @param {Integer} row Row number from 1 (front desk) to n
-	 * @param {Integer} number Seat number from 1 (at left from moderator view) to n
-	 * @param {Float} activity Seat activity between 0 (dead) and 1 (most active)
+	 * @param {int} row Row number from 1 (front desk) to n
+	 * @param {int} number Seat number from 1 (at left from moderator view) to n
+	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
 	 * @param {String} content Text to display on the seat (TO BE EXTENDED BY SIO [SEAT INFORMATION OBJECT])
 	 */
 	this.updateSeat = function updateSeat(row, number, activity, content) {
-		if (seats.height===-1) seats.height = $("#seats tbody").children().length;
-		if (seats.width ===-1) seats.width  = $("#seats tbody").children().first().children().length;
-		var seat = $("#seats tbody").children().eq(seats.height-row).children().eq(seats.width-number);
+		var seats = $("#seats tbody");
+        if (seats.height===-1) seats.height = seats.children().length;
+		if (seats.width ===-1) seats.width  = seats.children().first().children().length;
+		var seat = seats.children().eq(seats.height-row).children().eq(seats.width-number);
 
 		seat.text(content);
 

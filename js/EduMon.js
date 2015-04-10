@@ -63,19 +63,8 @@ function EduMon() {
 	};
 
 
-	// TODO wrapping the wrapping wrapper that wraps a worker (say that 10 times in a row without mistakes!)
 	/* Queue packet for sending */
 	this.sendPacket = function(packet){
-		that.cmdConnection(packet);
+		that.messenger.sendEvent(packet);
 	};
-
-
-	/* Command message worker */
-	this.cmdConnection = function(cmd){
-		that.messenger.sendEvent(cmd);
-	};
-
-
-	////////////////////constructor
-	//moved to init to ensure dom-ready start
 }
