@@ -44,5 +44,16 @@ EduMon.Prefs.currentLecture = {
             */]
         }
     },
-    analytics: {}
+    analytics: {
+        globalReferenceValues: {
+            /*
+             sender: {
+                 microphone: {},
+                 keyboard: {},
+                 mouseDistance: {},
+                 mouseClicks: {}
+             }
+             */
+        }
+    }
 };

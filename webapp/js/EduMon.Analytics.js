@@ -5,23 +5,18 @@ EduMon.Analytics = new function() {
 
     var analytics = EduMon.Prefs.currentLecture.analytics;
     var activeStudents = EduMon.Prefs.currentLecture.activeStudents;
+    var globalReferenceValues = analytics.globalReferenceValues;
 
     var micNormalizationPeriod = 60*5;
     var micMinimumEntries = 10;
     var curValPeriod = 5;
+    var minimalGlobalReferenceValues = 5;
 
     var weights = {
         microphone: 1,
         keyboard: 1,
         mouseDistance: 1,
         mouseClicks: 1
-    };
-
-    var globalReferenceValues = {
-        microphone: {},
-        keyboard: {},
-        mouseDistance: {},
-        mouseClicks: {}
     };
 
     /*
@@ -45,6 +40,103 @@ EduMon.Analytics = new function() {
         var currentValues = getAverageValueOfHistory(student.history);
         currentValues.microphone = getNormalizedMicValue(currentValues.microphone, student.micHistory);
 
+        if (!currentValues.microphone) {
+            delete currentValues.microphone;
+        }
+
+        globalReferenceValues[sender] = currentValues;
+
+
+
+    };
+
+
+    /**
+     * Calculates the disturbance for all active students, if there are at least
+     * minimalGlobalReferenceValues entries in minimalGlobalReference
+     */
+    var calculateAllDisturbances = function() {
+        var averageValues = {};
+        var minimumValues = {};
+        var maximumValues = {};
+        var numberOfValues = {};
+
+        for (var sender in analytics.globalReferenceValues) {
+            if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
+                var referenceValue = analytics.globalReferenceValues[sender];
+                for (var propertyName in referenceValue) {
+                    if (referenceValue.hasOwnProperty(propertyName)) {
+                        if (averageValues[propertyName]) {
+                            // then every ...Value[propertyName] exists
+                            averageValues[propertyName] += referenceValue[propertyName];
+                            minimumValues[propertyName] = Math.min(minimumValues[propertyName], referenceValue[propertyName]);
+                            maximumValues[propertyName] = Math.max(maximumValues[propertyName], referenceValue[propertyName]);
+                            ++numberOfValues[propertyName];
+                        } else {
+                            averageValues[propertyName] = referenceValue[propertyName];
+                            minimumValues[propertyName] = referenceValue[propertyName];
+                            maximumValues[propertyName] = referenceValue[propertyName];
+                            numberOfValues[propertyName] = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        for (propertyName in numberOfValues) {
+            if (numberOfValues.hasOwnProperty(propertyName)) {
+
+                // only calculate the index, if the minimal number is reached
+                if (numberOfValues[propertyName] >= minimalGlobalReferenceValues) {
+                    averageValues[propertyName] /= numberOfValues[propertyName];
+
+                    // iterate over all them senders
+                    for (sender in analytics.globalReferenceValues) {
+                        if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
+                            var senderValues = analytics.globalReferenceValues[sender];
+
+                        }
+                    }
+                }
+            }
+        }
+
+    };
+
+    /**
+     * Interpolates a polynomial with Lagrange
+     * @param {... Array} - The points to interpolate with Lagrange
+     * @return {Function}
+     */
+    this.interpolatePolynomialByLagrange = function() {
+        function createLagrangePolynomial(k, points) {
+            return function (x) {
+                var returnValue = 1;
+                for (var i = 0; i < n; i++) {
+                    if (i != k) {
+                        returnValue *= (x - points[i][0]) / (points[k][0] - points[i][0]);
+                    }
+                }
+                return returnValue;
+            };
+        }
+
+        var points = arguments;
+        var n = points.length;
+        var lagrangePolynomials = [];
+
+        for (var k = 0; k < n; k++) {
+            lagrangePolynomials.push(createLagrangePolynomial(k, points));
+        }
+
+        return function(x) {
+            var returnValue = 0;
+            for (var i = 0; i < n; i++) {
+                returnValue += points[i][1] * lagrangePolynomials[i](x);
+            }
+            return returnValue;
+        };
     };
 
 
@@ -83,8 +175,10 @@ EduMon.Analytics = new function() {
 
     /**
      * Normalizes the given microphone value using the user's microphone history
-     * @param {int} micValue the given microphone value
+     * @param {number} micValue the given microphone value
      * @param {Array} micHistory the sender's history of microphone values
+     * @return {number|Boolean} the normalized microphone value,
+     *         if micHistory contains at least micMinimumEntries entries, false otherwise
      */
     var getNormalizedMicValue = function(micValue, micHistory) {
         // todo which algorithm to normalize the microphone value?
@@ -97,6 +191,10 @@ EduMon.Analytics = new function() {
             historyAverage += historyEntry.value;
             ++historyCount;
         });
+
+        if (historyCount == 0) {
+            return false;
+        }
 
         return micValue * historyCount / Math.max(historyAverage, 1);
     };
