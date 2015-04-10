@@ -145,9 +145,16 @@
 	session_name('EDUMONSESSID');
 	session_start();
 
+	// For debug purposes -> get random demo package from server
+	if (isset($_GET['demoPackages'])) {
+		$demoFiles = glob(dirname(__FILE__) . '/demoData/*.json');
+
+		die (file_get_contents($demoFiles[rand(0, count($demoFiles) - 1)]));
+	}
+
 	$errorMessages = array();
 
-// try to get access to the database
+	// try to get access to the database
 	try {
 		$db = new SQLite3(dirname(__FILE__) . '/'.DB_FILE, SQLITE3_OPEN_READWRITE);
 

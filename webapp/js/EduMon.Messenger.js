@@ -15,8 +15,7 @@ window.EduMon.Messenger = function Messenger(eventCallback){
 
 
 	worker = new Worker('js/EduMon.Messenger.Worker.js');
-	worker.callbackWrapper = eventCallback; // TODO dafuq?
 	worker.onmessage = function(e) {
-		this.callbackWrapper(e.data);
+		eventCallback(e.data);
 	};
 };

@@ -1,0 +1,51 @@
+{
+  "inbox":[
+    {
+      "type":"4", "id":2, "time":1427052200, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{
+        "keys":2,
+        "mdist":0.3,
+        "mclicks":10,
+        "volume":0.43
+      }
+    },
+    {
+      "type":"4", "id":2, "time":1427052400, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{
+        "keys":50,
+        "mdist":3,
+        "mclicks":30,
+        "volume":0.9
+      }
+    },{
+      "type":"4", "id":2, "time":1427052800, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{
+        "keys":2,
+        "mdist":0,
+        "mclicks":2,
+        "volume":0.2
+      }
+    },
+    {
+      "type":"6", "id":3, "time":1427052900, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{
+        "id":23,
+        "thumb":0.55
+      }
+    },
+    {
+      "type":"8", "id":4, "time":1427053000, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{}
+    },
+    {
+      "type":"8", "id":4, "time":1427053200, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{}
+    },
+    {
+      "type":"8", "id":4, "time":1427053400, "from":"44aa488f082b42f5fdc0090878f8ef3f", "to":"MODERATOR", "room":"160C",
+      "body":{}
+    }
+  ],
+  "errorMessages":[],
+  "clientId":"MODERATOR"
+}
