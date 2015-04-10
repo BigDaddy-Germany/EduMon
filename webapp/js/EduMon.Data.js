@@ -1,4 +1,7 @@
-window.EduMon.Data = new function Data() {
+/*
+	method createCurrentLecture depends on EduMon.Prefs
+ */
+EduMon.Data = new function Data() {
 	/**
 	 * Creates a new student object
 	 * @param {String} studentName the student's name
@@ -69,9 +72,9 @@ window.EduMon.Data = new function Data() {
 	 *	 		}}
 	 */
 	this.createCurrentLecture = function createCurrentLecture(lectureId) {
-		var lectureObject = window.EduMon.Prefs.lectures[lectureId];
-		var roomObject = window.EduMon.Prefs.rooms[lectureObject.room];
-		var courseObject = window.EduMon.Prefs.courses[lectureObject.course];
+		var lectureObject = EduMon.Prefs.lectures[lectureId];
+		var roomObject = EduMon.Prefs.rooms[lectureObject.room];
+		var courseObject = EduMon.Prefs.courses[lectureObject.course];
 		//TODO: load students in course (are only ids so far)
 
 		return {
@@ -91,15 +94,23 @@ window.EduMon.Data = new function Data() {
 				 		{...}
 				 */
 			},
-			timeline:{
+
+			timeline: {
 				status: "stop", // "stop" | "play" | "pause"
 				totalSeconds: 0,
 				slices: [
 					/* Elements
-						seconds: 1337,
-						type: "lecture" | "break"
-					*/
+					 seconds: 1337,
+					 type: "lecture" | "break"
+					 */
 				]
+			},
+
+			analytics: {
+				/*
+					All analytic stuff goes here
+				 */
+
 			}
 		};
 	};

@@ -1,4 +1,4 @@
-window.EduMon.Gui = new function Gui() {
+EduMon.Gui = new function Gui() {
 	var that = this;
 
 	var countFeedMessages = 0;

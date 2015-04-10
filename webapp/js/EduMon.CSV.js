@@ -1,4 +1,7 @@
-window.EduMon.CSV = new function CSV() {
+/*
+	method createCourseFromCsv depends on EduMon.Data
+ */
+EduMon.CSV = new function CSV() {
 	var that = this;
 
 	/**
@@ -91,7 +94,7 @@ window.EduMon.CSV = new function CSV() {
 	 * @param {Boolean} [headerLine=false] Does the CSV contain a header line?
 	 * @param {int} [positionName=0] on which position is the name field?
 	 * @param {int} [positionTeam=1] on which position is the team field?
-	 * @returns {window.EduMon.Data.Course} The generated course
+	 * @returns {EduMon.Data.Course} The generated course
 	 */
 	this.createCourseFromCsv = function createCourseFromCsv(courseName, csvString, separator, delimiter, headerLine, positionName, positionTeam) {
 		headerLine = headerLine || false;
