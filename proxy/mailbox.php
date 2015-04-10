@@ -136,7 +136,7 @@
 	// if no setup is performed, we will just do the normal mailbox stuff
 	if (isset($_SERVER['HTTP_ORIGIN'])) {
 		$url = parse_url($_SERVER['HTTP_ORIGIN']);
-		header('Access-Control-Allow-Origin: ' . $url['scheme'] . '://' . $url['host']);
+		header('Access-Control-Allow-Origin: ' . $url['scheme'] . '://' . $url['host'] . (($url['port'] != 80 && $url['port'] != 443) ? ':' . $url['port'] : ''));
 		header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 		header('Access-Control-Allow-Credentials: true');
 	}
