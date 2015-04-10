@@ -96,9 +96,9 @@
 							</table>
 						</div>
 						<div id="frontdesk">
-							<input type="button" value="Demo: Start Worker" onclick="EduMon.cmdConnection({command:'start'})">
-							<input type="button" value="Demo: Stop Worker" onclick="EduMon.cmdConnection({command:'stop'})">
-							<input type="button" value="Demo: Fake data IN" onclick="EduMon.cmdConnection({command:'config',url:'demoDataIn.json'})">
+							<input type="button" value="Demo: Start Worker" onclick="EduMon.sendPacket({command:'start'})">
+							<input type="button" value="Demo: Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
+							<input type="button" value="Demo: Fake data IN" onclick="EduMon.sendPacket({command:'config',url:'demoDataIn.json'})">
 							<input type="button" value="Demo: Typ 1 OUT" onclick="EduMon.sendDemo(1)">
 							<input type="button" value="Demo: Typ 3 OUT" onclick="EduMon.sendDemo(3)">
 							<input type="button" value="Demo: Typ 5 OUT" onclick="EduMon.sendDemo(5)">
@@ -162,7 +162,7 @@
 				EduMon.Gui.showFeedMessage("danger","Mikrofonalarm","Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.");
 				EduMon.Gui.showFeedMessage("success","Umfrage gestartet","Umfrage #1 wurde erfolgreich gestartet.");
 				EduMon.Gui.showFeedMessage("warning","Tippsturm","Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.");
-				EduMon.cmdConnection({command:"config",url:"http://vps2.code-infection.de/edumon/mailbox.php",room:"160C",moderatorPassphrase:"alohomora"});
+				EduMon.sendPacket({command:"config",url:"http://vps2.code-infection.de/edumon/mailbox.php",room:"160C",moderatorPassphrase:"alohomora"});
 				EduMon.Gui.showToast("Hallo Welt! Dies ist ein Testtoast...");
 				EduMon.Gui.showToast("Lorem ipsum :)");
 
