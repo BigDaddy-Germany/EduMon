@@ -56,6 +56,21 @@ EduMon.Analytics = function() {
 
 
     /**
+     * Calculates a percentage with custom scaling out of the given disturbance index
+     * @param {number} disturbanceIndex The given disturbance index
+     * @return {number} the calculated percentage
+     */
+    this.scaleDisturbanceToPercentage = EduMon.Math.linearIntervalFunction(
+        [0,0],
+        [3,0.05],
+        [6,0.3],
+        [7,0.7],
+        [8,0.95],
+        [10,1]
+    );
+
+
+    /**
      * Calculates the disturbance for all active students, if there are at least
      * minimalGlobalReferenceValues entries in minimalGlobalReference
      *
@@ -107,13 +122,11 @@ EduMon.Analytics = function() {
                 function scaleFunctionCreator(lowerLimit, averageValue, upperLimit) {
                     return function(x) {
                         if (x < upperLimit) {
-                            var returnValue = EduMon.Math.interpolatePolynomialByLagrange(
-                                [lowerLimit, 1],
+                            return EduMon.Math.linearIntervalFunction(
+                                [lowerLimit, 0],
                                 [averageValue, 5],
                                 [upperLimit, 10]
                             )(x);
-
-                            return EduMon.Math.log(returnValue)*10;
                         }
                         return 10;
                     };

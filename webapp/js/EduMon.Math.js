@@ -70,7 +70,7 @@ EduMon.Math = new function() {
             throw 'Given x is not in defined range.';
         }
     };
-    
+
 
     /**
      * Returns a linear function going through p1 and p2
