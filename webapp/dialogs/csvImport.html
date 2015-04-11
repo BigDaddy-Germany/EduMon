@@ -1,0 +1,34 @@
+<header>
+	<h2>CSV Import</h2>
+	<h3>Please insert your content here</h3>
+</header>
+<p>
+	To import users using CSV, please paste the CSV file's content here:<br><br>
+	<textarea id="csvContent" style="width: 80%; height: 400px;"></textarea><br><br>
+	Field separator: <input tyoe="text" id="csvSeparator" value="," style="width: 20px;"><br>
+	Field delimiter: <input tyoe="text" id="csvDelimiter" value='"' style="width: 20px;"><br><br>
+	Recognized sets of data: <span id="csvDataCount">0</span>
+</p>
+<footer>
+	<button id="dialogBtnBack" type="button" class="btn btn-default">Abort</button>
+	<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Import</button>
+</footer>
+
+<script type="text/javascript">
+	$(function() {
+		var countField = $('#csvDataCount');
+		var contentField = $('#csvContent');
+		var separatorField = $('#csvSeparator');
+		var delimiterField = $('#csvDelimiter');
+
+		$(document).on('keyup', '#csvContent', function() {
+			var parsedData = EduMon.CSV.parseCsv(
+				contentField.val(),
+				separatorField.val(),
+				delimiterField.val()
+			);
+
+			countField.html(parsedData.length);
+		});
+	})
+</script>

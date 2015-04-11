@@ -82,6 +82,7 @@
 							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
 							<br>
 							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+							<input type="button" value="Demo: CSV import" onclick="EduMon.Gui.showDialog('csvImport')">
 							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
 							<input type="button" value="Demo: Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);})">
 							<input type="button" value="Update Students" onclick="EduMon.Gui.updateStudents()">
@@ -138,6 +139,7 @@
         <script src="js/EduMon.Messenger.js"></script>
         <script src="js/EduMon.CSV.js"></script>
         <script src="js/EduMon.Gui.js"></script>
+        <script src="js/EduMon.UserInteraction.js"></script>
         <script src="js/EduMon.Timeline.js"></script>
         <script>
 			$(window).load(function(){
