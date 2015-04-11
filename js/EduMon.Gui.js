@@ -211,6 +211,7 @@ EduMon.Gui = new function() {
 		var transStart = Math.max(  0, Math.round((activity - 0.01)*100));
 		var transEnd   = Math.min(100, Math.round((activity + 0.01)*100));
 
-		seat.css("background","linear-gradient(0deg, "+color+" 0%, "+color+" "+transStart+"%, #DDD "+transEnd+"%, #DDD 100%");
+		var gradient = "linear-gradient(0deg, "+color+" 0%, "+color+" "+transStart+"%, #DDD "+transEnd+"%, #DDD 100%)";
+		seat.css("background",gradient);
 	}
 };

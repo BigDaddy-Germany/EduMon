@@ -1,16 +1,25 @@
 #buttonpanel {
-	width:100px;
+	width: 90px;
+	min-width: 90px;
 	@include vflex;
 	justify-content: flex-start;
 
 	a {
-		margin: 10px;
+		margin: 10px auto;
 		display: block;
 		width: 50px;
 		height: 45px;
 		font-size: 30px;
 		padding: 0px;
 		text-align: center;
+	}
+
+	.panel-heading {
+		padding: 10px 0px;
+	}
+
+	.panel-body {
+		padding: 0px;
 	}
 }
 
