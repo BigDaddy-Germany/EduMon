@@ -1,7 +1,7 @@
 EduMon.Timeline = new function() {
 	var that = this;
 
-	var tick_interval = 0.5; //in seconds
+	var tick_interval = 2; //in seconds
 	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
 	var timer;
 	
@@ -85,14 +85,23 @@ EduMon.Timeline = new function() {
 				progressDisplay.append($("<div/>").addClass("progress-bar progress-bar-"+barType));
 				hourDisplay.append($("<span/>").addClass("hour"));
 
-				if (isFirstBar){ //insert lecture start time
+				/*if (isFirstBar){ //insert lecture start time
 					hourDisplay.children().eq(0).append(
 							$("<span/>")
 							.addClass("start")
 							.text(timeline.start)
 							);
+				}*/
+				if (timeline.slices[i].type==="lecture"){ //when opening a new lecture slice, insert end time of the previous one as start
+					var startTime = timeline.start;
+					if (i>0){
+						startTime = timeline.slices[i-1].end;
+					}
+					hourDisplay.children().eq(i).prepend(
+							$("<span/>").addClass("start").text(startTime)
+							);
 				}
-				if (i>0){ //when opening a new slice, insert end time of the previous one
+				if (i>0 && timeline.slices[i-1].type==="lecture"){ //when opening a new slice, insert end time of the previous lecture slice
 					hourDisplay.children().eq(i-1).append(
 							$("<span/>").addClass("end").text(timeline.slices[i-1].end)
 							);
@@ -109,14 +118,23 @@ EduMon.Timeline = new function() {
 			}
 
 			//update slice widths
-			progressDisplay.children().eq(i).width(barPercentage+"%").toggleClass("active",isLastBar);
+			progressDisplay.children().eq(i)
+				.width(barPercentage+"%")
+				.toggleClass("active",isLastBar && timeline.status!=="stop");
 			hourDisplay.children().eq(i).animate({"width":barPercentage+"%"},450);
 
 			//time only accumulates in the latest slice
 			if (i==timeline.slices.length-1){ 
 				var minutes = Math.floor(timeline.slices[i].seconds/60);
 				if (minutes>0){
-					progressDisplay.children().eq(i).text(minutes+"min");
+					var hours = (minutes-(minutes%60))/60;
+					if (hours > 0){
+						minutes -= hours*60;
+						hours = hours + " h ";
+					} else {
+						hours = "";
+					}
+					progressDisplay.children().eq(i).text(hours+minutes+" min");
 				}
 			}
 		}

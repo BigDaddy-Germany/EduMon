@@ -56,34 +56,37 @@ body {
   padding-bottom: 15px;
   padding-left: 20px;
   padding-right: 0px; }
-  #timeline #progressdisplay {
-    border-radius: 5px;
-    height: 40px;
-    margin: 0px; }
-  #timeline #hourdisplay {
-    height: 30px;
-    margin: 0px;
-    overflow: hidden;
-    font-size: 0px; }
-    #timeline #hourdisplay .hour {
-      display: inline-block;
-      position: relative;
-      font-size: 20px;
-      height: 100%;
-      padding: 0px;
-      text-align: right;
-      vertical-align: top; }
-      #timeline #hourdisplay .hour .start {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        bottom: 0px;
-        text-align: left; }
-  #timeline .progress-bar {
+
+#progressdisplay {
+  border-radius: 5px;
+  height: 40px;
+  margin: 0px; }
+  #progressdisplay .progress-bar {
     line-height: 40px;
     font-size: 24px;
     text-align: center;
-    overflow: visible; }
+    overflow: visible;
+    text-overflow: ellipsis ' '; }
+
+#hourdisplay {
+  height: 30px;
+  margin: 0px;
+  overflow: hidden;
+  font-size: 0px; }
+  #hourdisplay .hour {
+    display: inline-block;
+    position: relative;
+    font-size: 20px;
+    height: 100%;
+    padding: 0px;
+    text-align: right;
+    vertical-align: top; }
+    #hourdisplay .hour .start {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      bottom: 0px;
+      text-align: left; }
 
 #currentbox {
   padding-top: 15px;
@@ -111,12 +114,18 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start; }
+  #buttonpanel a {
+    margin: 10px;
+    display: block;
+    width: 50px;
+    height: 45px;
+    font-size: 30px;
+    padding: 0px;
+    text-align: center; }
 
 #flowbox, #actionbox {
   margin: 0px;
   text-align: center; }
-  #flowbox a, #actionbox a {
-    margin: 5px; }
 
 #actionbox {
   flex-grow: 1; }
