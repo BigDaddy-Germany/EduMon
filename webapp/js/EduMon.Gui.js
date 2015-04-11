@@ -188,20 +188,31 @@ EduMon.Gui = new function() {
 		popupOpened = 0;
 	};
 
+	var prepareSeats = function(){
+		$("#seats td").each(function(index,element){
+			$(this).empty()
+			.append($("<div/>").addClass("person")
+				.append($("<div/>").addClass("name"))
+				)
+			.append($("<div/>").addClass("stats")
+				.append($("<div/>"))
+				.append($("<div/>"))
+				.append($("<div/>"))
+				);
+		});
+	};
+
 	/**
 	 * Update a seat
 	 * @param {int} row Row number from 1 (front desk) to n
 	 * @param {int} number Seat number from 1 (at left from moderator view) to n
 	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
-	 * @param {String} content Text to display on the seat (TO BE EXTENDED BY SIO [SEAT INFORMATION OBJECT])
 	 */
-	this.updateSeat = function(row, number, activity, content) {
+	this.updateSeat = function(row, number, activity) {
 		var seats = $("#seats").find("tbody");
         if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
 		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
 		var seat = seats.children().eq(seatsInfo.height-row).children().eq(seatsInfo.width-number);
-
-		seat.text(content);
 
 		var colorCoding = {low:"#4CAF50",mid:"#FF5722",high:"#F44336"};
 		var color =                 colorCoding.low;
@@ -213,5 +224,14 @@ EduMon.Gui = new function() {
 
 		var gradient = "linear-gradient(0deg, "+color+" 0%, "+color+" "+transStart+"%, #DDD "+transEnd+"%, #DDD 100%)";
 		seat.css("background",gradient);
+
+		seat.find(".person").text("Max Mustermann");
+		seat.find(".stats div").eq(0).text("123");
+		seat.find(".stats div").eq(1).text("456");
+		seat.find(".stats div").eq(2).text("789");
 	}
+
+	this.init = function(){
+		prepareSeats();
+	};
 };

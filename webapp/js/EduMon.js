@@ -25,6 +25,7 @@ EduMon = new function() {
 
 		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
 
+		this.Gui.init();
 		this.Timeline.init();
 
 		this.Analytics = new EduMon.Analytics();

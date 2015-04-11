@@ -6,7 +6,31 @@
 	background-color: #FFFFFF;
 
 	td {
+		/*
+		@include vflex;
+		flex-wrap: nowrap;
+		justify-content: space-around;
+		*/
 		background: #DDDDDD;
 		margin: 2px;
+
+		.person {
+
+			text-align: center;
+		}
+
+		.stats {
+
+			@include hflex; 
+			flex-wrap: nowrap;
+			justify-content: space-around;
+			align-content: flex-start;
+			align-items: center;
+
+			& > div {
+				flex-grow: 0;
+				flex-shrink: 1;
+			}
+		}
 	}
 }
