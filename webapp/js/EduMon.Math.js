@@ -94,15 +94,49 @@ EduMon.Math = new function() {
 
     /**
      * Calculates the maximum of an array using the native Math.max
-     * @param {Array}values the given values
+     * @param {Array} values the given values
      * @return {number} the calculated maximum
      */
     this.max = function(values) {
-        var max = values[0];
-        values.forEach(function(value) {
-            max = Math.max(max, value);
+        return that.extremeValue(values, function(a, b) {
+            if (a > b) {
+                return 1;
+            }
+            if (b > a) {
+                return -1;
+            }
+            return 0;
         });
-        return max;
+    };
+
+    /**
+     * Calculates the minimum of an array using the native Math.max
+     * @param {Array} values the given values
+     * @return {number} the calculated minimum
+     */
+    this.min = function(values) {
+        return that.extremeValue(values, function(a, b) {
+            if (a > b) {
+                return -1;
+            }
+            if (b > a) {
+                return 1;
+            }
+            return 0;
+        });
+    };
+
+    /**
+     * Calculates the extreme value ("biggest" in case of the compare function) of a given array of values
+     * @param {Array} values the values
+     * @param {Function} compare the compare function
+     * @return {*|T} The extreme value
+     */
+    this.extremeValue = function(values, compare) {
+        values = values.slice(0);
+        values.sort(compare);
+
+        return values[values.length-1];
     };
 
 
@@ -150,4 +184,16 @@ EduMon.Math = new function() {
 
         return currentValue;
     };
+
+
+    /**
+     * Calculates the log[basis](x)
+     * @param {number} x The number
+     * @param {number} [basis=10] The basis
+     * @return {number}
+     */
+    this.log = function(x, basis) {
+        basis = basis || 10;
+        return Math.log(x) / Math.log(basis);
+    }
 };
