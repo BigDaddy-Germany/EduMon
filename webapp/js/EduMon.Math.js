@@ -9,13 +9,12 @@ EduMon.Math = new function() {
     this.interpolatePolynomialByLagrange = function() {
         function createLagrangePolynomial(k, points) {
             return function (x) {
-                var returnValue = 1;
-                for (var i = 0; i < n; i++) {
+                return that.productOver(0, n, function(i) {
                     if (i != k) {
-                        returnValue *= (x - points[i][0]) / (points[k][0] - points[i][0]);
+                        return (x - points[i][0]) / (points[k][0] - points[i][0]);
                     }
-                }
-                return returnValue;
+                    return 1;
+                });
             };
         }
 
@@ -28,11 +27,9 @@ EduMon.Math = new function() {
         }
 
         return function(x) {
-            var returnValue = 0;
-            for (var i = 0; i < n; i++) {
-                returnValue += points[i][1] * lagrangePolynomials[i](x);
-            }
-            return returnValue;
+            return that.sumOver(0, n, function(i) {
+                return points[i][1] * lagrangePolynomials[i](x);
+            });
         };
     };
 
@@ -46,10 +43,10 @@ EduMon.Math = new function() {
         if (values.length == 0) {
             return 0;
         }
-        var sum = 0;
-        values.forEach(function(value) {
-            sum += value;
+        var sum = that.sumOver(0, values.length, function(i) {
+            return values[i];
         });
+
         return sum/values.length;
     };
 
@@ -72,11 +69,56 @@ EduMon.Math = new function() {
     this.variance = function(values) {
         var expectancyValue = that.arithmeticAverage(values);
 
-        var insideSum = 0;
-        values.forEach(function(value) {
-            insideSum += Math.pow(value - expectancyValue, 2);
+        var sum = that.sumOver(0, values.length, function(i) {
+            return Math.pow(values[i] - expectancyValue, 2);
         });
 
-        return 1/(values.length - 1) * insideSum;
+        return 1/(values.length - 1) * sum;
+    };
+
+
+    /**
+     * Calculates the mathematical sum
+     * @param {int} from the start value
+     * @param {int} to the end value (exclusive)
+     * @param {Function} functor the function to apply in each step
+     * @return {number} the calculated sum
+     */
+    this.sumOver = function(from, to, functor) {
+        return that.applyOver(from, to, function(a, b) { return a + b; }, functor);
+    };
+
+
+    /**
+     * Calculates the mathematical product
+     * @param {int} from the start value
+     * @param {int} to the end value (exclusive)
+     * @param {Function} functor the function to apply in each step
+     * @return {number} the calculated product
+     */
+    this.productOver = function(from, to, functor) {
+        return that.applyOver(from, to, function(a, b) { return a * b; }, functor);
+    };
+
+
+    /**
+     * Calculates the mathematical sum
+     * @param {int} from the start value
+     * @param {int} to the end value (exclusive)
+     * @param {Function} predicate the predicate to apply to each interim result
+     * @param {Function} functor the function to apply in each step
+     * @return {number} the result
+     */
+    this.applyOver = function(from, to, predicate, functor) {
+        if (from == to) {
+            return functor(from);
+        }
+        var currentValue = predicate(functor(from++), functor(from++));
+
+        for (; from < to; from++) {
+            currentValue = predicate(currentValue, functor(from));
+        }
+
+        return currentValue;
     };
 };
