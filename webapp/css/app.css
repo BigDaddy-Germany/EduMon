@@ -187,19 +187,27 @@ body {
     justify-content: space-around;
     */
     background: #DDDDDD;
-    margin: 2px; }
+    margin: 2px;
+    cursor: pointer;
+    		/*.stats {
+    
+    			@include hflex; 
+    			flex-wrap: nowrap;
+    			justify-content: space-around;
+    			align-content: flex-start;
+    			align-items: center;
+    
+    			& > div {
+    				flex-grow: 0;
+    				flex-shrink: 1;
+    			}
+    		}*/ }
     #seats td .person {
       text-align: center; }
-    #seats td .stats {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: space-around;
-      align-content: flex-start;
-      align-items: center; }
-      #seats td .stats > div {
-        flex-grow: 0;
-        flex-shrink: 1; }
+      #seats td .person .name {
+        font-weight: bold; }
+      #seats td .person .group {
+        font-style: italics; }
 
 #feedpanel {
   width: 300px;

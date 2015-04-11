@@ -13,13 +13,21 @@
 		*/
 		background: #DDDDDD;
 		margin: 2px;
+		cursor: pointer;
 
 		.person {
-
 			text-align: center;
+
+			.name {
+				font-weight: bold;
+			}
+
+			.group {
+				font-style: italics;
+			}
 		}
 
-		.stats {
+		/*.stats {
 
 			@include hflex; 
 			flex-wrap: nowrap;
@@ -31,6 +39,6 @@
 				flex-grow: 0;
 				flex-shrink: 1;
 			}
-		}
+		}*/
 	}
 }
