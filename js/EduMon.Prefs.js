@@ -1,4 +1,4 @@
-window.EduMon.Prefs = {
+EduMon.Prefs = {
     courses: [],        // an array of all courses
     rooms: [],          // an array of all rooms
     lectures: [],       // an array of all lectures

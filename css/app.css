@@ -67,12 +67,17 @@ body {
     font-size: 0px; }
     #timeline #hourdisplay .hour {
       display: inline-block;
+      position: relative;
       font-size: 20px;
       height: 100%;
       padding: 0px;
       text-align: right;
       vertical-align: top; }
-      #timeline #hourdisplay .hour:first-child {
+      #timeline #hourdisplay .hour .start {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
         text-align: left; }
   #timeline .progress-bar {
     line-height: 40px;
@@ -85,19 +90,21 @@ body {
   padding-bottom: 15px;
   padding-left: 0px;
   padding-right: 10px; }
-  #currentbox #currentstate {
-    height: 40px;
-    margin: 0px;
-    line-height: 40px;
-    font-size: 40px;
-    text-align: center; }
-  #currentbox #currenttime {
-    height: 30px;
-    margin: 0px;
-    line-height: 30px;
-    font-size: 30px;
-    text-align: left;
-    font-weight: bold; }
+
+#currentstate {
+  height: 40px;
+  margin: 0px;
+  line-height: 40px;
+  font-size: 40px;
+  text-align: center; }
+
+#currenttime {
+  height: 30px;
+  margin: 0px;
+  line-height: 30px;
+  font-size: 30px;
+  text-align: left;
+  font-weight: bold; }
 
 #buttonpanel {
   width: 100px;
@@ -105,10 +112,10 @@ body {
   flex-direction: column;
   justify-content: flex-start; }
 
-#playbox, #actionbox {
+#flowbox, #actionbox {
   margin: 0px;
   text-align: center; }
-  #playbox a, #actionbox a {
+  #flowbox a, #actionbox a {
     margin: 5px; }
 
 #actionbox {

@@ -1,10 +1,5 @@
-window.EduMon = new EduMon();
-
-/* Main app class */
-function EduMon() {
+EduMon = new function() {
 	var that = this;
-
-	var sessionId = ""; //session id assinged by message server TODO necessary?
 
 	this.debugging = true; //show debug messages in javascript console
 
@@ -17,9 +12,13 @@ function EduMon() {
 		this.Prefs.rooms.push(new EduMon.Data.Room("160C",5,5));
 		this.Prefs.students.push(new EduMon.Data.Student("Max Mustermann","Mustergruppe"));
 		this.Prefs.courses.push(new EduMon.Data.Course("DevCourse",[0]));
-		this.Prefs.lectures.push(new EduMon.Data.Lecture("DevLecture",[0],[0]));
+		this.Prefs.lectures.push(new EduMon.Data.Lecture("DevLecture",0,0));
 
 		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
+
+		this.Timeline.init();
+
+		this.Analytics = new EduMon.Analytics();
 	};
 
 
@@ -46,19 +45,49 @@ function EduMon() {
 				that.debug(event.errorMessages[i]);
 			}
 		}
-
-		//Save session id assigned by message server
-		if ("clientId" in event){
-			sessionId = event.clientId;
-		}
 	};
 
 
 	/* Process packet */
 	var processPacket = function(packet){
-		//TODO to be implemented
-		that.debug("Received packet:");
-		that.debug(packet);
+		console.log(packet);
+		var packetType = parseInt(packet.type);
+		switch (packetType) {
+			case 2:
+				/*
+					client sends name and seat
+					body: { name: "..", seat: {x: 4, y: 1}}
+				 */
+				// todo do fancy things
+				break;
+
+			case 4:
+				/*
+					client sends data to server
+					body: { keys: 69, mdist: 999, mclicks: 23, volume: 0.42 }
+				 */
+				EduMon.Analytics.processData(packet.from, packet.time, packet.body);
+				break;
+
+			case 6:
+				/*
+					Client sends feedback
+					body: { id: 123, value: 0.69 }
+				 */
+				EduMon.Analytics.processFeedback(packet.from, packet.body);
+				break;
+
+			case 8:
+				/*
+					Client asks for break
+					body: {}
+				 */
+				// todo @Niko: Break Request
+				break;
+
+			default:
+				console.error('Unknown packet type ' + packetType + ' received.');
+		}
 	};
 
 
@@ -74,4 +103,4 @@ function EduMon() {
 	this.sendPacket = function(packet){
 		that.messenger.sendEvent(packet);
 	};
-}
+};

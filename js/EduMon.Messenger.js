@@ -1,5 +1,5 @@
 /* Packet handling - Messager class connects with message worker */
-window.EduMon.Messenger = function Messenger(eventCallback){
+EduMon.Messenger = function(eventCallback){
 	var worker;
 
 	/* Send command to message worker */

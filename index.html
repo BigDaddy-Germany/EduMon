@@ -16,18 +16,11 @@
                 </div>
                 <div id="timeline">
                         <div id="progressdisplay" class="progress progress-striped"></div>
-                        <div id="hourdisplay">
-                            <span class="hour" style="width:10%;">9:00</span>
-                            <span class="hour" style="width:10%;">9:20</span>
-                            <span class="hour" style="width:10%;">9:30</span>
-                            <span class="hour" style="width:30%;">10:00</span>
-                            <span class="hour" style="width:10%;">10:10</span>
-                            <span class="hour" style="width:30%;"></span>
-                        </div>
+                        <div id="hourdisplay"></div>
                 </div>
                 <div id="currentbox">
                         <div id="currentstate">
-                            <i class="glyphicon glyphicon-play-circle"></i>
+                            <i class="glyphicon"></i>
                         </div>
                         <div id="currenttime">
                             10:40
@@ -37,11 +30,12 @@
 
 			<div id="maincontainer">
 				<div id="buttonpanel" class="panel mypanel">
-					<div id="playbox" class="panel panel-info">
+					<div id="flowbox" class="panel panel-info">
 						<div class="panel-heading">
 							<h3 class="panel-title">Vorlesung</h3>
 						</div>
 						<div class="panel-body">
+							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-play"></a><br>
 							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-pause"></a><br>
 							<a href="javascript:void(0)" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-stop"></a><br>
 						</div>
@@ -145,12 +139,15 @@
         <script src="lib/jquery/js/jquery.min.js"></script>
         <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
-        <script src="js/EduMon.js"></script>
+		<script src="js/EduMon.js"></script>
+		<script src="js/EduMon.Math.js"></script>
+		<script src="js/EduMon.Util.js"></script>
+		<script src="js/EduMon.Prefs.js"></script>
+		<script src="js/EduMon.Data.js"></script>
+		<script src="js/EduMon.Analytics.js"></script>
         <script src="js/EduMon.Messenger.js"></script>
-        <script src="js/EduMon.Data.js"></script>
         <script src="js/EduMon.CSV.js"></script>
         <script src="js/EduMon.Gui.js"></script>
-        <script src="js/EduMon.Prefs.js"></script>
         <script src="js/EduMon.Timeline.js"></script>
         <script>
 			$(window).load(function(){

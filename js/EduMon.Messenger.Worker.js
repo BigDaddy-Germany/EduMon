@@ -1,5 +1,8 @@
 /* Message-Worker communicates with the message server */
 
+EduMon = {};
+importScripts('EduMon.Util.js');
+
 //config
 var debugging = true;
 var url = "localhost";
@@ -9,12 +12,13 @@ var outgoing = [];
 var interval = 1000;
 var timer = -1; // TODO -1 under the assumption that only positive IDs are assigned by browsers
 var requests_failed = 0;
+console.log('hello');
 
 
 /* Create a JSON-POST-HTTP-Request */
 function createRequest() {
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", url + "?room=" + room + "&moderatorPassphrase=" + moderatorPassphrase, true);
+	xhr.open("POST", url + "?demoPackages&room=" + room + "&moderatorPassphrase=" + moderatorPassphrase, true);
 	xhr.withCredentials = true;
 	xhr.setRequestHeader("Content-type", "text/plain; charset=UTF-8"); //forged to force cross-site request of the "simple" type
 	xhr.setRequestHeader("Accept", "application/json");
@@ -33,6 +37,7 @@ var commands = {
 			clearInterval(timer);
 			console.log("Queue processing was already running, stopped it!");
 		}
+		console.log('started');
 		timer = setInterval(processQueue, interval);
 	},
 	stop: function() {
@@ -44,6 +49,8 @@ var commands = {
 
 /* Handle call for action from main app */
 onmessage = function (input) {
+	console.log('onmessage:');
+	console.log(input);
 	//Configuration command
 	var data = input.data;
 	if ("command" in data) {

@@ -1,4 +1,7 @@
-window.EduMon.Data = new function Data() {
+/*
+	method createCurrentLecture depends on EduMon.Prefs
+ */
+EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
 	 * @param {String} studentName the student's name
@@ -68,39 +71,81 @@ window.EduMon.Data = new function Data() {
 	 *	 			activeStudents: {}
 	 *	 		}}
 	 */
-	this.createCurrentLecture = function createCurrentLecture(lectureId) {
-		var lectureObject = window.EduMon.Prefs.lectures[lectureId];
-		var roomObject = window.EduMon.Prefs.rooms[lectureObject.room];
-		var courseObject = window.EduMon.Prefs.courses[lectureObject.course];
-		//TODO: load students in course (are only ids so far)
+	this.createCurrentLecture = function(lectureId) {
+		if (EduMon.Prefs.lectures[lectureId]) {
+			var lectureObject = EduMon.Prefs.lectures[lectureId];
+			var roomObject = EduMon.Prefs.rooms[lectureObject.room];
+			var courseObject = EduMon.Prefs.courses[lectureObject.course];
+			/*
+				 we only need IDs inside the course, because it's only to start the broadcast once
+				 Everything, which is needed to calculate or something similar should be copied
+				 (like analytics or timeline)
+			 */
 
-		return {
-			lectureName: lectureObject.lectureName,
-			room: roomObject,
-			course: courseObject,
-			activeStudents: {
-				/*
-					[SESSID]:
-						{
-							studentName: {String},
-							group: {String},
-							seat: {x: {int}, y: {int}},
-							[enhance me]
-						},
-				 	[SESSID2]:
-				 		{...}
-				 */
-			},
-			timeline:{
-				status: "stop", // "stop" | "play" | "pause"
-				totalSeconds: 0,
-				slices: [
-					/* Elements
+			return {
+				lectureName: lectureObject.lectureName,
+				room: roomObject,
+				course: courseObject,
+				activeStudents: {/*
+					'44aa488f082b42f5fdc0090878f8ef3f': {
+						studentName: 'Steyer',
+						group: 'ShitGroup',
+						seat: {x: 3, y: 2},
+						disturbance: 0,
+						history: [
+							{
+								time: 1234566,
+								microphone: 12,
+								keyboard: 13,
+								mouseDistance: 145,
+								mouseClicks: 13
+							}
+						],
+						micHistory: [
+							{
+								time: 123456,
+								value: 123
+							}
+						]
+					},
+
+					SESSID: { fancy stuff like above }
+				*/},
+
+				timeline: {
+					status: "stop", // "stop" | "play" | "pause"
+					totalSeconds: 1, //start value 1 is intended
+					start: "",
+					slices: [/*
+						Elements:
 						seconds: 1337,
-						type: "lecture" | "break"
-					*/
-				]
-			}
-		};
+						type: "lecture" | "break",
+						end: "12:30"
+					*/]
+				},
+
+				analytics: {
+					globalReferenceValues: {/*
+						sender: {
+							microphone: 12,
+							keyboard: 32,
+							mouseDistance: 312,
+							mouseClicks: 123
+						}
+					*/},
+
+					studentFeedback: {/*
+						feedbackId: {
+							time: 123456,
+							currentAverage: 0.175
+							studentVoting: {
+								sender1: 0.12,
+								sender2: 0.23
+							}
+						}
+					*/}
+				}
+			};
+		}
 	};
 };
