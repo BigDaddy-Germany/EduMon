@@ -192,12 +192,8 @@ EduMon.Gui = new function() {
 		$("#seats td").each(function(index,element){
 			$(this).empty()
 			.append($("<div/>").addClass("person")
-				.append($("<div/>").addClass("name"))
-				)
-			.append($("<div/>").addClass("stats")
-				.append($("<div/>"))
-				.append($("<div/>"))
-				.append($("<div/>"))
+				.append($("<div/>").addClass("name").html("&nbsp;"))
+				.append($("<div/>").addClass("group").html("&nbsp;"))
 				);
 		});
 	};
@@ -208,7 +204,7 @@ EduMon.Gui = new function() {
 	 * @param {int} number Seat number from 1 (at left from moderator view) to n
 	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
 	 */
-	this.updateSeat = function(row, number, activity) {
+	var updateSeat = function(row, number, name, group, activity) {
 		var seats = $("#seats").find("tbody");
         if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
 		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
@@ -225,13 +221,22 @@ EduMon.Gui = new function() {
 		var gradient = "linear-gradient(0deg, "+color+" 0%, "+color+" "+transStart+"%, #DDD "+transEnd+"%, #DDD 100%)";
 		seat.css("background",gradient);
 
-		seat.find(".person").text("Max Mustermann");
-		seat.find(".stats div").eq(0).text("123");
-		seat.find(".stats div").eq(1).text("456");
-		seat.find(".stats div").eq(2).text("789");
+		seat.find(".person .name").text(name);
+		seat.find(".person .group").text(group);
 	}
 
 	this.init = function(){
 		prepareSeats();
+	};
+
+	this.updateStudents = function(){
+		for (var key in EduMon.Prefs.currentLecture.activeStudents){
+			if (EduMon.Prefs.currentLecture.activeStudents.hasOwnProperty(key)){
+				var student = EduMon.Prefs.currentLecture.activeStudents[key];
+				updateSeat(student.seat.y, student.seat.x, student.name, student.group,
+						EduMon.Analytics.scaleDisturbanceToPercentage(student.disturbance)
+						);
+			}
+		}
 	};
 };
