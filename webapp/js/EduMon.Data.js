@@ -1,7 +1,7 @@
 /*
 	method createCurrentLecture depends on EduMon.Prefs
  */
-EduMon.Data = new function Data() {
+EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
 	 * @param {String} studentName the student's name
@@ -71,47 +71,70 @@ EduMon.Data = new function Data() {
 	 *	 			activeStudents: {}
 	 *	 		}}
 	 */
-	this.createCurrentLecture = function createCurrentLecture(lectureId) {
-		var lectureObject = EduMon.Prefs.lectures[lectureId];
-		var roomObject = EduMon.Prefs.rooms[lectureObject.room];
-		var courseObject = EduMon.Prefs.courses[lectureObject.course];
-		//TODO: load students in course (are only ids so far)
+	this.createCurrentLecture = function(lectureId) {
+		if (EduMon.Prefs.lectures[lectureId]) {
+			var lectureObject = EduMon.Prefs.lectures[lectureId];
+			var roomObject = EduMon.Prefs.rooms[lectureObject.room];
+			var courseObject = EduMon.Prefs.courses[lectureObject.course];
+			/*
+				 we only need IDs inside the course, because it's only to start the broadcast once
+				 Everything, which is needed to calculate or something similar should be copied
+				 (like analytics or timeline)
+			 */
 
-		return {
-			lectureName: lectureObject.lectureName,
-			room: roomObject,
-			course: courseObject,
-			activeStudents: {
-				/*
-					[SESSID]:
-						{
-							studentName: {String},
-							group: {String},
-							seat: {x: {int}, y: {int}},
-							[enhance me]
-						},
-				 	[SESSID2]:
-				 		{...}
-				 */
-			},
+			var currentLecure =  {
+				lectureName: lectureObject.lectureName,
+				room: roomObject,
+				course: courseObject,
+				activeStudents: {/*
+					'44aa488f082b42f5fdc0090878f8ef3f': {
+						studentName: 'Steyer',
+						group: 'ShitGroup',
+						seat: {x: 3, y: 2},
+						disturbance: 0,
+						history: [
+							{
+								time: 1234566,
+								microphone: 12,
+								keyboard: 13,
+								mouseDistance: 145,
+								mouseClicks: 13
+							}
+						],
+						micHistory: [
+							{
+								time: 123456,
+								value: 123
+							}
+						]
+					},
 
-			timeline: {
-				status: "stop", // "stop" | "play" | "pause"
-				totalSeconds: 0,
-				slices: [
-					/* Elements
-					 seconds: 1337,
-					 type: "lecture" | "break"
-					 */
-				]
-			},
+					SESSID: { fancy stuff like above }
+				*/},
 
-			analytics: {
-				/*
-					All analytic stuff goes here
-				 */
+				timeline: {
+					status: "stop", // "stop" | "play" | "pause"
+					totalSeconds: 0,
+					slices: [/*
+						Elements
+						seconds: 1337,
+						type: "lecture" | "break"
+					*/]
+				},
 
-			}
-		};
+				analytics: {
+					globalReferenceValues: {/*
+						sender: {
+							microphone: 12,
+							keyboard: 32,
+							mouseDistance: 312,
+							mouseClicks: 123
+						}
+					*/}
+				}
+			};
+
+			return currentLecure;
+		}
 	};
 };

@@ -3,7 +3,7 @@
        - EduMon.Prefs
        - EduMon.Math
  */
-EduMon.Analytics = new function() {
+EduMon.Analytics = function() {
 
     var analytics = EduMon.Prefs.currentLecture.analytics;
     var activeStudents = EduMon.Prefs.currentLecture.activeStudents;

@@ -15,6 +15,8 @@ EduMon = new function() {
 		this.Prefs.lectures.push(new EduMon.Data.Lecture("DevLecture",[0],[0]));
 
 		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
+
+		this.Analytics = new EduMon.Analytics();
 	};
 
 
