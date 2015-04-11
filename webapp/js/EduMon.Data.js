@@ -130,6 +130,17 @@ EduMon.Data = new function() {
 							mouseDistance: 312,
 							mouseClicks: 123
 						}
+					*/},
+
+					studentFeedback: {/*
+						feedbackId: {
+							time: 123456,
+							currentAverage: 0.175
+							studentVoting: {
+								sender1: 0.12,
+								sender2: 0.23
+							}
+						}
 					*/}
 				}
 			};

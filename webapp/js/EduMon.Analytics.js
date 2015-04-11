@@ -5,11 +5,13 @@
  */
 EduMon.Analytics = function() {
 
-    var Util = EduMon.Util;
+    var util = EduMon.Util;
+    var math = EduMon.Math;
 
     var analytics = EduMon.Prefs.currentLecture.analytics;
     var activeStudents = EduMon.Prefs.currentLecture.activeStudents;
     var globalReferenceValues = analytics.globalReferenceValues;
+    var feedbackValues = analytics.studentFeedback;
 
     var micNormalizationPeriod = 60*5;
     var micMinimumEntries = 10;
@@ -25,23 +27,24 @@ EduMon.Analytics = function() {
         mouseClicks: 1
     };
 
-    /*
-        Packet Body format
-        body: { keys: 69, mdist: 999, mclicks: 23, volume: 0.42 }
-     */
 
     /**
      * Processes data sent by the client
-     * @param {int} sender the sender
+     * @param {String} sender the sender
      * @param {int} time the time
      * @param {Object} data the body
      */
     this.processData = function(sender, time, data) {
+        /*
+         Packet Body format
+         body: { keys: 69, mdist: 999, mclicks: 23, volume: 0.42 }
+         */
+
         var student = activeStudents[sender];
 
         // create new history entry for given set of data
         var historyEntry = { time: time };
-        Util.forEachField(data, function(key, value) {
+        util.forEachField(data, function(key, value) {
             historyEntry[key] = value;
         });
         student.history.push(historyEntry);
@@ -74,7 +77,7 @@ EduMon.Analytics = function() {
      * @param {number} disturbanceIndex The given disturbance index
      * @return {number} the calculated percentage
      */
-    this.scaleDisturbanceToPercentage = EduMon.Math.linearIntervalFunction(
+    this.scaleDisturbanceToPercentage = math.linearIntervalFunction(
         [0,0],
         [3,0.05],
         [6,0.3],
@@ -82,6 +85,33 @@ EduMon.Analytics = function() {
         [8,0.95],
         [10,1]
     );
+
+
+    /**
+     * Processes a feedback gotten by the user and calculates the new average
+     * @param {String} sender the sender's session id
+     * @param {Object} data the feedback package's body
+     */
+    this.processFeedback = function(sender, data) {
+        /*
+        Package body format:
+        body: { id: 123, value: 0.69 }
+         */
+        var feedback = feedbackValues[data.id];
+        if (!feedback) {
+            return;
+        }
+
+        feedback.studentVoting[sender] = data.value;
+
+        // calculate average again
+        var values = [];
+        util.forEachField(feedback.studentVoting, function(key, value) {
+            values.push(value);
+        });
+
+        feedback.currentAverage = math.arithmeticAverage(values);
+    };
 
 
     /**
@@ -97,8 +127,8 @@ EduMon.Analytics = function() {
         var maximumValues = {};
 
         // iterate over all senders to get minimum, maximum average of each property
-        Util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
-            Util.forEachField(referenceValue, function(propertyName, values) {
+        util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
+            util.forEachField(referenceValue, function(propertyName, values) {
                 if (setOfValues[propertyName]) {
                     setOfValues[propertyName].push(values);
                 } else {
@@ -112,16 +142,16 @@ EduMon.Analytics = function() {
         var scales = {};
 
         // iterate over properties to calculate scaling function
-        Util.forEachField(setOfValues, function(propertyName, values) {
+        util.forEachField(setOfValues, function(propertyName, values) {
             // only calculate the index, if the minimal number is reached
             if (values.length >= minimalGlobalReferenceValues) {
 
-                averageValues[propertyName] = EduMon.Math.arithmeticAverage(values);
-                minimumValues[propertyName] = EduMon.Math.min(values);
-                maximumValues[propertyName] = EduMon.Math.max(values);
+                averageValues[propertyName] = math.arithmeticAverage(values);
+                minimumValues[propertyName] = math.min(values);
+                maximumValues[propertyName] = math.max(values);
 
                 // get function to scale student in a really fancy way with lagrange :)
-                var upperLimit = (1-EduMon.Math.giniIndex(values)) * maximumValues[propertyName] * upperBoundGiniFactor;
+                var upperLimit = (1-math.giniIndex(values)) * maximumValues[propertyName] * upperBoundGiniFactor;
                 upperLimit = Math.max(upperLimit, maximumValues[propertyName]);
 
                 /**
@@ -136,7 +166,7 @@ EduMon.Analytics = function() {
                 function scaleFunctionCreator(lowerLimit, averageValue, upperLimit) {
                     return function(x) {
                         if (x < upperLimit) {
-                            return EduMon.Math.linearIntervalFunction(
+                            return math.linearIntervalFunction(
                                 [lowerLimit, 0],
                                 [averageValue, 5],
                                 [upperLimit, 10]
@@ -156,12 +186,12 @@ EduMon.Analytics = function() {
 
 
         // finally, iterate over all senders again to rate them per property and calculate final index
-        Util.forEachField(analytics.globalReferenceValues, function(sender, senderValue) {
+        util.forEachField(analytics.globalReferenceValues, function(sender, senderValue) {
             var theReallyFinalIndex = 0;
             var sumPropertyWeights = 0;
 
             // iterate over properties to calculate final rating now
-            Util.forEachField(weights, function(propertyName, weight) {
+            util.forEachField(weights, function(propertyName, weight) {
                 theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
                 sumPropertyWeights += weight;
             });
@@ -245,7 +275,7 @@ EduMon.Analytics = function() {
         var historyCount = {};
 
         history.forEach(function(historyEntry) {
-            Util.forEachField(historyEntry, function(historyKey, value) {
+            util.forEachField(historyEntry, function(historyKey, value) {
                 if (historyKey != 'time') {
                     historyAverage[historyKey] = historyAverage[historyKey] + value || value;
                     historyCount[historyKey] = historyCount[historyKey] + 1 || 1;
@@ -253,7 +283,7 @@ EduMon.Analytics = function() {
             });
         });
 
-        Util.forEachField(historyAverage, function(historyKey) {
+        util.forEachField(historyAverage, function(historyKey) {
             historyAverage[historyKey] /= historyCount[historyKey];
         });
 

@@ -72,7 +72,7 @@ EduMon = new function() {
 					Client sends feedback
 					body: { id: 123, value: 0.69 }
 				 */
-				// todo analyse feedback
+				EduMon.Analytics.processFeedback(packet.from, packet.body);
 				break;
 
 			case 8:
@@ -80,7 +80,7 @@ EduMon = new function() {
 					Client asks for break
 					body: {}
 				 */
-				// todo analyse break request
+				// todo @Niko: Break Request
 				break;
 
 			default:
