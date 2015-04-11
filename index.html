@@ -15,13 +15,7 @@
                     <h1><img src="images/logo.png">EduMon</h1>
                 </div>
                 <div id="timeline">
-                        <div id="progressdisplay" class="progress progress-striped">
-                            <div class="progress-bar progress-bar-warning" style="width:20%;">20min</div>
-                            <div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
-                            <div class="progress-bar progress-bar-warning" style="width:30%;">30min</div>
-                            <div class="progress-bar progress-bar-success" style="width:10%;">10min</div>
-                            <div class="progress-bar progress-bar-warning active" style="width:30%;">30min</div>
-                        </div>
+                        <div id="progressdisplay" class="progress progress-striped"></div>
                         <div id="hourdisplay">
                             <span class="hour" style="width:10%;">9:00</span>
                             <span class="hour" style="width:10%;">9:20</span>
@@ -155,6 +149,8 @@
         <script src="js/EduMon.Data.js"></script>
         <script src="js/EduMon.CSV.js"></script>
         <script src="js/EduMon.Gui.js"></script>
+        <script src="js/EduMon.Prefs.js"></script>
+        <script src="js/EduMon.Timeline.js"></script>
         <script>
 			$(window).load(function(){
 				EduMon.init();

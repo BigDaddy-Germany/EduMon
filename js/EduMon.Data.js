@@ -72,6 +72,7 @@ window.EduMon.Data = new function Data() {
 		var lectureObject = window.EduMon.Prefs.lectures[lectureId];
 		var roomObject = window.EduMon.Prefs.rooms[lectureObject.room];
 		var courseObject = window.EduMon.Prefs.courses[lectureObject.course];
+		//TODO: load students in course (are only ids so far)
 
 		return {
 			lectureName: lectureObject.lectureName,
@@ -89,6 +90,16 @@ window.EduMon.Data = new function Data() {
 				 	[SESSID2]:
 				 		{...}
 				 */
+			},
+			timeline:{
+				status: "stop", // "stop" | "play" | "pause"
+				totalSeconds: 0,
+				slices: [
+					/* Elements
+						seconds: 1337,
+						type: "lecture" | "break"
+					*/
+				]
 			}
 		};
 	};
