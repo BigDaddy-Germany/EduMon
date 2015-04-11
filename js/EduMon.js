@@ -13,6 +13,13 @@ function EduMon() {
 		that.debug("*** All Glory to the EduMon! ***");
 		that.debug("EduMon awakening...");
 		that.messenger = new EduMon.Messenger(handleIncomingData);
+
+		this.Prefs.rooms.push(new EduMon.Data.Room("160C",5,5));
+		this.Prefs.students.push(new EduMon.Data.Student("Max Mustermann","Mustergruppe"));
+		this.Prefs.courses.push(new EduMon.Data.Course("DevCourse",[0]));
+		this.Prefs.lectures.push(new EduMon.Data.Lecture("DevLecture",[0],[0]));
+
+		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
 	};
 
 
