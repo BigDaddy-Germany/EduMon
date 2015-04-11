@@ -339,6 +339,13 @@
 					We will NOT check the body's structure now. This work should be done by the receiver
 				*/
 
+				// if new lecture starts (message type 1), delete all packages inside this room now
+				$stmt = $db->prepare("DELETE FROM packages WHERE room = :room");
+				$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT);
+				$stmt->execute();
+
+				// insert new package into database
+
 				$stmt = $db->prepare("INSERT INTO packages (room, to_client, data) VALUES (:room, :toClient, :data)");
 
 				$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT) or die($db->lastErrorMsg());
