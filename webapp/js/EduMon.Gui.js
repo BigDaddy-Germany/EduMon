@@ -54,7 +54,7 @@ EduMon.Gui = new function() {
 	 * Performs the AJAX request for dialog content. [Deduplicating code in showDialog() and switchDialog()]
 	 * @param {String} dialogid [see showDialog()]
 	 */
-	var loadDialog = function loadDialog(dialogid) {
+	var loadDialog = function(dialogid) {
 		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(response, status, xhr){
 			if (status==="success"){
 				$("#dialogcontainer").scrollTop(0);
