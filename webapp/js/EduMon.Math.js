@@ -3,10 +3,10 @@ EduMon.Math = new function() {
 
     /**
      * Interpolates a polynomial with Lagrange
-     * @param {... Array} - The points to interpolate with Lagrange
+     * @param {... Array} [points] The points to interpolate with Lagrange
      * @return {Function}
      */
-    this.interpolatePolynomialByLagrange = function() {
+    this.interpolatePolynomialByLagrange = function(points) {
         function createLagrangePolynomial(k, points) {
             return function (x) {
                 return that.productOver(0, n, function(i) {
@@ -18,7 +18,7 @@ EduMon.Math = new function() {
             };
         }
 
-        var points = arguments;
+        points = Array.prototype.slice.call(arguments);
         var n = points.length;
         var lagrangePolynomials = [];
 
@@ -30,6 +30,59 @@ EduMon.Math = new function() {
             return that.sumOver(0, n, function(i) {
                 return points[i][1] * lagrangePolynomials[i](x);
             });
+        };
+    };
+
+
+    /**
+     * Create a function, which is linear over intervals using the given points
+     * @param {... Array} [points] the given points
+     * @return {Function} the calculated function
+     */
+    this.linearIntervalFunction = function(points) {
+        var values = Array.prototype.slice.call(arguments);
+        values.sort(function(a, b) {
+            if (a[0] > b[0]) {
+                return 1;
+            }
+            if (a[0] < b[0]) {
+                return -1;
+            }
+            return 0;
+        });
+
+        // generate the linear functions
+        var functions = [];
+        for (var i = 0; i < values.length - 1; ++i) {
+            var p1 = values[i];
+            var p2 = values[i + 1];
+
+            functions.push([p1[0], p2[0], that.linearFunction(p1, p2)]);
+        }
+
+        return function(x) {
+            // for each x: choose the right function and calculate the value
+            for (var i = 0; i < functions.length; ++i) {
+                if (x >= functions[i][0] && x <= functions[i][1]) {
+                    return functions[i][2](x);
+                }
+            }
+            throw 'Given x is not in defined range.';
+        }
+    };
+    
+
+    /**
+     * Returns a linear function going through p1 and p2
+     * @param {Array} p1 the point p1
+     * @param {Array} p2 the point p2
+     */
+    this.linearFunction = function(p1, p2) {
+        var m = (p2[1] - p1[1]) / (p2[0] - p1[0]);
+        var b = p1[1] - m * p1[0];
+
+        return function(x) {
+            return m*x + b;
         };
     };
 
