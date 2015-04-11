@@ -3,6 +3,7 @@ EduMon.Gui = new function() {
 
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
+	var openedDialog = undefined;
 	var popupOpened = 0;
 	var popupCallback;
 	var defaultButtons = {
@@ -54,15 +55,20 @@ EduMon.Gui = new function() {
 	 * Performs the AJAX request for dialog content. [Deduplicating code in showDialog() and switchDialog()]
 	 * @param {String} dialogid [see showDialog()]
 	 */
-	var loadDialog = function loadDialog(dialogid) {
-		$("#dialogcontent").load("dialogs/"+dialogid+".html", function(response, status, xhr){
-			if (status==="success"){
-				$("#dialogcontainer").scrollTop(0);
-				that.setDialogBlock(0);
-			} else {
-				that.closeDialog();
-				throw "loadDialog() fehlgeschlagen";
-			}
+	var loadDialog = function(dialogid) {
+		return new Promise(function(fulfill, reject) {
+			$("#dialogcontent").load("dialogs/"+dialogid+".html", function(response, status, xhr){
+				openedDialog = dialogid;
+				if (status==="success"){
+					$("#dialogcontainer").scrollTop(0);
+					that.setDialogBlock(0);
+					fulfill();
+				} else {
+					that.closeDialog();
+					reject();
+					throw "loadDialog() fehlgeschlagen";
+				}
+			});
 		});
 	};
 
@@ -71,18 +77,24 @@ EduMon.Gui = new function() {
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
 	 */
 	this.showDialog = function(dialogid) {
-		if (dialogOpened){
-			throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
-		}
-		dialogOpened = 1;
-		$("#dialogcontent").empty();
-		this.setDialogBlock(true);
-		$("#layercontainer").show();
-		if (!popupOpened){
-			$("#popupcontainer").hide();
-		}
-		$("#dialogcontainer").fadeIn(200);
-		loadDialog(dialogid);
+		var that = this;
+		return new Promise(function(fulfill, reject) {
+			if (dialogOpened){
+				reject();
+				throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
+			}
+			dialogOpened = 1;
+			$("#dialogcontent").empty();
+			that.setDialogBlock(true);
+			$("#layercontainer").show();
+			if (!popupOpened){
+				$("#popupcontainer").hide();
+			}
+			$("#dialogcontainer").fadeIn(200);
+			loadDialog(dialogid)
+				.then(fulfill)
+				.catch(reject);
+		});
 	};
 
 	/**
@@ -90,11 +102,17 @@ EduMon.Gui = new function() {
 	 * @param {String} dialogid [see showDialog()]
 	 */
 	this.switchDialog = function(dialogid) {
-		if (!dialogOpened){
-			throw "No dialog currently open to switch from. Use openDialog() instead";
-		}
-		this.setDialogBlock(true);
-		loadDialog(dialogid);
+		var that = this;
+		return new Promise(function(fulfill, reject) {
+			if (!dialogOpened){
+				reject();
+				throw "No dialog currently open to switch from. Use openDialog() instead";
+			}
+			that.setDialogBlock(true);
+			loadDialog(dialogid)
+				.then(fulfill)
+				.catch(reject);
+		});
 	};
 
 	/**
@@ -121,7 +139,16 @@ EduMon.Gui = new function() {
 			}
 			$("#dialogcontent").empty();
 			dialogOpened = 0;
+			openedDialog = undefined;
 		});
+	};
+
+	/**
+	 * Returns the dialog's ID which is opened currently
+	 * @return {String} the dialog's ID
+	 */
+	this.getOpenedDialog = function() {
+		return openedDialog;
 	};
 
 	/**

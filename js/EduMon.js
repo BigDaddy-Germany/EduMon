@@ -19,8 +19,7 @@ EduMon = new function() {
 		that.messenger = new EduMon.Messenger(handleIncomingData);
 
 		this.Prefs.rooms.push(new EduMon.Data.Room("160C",5,5));
-		this.Prefs.students.push(new EduMon.Data.Student("Max Mustermann","Mustergruppe"));
-		this.Prefs.courses.push(new EduMon.Data.Course("DevCourse",[0]));
+		this.Prefs.courses.push(new EduMon.Data.Course("DevCourse",[new EduMon.Data.Student("Max Mustermann","Mustergruppe")]));
 		this.Prefs.lectures.push(new EduMon.Data.Lecture("DevLecture",0,0));
 
 		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
@@ -145,18 +144,17 @@ EduMon = new function() {
 		// check state of chosen name
 		var nameExists = false;
 		var groupForName;
-		course.students.forEach(function(studentId) {
-			var allStudents = EduMon.Prefs.students[studentId];
-            if (name == allStudents.studentName) {
+		course.students.forEach(function(student) {
+            if (name == student.name) {
 				nameExists = true;
-				groupForName = allStudents.group;
+				groupForName = student.group;
 			}
 		});
 
 		if (nameExists) {
 			var nameState;
 			util.forEachField(activeStudents, function (sessionId, student) {
-				if (student.studentName == name) {
+				if (student.name == name) {
 					nameState = sessionId;
 				}
 			});
@@ -179,7 +177,7 @@ EduMon = new function() {
 		// if error code is 0, user can be logged in
 		if (errorBits.equals(0)) {
 			activeStudents[sender] = activeStudents[sender] || {
-				studentName: name,
+				name: name,
 				group: groupForName,
 				seat: seat,
 				disturbance: 0,

@@ -4,12 +4,12 @@
 EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
-	 * @param {String} studentName the student's name
+	 * @param {String} name the student's name
 	 * @param {String} group the group, the student is in
 	 */
-	this.Student = function Student(studentName, group) {
+	this.Student = function Student(name, group) {
 		return {
-			studentName: studentName,
+			name: name,
 			group: group
 		};
 	};
@@ -17,7 +17,7 @@ EduMon.Data = new function() {
 	/**
 	 * Creates a new course object
 	 * @param {String} courseName A name to identify the course
-	 * @param {int[]} students An array of all students (IDs) in the course
+	 * @param {Student[]} students An array of all students in the course
 	 */
 	this.Course = function Course(courseName, students) {
 		return {
@@ -66,7 +66,7 @@ EduMon.Data = new function() {
 	 * 				},
 	 * 				course: {
 	 * 					courseName: {String},
-	 * 					students: Array({int})
+	 * 					students: Array({Student})
 	 *	 			},
 	 *	 			activeStudents: {}
 	 *	 		}}
@@ -88,7 +88,7 @@ EduMon.Data = new function() {
 				course: courseObject,
 				activeStudents: {/*
 					'44aa488f082b42f5fdc0090878f8ef3f': {
-						studentName: 'Steyer',
+						name: 'Steyer',
 						group: 'ShitGroup',
 						seat: {x: 3, y: 2},
 						disturbance: 0,
