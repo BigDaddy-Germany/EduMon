@@ -115,10 +115,12 @@ EduMon.Data = new function() {
 				timeline: {
 					status: "stop", // "stop" | "play" | "pause"
 					totalSeconds: 0,
+					start: "9:00",
 					slices: [/*
 						Elements
 						seconds: 1337,
-						type: "lecture" | "break"
+						type: "lecture" | "break",
+						end: "12:30"
 					*/]
 				},
 

@@ -7,17 +7,18 @@ EduMon.Timeline = new function() {
 	
 	var timeline; //comfort
 
-	var getTime = function getTime(){
-		return EduMon.Prefs.currentLecture.timeline.totalSeconds; //TODO format time
+	var getTime = function(){
+		var now = new Date();
+		return now.getHours()+":"+("0"+now.getMinutes()).slice(-2);
 	}
 
-	var setPreviousEnd = function setPreviousEnd(){
+	var setPreviousEnd = function(){
 		if (timeline.slices.length>1){
-			timeline.slices[timeline.slice.length-2].end = getTime();
+			timeline.slices[timeline.slices.length-2].end = getTime();
 		}
 	}
 
-	this.play = function play() {
+	this.play = function() {
 		if (EduMon.Prefs.currentLecture.timeline.status!=="play"){
 			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"lecture"});
 			setPreviousEnd();
@@ -67,6 +68,27 @@ EduMon.Timeline = new function() {
 			isLastBar = (i==timeline.slices.length-1);
 			isFirstBar = (i==0);
 
+			//create new slice if necessary
+			var progressDisplay = $("#progressdisplay");
+			var hourDisplay     = $("#hourdisplay");
+			if(progressDisplay.children().length<=i){
+				//insert new slice in both timeline and hour display
+				var barType = (timeline.slices[i].type==="lecture"?"success":"warning");
+				progressDisplay.append($("<div/>").addClass("progress-bar progress-bar-"+barType));
+				hourDisplay.append($("<span/>").addClass("hour"));
+
+				if (isFirstBar){ //insert lecture start time
+					hourDisplay.children().eq(0).append(
+							$("<span/>")
+							.addClass("start")
+							.text(timeline.start)
+							);
+				}
+				if (i>0){ //when opening a new slice, insert end time of the previous one
+					hourDisplay.children().eq(i-1).append(timeline.slices[i-1].end);
+				}
+			}
+
 			//calculate percentage and add it up
 			barPercentage = Math.floor(timeline.slices[i].seconds/timeline.totalSeconds*100);
 			totalPercentage += barPercentage;
@@ -76,31 +98,14 @@ EduMon.Timeline = new function() {
 				barPercentage += 100-totalPercentage;
 			}
 
-			//create new slice if necessary
-			var progressDisplay = $("#progressdisplay");
-            if(progressDisplay.children().length<=i){
-				var barType = (timeline.slices[i].type==="lecture"?"success":"warning");
-				$("#progressdisplay").append($("<div/>").addClass("progress-bar progress-bar-"+barType));
-				$("#hourdisplay").append($("<span/>").addClass("hour"));
-				if (isFirstBar){
-					$("#hourdisplay").children().eq(0).append(
-							$("<span/>")
-							.addClass("start")
-							.text(timeline.start)
-							);
-				}
-			}
+			//update slice widths
+			progressDisplay.children().eq(i).width(barPercentage+"%").toggleClass("active",isLastBar);
+			hourDisplay.children().eq(i).width(barPercentage+"%");
 
-			//update slice
-			progressDisplay.children().eq(i)
-				.width(barPercentage+"%")
-				.text(Math.floor(timeline.slices[i].seconds/60)+"min")
-				.toggleClass("active",isLastBar)
-				;
-			$("#hourdisplay").children().eq(i)
-				.width(barPercentage+"%")
-				.text(timeline.slices[i].end)
-				;
+			//time only accumulates in the latest slice
+			if (i==timeline.slices.length-1){ 
+				progressDisplay.children().eq(i).text(Math.floor(timeline.slices[i].seconds/60)+"min");
+			}
 		}
 
 		//TODO: update clock
