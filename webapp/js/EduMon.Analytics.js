@@ -68,101 +68,82 @@ EduMon.Analytics = new function() {
         var maximumValues = {};
 
         // iterate over all senders to get minimum, maximum average of each property
-        for (var sender in analytics.globalReferenceValues) {
-            if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
-                var referenceValue = analytics.globalReferenceValues[sender];
-
-                // iterate over properties to add or calculate minimum or maximum new
-                for (var propertyName in referenceValue) {
-                    if (referenceValue.hasOwnProperty(propertyName)) {
-                        if (setOfValues[propertyName]) {
-                            setOfValues[propertyName].push(referenceValue[propertyName]);
-                        } else {
-                            setOfValues[propertyName] = [referenceValue[propertyName]];
-                        }
-                    }
+        EduMon.Util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
+            EduMon.Util.forEachField(referenceValue, function(propertyName, values) {
+                if (setOfValues[propertyName]) {
+                    setOfValues[propertyName].push(values);
+                } else {
+                    setOfValues[propertyName] = [values];
                 }
-            }
-        }
+            });
+        });
 
 
         // functions to scale user later go here
         var scales = {};
 
         // iterate over properties to calculate scaling function
-        for (propertyName in setOfValues) {
-            if (setOfValues.hasOwnProperty(propertyName)) {
+        EduMon.Util.forEachField(setOfValues, function(propertyName, values) {
+            // only calculate the index, if the minimal number is reached
+            if (values.length >= minimalGlobalReferenceValues) {
 
-                // only calculate the index, if the minimal number is reached
-                if (setOfValues[propertyName].length >= minimalGlobalReferenceValues) {
-                    var values = setOfValues[propertyName];
+                averageValues[propertyName] = EduMon.Math.arithmeticAverage(values);
+                minimumValues[propertyName] = EduMon.Math.min(values);
+                maximumValues[propertyName] = EduMon.Math.max(values);
 
-                    averageValues[propertyName] = EduMon.Math.arithmeticAverage(values);
-                    minimumValues[propertyName] = EduMon.Math.min(values);
-                    maximumValues[propertyName] = EduMon.Math.max(values);
+                // get function to scale student in a really fancy way with lagrange :)
+                var upperLimit = (1-EduMon.Math.giniIndex(values)) * maximumValues[propertyName] * upperBoundGiniFactor;
+                upperLimit = Math.max(upperLimit, maximumValues[propertyName]);
 
-                    // get function to scale student in a really fancy way with lagrange :)
-                    var upperLimit = (1-EduMon.Math.giniIndex(values)) * maximumValues[propertyName] * upperBoundGiniFactor;
-                    upperLimit = Math.max(upperLimit, maximumValues[propertyName]);
+                /**
+                 * Creates the function to access the variables inside the closure
+                 * If the given x is lower than the upper limit, the interpolated function will be called
+                 * If the given x is higher or equal to the upper limit, 10 will be returned
+                 * @param lowerLimit the function's lower limit
+                 * @param averageValue the function's average value
+                 * @param upperLimit the function's upper limit
+                 * @return {Function} the generated function
+                 */
+                function scaleFunctionCreator(lowerLimit, averageValue, upperLimit) {
+                    return function(x) {
+                        if (x < upperLimit) {
+                            var returnValue = EduMon.Math.interpolatePolynomialByLagrange(
+                                [lowerLimit, 1],
+                                [averageValue, 5],
+                                [upperLimit, 10]
+                            )(x);
 
-                    /**
-                     * Creates the function to access the variables inside the closure
-                     * If the given x is lower than the upper limit, the interpolated function will be called
-                     * If the given x is higher or equal to the upper limit, 10 will be returned
-                     * @param lowerLimit the function's lower limit
-                     * @param averageValue the function's average value
-                     * @param upperLimit the function's upper limit
-                     * @return {Function} the generated function
-                     */
-                    function scaleFunctionCreator(lowerLimit, averageValue, upperLimit) {
-                        return function(x) {
-                            if (x < upperLimit) {
-                                var returnValue = EduMon.Math.interpolatePolynomialByLagrange(
-                                    [lowerLimit, 1],
-                                    [averageValue, 5],
-                                    [upperLimit, 10]
-                                )(x);
-
-                                return EduMon.Math.log(returnValue)*10;
-                            }
-                            return 10;
-                        };
-                    }
-
-                    scales[propertyName] = scaleFunctionCreator(
-                        minimumValues[propertyName],
-                        averageValues[propertyName],
-                        maximumValues[propertyName]
-                    );
+                            return EduMon.Math.log(returnValue)*10;
+                        }
+                        return 10;
+                    };
                 }
+
+                scales[propertyName] = scaleFunctionCreator(
+                    minimumValues[propertyName],
+                    averageValues[propertyName],
+                    maximumValues[propertyName]
+                );
             }
-        }
+        });
 
 
         // finally, iterate over all senders again to rate them per property and calculate final index
-        for (sender in analytics.globalReferenceValues) {
-            if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
-                var senderValue = analytics.globalReferenceValues[sender];
+        EduMon.Util.forEachField(analytics.globalReferenceValues, function(sender, senderValue) {
+            var theReallyFinalIndex = 0;
+            var sumPropertyWeights = 0;
 
-                var theReallyFinalIndex = 0;
-                var sumPropertyWeights = 0;
+            // iterate over properties to calculate final rating now
+            EduMon.Util.forEachField(weights, function(propertyName, weight) {
+                theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
+                sumPropertyWeights += weight;
+            });
 
-                // iterate over properties to calculate final rating now
-                for (propertyName in setOfValues) {
-                    // that shit with hasOwnProperty again. hopefully last time now
-                    if (setOfValues.hasOwnProperty(propertyName)) {
-                        var weight = weights[propertyName];
-                        theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
-                        sumPropertyWeights += weight;
-                    }
-                }
-
-                theReallyFinalIndex /= sumPropertyWeights;
+            theReallyFinalIndex /= sumPropertyWeights;
 
 
-                activeStudents[sender].disturbance = theReallyFinalIndex;
-            }
-        }
+            activeStudents[sender].disturbance = theReallyFinalIndex;
+        });
 
     };
 
@@ -237,21 +218,17 @@ EduMon.Analytics = new function() {
         var historyCount = {};
 
         history.forEach(function(historyEntry) {
-            for (var historyKey in historyEntry) {
-                if (historyEntry.hasOwnProperty(historyKey) && historyKey != 'time') {
-                    historyAverage[historyKey] = historyAverage[historyKey] + historyEntry[historyKey]
-                                                 || historyEntry[historyKey];
-
+            EduMon.Util.forEachField(historyEntry, function(historyKey, value) {
+                if (historyKey != 'time') {
+                    historyAverage[historyKey] = historyAverage[historyKey] + value || value;
                     historyCount[historyKey] = historyCount[historyKey] + 1 || 1;
                 }
-            }
+            });
         });
 
-        for (var historyKey in historyAverage) {
-            if (historyAverage.hasOwnProperty(historyKey)) {
-                historyAverage[historyKey] /= historyCount[historyKey];
-            }
-        }
+        EduMon.Util.forEachField(historyAverage, function(historyKey) {
+            historyAverage[historyKey] /= historyCount[historyKey];
+        });
 
         return historyAverage;
     };
