@@ -7,16 +7,29 @@ EduMon.Timeline = new function() {
 	
 	var timeline; //comfort
 
-	this.play = function() {
+	var getTime = function getTime(){
+		return EduMon.Prefs.currentLecture.timeline.totalSeconds; //TODO format time
+	}
+
+	var setPreviousEnd = function setPreviousEnd(){
+		if (timeline.slices.length>1){
+			timeline.slices[timeline.slice.length-2].end = getTime();
+		}
+	}
+
+	this.play = function play() {
 		if (EduMon.Prefs.currentLecture.timeline.status!=="play"){
 			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"lecture"});
+			setPreviousEnd();
 			EduMon.Prefs.currentLecture.timeline.status = "play";
+			EduMon.Prefs.currentLecture.timeline.start = getTime();
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
 	};
 
 	this.pause = function() {
 		if (EduMon.Prefs.currentLecture.timeline.status==="play"){
 			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"break"});
+			setPreviousEnd();
 			EduMon.Prefs.currentLecture.timeline.status = "pause";
 		} else throw "Timeline-Unterbrechung nicht erlaubt, Timer lief nicht";
 	};
@@ -48,9 +61,11 @@ EduMon.Timeline = new function() {
 		var barPercentage;
 		var barActiveClass = "";
 		var isLastBar = false;
+		var isFirstBar = false;
 
 		for (var i=0; i<timeline.slices.length; i++){ //refresh all slices
 			isLastBar = (i==timeline.slices.length-1);
+			isFirstBar = (i==0);
 
 			//calculate percentage and add it up
 			barPercentage = Math.floor(timeline.slices[i].seconds/timeline.totalSeconds*100);
@@ -65,7 +80,15 @@ EduMon.Timeline = new function() {
 			var progressDisplay = $("#progressdisplay");
             if(progressDisplay.children().length<=i){
 				var barType = (timeline.slices[i].type==="lecture"?"success":"warning");
-				progressDisplay.append($("<div/>").addClass("progress-bar progress-bar-"+barType));
+				$("#progressdisplay").append($("<div/>").addClass("progress-bar progress-bar-"+barType));
+				$("#hourdisplay").append($("<span/>").addClass("hour"));
+				if (isFirstBar){
+					$("#hourdisplay").children().eq(0).append(
+							$("<span/>")
+							.addClass("start")
+							.text(timeline.start)
+							);
+				}
 			}
 
 			//update slice
@@ -74,7 +97,15 @@ EduMon.Timeline = new function() {
 				.text(Math.floor(timeline.slices[i].seconds/60)+"min")
 				.toggleClass("active",isLastBar)
 				;
+			$("#hourdisplay").children().eq(i)
+				.width(barPercentage+"%")
+				.text(timeline.slices[i].end)
+				;
 		}
+
+		//TODO: update clock
 	};
+
+	//TODO create "updateControls" and implement their functionaltiy
 
 };

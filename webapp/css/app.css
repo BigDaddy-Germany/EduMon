@@ -67,12 +67,17 @@ body {
     font-size: 0px; }
     #timeline #hourdisplay .hour {
       display: inline-block;
+      position: relative;
       font-size: 20px;
       height: 100%;
       padding: 0px;
       text-align: right;
       vertical-align: top; }
-      #timeline #hourdisplay .hour:first-child {
+      #timeline #hourdisplay .hour .start {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
         text-align: left; }
   #timeline .progress-bar {
     line-height: 40px;

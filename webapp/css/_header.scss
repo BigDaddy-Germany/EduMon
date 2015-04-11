@@ -43,13 +43,18 @@
 
 		.hour {
 			display: inline-block;
+			position: relative;
 			font-size: $hourdisplay_font;
 			height: 100%;
 			padding: 0px;
 			text-align: right;
 			vertical-align: top;
 
-			&:first-child {
+			.start {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				bottom: 0px;
 				text-align: left;
 			}
 		}
