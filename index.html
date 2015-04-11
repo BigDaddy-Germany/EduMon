@@ -60,27 +60,13 @@
 							<div>
 								<table id="seats">
 									<tbody>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
-									<tr>
-										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
-									</tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 									</tbody>
 								</table>
 							</div>
@@ -166,7 +152,7 @@
 
 				$("#RandomColorSeats").click(function(){
 					for (var x=1; x<=7; x++){ for (var y=1; y<=7; y++){
-					EduMon.Gui.updateSeat(x,y,Math.random(),"Info");
+					EduMon.Gui.updateSeat(x,y,Math.random());
 					}
 					}
 					});
