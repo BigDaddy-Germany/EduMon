@@ -1,6 +1,15 @@
 package org.cubyte.edumon.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import org.cubyte.edumon.client.controller.Controller;
+import org.cubyte.edumon.client.controller.LoginController;
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
 import org.cubyte.edumon.client.messaging.messagebody.BreakRequest;
@@ -17,18 +26,21 @@ import org.jnativehook.NativeHookException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Main {
+import static org.cubyte.edumon.client.Main.Scene.LOGIN;
+
+public class Main extends Application {
     private static final String TRAY_ICON = "/SystemtrayIcon.png";
 
     private final KeyListener keyListener;
@@ -39,6 +51,7 @@ public class Main {
     private TrayIcon trayIcon;
     private final ClientConfig clientConfig;
     private final File appData;
+    private Stage stage;
 
     public Main() {
         keyListener = new KeyListener();
@@ -48,6 +61,10 @@ public class Main {
         if ("\\".equals(separator)) {
             appData = new File(System.getenv("APPDATA") + separator + "EduMon" + separator + "config");
         } else {
+            File folder = new File(System.getProperty("user.home") + separator + ".EduMon");
+            if (!folder.exists()) {
+              folder.mkdirs();
+            }
             appData = new File(System.getProperty("user.home") + separator + ".EduMon" + separator + "config");
         }
         final ObjectMapper mapper = new ObjectMapper();
@@ -57,13 +74,22 @@ public class Main {
             clientConfig.server = config.server;
             clientConfig.room = config.room;
         } catch(IOException e) {
+            System.err.println("Could not read config.");
             System.err.println(e.getMessage());
         }
+
+        // set config defaults
+        if ("".equals(getServer()))
+            setServer("http://vps2.code-infection.de/edumon/mailbox.php");
+        if ("".equals(getRoom()))
+            setRoom("160C");
+
         messageQueue = new MessageQueue(this);
         messageFactory = new MessageFactory(this, "MODERATOR");
         try {
-            trayIcon = new TrayIcon(ImageIO.read(Main.class.getResourceAsStream(TRAY_ICON)));
+            trayIcon = new TrayIcon(ImageIO.read(getClass().getResourceAsStream(TRAY_ICON)));
         } catch (IOException e) {
+            System.err.println("Could not load tray icon.");
             System.err.println(e.getMessage());
         }
     }
@@ -71,31 +97,42 @@ public class Main {
     public static void main(String[] args) {
         final Main main = new Main();
 
-        main.addAppToSystemTray();
-
         // temporary
         final Main mainMod = new Main();
+        mainMod.setServer("http://vps2.code-infection.de/edumon/mailbox.php");
+        mainMod.setRoom("160C");
         final MessageQueue messageQueueMod = new MessageQueue(mainMod, true);
         final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
         messageQueueMod.queue(messageFactoryMod.create(new NameList(list, "160C", new Dimensions(5, 5))));
         messageQueueMod.send();
-
-        if ("".equals(main.getServer()))
-            main.setServer("http://vps2.code-infection.de/edumon/mailbox.php");
-        if ("".equals(main.getRoom()))
-            main.setRoom("160C");
         // temporary
 
-        main.messageQueue.send();
-        //TODO what is when no namelist is on the server?
+        // Launch JavaFX Application
+        Main.launch(args);
 
         main.messageQueue.queue(main.messageFactory.create(new WhoAmI("Jonas Dann", new Position(1, 1))));
         main.messageQueue.send();
 
+        main.addAppToSystemTray();
         main.registerSensorListeners();
         main.scheduleExecutors();
+    }
+
+    @Override
+    public void start(Stage stage) {
+        Scene.setApp(this);
+        stage.setTitle("Login");
+        stage.setResizable(false);
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                exit();
+            }
+        });
+        this.stage = stage;
+        changeScene(LOGIN);
     }
 
     private void registerSensorListeners() {
@@ -151,6 +188,59 @@ public class Main {
         scheduledExecutorService.scheduleAtFixedRate(new MessageSender(), 0, 1, TimeUnit.SECONDS);
     }
 
+    public enum Scene {
+        LOGIN,
+        LOADING,
+        NAME_CHOOSER,
+        SEAT_CHOOSER;
+
+        private static final HashMap<Scene, javafx.scene.Scene> toSceneMap = new HashMap<>();
+        private static final HashMap<Scene, Controller> toControllerMap = new HashMap<>();
+
+        static {
+            String sceneString;
+            String[] split;
+            javafx.scene.Scene fxScene;
+            for(Scene scene: Scene.values()) {
+                sceneString = scene.toString().toLowerCase();
+                split = sceneString.split("_");
+                sceneString = "";
+                for (String string: split) {
+                    sceneString += string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+                }
+
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(Main.class.getResource("/" + sceneString + ".fxml"));
+                    fxScene = new javafx.scene.Scene((Parent) loader.load());
+
+                    toSceneMap.put(scene, fxScene);
+                    toControllerMap.put(scene, (Controller) loader.getController());
+                } catch (IOException e) {
+                    System.err.println("Could not load scene " + sceneString + ".");
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+
+        public static void setApp(Main app) {
+            for(Map.Entry<Scene, Controller> entry: toControllerMap.entrySet()) {
+                if (entry.getValue() != null) {
+                    entry.getValue().setApp(app);
+                }
+            }
+        }
+
+        public javafx.scene.Scene getScene() {
+            return toSceneMap.get(this);
+        }
+    }
+
+    public void changeScene(Scene scene) {
+        stage.setScene(scene.getScene());
+        stage.show();
+    }
+
     public MessageQueue getQueue() {
         return messageQueue;
     }
@@ -163,11 +253,11 @@ public class Main {
         return clientConfig.room;
     }
 
-    private void setServer(String server) {
+    public void setServer(String server) {
         clientConfig.server = server;
     }
 
-    private void setRoom(String room) {
+    public void setRoom(String room) {
         clientConfig.room = room;
     }
 
@@ -188,16 +278,18 @@ public class Main {
         }
     }
 
-    private void exit() {
+    public void exit() {
         final ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(appData, clientConfig);
         } catch (IOException e) {
+            System.err.println("Could not write configuration.");
             System.err.println(e.getMessage());
         }
         try {
             GlobalScreen.unregisterNativeHook();
         } catch (NativeHookException e) {
+            System.err.println("Could not unregister Native Hook.");
             System.err.println(e.getMessage());
         }
         System.runFinalization();
@@ -213,7 +305,7 @@ public class Main {
 
     private class BreakRequestListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent event) {
+        public void actionPerformed(java.awt.event.ActionEvent event) {
             messageQueue.queue(messageFactory.create(new BreakRequest()));
             trayIcon.displayMessage("Hallo", "Du hast eine Pausenanfrage gesendet", TrayIcon.MessageType.INFO); // TODO maybe do it as Popup
         }
@@ -221,7 +313,7 @@ public class Main {
 
     private class ExitListener implements ActionListener {
         @Override
-        public void actionPerformed(ActionEvent event) {
+        public void actionPerformed(java.awt.event.ActionEvent event) {
             exit();
         }
     }

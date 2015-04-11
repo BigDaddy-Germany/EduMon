@@ -19,6 +19,7 @@ public class MicListener {
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format);
         } catch (LineUnavailableException e) {
+            System.err.println("Mic line is unavailable.");
             System.err.println(e.getMessage());
         }
         line.start();

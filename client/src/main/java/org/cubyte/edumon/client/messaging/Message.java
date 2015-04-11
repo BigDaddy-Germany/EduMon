@@ -49,7 +49,8 @@ public class Message implements Bullet {
                     Type.toClassMap.put(type, clazz);
                     Type.classToTypeMap.put(clazz, type);
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace(System.err);
+                    System.err.println("Could not load type " + typeString + ".");
+                    System.err.println(e.getMessage());
                 }
             }
         }

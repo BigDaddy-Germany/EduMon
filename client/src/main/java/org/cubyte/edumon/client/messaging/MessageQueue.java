@@ -59,7 +59,8 @@ public class MessageQueue extends Revolver<Message> {
                 try {
                     mapper.writeValue(writer, queuedMessages.get(i));
                 } catch (IOException e) {
-                    e.printStackTrace(System.err);
+                    System.err.println("Could not write Json value.");
+                    System.err.println(e.getMessage());
                 }
                 jsonString += writer.toString() + ((i == queueSize - 1) ? "" : ",");
                 writer.flush();
@@ -68,6 +69,7 @@ public class MessageQueue extends Revolver<Message> {
             try {
                 writer.close();
             } catch (IOException e) {
+                System.err.println("Could not close Json writer.");
                 System.err.println(e.getMessage());
             }
         }
@@ -83,11 +85,16 @@ public class MessageQueue extends Revolver<Message> {
             for (Message message: jsonResponse.inbox) {
                 load(message);
             }
+            if (jsonResponse.errorMessages.size() > 0) {
+                System.err.println("Response error messages: ");
+            }
             for (String errorMessage: jsonResponse.errorMessages) {
                 System.err.println(errorMessage);
             }
         } catch (IOException e) {
+            System.err.println("Could not get response.");
             System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
             return;
         }
         queuedMessages.clear();
