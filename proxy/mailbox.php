@@ -42,6 +42,8 @@
 	 * the given instructions.
 	 */
 
+	error_reporting(-1);
+	ini_set("display_errors", true);
 	define('PW_FILE', '.htedumonpassword');
 	define('DB_FILE', '.htedumondatabase');
 
