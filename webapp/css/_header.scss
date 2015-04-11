@@ -28,43 +28,44 @@
 	padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
 	padding-left: 20px;
 	padding-right: 0px;
+}
 
-	#progressdisplay {
-		border-radius: 5px;
-		height: $timeprogress_height;
-		margin: 0px;
-	}
-
-	#hourdisplay {
-		height: $hourdisplay_height;
-		margin: 0px;
-		overflow: hidden;
-		font-size: 0px;
-
-		.hour {
-			display: inline-block;
-			position: relative;
-			font-size: $hourdisplay_font;
-			height: 100%;
-			padding: 0px;
-			text-align: right;
-			vertical-align: top;
-
-			.start {
-				position: absolute;
-				top: 0px;
-				left: 0px;
-				bottom: 0px;
-				text-align: left;
-			}
-		}
-	}
+#progressdisplay {
+	border-radius: 5px;
+	height: $timeprogress_height;
+	margin: 0px;
 
 	.progress-bar {
 		line-height: $timeprogress_height;
 		font-size: $timeprogress_font;
 		text-align: center;
 		overflow: visible;
+		text-overflow: ellipsis ' ';
+	}
+}
+
+#hourdisplay {
+	height: $hourdisplay_height;
+	margin: 0px;
+	overflow: hidden;
+	font-size: 0px;
+
+	.hour {
+		display: inline-block;
+		position: relative;
+		font-size: $hourdisplay_font;
+		height: 100%;
+		padding: 0px;
+		text-align: right;
+		vertical-align: top;
+
+		.start {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			bottom: 0px;
+			text-align: left;
+		}
 	}
 }
 
