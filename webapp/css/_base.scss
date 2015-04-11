@@ -26,11 +26,11 @@ body {
 	width:  100%;
 	overflow: hidden;
 	@include vflex;
+}
 
-	#maincontainer {
-		flex-grow: 1;
-		@include hflex;
-	}
+#maincontainer {
+	flex-grow: 1;
+	@include hflex;
 }
 
 .panel {

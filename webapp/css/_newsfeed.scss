@@ -1,5 +1,6 @@
 #feedpanel {
 	width:300px;
+	min-width:300px;
 	@include vflex;
 
 	.panel-body {

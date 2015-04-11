@@ -2,31 +2,42 @@
 	flex-grow: 1;
 	@include vflex;
 	position: relative;
+}
 
-	#room {
-		flex-grow: 1;
+#layercontainer {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 110px;
+	overflow: hidden;
+}
+
+#room {
+	flex-grow: 1;
+	width: 100%;
+	padding: 10px;
+	@include vflex;
+
+	#frontdesk {
 		width: 100%;
-		padding: 10px;
-		@include vflex;
+		height: 100px;
+		background-color: #DDDDDD;
 
-		#seatscontainer {
-			flex-grow: 1;
-		}
-
-		#frontdesk {
-			width: 100%;
-			height: 100px;
-			background-color: #DDDDDD;
+		input {
+			display: inline-block;
 		}
 	}
+}
 
-	#layercontainer {
-		display: none;
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		right: 0px;
-		bottom: 110px;
-		overflow: hidden;
+#seatscontainer {
+	flex-grow: 1;
+	position: relative;
+
+	& > div {
+		position:absolute;
+		width: 100%;
+		height: 100%;
 	}
 }

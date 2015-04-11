@@ -57,8 +57,9 @@
 
 					<div id="room">
 						<div id="seatscontainer">
-							<table id="seats">
-								<tbody>
+							<div>
+								<table id="seats">
+									<tbody>
 									<tr>
 										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
 									</tr>
@@ -80,17 +81,20 @@
 									<tr>
 										<td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td><td>Sitz</td>
 									</tr>
-								</tbody>
-							</table>
+									</tbody>
+								</table>
+							</div>
 						</div>
 						<div id="frontdesk">
 							<input type="button" value="Demo: Start Worker" onclick="EduMon.sendPacket({command:'start'})">
 							<input type="button" value="Demo: Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
 							<input type="button" value="Demo: Fake data IN" onclick="EduMon.sendPacket({command:'config',url:'demoDataIn.json'})">
+							<br>
 							<input type="button" value="Demo: Typ 1 OUT" onclick="EduMon.sendDemo(1)">
 							<input type="button" value="Demo: Typ 3 OUT" onclick="EduMon.sendDemo(3)">
 							<input type="button" value="Demo: Typ 5 OUT" onclick="EduMon.sendDemo(5)">
 							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
+							<br>
 							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
 							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
 							<input type="button" value="Demo: Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);})">
@@ -126,7 +130,7 @@
 
 				</div>
 
-				<div id="feedpanel"   class="panel panel-default mypanel">
+				<div id="feedpanel" class="panel panel-default mypanel">
 					<div class="panel-heading">Newsfeed</div>
 					<div class="panel-body">
 						<div id="alertcontainer"></div>
