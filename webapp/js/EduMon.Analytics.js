@@ -5,6 +5,8 @@
  */
 EduMon.Analytics = function() {
 
+    var Util = EduMon.Util;
+
     var analytics = EduMon.Prefs.currentLecture.analytics;
     var activeStudents = EduMon.Prefs.currentLecture.activeStudents;
     var globalReferenceValues = analytics.globalReferenceValues;
@@ -12,7 +14,7 @@ EduMon.Analytics = function() {
     var micNormalizationPeriod = 60*5;
     var micMinimumEntries = 10;
     var curValPeriod = 5;
-    var minimalGlobalReferenceValues = 3;
+    var minimalGlobalReferenceValues = 5;
     
     var upperBoundGiniFactor = 0.8;
 
@@ -37,6 +39,19 @@ EduMon.Analytics = function() {
     this.processData = function(sender, time, data) {
         var student = activeStudents[sender];
 
+        // create new history entry for given set of data
+        var historyEntry = { time: time };
+        Util.forEachField(data, function(key, value) {
+            historyEntry[key] = value;
+        });
+        student.history.push(historyEntry);
+
+        student.micHistory.push({
+            time: time,
+            value: data.microphone
+        });
+
+        // remove old history entry (and the new one, if it is too old)
         student.history = truncateHistory(student.history);
         student.micHistory = truncateHistory(student.micHistory, true);
 
@@ -50,8 +65,7 @@ EduMon.Analytics = function() {
 
         globalReferenceValues[sender] = currentValues;
 
-
-
+        calculateAllDisturbances();
     };
 
 
@@ -83,8 +97,8 @@ EduMon.Analytics = function() {
         var maximumValues = {};
 
         // iterate over all senders to get minimum, maximum average of each property
-        EduMon.Util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
-            EduMon.Util.forEachField(referenceValue, function(propertyName, values) {
+        Util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
+            Util.forEachField(referenceValue, function(propertyName, values) {
                 if (setOfValues[propertyName]) {
                     setOfValues[propertyName].push(values);
                 } else {
@@ -98,7 +112,7 @@ EduMon.Analytics = function() {
         var scales = {};
 
         // iterate over properties to calculate scaling function
-        EduMon.Util.forEachField(setOfValues, function(propertyName, values) {
+        Util.forEachField(setOfValues, function(propertyName, values) {
             // only calculate the index, if the minimal number is reached
             if (values.length >= minimalGlobalReferenceValues) {
 
@@ -142,12 +156,12 @@ EduMon.Analytics = function() {
 
 
         // finally, iterate over all senders again to rate them per property and calculate final index
-        EduMon.Util.forEachField(analytics.globalReferenceValues, function(sender, senderValue) {
+        Util.forEachField(analytics.globalReferenceValues, function(sender, senderValue) {
             var theReallyFinalIndex = 0;
             var sumPropertyWeights = 0;
 
             // iterate over properties to calculate final rating now
-            EduMon.Util.forEachField(weights, function(propertyName, weight) {
+            Util.forEachField(weights, function(propertyName, weight) {
                 theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
                 sumPropertyWeights += weight;
             });
@@ -231,7 +245,7 @@ EduMon.Analytics = function() {
         var historyCount = {};
 
         history.forEach(function(historyEntry) {
-            EduMon.Util.forEachField(historyEntry, function(historyKey, value) {
+            Util.forEachField(historyEntry, function(historyKey, value) {
                 if (historyKey != 'time') {
                     historyAverage[historyKey] = historyAverage[historyKey] + value || value;
                     historyCount[historyKey] = historyCount[historyKey] + 1 || 1;
@@ -239,7 +253,7 @@ EduMon.Analytics = function() {
             });
         });
 
-        EduMon.Util.forEachField(historyAverage, function(historyKey) {
+        Util.forEachField(historyAverage, function(historyKey) {
             historyAverage[historyKey] /= historyCount[historyKey];
         });
 
