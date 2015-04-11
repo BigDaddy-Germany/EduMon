@@ -115,7 +115,7 @@
     </dependencies>
 
     <build>
-        <defaultGoal>clean package</defaultGoal>
+        <defaultGoal>clean package launch4j:launch4j</defaultGoal>
         <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
@@ -149,6 +149,7 @@
                     </archive>
                 </configuration>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -165,6 +166,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -214,6 +216,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.skife.maven</groupId>
                 <artifactId>really-executable-jar-maven-plugin</artifactId>
@@ -230,6 +233,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -237,7 +241,7 @@
                 <configuration>
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
-                    <jar>${project.build.directory}/${project.build.finalName}.jar</jar>
+                    <jar>${project.build.directory}/${project.build.finalName}-jfx.jar</jar>
                     <outfile>${project.build.directory}/${windowsName}</outfile>
                     <chdir>.</chdir>
                     <priority>normal</priority>
@@ -267,6 +271,7 @@
                         <originalFilename>${windowsName}</originalFilename>
                     </versionInfo>
                 </configuration>
+                <!--
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -275,6 +280,7 @@
                         </goals>
                     </execution>
                 </executions>
+                -->
             </plugin>
         </plugins>
     </build>
