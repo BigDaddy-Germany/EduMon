@@ -1,7 +1,7 @@
 EduMon.Timeline = new function() {
 	var that = this;
 
-	var tick_interval = 5; //in seconds
+	var tick_interval = 0.5; //in seconds
 	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
 	var timer;
 	
@@ -19,42 +19,50 @@ EduMon.Timeline = new function() {
 	}
 
 	this.play = function() {
-		if (EduMon.Prefs.currentLecture.timeline.status!=="play"){
-			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"lecture"});
+		if (timeline.status!=="play"){
+			timeline.slices.push({seconds:0,type:"lecture"});
 			setPreviousEnd();
-			EduMon.Prefs.currentLecture.timeline.status = "play";
-			EduMon.Prefs.currentLecture.timeline.start = getTime();
+			timeline.status = "play";
+			timeline.start = getTime();
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
+		updateTimeline();
 	};
 
 	this.pause = function() {
-		if (EduMon.Prefs.currentLecture.timeline.status==="play"){
-			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"break"});
+		if (timeline.status==="play"){
+			timeline.slices.push({seconds:0,type:"break"});
 			setPreviousEnd();
-			EduMon.Prefs.currentLecture.timeline.status = "pause";
+			timeline.status = "pause";
 		} else throw "Timeline-Unterbrechung nicht erlaubt, Timer lief nicht";
+		updateTimeline();
 	};
 
 	this.stop = function() {
 		clearInterval(timer);
-		EduMon.Prefs.currentLecture.timeline.status = "stop";
+		timeline.status = "stop";
+		updateTimeline();
 		//TODO is irreversible - shall it be? (logic: you can only finish a lecture once)
 	};
 	
-	var tick = function() {
-		if (EduMon.Prefs.currentLecture.timeline.status!=="stop"){
+	var tick = function(onlyUpdate) {
+		if (onlyUpdate!==true && EduMon.Prefs.currentLecture.timeline.status!=="stop"){
 			var currentSlice = timeline.slices[timeline.slices.length-1];
 			currentSlice.seconds += tick_value;
 			timeline.totalSeconds += tick_value;
-			updateTimeline();
 		}
+		updateTimeline();
 	};
 
 	this.init = function(){
 		//Timer is always active, but timer tick does not always trigger action
 		//this prevents seconds getting lost
-		timer = setInterval(tick, tick_interval*1000);
 		timeline = EduMon.Prefs.currentLecture.timeline;
+		timer = setInterval(tick, tick_interval*1000);
+		updateTimeline();
+
+		$("#flowbox").find(".glyphicon-play").click(function(){that.play();});
+		$("#flowbox").find(".glyphicon-pause").click(function(){that.pause();});
+		$("#flowbox").find(".glyphicon-stop").click(function(){that.stop();});
 	};
 
 	var updateTimeline = function(){
@@ -85,7 +93,9 @@ EduMon.Timeline = new function() {
 							);
 				}
 				if (i>0){ //when opening a new slice, insert end time of the previous one
-					hourDisplay.children().eq(i-1).append(timeline.slices[i-1].end);
+					hourDisplay.children().eq(i-1).append(
+							$("<span/>").addClass("end").text(timeline.slices[i-1].end)
+							);
 				}
 			}
 
@@ -100,15 +110,27 @@ EduMon.Timeline = new function() {
 
 			//update slice widths
 			progressDisplay.children().eq(i).width(barPercentage+"%").toggleClass("active",isLastBar);
-			hourDisplay.children().eq(i).width(barPercentage+"%");
+			hourDisplay.children().eq(i).animate({"width":barPercentage+"%"},450);
 
 			//time only accumulates in the latest slice
 			if (i==timeline.slices.length-1){ 
-				progressDisplay.children().eq(i).text(Math.floor(timeline.slices[i].seconds/60)+"min");
+				var minutes = Math.floor(timeline.slices[i].seconds/60);
+				if (minutes>0){
+					progressDisplay.children().eq(i).text(minutes+"min");
+				}
 			}
 		}
 
-		//TODO: update clock
+		//update clock and state display
+		$("#currenttime").text(getTime());
+		$("#currentstate i")
+			.removeClass("glyphicon-play glyphicon-pause glyphicon-stop")
+			.addClass("glyphicon-"+timeline.status);
+
+		//display fitting control buttons
+		$("#flowbox").find(".glyphicon-play").toggle(timeline.status!=="play");
+		$("#flowbox").find(".glyphicon-pause").toggle(timeline.status==="play");
+		$("#flowbox").find(".glyphicon-stop").toggle(timeline.status!=="stop");
 	};
 
 	//TODO create "updateControls" and implement their functionaltiy

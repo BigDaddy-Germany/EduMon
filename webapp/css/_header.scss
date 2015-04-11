@@ -73,21 +73,21 @@
 	padding-bottom: ($timepanel_height - $timeprogress_height - $hourdisplay_height) / 2;
 	padding-left: 0px;
 	padding-right: 10px;
+}
 
-	#currentstate {
-		height: $timeprogress_height;
-		margin: 0px;
-		line-height: $timeprogress_height;
-		font-size: $timeprogress_height;
-		text-align: center;
-	}
+#currentstate {
+	height: $timeprogress_height;
+	margin: 0px;
+	line-height: $timeprogress_height;
+	font-size: $timeprogress_height;
+	text-align: center;
+}
 
-	#currenttime {
-		height: $hourdisplay_height;
-		margin: 0px;
-		line-height: $hourdisplay_height;
-		font-size: $hourdisplay_height;
-		text-align: left;
-		font-weight: bold;
-	}
+#currenttime {
+	height: $hourdisplay_height;
+	margin: 0px;
+	line-height: $hourdisplay_height;
+	font-size: $hourdisplay_height;
+	text-align: left;
+	font-weight: bold;
 }

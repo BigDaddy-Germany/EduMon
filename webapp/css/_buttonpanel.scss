@@ -4,7 +4,7 @@
 	justify-content: flex-start;
 }
 
-#playbox {
+#flowbox {
 	margin: 0px;
 	text-align: center;
 
@@ -14,6 +14,6 @@
 }
 
 #actionbox {
-	@extend #playbox;
+	@extend #flowbox;
 	flex-grow: 1;
 }
