@@ -42,7 +42,7 @@ public class MessageQueue extends Revolver<Message> {
         this.httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         this.sessionId = "";
         this.isModerator = isModerator;
-        SimpleModule module = new SimpleModule("CustomBodyDeserializer", new Version(1, 0, 0, null));
+        SimpleModule module = new SimpleModule("CustomBodyDeserializer", new Version(1, 0, 0, "", "org.cubyte", "edumon-client"));
         module.addDeserializer(MessageBody.class, new BodyDeserializer());
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(module);
@@ -80,6 +80,7 @@ public class MessageQueue extends Revolver<Message> {
         post.setEntity(new StringEntity(jsonString, ContentType.create("application/json", "utf-8")));
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
+            //TODO handle server not found
             Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
             sessionId = jsonResponse.clientId;
             for (Message message: jsonResponse.inbox) {

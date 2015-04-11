@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 public class MessageTest {
     @Test
     public void testDeSerialization() {
-        SimpleModule module = new SimpleModule("CustomBodyDeserializer", new Version(1, 0, 0, null));
+        SimpleModule module = new SimpleModule("CustomBodyDeserializer", new Version(1, 0, 0, "", "org.cubyte", "edumon-client"));
         module.addDeserializer(MessageBody.class, new BodyDeserializer());
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(module);

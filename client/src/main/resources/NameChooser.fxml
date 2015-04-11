@@ -2,7 +2,15 @@
 
 <?import java.lang.*?>
 <?import java.util.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" />
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.NameChooserController">
+  <children>
+    <ListView fx:id="nameList" layoutX="200.0" layoutY="58.0" prefHeight="328.0" prefWidth="200.0" />
+    <Button layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleBack" text="Zurück" />
+    <Label layoutX="198.0" layoutY="35.0" text="Wählen Sie Ihren Namen aus" />
+    <Label fx:id="room" layoutX="14.0" layoutY="14.0" text="Label" />
+  </children>
+</AnchorPane>

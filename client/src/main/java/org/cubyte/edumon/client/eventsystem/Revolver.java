@@ -42,12 +42,7 @@ public class Revolver<T extends Bullet> {
         bullets.add(bullet);
     }
 
-    public T unload() {
-        try {
-            return bullets.take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public boolean hasBullets() {
+        return bullets.size() > 0;
     }
 }

@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<FlowPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.SeatChooserController">
   <children>
-    <Label text="Raum: 160C" />
-    <Label alignment="CENTER" prefWidth="600.0" text="Tafel" textAlignment="LEFT" />
-    <GridPane alignment="TOP_LEFT" gridLinesVisible="true">
+    <Label alignment="CENTER" layoutX="14.0" layoutY="30.0" prefWidth="572.0" text="Tafel" textAlignment="LEFT" />
+    <Label fx:id="roomAndName" layoutX="14.0" layoutY="14.0" text="Label" />
+    <GridPane alignment="TOP_LEFT" gridLinesVisible="true" layoutX="14.0" layoutY="53.0" prefHeight="300.0" prefWidth="573.0">
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -21,8 +21,6 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Button mnemonicParsing="false" text="Schließen" />
-    <Button mnemonicParsing="false" text="Zurück" />
-    <Button mnemonicParsing="false" text="Weiter" />
+    <Button layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleBack" text="Zurück" />
   </children>
-</FlowPane>
+</AnchorPane>

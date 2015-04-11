@@ -2,6 +2,7 @@ package org.cubyte.edumon.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -52,6 +53,7 @@ public class Main extends Application {
     private final ClientConfig clientConfig;
     private final File appData;
     private Stage stage;
+    private final ScheduledExecutorService scheduledExecutorService;
 
     public Main() {
         keyListener = new KeyListener();
@@ -92,6 +94,8 @@ public class Main extends Application {
             System.err.println("Could not load tray icon.");
             System.err.println(e.getMessage());
         }
+
+        scheduledExecutorService = Executors.newScheduledThreadPool(5);
     }
 
     public static void main(String[] args) {
@@ -105,6 +109,9 @@ public class Main extends Application {
         final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");
         ArrayList<String> list = new ArrayList<>();
         list.add("Jonas Dann");
+        list.add("Phillip Schichtel");
+        list.add("Marco Dörfler");
+        list.add("Niko Berkmann");
         messageQueueMod.queue(messageFactoryMod.create(new NameList(list, "160C", new Dimensions(5, 5))));
         messageQueueMod.send();
         // temporary
@@ -183,7 +190,6 @@ public class Main extends Application {
     }
 
     private void scheduleExecutors() {
-        final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new SensorFetcher(), 0, 1, TimeUnit.SECONDS);
         scheduledExecutorService.scheduleAtFixedRate(new MessageSender(), 0, 1, TimeUnit.SECONDS);
     }
@@ -234,11 +240,20 @@ public class Main extends Application {
         public javafx.scene.Scene getScene() {
             return toSceneMap.get(this);
         }
+
+        public Controller getController() {
+            return toControllerMap.get(this);
+        }
     }
 
-    public void changeScene(Scene scene) {
-        stage.setScene(scene.getScene());
-        stage.show();
+    public void changeScene(final Scene scene) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                stage.setScene(scene.getScene());
+                stage.show();
+            }
+        });
     }
 
     public MessageQueue getQueue() {
@@ -259,6 +274,10 @@ public class Main extends Application {
 
     public void setRoom(String room) {
         clientConfig.room = room;
+    }
+
+    public ScheduledExecutorService getScheduledExecutorService() {
+        return scheduledExecutorService;
     }
 
     private class SensorFetcher implements Runnable {
