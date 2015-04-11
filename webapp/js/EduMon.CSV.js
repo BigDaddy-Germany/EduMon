@@ -1,7 +1,7 @@
 /*
 	method createCourseFromCsv depends on EduMon.Data
  */
-EduMon.CSV = new function CSV() {
+EduMon.CSV = new function() {
 	var that = this;
 
 	/**

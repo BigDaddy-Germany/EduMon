@@ -82,7 +82,7 @@ EduMon.Data = new function() {
 				 (like analytics or timeline)
 			 */
 
-			var currentLecure =  {
+			return {
 				lectureName: lectureObject.lectureName,
 				room: roomObject,
 				course: courseObject,
@@ -133,8 +133,6 @@ EduMon.Data = new function() {
 					*/}
 				}
 			};
-
-			return currentLecure;
 		}
 	};
 };

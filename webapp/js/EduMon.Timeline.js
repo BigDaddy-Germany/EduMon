@@ -1,4 +1,4 @@
-window.EduMon.Timeline = new function Timeline() {
+EduMon.Timeline = new function() {
 	var that = this;
 
 	var tick_interval = 5; //in seconds
@@ -7,27 +7,27 @@ window.EduMon.Timeline = new function Timeline() {
 	
 	var timeline; //comfort
 
-	this.play = function play() {
+	this.play = function() {
 		if (EduMon.Prefs.currentLecture.timeline.status!=="play"){
 			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"lecture"});
 			EduMon.Prefs.currentLecture.timeline.status = "play";
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
 	};
 
-	this.pause = function pause() {
+	this.pause = function() {
 		if (EduMon.Prefs.currentLecture.timeline.status==="play"){
 			EduMon.Prefs.currentLecture.timeline.slices.push({seconds:0,type:"break"});
 			EduMon.Prefs.currentLecture.timeline.status = "pause";
 		} else throw "Timeline-Unterbrechung nicht erlaubt, Timer lief nicht";
 	};
 
-	this.stop = function stop() {
+	this.stop = function() {
 		clearInterval(timer);
 		EduMon.Prefs.currentLecture.timeline.status = "stop";
 		//TODO is irreversible - shall it be? (logic: you can only finish a lecture once)
 	};
 	
-	var tick = function tick() {
+	var tick = function() {
 		if (EduMon.Prefs.currentLecture.timeline.status!=="stop"){
 			var currentSlice = timeline.slices[timeline.slices.length-1];
 			currentSlice.seconds += tick_value;
@@ -36,14 +36,14 @@ window.EduMon.Timeline = new function Timeline() {
 		}
 	};
 
-	this.init = function init(){
+	this.init = function(){
 		//Timer is always active, but timer tick does not always trigger action
 		//this prevents seconds getting lost
 		timer = setInterval(tick, tick_interval*1000);
 		timeline = EduMon.Prefs.currentLecture.timeline;
 	};
 
-	var updateTimeline = function updateTimeline(){
+	var updateTimeline = function(){
 		var totalPercentage = 0; //remember how full the bar is
 		var barPercentage;
 		var barActiveClass = "";
@@ -62,13 +62,14 @@ window.EduMon.Timeline = new function Timeline() {
 			}
 
 			//create new slice if necessary
-			if($("#progressdisplay").children().length<=i){
+			var progressDisplay = $("#progressdisplay");
+            if(progressDisplay.children().length<=i){
 				var barType = (timeline.slices[i].type==="lecture"?"success":"warning");
-				$("#progressdisplay").append($("<div/>").addClass("progress-bar progress-bar-"+barType));
+				progressDisplay.append($("<div/>").addClass("progress-bar progress-bar-"+barType));
 			}
 
 			//update slice
-			$("#progressdisplay").children().eq(i)
+			progressDisplay.children().eq(i)
 				.width(barPercentage+"%")
 				.text(Math.floor(timeline.slices[i].seconds/60)+"min")
 				.toggleClass("active",isLastBar)

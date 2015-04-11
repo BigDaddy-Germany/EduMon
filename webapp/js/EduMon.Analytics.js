@@ -61,7 +61,7 @@ EduMon.Analytics = function() {
      *
      * This is really fancy magic including but not limited to unicorns :)
      */
-    this.calculateAllDisturbances = function() {
+    var calculateAllDisturbances = function() {
         var setOfValues = {};
         var averageValues = {};
         var minimumValues = {};

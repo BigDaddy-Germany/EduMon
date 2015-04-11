@@ -130,7 +130,7 @@ EduMon.Math = new function() {
      * Calculates the extreme value ("biggest" in case of the compare function) of a given array of values
      * @param {Array} values the values
      * @param {Function} compare the compare function
-     * @return {*|T} The extreme value
+     * @return {*} The extreme value
      */
     this.extremeValue = function(values, compare) {
         values = values.slice(0);

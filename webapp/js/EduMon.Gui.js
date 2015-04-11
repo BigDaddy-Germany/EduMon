@@ -1,4 +1,4 @@
-EduMon.Gui = new function Gui() {
+EduMon.Gui = new function() {
 	var that = this;
 
 	var countFeedMessages = 0;
@@ -19,7 +19,7 @@ EduMon.Gui = new function Gui() {
 	 * @param {String} title The message title
 	 * @param {String} message The html message to display
 	 */
-	this.showFeedMessage = function showFeedMessage(type, title, message) {
+	this.showFeedMessage = function(type, title, message) {
 		countFeedMessages++;
 		this.updateFeedCountView();
 		$("#alertcontainer")
@@ -33,10 +33,10 @@ EduMon.Gui = new function Gui() {
 							countFeedMessages--;
 							that.updateFeedCountView();
 							$(this).parent()
-							.css("visibility","hidden")
-							.slideUp(200,function(){
-								$(this).remove();
-							});
+								.css("visibility","hidden")
+								.slideUp(200,function(){
+									$(e.target).remove();
+								});
 						}))
 					.append($("<h4/>").text(title))
 					.append($("<p/>").html(message))
@@ -46,7 +46,7 @@ EduMon.Gui = new function Gui() {
 	/**
 	 * Refresh the "n Messages"-Counter in the newsfeed panel
 	 */
-	this.updateFeedCountView = function updateFeedCountView() {
+	this.updateFeedCountView = function() {
 		$("#feedcounter").html("<span class=\"badge\">"+countFeedMessages+"</span> Nachricht"+(countFeedMessages!==1?"en":""));
 	};
 
@@ -70,13 +70,13 @@ EduMon.Gui = new function Gui() {
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
 	 */
-	this.showDialog = function showDialog(dialogid) {
+	this.showDialog = function(dialogid) {
 		if (dialogOpened){
 			throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
 		}
 		dialogOpened = 1;
 		$("#dialogcontent").empty();
-		this.setDialogBlock(1);
+		this.setDialogBlock(true);
 		$("#layercontainer").show();
 		if (!popupOpened){
 			$("#popupcontainer").hide();
@@ -89,11 +89,11 @@ EduMon.Gui = new function Gui() {
 	 * Switch from the current dialog to another
 	 * @param {String} dialogid [see showDialog()]
 	 */
-	this.switchDialog = function switchDialog(dialogid) {
+	this.switchDialog = function(dialogid) {
 		if (!dialogOpened){
 			throw "No dialog currently open to switch from. Use openDialog() instead";
 		}
-		this.setDialogBlock(1);
+		this.setDialogBlock(true);
 		loadDialog(dialogid);
 	};
 
@@ -101,7 +101,7 @@ EduMon.Gui = new function Gui() {
 	 * Display or hide the loading/busy indicator of the dialog
 	 * @param {Boolean} blocked Set to 1 for display and 0 to hide the blocker
 	 */
-	this.setDialogBlock = function setDialogBlock(blocked) {
+	this.setDialogBlock = function(blocked) {
 		if (blocked){
 			$("#loadingbox").hide().delay(500).fadeIn(500);
 			$("#loadinglayer").show();
@@ -114,7 +114,7 @@ EduMon.Gui = new function Gui() {
 	/**
 	 * Close the active dialog
 	 */
-	this.closeDialog = function closeDialog() {
+	this.closeDialog = function() {
 		$("#dialogcontainer").fadeOut(100,function(){
 			if (!popupOpened){
 				$("#layercontainer").hide();
@@ -128,12 +128,12 @@ EduMon.Gui = new function Gui() {
 	 * Display a toast notification that disappears after a little while
 	 * @param {String} message Message to be displayed
 	 */
-	this.showToast = function showToast(message) {
+	this.showToast = function(message) {
 		$("#toastlist")
 			.prepend($("<li/>")
 					.append($("<div/>").text(message))
 					.one("click",function(e){
-						$(this).remove();
+						$(e.target).remove();
 					})
 					.delay(2000)
 					.fadeOut(1000,function(){
@@ -148,7 +148,7 @@ EduMon.Gui = new function Gui() {
 	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
 	 * @param {Function} callback Function to be called on button click, will be given button value as parameter
 	 */
-	this.showPopup = function showPopup(title, message, buttons, callback) {
+	this.showPopup = function(title, message, buttons, callback) {
 		if (popupOpened){
 			throw "Cannot open another popup. The current one has to be closed first";
 		}
@@ -156,12 +156,13 @@ EduMon.Gui = new function Gui() {
 		$("#layercontainer").show();
 		$("#popuptitle").text(title);
 		$("#popupmessage").text(message);
-		$("#popupfooter").empty();
+		var popupfooter = $("#popupfooter");
+		popupfooter.empty();
 		for (var i = 0; i < buttons.length; i++){
 			if ((typeof (buttons[i])==="string") && (buttons[i] in defaultButtons)){
 				buttons[i] = defaultButtons[buttons[i]];
 			}
-			$("#popupfooter").append(
+			popupfooter.append(
 					$("<button/>",{type:"button"})
 					.addClass("btn btn-"+buttons[i].class)
 					.text(buttons[i].text)
@@ -169,7 +170,7 @@ EduMon.Gui = new function Gui() {
 					);
 		}
 		popupCallback = callback || function(){};
-		$("#popupfooter button").one("click",function(){
+		popupfooter.find("button").one("click",function(){
 			that.closePopup();
 			popupCallback($(this).data("returnvalue"));
 		});
@@ -179,7 +180,7 @@ EduMon.Gui = new function Gui() {
 	/**
 	 * Closes the popup box
 	 */
-	this.closePopup = function closePopup() {
+	this.closePopup = function() {
 		$("#popupcontainer").hide();
 		if (!dialogOpened){
 			$("#layercontainer").hide();
@@ -194,8 +195,8 @@ EduMon.Gui = new function Gui() {
 	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
 	 * @param {String} content Text to display on the seat (TO BE EXTENDED BY SIO [SEAT INFORMATION OBJECT])
 	 */
-	this.updateSeat = function updateSeat(row, number, activity, content) {
-		var seats = $("#seats tbody");
+	this.updateSeat = function(row, number, activity, content) {
+		var seats = $("#seats").find("tbody");
         if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
 		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
 		var seat = seats.children().eq(seatsInfo.height-row).children().eq(seatsInfo.width-number);
