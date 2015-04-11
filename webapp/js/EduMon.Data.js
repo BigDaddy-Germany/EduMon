@@ -112,6 +112,13 @@ EduMon.Data = new function() {
 					SESSID: { fancy stuff like above }
 				*/},
 
+				seatingPlan: [/*
+					// access via seatingPlan[x][y]
+					5: [
+						3: sessionId
+					]
+				*/],
+
 				timeline: {
 					status: "stop", // "stop" | "play" | "pause"
 					totalSeconds: 1, //start value 1 is intended
