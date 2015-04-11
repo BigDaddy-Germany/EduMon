@@ -1,5 +1,7 @@
 /*
-    Depends on EduMon.Prefs
+    Depends on
+       - EduMon.Prefs
+       - EduMon.Math
  */
 EduMon.Analytics = new function() {
 
@@ -10,7 +12,7 @@ EduMon.Analytics = new function() {
     var micNormalizationPeriod = 60*5;
     var micMinimumEntries = 10;
     var curValPeriod = 5;
-    var minimalGlobalReferenceValues = 5;
+    var minimalGlobalReferenceValues = 3;
 
     var weights = {
         microphone: 1,
@@ -54,16 +56,21 @@ EduMon.Analytics = new function() {
     /**
      * Calculates the disturbance for all active students, if there are at least
      * minimalGlobalReferenceValues entries in minimalGlobalReference
+     *
+     * This is really fancy magic including but not limited to unicorns :)
      */
-    var calculateAllDisturbances = function() {
+    this.calculateAllDisturbances = function() {
         var averageValues = {};
         var minimumValues = {};
         var maximumValues = {};
-        var numberOfValues = {};
+        var setOfValues = {};
 
+        // iterate over all senders to get minimum, maximum average of each property
         for (var sender in analytics.globalReferenceValues) {
             if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
                 var referenceValue = analytics.globalReferenceValues[sender];
+
+                // iterate over properties to add or calculate minimum or maximum new
                 for (var propertyName in referenceValue) {
                     if (referenceValue.hasOwnProperty(propertyName)) {
                         if (averageValues[propertyName]) {
@@ -71,12 +78,12 @@ EduMon.Analytics = new function() {
                             averageValues[propertyName] += referenceValue[propertyName];
                             minimumValues[propertyName] = Math.min(minimumValues[propertyName], referenceValue[propertyName]);
                             maximumValues[propertyName] = Math.max(maximumValues[propertyName], referenceValue[propertyName]);
-                            ++numberOfValues[propertyName];
+                            setOfValues[propertyName].push(referenceValue[propertyName]);
                         } else {
                             averageValues[propertyName] = referenceValue[propertyName];
                             minimumValues[propertyName] = referenceValue[propertyName];
                             maximumValues[propertyName] = referenceValue[propertyName];
-                            numberOfValues[propertyName] = 1;
+                            setOfValues[propertyName] = [referenceValue[propertyName]];
                         }
                     }
                 }
@@ -84,59 +91,53 @@ EduMon.Analytics = new function() {
         }
 
 
-        for (propertyName in numberOfValues) {
-            if (numberOfValues.hasOwnProperty(propertyName)) {
+        // functions to scale user later go here
+        var scales = {};
+
+        // iterate over properties to calculate scaling function
+        for (propertyName in setOfValues) {
+            if (setOfValues.hasOwnProperty(propertyName)) {
 
                 // only calculate the index, if the minimal number is reached
-                if (numberOfValues[propertyName] >= minimalGlobalReferenceValues) {
-                    averageValues[propertyName] /= numberOfValues[propertyName];
+                if (setOfValues[propertyName].length >= minimalGlobalReferenceValues) {
+                    averageValues[propertyName] /= setOfValues[propertyName].length;
 
-                    // iterate over all them senders
-                    for (sender in analytics.globalReferenceValues) {
-                        if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
-                            var senderValues = analytics.globalReferenceValues[sender];
-
-                        }
-                    }
+                    // get function to scale student in a really fancy way with lagrange :)
+                    scales[propertyName] = EduMon.Math.interpolatePolynomialByLagrange(
+                        [minimumValues[propertyName], 0],
+                        [averageValues[propertyName], 5],
+                        [maximumValues[propertyName], 10]
+                    );
                 }
             }
         }
 
-    };
 
-    /**
-     * Interpolates a polynomial with Lagrange
-     * @param {... Array} - The points to interpolate with Lagrange
-     * @return {Function}
-     */
-    this.interpolatePolynomialByLagrange = function() {
-        function createLagrangePolynomial(k, points) {
-            return function (x) {
-                var returnValue = 1;
-                for (var i = 0; i < n; i++) {
-                    if (i != k) {
-                        returnValue *= (x - points[i][0]) / (points[k][0] - points[i][0]);
+        // finally, iterate over all senders again to rate them per property and calculate final index
+        for (sender in analytics.globalReferenceValues) {
+            if (analytics.globalReferenceValues.hasOwnProperty(sender)) {
+                var senderValue = analytics.globalReferenceValues[sender];
+
+                var theReallyFinalIndex = 0;
+                var sumPropertyWeights = 0;
+
+                // iterate over properties to calculate final rating now
+                for (propertyName in setOfValues) {
+                    // that shit with hasOwnProperty again. hopefully last time now
+                    if (setOfValues.hasOwnProperty(propertyName)) {
+                        var weight = weights[propertyName];
+                        theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
+                        sumPropertyWeights += weight;
                     }
                 }
-                return returnValue;
-            };
-        }
 
-        var points = arguments;
-        var n = points.length;
-        var lagrangePolynomials = [];
+                theReallyFinalIndex /= sumPropertyWeights;
 
-        for (var k = 0; k < n; k++) {
-            lagrangePolynomials.push(createLagrangePolynomial(k, points));
-        }
 
-        return function(x) {
-            var returnValue = 0;
-            for (var i = 0; i < n; i++) {
-                returnValue += points[i][1] * lagrangePolynomials[i](x);
+                activeStudents[sender].disturbance = theReallyFinalIndex;
             }
-            return returnValue;
-        };
+        }
+
     };
 
 
@@ -198,25 +199,6 @@ EduMon.Analytics = new function() {
 
         return micValue * historyCount / Math.max(historyAverage, 1);
     };
-
-
-
-    /**
-     * Calculates the average value of a given Array of numbers
-     * @param {Array} values The values to calculate the average
-     * @returns {number} The calculated average
-     */
-    var arithmeticAverage = function(values) {
-        if (values.length == 0) {
-            return 0;
-        }
-        var sum = 0;
-        values.forEach(function(value) {
-            sum += value;
-        });
-        return sum/values.length;
-    };
-
 
 
     /**

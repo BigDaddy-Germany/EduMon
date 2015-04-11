@@ -48,10 +48,10 @@ EduMon.Prefs.currentLecture = {
         globalReferenceValues: {
             /*
              sender: {
-                 microphone: {},
-                 keyboard: {},
-                 mouseDistance: {},
-                 mouseClicks: {}
+                 microphone: 12,
+                 keyboard: 32,
+                 mouseDistance: 312,
+                 mouseClicks: 123
              }
              */
         }
