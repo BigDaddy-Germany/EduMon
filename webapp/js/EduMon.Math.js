@@ -78,6 +78,35 @@ EduMon.Math = new function() {
 
 
     /**
+     * Calculates the Gini Index of given values
+     * @param {Array} values the given values
+     * @return {number} the calculated gini index
+     */
+    this.giniIndex = function(values) {
+        var n = values.length;
+
+        var upperSum = 2 * that.sumOver(0, n, function(k) { return (k+1) * values[k]; });
+        var lowerSum = n * that.sumOver(0, n, function(k) { return values[k]; });
+
+        return upperSum / lowerSum - (n + 1) / n;
+    };
+
+
+    /**
+     * Calculates the maximum of an array using the native Math.max
+     * @param {Array}values the given values
+     * @return {number} the calculated maximum
+     */
+    this.max = function(values) {
+        var max = values[0];
+        values.forEach(function(value) {
+            max = Math.max(max, value);
+        });
+        return max;
+    };
+
+
+    /**
      * Calculates the mathematical sum
      * @param {int} from the start value
      * @param {int} to the end value (exclusive)
