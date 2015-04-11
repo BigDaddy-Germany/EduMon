@@ -16,12 +16,12 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new course object
-	 * @param {String} courseName A name to identify the course
+	 * @param {String} name A name to identify the course
 	 * @param {Student[]} students An array of all students in the course
 	 */
-	this.Course = function Course(courseName, students) {
+	this.Course = function Course(name, students) {
 		return {
-			courseName: courseName,
+			name: name,
 			students: students
 		};
 	};
@@ -65,7 +65,7 @@ EduMon.Data = new function() {
 	 * 					height: {int}
 	 * 				},
 	 * 				course: {
-	 * 					courseName: {String},
+	 * 					name: {String},
 	 * 					students: Array({Student})
 	 *	 			},
 	 *	 			activeStudents: {}
