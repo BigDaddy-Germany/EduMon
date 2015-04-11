@@ -100,6 +100,7 @@
 							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
 							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
 							<input type="button" value="Demo: Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);})">
+							<input type="button" value="RandomColorSeats" id="RandomColorSeats">
 						</div>
 					</div>
 
@@ -162,14 +163,13 @@
 				EduMon.Gui.showToast("Hallo Welt! Dies ist ein Testtoast...");
 				EduMon.Gui.showToast("Lorem ipsum :)");
 
-				window.setInterval(function(){
-					for (var x=1; x<=7; x++){
-					for (var y=1; y<=7; y++){
+				$("#RandomColorSeats").click(function(){
+					for (var x=1; x<=7; x++){ for (var y=1; y<=7; y++){
 					EduMon.Gui.updateSeat(x,y,Math.random(),"Info");
 					}
 					}
+					});
 
-					},200);
 				});
 		</script>
 

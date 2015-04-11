@@ -11,7 +11,7 @@ window.EduMon.Gui = new function Gui() {
 		"ok":     {text:"OK",       value:"ok",    class:"primary"},
 		"cancel": {text:"Abbrechen",value:"cancel",class:"default"}
 	};
-	var seats = {width: -1, height: -1};
+	var seatsInfo = {width: -1, height: -1};
 
 	/**
 	 * Add message to newsfeed
@@ -196,9 +196,9 @@ window.EduMon.Gui = new function Gui() {
 	 */
 	this.updateSeat = function updateSeat(row, number, activity, content) {
 		var seats = $("#seats tbody");
-        if (seats.height===-1) seats.height = seats.children().length;
-		if (seats.width ===-1) seats.width  = seats.children().first().children().length;
-		var seat = seats.children().eq(seats.height-row).children().eq(seats.width-number);
+        if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
+		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
+		var seat = seats.children().eq(seatsInfo.height-row).children().eq(seatsInfo.width-number);
 
 		seat.text(content);
 
