@@ -118,13 +118,6 @@ public class Main extends Application {
 
         // Launch JavaFX Application
         Main.launch(args);
-
-        main.messageQueue.queue(main.messageFactory.create(new WhoAmI("Jonas Dann", new Position(1, 1))));
-        main.messageQueue.send();
-
-        main.addAppToSystemTray();
-        main.registerSensorListeners();
-        main.scheduleExecutors();
     }
 
     @Override
@@ -140,6 +133,12 @@ public class Main extends Application {
         });
         this.stage = stage;
         changeScene(LOGIN);
+    }
+
+    public void startBackgroundExecution() {
+        addAppToSystemTray();
+        registerSensorListeners();
+        scheduleExecutors();
     }
 
     private void registerSensorListeners() {
@@ -198,7 +197,8 @@ public class Main extends Application {
         LOGIN,
         LOADING,
         NAME_CHOOSER,
-        SEAT_CHOOSER;
+        SEAT_CHOOSER,
+        LOGIN_CONFIRM;
 
         private static final HashMap<Scene, javafx.scene.Scene> toSceneMap = new HashMap<>();
         private static final HashMap<Scene, Controller> toControllerMap = new HashMap<>();
@@ -256,8 +256,21 @@ public class Main extends Application {
         });
     }
 
+    public void hide() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                stage.hide();
+            }
+        });
+    }
+
     public MessageQueue getQueue() {
         return messageQueue;
+    }
+
+    public MessageFactory getFactory() {
+        return messageFactory;
     }
 
     public String getServer() {

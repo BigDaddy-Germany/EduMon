@@ -13,6 +13,7 @@ import java.util.concurrent.*;
 
 import static org.cubyte.edumon.client.Main.Scene.LOGIN;
 import static org.cubyte.edumon.client.Main.Scene.NAME_CHOOSER;
+import static org.cubyte.edumon.client.Main.Scene.SEAT_CHOOSER;
 
 public class LoadingController implements Victim<Message>, Controller {
     private Main app;
@@ -54,7 +55,9 @@ public class LoadingController implements Victim<Message>, Controller {
     @Override
     public void take(Message bullet) {
         //TODO what is when no namelist is on the server?
-        ((NameChooserController)NAME_CHOOSER.getController()).setNameList(((NameList) bullet.body).names);
+        NameList nameList = ((NameList) bullet.body);
+        ((NameChooserController)NAME_CHOOSER.getController()).setNameList(nameList.names);
+        ((SeatChooserController)SEAT_CHOOSER.getController()).storeDimensions(nameList.dimensions);
         app.changeScene(NAME_CHOOSER);
     }
 }

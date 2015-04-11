@@ -27,7 +27,7 @@ public class NameChooserController implements Controller {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 name = newValue;
-                ((SeatChooserController) SEAT_CHOOSER.getController()).setRoomAndName(app.getRoom(), name);
+                ((SeatChooserController) SEAT_CHOOSER.getController()).setRoomAndName(app.getRoom(), name).setDimensions();
                 app.changeScene(SEAT_CHOOSER);
             }
         });

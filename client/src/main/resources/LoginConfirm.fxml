@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoginConfirmController">
+  <children>
+    <Label layoutX="173.0" layoutY="192.0" text="Sie haben sich erfolgreich eingeloggt..." textFill="#0c9900" />
+    <Label fx:id="time" alignment="CENTER" layoutX="14.0" layoutY="219.0" prefWidth="572.0" text="Label" textAlignment="LEFT" textFill="#606060" />
+  </children>
+</AnchorPane>
