@@ -99,8 +99,12 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        final Main main = new Main();
+        // Launch JavaFX Application
+        Main.launch(args);
+    }
 
+    @Override
+    public void start(Stage stage) {
         // temporary
         final Main mainMod = new Main();
         mainMod.setServer("http://vps2.code-infection.de/edumon/mailbox.php");
@@ -116,12 +120,6 @@ public class Main extends Application {
         messageQueueMod.send();
         // temporary
 
-        // Launch JavaFX Application
-        Main.launch(args);
-    }
-
-    @Override
-    public void start(Stage stage) {
         Scene.setApp(this);
         stage.setTitle("Login");
         stage.setResizable(false);

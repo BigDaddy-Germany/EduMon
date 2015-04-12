@@ -57,7 +57,7 @@ public class SeatChooserController implements Controller {
                 for(int x = 0; x < dimensions.width; x++) {
                     for(int y = 0; y < dimensions.height; y++) {
                         final Hyperlink link = new Hyperlink(name);
-                        final int seatX = x; final int seatY = y;
+                        final int seatX = x; final int seatY = y + 1;
                         link.setPrefSize(columnWidth, rowHeight);
                         link.setAlignment(Pos.CENTER);
                         link.setStyle("-fx-text-fill: #fff;");
@@ -76,7 +76,7 @@ public class SeatChooserController implements Controller {
                         link.setOnMouseClicked(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent mouseEvent) {
-                                app.getQueue().queue(app.getFactory().create(new WhoAmI(name, new Position(seatX, seatY))));
+                                app.getQueue().queue(app.getFactory().create(new WhoAmI(name, new Position(dimensions.width - seatX, seatY))));
                                 app.getQueue().send();
                                 app.changeScene(LOGIN_CONFIRM);
                                 ((LoginConfirmController) LOGIN_CONFIRM.getController()).confirmLogin();

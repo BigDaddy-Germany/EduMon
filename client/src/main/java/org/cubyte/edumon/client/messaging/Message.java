@@ -140,7 +140,7 @@ public class Message implements Bullet {
     public static class DateToIntegerConverter implements Converter<Date, Integer> {
         @Override
         public Integer convert(Date date) {
-            return Math.round(date.getTime() / 1000);
+            return (int)Math.round(date.getTime() / 1000d);
         }
         @Override
         public JavaType getInputType(TypeFactory typeFactory) {
