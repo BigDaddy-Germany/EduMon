@@ -248,5 +248,94 @@ EduMon.Math = new function() {
     this.log = function(x, basis) {
         basis = basis || 10;
         return Math.log(x) / Math.log(basis);
-    }
+    };
+
+
+
+    this.rgbToHsv = function(red, green, blue) {
+        red   /= 255;
+        green /= 255;
+        blue  /= 255;
+
+        var max = EduMon.Math.max([red, green, blue]);
+        var min = EduMon.Math.min([red, green, blue]);
+
+        var delta = max - min;
+
+        var hue = 0;
+        var saturation = 0;
+        var value = max;
+
+        if (min === max) {
+            hue = 0;
+        } else if (max === red) {
+            hue = 60 * (((green - blue) % 6) / delta);
+        } else if (max === green) {
+            hue = 60 * ((blue - red) / delta + 2);
+        } else if (max === blue) {
+            hue = 60 * ((red - green) / delta + 4);
+        } else {
+            throw "Hue calculation failed!"
+        }
+
+        if (max > 0) {
+            saturation = delta / max;
+        }
+
+        if (hue < 0) {
+            hue += 360;
+        }
+
+        return [hue, saturation, value]
+    };
+
+    this.hsvToRgb = function(hue, saturation, value) {
+
+        hue = Math.floor(hue / 60);
+
+        var c = value * saturation;
+        var x = c * (1 - Math.abs((hue % 2) - 1));
+        var m = value - c;
+
+        var r = 0;
+        var g = 0;
+        var b = 0;
+
+        switch (Math.floor(hue)) {
+            case 0:
+                r = c;
+                g = x;
+                b = 0;
+                break;
+            case 1:
+                r = x;
+                g = c;
+                b = 0;
+                break;
+            case 2:
+                r = 0;
+                g = c;
+                b = x;
+                break;
+            case 3:
+                r = 0;
+                g = x;
+                b = c;
+                break;
+            case 4:
+                r = x;
+                g = 0;
+                b = c;
+                break;
+            case 5:
+                r = c;
+                g = 0;
+                b = x;
+                break;
+            default:
+                throw "HSV to RGB conversion failed!";
+        }
+
+        return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+    };
 };
