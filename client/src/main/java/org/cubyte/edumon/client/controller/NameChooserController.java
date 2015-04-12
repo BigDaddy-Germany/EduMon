@@ -52,7 +52,7 @@ public class NameChooserController implements Controller {
                     handleBack();
                 }
             }
-        }); //TODO handle key input and search for names
+        });
     }
 
     @Override
@@ -79,7 +79,7 @@ public class NameChooserController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                nameList.setItems(FXCollections.observableArrayList(app.getRoomState().nameList.names)); //TODO prefocus name from config
+                nameList.setItems(FXCollections.observableArrayList(app.getRoomState().nameList.names));
             }
         });
     }

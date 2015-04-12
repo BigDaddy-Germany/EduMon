@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" style="" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.ThumbfeedbackController">
+  <children>
+    <AnchorPane layoutX="5.0" layoutY="5.0" minHeight="86.0" prefHeight="90.0" prefWidth="290.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);">
+      <children>
+        <Label layoutX="30.0" layoutY="37.0" text="Test" textFill="#0c9900" />
+            <Label layoutX="81.0" layoutY="14.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F9 bis der Daumen Ihrem Feedback entspricht." wrapText="true" />
+      </children>
+    </AnchorPane>
+  </children>
+  <padding>
+    <Insets />
+  </padding>
+</AnchorPane>

@@ -10,6 +10,7 @@ import org.cubyte.edumon.client.messaging.Message;
 import java.awt.*;
 
 import static org.cubyte.edumon.client.Scene.BREAK_REQUEST_CONFIRM;
+import static org.cubyte.edumon.client.Scene.THUMBFEEDBACK;
 
 public class NotificationSystem implements Victim<Message> {
     private Stage stage;
@@ -21,6 +22,7 @@ public class NotificationSystem implements Victim<Message> {
                 stage = new Stage();
                 stage.initStyle(StageStyle.TRANSPARENT);
                 BREAK_REQUEST_CONFIRM.getScene().setFill(null);
+                THUMBFEEDBACK.getScene().setFill(null);
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 stage.setX(screenSize.getWidth() - 350);
                 stage.setY(screenSize.getHeight() - 150);

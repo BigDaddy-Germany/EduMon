@@ -60,7 +60,7 @@ public class Main extends Application {
         messageQueue = new MessageQueue(this);
         messageFactory = new MessageFactory(this, "MODERATOR");
 
-        try { //TODO window iconse
+        try {
             trayIcon = new TrayIcon(ImageIO.read(getClass().getResourceAsStream(TRAY_ICON)));
         } catch (IOException e) {
             System.err.println("Could not load tray icon.");
@@ -102,7 +102,7 @@ public class Main extends Application {
     }
 
     public void resetToLogin() {
-        stage.setTitle("Login"); //TODO maybe rename title in login screens
+        stage.setTitle("Login");
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {

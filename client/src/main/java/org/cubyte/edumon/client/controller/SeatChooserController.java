@@ -101,7 +101,7 @@ public class SeatChooserController implements Controller {
                         });
                         seatingplan.add(link, x, y);
                     }
-                } //TODO profocus seat from config
+                }
             }
         });
     }

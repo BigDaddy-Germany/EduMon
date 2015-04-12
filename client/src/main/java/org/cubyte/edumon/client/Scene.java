@@ -15,8 +15,8 @@ public enum Scene {
     SEAT_CHOOSER,
     LOGIN_CONFIRM,
     OPTIONS,
-    BREAK_REQUEST_CONFIRM;
-    //THUMBFEEDBACK,
+    BREAK_REQUEST_CONFIRM,
+    THUMBFEEDBACK;
     //REVIEW;
 
     private static final HashMap<Scene, javafx.scene.Scene> toSceneMap = new HashMap<>();
