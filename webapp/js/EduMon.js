@@ -245,7 +245,11 @@ EduMon = new function() {
 		EduMon.Gui.initSeating();
 		broadcastCurrentLecture();
 		EduMon.sendPacket({command:'start'});
-	}
+	};
+
+	this.stopLecture = function(){
+		EduMon.sendPacket({command:'stop'});
+	};
 
 	/* [DEV] Send demo packet */
 	this.sendDemo = function(typenumber){

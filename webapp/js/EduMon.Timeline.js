@@ -52,6 +52,7 @@ EduMon.Timeline = new function() {
 						timeline.status = "stop";
 						lectureOver = true;
 						updateTimeline();
+						EduMon.stopLecture();
 					}
 				},true);
 	};
