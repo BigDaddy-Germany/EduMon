@@ -145,8 +145,6 @@ Array.prototype.insertIntoFirstFreeSlot = function(element) {
  * @return {number} the calculated index
  */
 Array.prototype.firstUsedElement = function() {
-    var firstUsed;
-
     for (var i = 0; i < this.length; ++i) {
         if (this[i]) {
             return i;
