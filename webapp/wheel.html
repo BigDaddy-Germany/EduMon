@@ -49,7 +49,7 @@
 
                 function initializeData() {
                     // Ensure we start mid way on a item
-                    currentAngle = 0.5 * unit * segments[0][1] * TAU;
+                    currentAngle = TAU - 0.5 * unit * segments[0][1];
 
                     var len = segments.length;
                     var colorLen = colors.length;
@@ -136,11 +136,6 @@
                 }
 
                 function drawActive(text, startAngle, endAngle) {
-
-                    if ((startAngle % TAU) < (endAngle % TAU)) {
-                        return;
-                    }
-
                     // Now draw the winning name
                     context.textAlign = "left";
                     context.textBaseline = "middle";
@@ -149,18 +144,18 @@
                     context.fillText(text, centerX + size + 25, centerY);
                 }
 
-                function drawSegment(segment, color, baseAngle) {
+                function drawSegment(segment, color, startAngle) {
                     var text = segment[0];
                     var weight = segment[1];
 
-                    var angle = baseAngle + weight * unit;
+                    var endAngle = startAngle + weight * unit;
 
                     context.save();
                     context.beginPath();
 
                     // Start in the centre
                     context.moveTo(centerX, centerY);
-                    context.arc(centerX, centerY, size, baseAngle, angle, false); // Draw a arc around the edge
+                    context.arc(centerX, centerY, size, startAngle, endAngle, false); // Draw a arc around the edge
                     context.lineTo(centerX, centerY); // Now draw a line back to the centre
 
                     // Clip anything that follows to this area
@@ -174,17 +169,21 @@
                     // Now draw the text
                     context.save(); // The save ensures this works on Android devices
                     context.translate(centerX, centerY);
-                    context.rotate((baseAngle + angle) / 2);
+                    context.rotate((startAngle + endAngle) / 2);
 
                     context.fillStyle = '#000000';
                     context.fillText(text.substr(0, 20), size / 2 + 20, 0);
                     context.restore();
 
+                    if ((startAngle % TAU) >= (endAngle % TAU)) {
+                        drawActive(text, startAngle, endAngle);
+                    }
+
                     context.restore();
 
-                    drawActive(text, baseAngle, angle);
 
-                    return angle;
+
+                    return endAngle;
                 }
 
                 function drawWheel() {
@@ -252,7 +251,7 @@
                 ['Pasta4', 1.0],
                 ['Pasta5', 5.0],
                 ['Pasta6', 1.0],
-                ['Pasta7', 1.0],
+                ['Pasta7', 8.0],
                 ['Pasta8', 1.0],
                 ['Pasta9', 1.0],
                 ['Pasta0', 1.0]/*,
