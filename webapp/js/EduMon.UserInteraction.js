@@ -148,32 +148,6 @@ EduMon.UserInteraction = new function() {
         return new Promise();
     };
 
-
-    /**
-     * Opens a dialog and returns a promise to get the values entered by the user
-     * @param {String} dialogId the dialog's ID
-     * @param {Array} formIds all form IDs to return their content
-     * @return {Promise} fulfill will get a map from field IDs to their content
-     */
-    this.simplePromisingFormDialog = function(dialogId, formIds) {
-        return new Promise(function(fulfill, reject) {
-            var valueCalculator = function() {
-                var values = {};
-                formIds.forEach(function (formId) {
-                    var formField = $('#' + formId);
-                    if (formField) {
-                        values[formId] = formField.val();
-                    }
-                });
-                return values;
-            };
-
-            that.promisingDialog(dialogId, valueCalculator)
-                .then(fulfill)
-                .catch(reject);
-        });
-    };
-
     /**
      * Closes dialog, if lastOpenedDialog is undefined, otherwise switches to it
      * @param {String} lastOpenedDialog the dialog to switch to
