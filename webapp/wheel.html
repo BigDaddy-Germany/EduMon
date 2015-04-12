@@ -3,8 +3,12 @@
     <head>
         <title>Lunch Wheel</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="lib/jquery/js/jquery.min.js"></script>
-        <script type="text/javascript" src="lib/excanvas/js/excanvas.js"></script>
+        <script src="lib/jquery/js/jquery.min.js"></script>
+        <script src="lib/excanvas/js/excanvas.js"></script>
+        <script>
+            EduMon = {}
+        </script>
+        <script src="js/EduMon.Math.js"></script>
 
         <script type="text/javascript">
 
@@ -16,10 +20,13 @@
                 var HALF_PI = PI / 2;
                 var TAU = 2 * PI;
 
+                var weights = EduMon.Math.sumOver(0, segments.length, function(i) {return segments[i][1]});
+                var unit = TAU / weights;
+
                 var timerHandle = -1;
                 var timerDelay = 33;
 
-                var angleCurrent = 0;
+                var currentAngle = 0;
                 var angleDelta = 0;
 
                 var size = 290;
@@ -28,7 +35,7 @@
 
                 var segmentColors = [];
 
-                var maxSpeed = Math.PI / 16;
+                var maxSpeed = PI / 16;
 
                 var upTime = 1000;
                 var downTime = 17000;
@@ -42,9 +49,7 @@
 
                 function initializeData() {
                     // Ensure we start mid way on a item
-                    //var r = Math.floor(Math.random() * wheel.segments.length);
-                    var r = 0;
-                    angleCurrent = ((r + 0.5) / segments.length) * TAU;
+                    currentAngle = 0.5 * unit * segments[0][1] * TAU;
 
                     var len = segments.length;
                     var colorLen = colors.length;
@@ -52,9 +57,8 @@
                     // Generate a color cache (so we have consistent coloring)
                     var newSegmentColors = [];
                     for (var i = 0; i < len; i++) {
-                        newSegmentColors.push(colors[modulo(hashString(segments[i]), colorLen)]);
+                        newSegmentColors.push(colors[modulo(hashString(segments[i][0]), colorLen)]);
                     }
-
                     segmentColors = newSegmentColors;
 
                     draw();
@@ -81,7 +85,7 @@
                     return hash;
                 }
 
-                this.spin = function() {
+                this.start = function() {
 
                     // Start the wheel only if it's not already spinning
                     if (timerHandle == -1) {
@@ -110,10 +114,10 @@
                         }
                     }
 
-                    angleCurrent += angleDelta;
-                    while (angleCurrent >= TAU)
+                    currentAngle += angleDelta;
+                    while (currentAngle >= TAU)
                         // Keep the angle in a reasonable range
-                        angleCurrent -= TAU;
+                        currentAngle -= TAU;
 
                     if (finished) {
                         clearInterval(timerHandle);
@@ -125,68 +129,62 @@
                 function draw() {
                     clear();
                     drawWheel();
-                    drawNeedle();
                 }
 
                 function clear() {
                     context.clearRect(0, 0, 1000, 800);
                 }
 
-                function drawNeedle() {
-                    context.lineWidth = 1;
-                    context.strokeStyle = '#000000';
-                    context.fileStyle = '#ffffff';
+                function drawActive(text, startAngle, endAngle) {
 
-                    context.beginPath();
-
-                    context.moveTo(centerX + size - 40, centerY);
-                    context.lineTo(centerX + size + 20, centerY - 10);
-                    context.lineTo(centerX + size + 20, centerY + 10);
-                    context.closePath();
-
-                    context.stroke();
-                    context.fill();
-
-                    // Which segment is being pointed to?
-                    var i = segments.length - Math.floor((angleCurrent / TAU) * segments.length) - 1;
+                    if ((startAngle % TAU) < (endAngle % TAU)) {
+                        return;
+                    }
 
                     // Now draw the winning name
                     context.textAlign = "left";
                     context.textBaseline = "middle";
                     context.fillStyle = '#000000';
                     context.font = "2em Arial";
-                    context.fillText(segments[i], centerX + size + 25, centerY);
+                    context.fillText(text, centerX + size + 25, centerY);
                 }
 
-                function drawSegment(key, lastAngle, angle) {
-                    var value = segments[key];
+                function drawSegment(segment, color, baseAngle) {
+                    var text = segment[0];
+                    var weight = segment[1];
+
+                    var angle = baseAngle + weight * unit;
 
                     context.save();
                     context.beginPath();
 
                     // Start in the centre
                     context.moveTo(centerX, centerY);
-                    context.arc(centerX, centerY, size, lastAngle, angle, false); // Draw a arc around the edge
+                    context.arc(centerX, centerY, size, baseAngle, angle, false); // Draw a arc around the edge
                     context.lineTo(centerX, centerY); // Now draw a line back to the centre
 
                     // Clip anything that follows to this area
                     //ctx.clip(); // It would be best to clip, but we can double performance without it
                     context.closePath();
 
-                    context.fillStyle = segmentColors[key];
+                    context.fillStyle = color;
                     context.fill();
                     context.stroke();
 
                     // Now draw the text
                     context.save(); // The save ensures this works on Android devices
                     context.translate(centerX, centerY);
-                    context.rotate((lastAngle + angle) / 2);
+                    context.rotate((baseAngle + angle) / 2);
 
                     context.fillStyle = '#000000';
-                    context.fillText(value.substr(0, 20), size / 2 + 20, 0);
+                    context.fillText(text.substr(0, 20), size / 2 + 20, 0);
                     context.restore();
 
                     context.restore();
+
+                    drawActive(text, baseAngle, angle);
+
+                    return angle;
                 }
 
                 function drawWheel() {
@@ -197,13 +195,11 @@
                     context.textAlign = "center";
                     context.font = "1.4em Arial";
 
-                    var lastAngle = angleCurrent;
+                    var lastAngle = currentAngle;
                     var len = segments.length;
 
-                    for (var i = 1; i <= len; i++) {
-                        var angle = TAU * (i / len) + angleCurrent;
-                        drawSegment(i - 1, lastAngle, angle);
-                        lastAngle = angle;
+                    for (var i = 0; i < len; i++) {
+                        lastAngle = drawSegment(segments[i], segmentColors[i], lastAngle);
                     }
 
                     // Draw a center circle
@@ -224,6 +220,21 @@
                     context.lineWidth = 10;
                     context.strokeStyle = '#000000';
                     context.stroke();
+
+                    // draw the needle
+                    context.lineWidth = 1;
+                    context.strokeStyle = '#000000';
+                    context.fillStyle = '#ffffff';
+
+                    context.beginPath();
+
+                    context.moveTo(centerX + size - 40, centerY);
+                    context.lineTo(centerX + size + 20, centerY - 10);
+                    context.lineTo(centerX + size + 20, centerY + 10);
+                    context.closePath();
+
+                    context.stroke();
+                    context.fill();
                 }
             }
         </script>
@@ -235,46 +246,48 @@
         <script>
             var canvas = document.getElementById('canvas');
             var w = new Wheel(canvas, [
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pasta',
-                'Pizza'
+                ['Pasta1', 1.0],
+                ['Pasta2', 1.0],
+                ['Pasta3', 1.0],
+                ['Pasta4', 1.0],
+                ['Pasta5', 5.0],
+                ['Pasta6', 1.0],
+                ['Pasta7', 1.0],
+                ['Pasta8', 1.0],
+                ['Pasta9', 1.0],
+                ['Pasta0', 1.0]/*,
+                ['Pasta1', 1.0],
+                ['Pasta2', 1.0],
+                ['Pasta3', 1.0],
+                ['Pasta4', 1.0],
+                ['Pasta5', 1.0],
+                ['Pasta6', 1.0],
+                ['Pasta7', 1.0],
+                ['Pasta8', 1.0],
+                ['Pasta9', 1.0],
+                ['Pasta0', 1.0],
+                ['Pasta1', 1.0],
+                ['Pasta2', 1.0],
+                ['Pasta3', 1.0],
+                ['Pasta4', 1.0],
+                ['Pasta5', 1.0],
+                ['Pasta6', 1.0],
+                ['Pasta7', 1.0],
+                ['Pasta8', 1.0],
+                ['Pasta9', 1.0],
+                ['Pasta0', 1.0],
+                ['Pasta1', 1.0],
+                ['Pasta2', 1.0],
+                ['Pasta3', 1.0],
+                ['Pasta4', 1.0],
+                ['Pasta5', 1.0],
+                ['Pasta6', 1.0],
+                ['Pasta7', 1.0],
+                ['Pasta8', 1.0],
+                ['Pasta9', 1.0],
+                ['Pasta0', 1.0]*/
             ]);
-            $(canvas).on('click', w.spin);
+            $(canvas).on('click', w.start);
         </script>
     </body>
 </html>
