@@ -109,7 +109,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        // temporary
+        /*// temporary
         final Main mainMod = new Main();
         mainMod.setServer("http://vps2.code-infection.de/edumon");
         mainMod.setRoom("170C");
@@ -122,7 +122,7 @@ public class Main extends Application {
         list.add("Niko Berkmann");
         messageQueueMod.queue(messageFactoryMod.create(new NameList(list, "160C", new Dimensions(5, 5))));
         messageQueueMod.send();
-        // temporary
+        */// temporary
 
         Scene.setApp(this);
         stage.setTitle("Login");
@@ -173,6 +173,7 @@ public class Main extends Application {
         MenuItem optionsItem = new MenuItem("Einstellungen"); // TODO add listener
         MenuItem exitItem = new MenuItem("Anwendung schließen");
         exitItem.addActionListener(new ExitListener());
+        //TODO add logout item
 
         popup.add(breakRequestItem);
         popup.addSeparator();

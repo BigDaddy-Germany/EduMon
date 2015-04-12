@@ -5,6 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -30,6 +31,8 @@ public class LoginController implements Controller {
     private Hyperlink serverLink;
     @FXML
     private Pane popup;
+    @FXML
+    private Label serverError;
 
     @FXML
     private void initialize() {
@@ -53,8 +56,6 @@ public class LoginController implements Controller {
         setServer(serverAddress);
     }
 
-    //TODO red warning if server not pingable
-
     @FXML
     private void handleNext() {
         String room = this.room.getText();
@@ -72,6 +73,7 @@ public class LoginController implements Controller {
         serverAddress = server.getText();
         setServer(serverAddress);
         popup.setVisible(false);
+        serverError.setVisible(false);
         room.requestFocus();
     }
 
@@ -91,5 +93,9 @@ public class LoginController implements Controller {
     private void setServer(String server) {
         this.serverLink.setText("Server: " + server);
         this.server.setText(server);
+    }
+
+    public void serverNotReachable() {
+        serverError.setVisible(true);
     }
 }

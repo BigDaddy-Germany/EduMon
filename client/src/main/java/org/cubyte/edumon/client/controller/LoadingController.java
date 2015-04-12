@@ -51,6 +51,7 @@ public class LoadingController implements Victim<Message>, Controller {
         final MessageQueue queue = app.getQueue();
         if(!queue.ping()) {
             app.changeScene(LOGIN);
+            ((LoginController)LOGIN.getController()).serverNotReachable();
             return;
         }
         queue.aimAt(NameList.class, this);
@@ -77,6 +78,7 @@ public class LoadingController implements Victim<Message>, Controller {
     @Override
     public void take(Message bullet) {
         NameList nameList = ((NameList) bullet.body);
+        //TODO save nameList somewhere in config
         ((NameChooserController)NAME_CHOOSER.getController()).setNameList(nameList.names);
         ((SeatChooserController)SEAT_CHOOSER.getController()).storeDimensions(nameList.dimensions);
         app.changeScene(NAME_CHOOSER);

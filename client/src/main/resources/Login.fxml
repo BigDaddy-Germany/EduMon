@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoginController">
   <children>
-    <GridPane id="GridPane" alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" rotate="0.0">
+    <GridPane id="GridPane" alignment="TOP_LEFT" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" rotate="0.0">
       <children>
         <Label alignment="TOP_LEFT" prefHeight="59.0" prefWidth="154.0" text="Login" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="CENTER">
           <font>
@@ -29,13 +29,18 @@
           </GridPane.margin>
         </Label>
         <TextField id="" fx:id="room" onAction="#handleNext" prefWidth="259.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-        <Button mnemonicParsing="false" onAction="#handleNext" text="Weiter" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
+        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleNext" text="Weiter" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Hyperlink fx:id="serverLink" onAction="#handlePopup" text="Server: cubeisland.org" textFill="#404040" GridPane.columnIndex="0" GridPane.rowIndex="3">
           <font>
-            <Font size="10.0" />
+            <Font size="10.0" fx:id="x1" />
           </font>
         </Hyperlink>
+        <Label fx:id="serverError" alignment="CENTER" font="$x1" text="Server nicht erreichbar." textFill="#cc0000" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="4">
+          <GridPane.margin>
+            <Insets left="3.0" />
+          </GridPane.margin>
+        </Label>
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -48,6 +53,7 @@
         <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
       </rowConstraints>

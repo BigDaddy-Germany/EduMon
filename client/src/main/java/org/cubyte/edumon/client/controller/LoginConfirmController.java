@@ -22,27 +22,31 @@ public class LoginConfirmController implements Controller {
     }
 
     public void confirmLogin() {
-        seconds = 5;
+        seconds = 3;
         final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        time.setText("Diese Meldung verschwindet in " + seconds + " Sekunden");
+                        String text = "Die Applikation wird nun im Hintergrund ausgeführt";
+                        for (int i = 0; i < seconds; i++) {
+                            text += ".";
+                        }
+                        time.setText(text);
                     }
                 });
                 if (seconds > 0) {
                     seconds--;
                 }
             }
-        }, 0, 1, SECONDS);
+        }, 1, 1, SECONDS);
         app.getScheduledExecutorService().schedule(new Runnable() {
             @Override
             public void run() {
                 scheduledFuture.cancel(true);
                 app.hide();
             }
-        }, seconds, SECONDS);
+        }, seconds + 1, SECONDS);
     }
 }
