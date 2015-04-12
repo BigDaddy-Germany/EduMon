@@ -103,6 +103,10 @@ EduMon.UserInteraction = new function() {
                 line.find('.courseMemberGroup').val(courseData.students[i].group);
             }
 
+            // add new lines to the member form by clicking on the add button
+            // set the delete listeners
+            $('.courseMemberDelete').off('click').on('click', courseDeleteMember);
+
         };
 
         // checks, that names are unique
@@ -144,8 +148,63 @@ EduMon.UserInteraction = new function() {
      * @return {Promise} fulfill gets the updated lecture data
      */
     this.getLectureData = function(lectureId) {
-        // todo implement me
-        return new Promise();
+
+        // get the values out of the fields
+        var valueCalculator = function() {
+            var lectureName = $('#lectureName').val().trim();
+            var lectureRoom = $('#lectureRoom').val().trim();
+            var lectureCourse = $('#lectureCourse').val().trim();
+
+            return EduMon.Data.Lecture(lectureName, lectureRoom, lectureCourse);
+        };
+
+
+        // load saved lecture and initialize input fields
+        var initializer = function() {
+            var lecture = EduMon.Prefs.lectures[lectureId];
+            if (!lecture) {
+                return;
+            }
+
+            // fill the selects for room and course with options
+            var roomSelect = $('#lectureRoom');
+            var courseSelect = $('#lectureCourse');
+
+            var rooms = EduMon.Prefs.rooms;
+            var courses = EduMon.Prefs.courses;
+
+            for (var i = 0; i < rooms.length; i++) {
+                roomSelect.append('<option value="' + i + '">' + rooms[i].roomName + '</option>');
+            }
+            for (i = 0; i < courses.length; i++) {
+                courseSelect.append('<option value="' + i + '">' + courses[i].name + '</option>');
+            }
+
+            $('#lectureName').val(lecture.lectureName);
+            roomSelect.val(lecture.room);
+            courseSelect.val(lecture.course);
+        };
+
+
+        // checks, that all fields are selected and room and course do exist
+        var validator  = function(values) {
+            if (values.lectureName == '') {
+                return 'The lecture name may not be empty.';
+            }
+            if (!EduMon.Prefs.rooms[values.room]) {
+                return 'The selected room does not exist.';
+            }
+            if (!EduMon.Prefs.course[values.course]) {
+                return 'The selected course does not exist.';
+            }
+            return true;
+        };
+
+        return new Promise(function(fulfill, reject) {
+            that.promisingDialog('editLecture', valueCalculator, initializer, validator)
+                .then(fulfill)
+                .catch(reject);
+        });
     };
 
     /**
