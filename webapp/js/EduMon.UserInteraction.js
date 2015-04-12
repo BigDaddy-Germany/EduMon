@@ -137,11 +137,16 @@ EduMon.UserInteraction = new function() {
      * @param {String} lastOpenedDialog the dialog to switch to
      */
     var switchOrClose = function(lastOpenedDialog) {
-        if (lastOpenedDialog) {
-            gui.switchDialog(lastOpenedDialog);
-        } else {
-            gui.closeDialog();
-        }
+        return new Promise(function(fulfill, reject) {
+            if (lastOpenedDialog) {
+                gui.switchDialog(lastOpenedDialog)
+                    .then(fulfill)
+                    .catch(reject);
+            } else {
+                gui.closeDialog();
+                fulfill();
+            }
+        });
     };
 
 
@@ -170,8 +175,13 @@ EduMon.UserInteraction = new function() {
                     $('#dialogBtnBack')
                         .off('click')
                         .on('click', function() {
-                            reject('Action aborted by user');
-                            switchOrClose(lastOpenedDialog);
+                            switchOrClose(lastOpenedDialog)
+                                .then(function() {
+                                    reject('Action aborted by user');
+                                })
+                                .catch(function() {
+                                    reject('Action aborted by user');
+                                });
                         });
 
                     $('#dialogBtnSubmit')
@@ -179,9 +189,11 @@ EduMon.UserInteraction = new function() {
                         .on('click', function() {
                             var values = valueCalculator();
 
-                            switchOrClose(lastOpenedDialog);
-
-                            fulfill(values);
+                            switchOrClose(lastOpenedDialog)
+                                .then(function() {
+                                    fulfill(values);
+                                })
+                                .catch(reject);
                         });
                 })
                 .catch(reject);
