@@ -223,17 +223,15 @@ EduMon.Gui = new function() {
 	};
 
 	this.initSeating = function(){
-		$("#seats td").each(function(index,element){
-			$(this).empty()
-			.append($("<div/>").addClass("person")
-				.append($("<div/>").addClass("name").html("&nbsp;"))
-				.append($("<div/>").addClass("group").html("&nbsp;"))
-				);
-		});
-
 		if (seatUpdateTimer!==undefined){
 			clearInterval(seatUpdateTimer);
 		}
+
+		var room = EduMon.Prefs.currentLecture.room;
+		$("#seats tbody").html(new Array(room.height+1).join('<tr>'+new Array(room.width+1).join(
+						'<td><div class="person"><div class="name">&nbsp;</div><div class="group">&nbsp;</div></div></td>'
+						)+'</tr>'));
+
 		seatUpdateTimer = setInterval(function(){
 			updateStudents();
 		},seatUpdateInterval);

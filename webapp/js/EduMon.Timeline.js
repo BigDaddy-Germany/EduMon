@@ -4,6 +4,7 @@ EduMon.Timeline = new function() {
 	var tick_interval = 2; //in seconds
 	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
 	var timer;
+	var lectureStarted = false;
 	var lectureOver = false;
 	
 	var timeline; //comfort
@@ -26,6 +27,7 @@ EduMon.Timeline = new function() {
 			EduMon.Gui.showToast("Vorlesung läuft!");
 			timeline.status = "play";
 			timeline.start = getTime();
+			lectureStarted = true;
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
 		updateTimeline();
 	};

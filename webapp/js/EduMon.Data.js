@@ -153,8 +153,28 @@ EduMon.Data = new function() {
 					*/},
 
 					breakRequests: 0
+				},
+
+				messaging: {
+					outgoingPackageId: 1,
+					serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
+					moderatorPassphrase: "alohomora"
 				}
 			};
 		}
 	};
+
+	this.createBasePacket = function(type, to, body){
+		return {
+			"type":+type,
+				"id":++EduMon.Prefs.currentLecture.messaging.outgoingPackageId,
+				"time":Math.floor(Date.now()/1000),
+				"from":"MODERATOR",
+				"to":to,
+				"room":EduMon.Prefs.currentLecture.room.roomName,
+				"body":body
+		};
+	};
+
+
 };

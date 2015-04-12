@@ -18,9 +18,14 @@ EduMon = new function() {
 		that.debug("EduMon awakening...");
 		that.messenger = new EduMon.Messenger(handleIncomingData);
 
-		this.Prefs.rooms.push(new EduMon.Data.Room("170C",5,5));
-		this.Prefs.courses.push(new EduMon.Data.Course("DevCourse",[new EduMon.Data.Student("Max Mustermann","Mustergruppe")]));
-		this.Prefs.lectures.push(new EduMon.Data.Lecture("DevLecture",0,0));
+		this.Prefs.rooms.push(new EduMon.Data.Room("160C",6,4));
+		this.Prefs.courses.push(new EduMon.Data.Course("DemoCourse",[
+					new EduMon.Data.Student("Max Mustermann","Gruppe 1"),
+					new EduMon.Data.Student("Anna Mustermann","Gruppe 1"),
+					new EduMon.Data.Student("Lieschen Müller","Gruppe 2"),
+					new EduMon.Data.Student("Arno Nymous","Gruppe 2")
+					]));
+		this.Prefs.lectures.push(new EduMon.Data.Lecture("DemoLecture",0,0));
 
 		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
 
@@ -91,19 +96,7 @@ EduMon = new function() {
 				Client asks for break
 				body: {}
 				 */
-				if (EduMon.Prefs.currentLecture.timeline.status==="play"){
-					var analytics = EduMon.Prefs.currentLecture.analytics;
-					var numStudents = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
-					analytics.breakRequests++;
-
-					var style = "info";
-					if (analytics.breakRequests>(numStudents*0.2)) style = "warning";
-					if (analytics.breakRequests>(numStudents*0.5)) style = "danger";
-
-					EduMon.Gui.showFeedMessage(style,"Pausenanfrage",
-							(analytics.breakRequests>1 ? analytics.breakRequests+" Teilnehmer bitten" : "Ein Teilnehmer bittet")+" um eine Pause."
-							);
-				}
+				processBreakRequest()
 				break;
 
 			default:
@@ -111,6 +104,21 @@ EduMon = new function() {
 		}
 	};
 
+	var processBreakRequest = function(){
+		if (EduMon.Prefs.currentLecture.timeline.status==="play"){
+			var analytics = EduMon.Prefs.currentLecture.analytics;
+			var numStudents = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
+			analytics.breakRequests++;
+
+			var style = "info";
+			if (analytics.breakRequests>(numStudents*0.2)) style = "warning";
+			if (analytics.breakRequests>(numStudents*0.5)) style = "danger";
+
+			EduMon.Gui.showFeedMessage(style,"Pausenanfrage",
+					(analytics.breakRequests>1 ? analytics.breakRequests+" Teilnehmer bitten" : "Ein Teilnehmer bittet")+" um eine Pause."
+					);
+		}
+	};
 
 	/**
 	 * Tries to login a client by its name and its seat. If
@@ -206,6 +214,38 @@ EduMon = new function() {
 
 	};
 
+
+	/**
+	 * Broadcasts the current lecture (room dimensions + list of names)
+	 * @returns {Object} the sent packet
+	 */
+	var broadcastCurrentLecture = function(){
+		var room = EduMon.Prefs.currentLecture.room;
+		var body = {
+			"names": [],
+			"room": room.roomName,
+			"dimensions": {"width": room.width, "height": room.height}
+		};
+		var students = EduMon.Prefs.currentLecture.course.students;
+		for (var i=0; i<students.length; i++){
+			body.names.push(students[i].name);
+		}
+
+		var packet = EduMon.Data.createBasePacket(1,"BROADCAST",body);
+		that.sendPacket(packet);
+		return packet;
+	};
+
+	this.initLecture = function(){
+		that.sendPacket({command:"config",
+			url: EduMon.Prefs.currentLecture.messaging.serverUrl,
+			room: EduMon.Prefs.currentLecture.room.roomName,
+			moderatorPassphrase:EduMon.Prefs.currentLecture.messaging.moderatorPassphrase
+		});
+		EduMon.Gui.initSeating();
+		broadcastCurrentLecture();
+		EduMon.sendPacket({command:'start'});
+	}
 
 	/* [DEV] Send demo packet */
 	this.sendDemo = function(typenumber){

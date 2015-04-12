@@ -60,35 +60,26 @@
 						<div id="seatscontainer">
 							<div>
 								<table id="seats">
-									<tbody>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-										<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-									</tbody>
+									<tbody></tbody>
 								</table>
 							</div>
 						</div>
 						<div id="frontdesk">
-							<input type="button" value="Demo: Start Worker" onclick="EduMon.sendPacket({command:'start'})">
-							<input type="button" value="Demo: Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
-							<input type="button" value="Demo: Fake data IN" onclick="EduMon.sendPacket({command:'config',url:'demoDataIn.json'})">
+							<input type="button" value="INIT LECTURE (load current, broadcast, start seating plan refresher)" onclick="EduMon.initLecture()">
+							| Manual Worker Control: 
+							<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})">
+							<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
 							<br>
-							<input type="button" value="Demo: Typ 1 OUT" onclick="EduMon.sendDemo(1)">
-							<input type="button" value="Demo: Typ 3 OUT" onclick="EduMon.sendDemo(3)">
-							<input type="button" value="Demo: Typ 5 OUT" onclick="EduMon.sendDemo(5)">
-							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
-							<br>
-							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+							Direct Direct Dialogs:
 							<input type="button" value="Demo: Lecture edit" onclick="EduMon.Gui.showDialog('editLecture')">
 							<input type="button" value="Demo: Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
 							<input type="button" value="Demo: CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
-							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
-							<input type="button" value="Demo: Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);})">
-							<input type="button" value="Init Seating Plan" onclick="EduMon.Gui.initSeating()">
+							<br>
+							UI-Demo:
+							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+							<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')">
+							<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);})">
+
 						</div>
 					</div>
 
@@ -153,7 +144,6 @@
 				EduMon.Gui.showFeedMessage("danger","Mikrofonalarm","Lorem impsum studentus quasellus muchos. Importantus nachrichtus leset in dieset boxus.");
 				EduMon.Gui.showFeedMessage("success","Umfrage gestartet","Umfrage #1 wurde erfolgreich gestartet.");
 				EduMon.Gui.showFeedMessage("warning","Tippsturm","Lorem impsum studentus tippus mehrus. Auchet anderus Hinweisus könnet leset in dieset boxus.");
-				EduMon.sendPacket({command:"config",url:"http://vps2.code-infection.de/edumon/mailbox.php",room:"160C",moderatorPassphrase:"alohomora"});
 				EduMon.Gui.showToast("Hallo Welt! Dies ist ein Testtoast...");
 				EduMon.Gui.showToast("Lorem ipsum :)");
 				});

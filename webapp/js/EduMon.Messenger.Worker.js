@@ -12,6 +12,7 @@ var outgoing = [];
 var interval = 1000;
 var timer = -1; // TODO -1 under the assumption that only positive IDs are assigned by browsers
 var requests_failed = 0;
+var configured = false;
 
 
 /* Create a JSON-POST-HTTP-Request */
@@ -30,14 +31,19 @@ var commands = {
 		if ("room"                in data) room = encodeURIComponent(data.room);
 		if ("moderatorPassphrase" in data) moderatorPassphrase = encodeURIComponent(data.moderatorPassphrase);
 		if ("interval"            in data) interval = data.interval;
+		configured = true;
 	},
 	start: function() {
-		if (timer !== undefined) {
-			clearInterval(timer);
-			console.log("Queue processing was already running, stopped it!");
+		if (!configured){
+			console.log("Worker cannot be started: Not yet configured");
+		} else {
+			if (timer !== undefined) {
+				clearInterval(timer);
+				console.log("Queue processing was already running, stopped it!");
+			}
+			console.log('Queue processing started.');
+			timer = setInterval(processQueue, interval);
 		}
-		console.log('Queue processing started.');
-		timer = setInterval(processQueue, interval);
 	},
 	stop: function() {
 		clearInterval(timer);
@@ -53,7 +59,7 @@ onmessage = function (input) {
 	if ("command" in data) {
 		var cmd = data.command;
 		if (commands.hasOwnProperty(cmd)) {
-			commands[cmd](data)
+			commands[cmd](data);
 		} else {
 			console.log("Received unknown command '" + cmd + "' ... ignoring it.")
 		}
