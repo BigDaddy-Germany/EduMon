@@ -78,11 +78,15 @@ EduMon.Gui = new function() {
 	/**
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
+	 * @param {Boolean} [attentionAbort] If activated and another dialog is already open, attention box will flash instead of an error being thrown
 	 */
-	this.showDialog = function(dialogid) {
+	this.showDialog = function(dialogid, attentionAbort) {
 		var that = this;
 		return new Promise(function(fulfill, reject) {
 			if (dialogOpened){
+				if (attentionAbort===true){
+					EduMon.Gui.attention();
+				}
 				reject();
 				throw "Cannot open another dialog. Use switchDialog() instead of openDialog()";
 			}
@@ -174,10 +178,10 @@ EduMon.Gui = new function() {
 	/**
 	 * Display a popup box
 	 * @param {String} title Popup title
-	 * @param {String} message Message to be displayed
+	 * @param {String} message (HTML-)Message to be displayed
 	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
 	 * @param {Function} [callback] Function to be called on button click, will be given button value as parameter
-	 * @param {Boolean} [attentionAbort] If activated and another popup is already open, attenion box will flash instead of an error being thrown
+	 * @param {Boolean} [attentionAbort] If activated and another popup is already open, attention box will flash instead of an error being thrown
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
 		if (popupOpened && attentionAbort!==true){
@@ -189,7 +193,7 @@ EduMon.Gui = new function() {
 		popupOpened = 1;
 		$("#layercontainer").show();
 		$("#popuptitle").text(title);
-		$("#popupmessage").text(message);
+		$("#popupmessage").html(message);
 		var popupfooter = $("#popupfooter");
 		popupfooter.empty();
 		for (var i = 0; i < buttons.length; i++){
@@ -277,5 +281,11 @@ EduMon.Gui = new function() {
 
 	this.attention = function(){
 		$("#attention").stop(true,true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
+	};
+
+	this.init = function(){
+		$("#btnSettings").click(function(){
+			EduMon.Gui.showDialog("connectionSettings",true);
+		});
 	};
 };

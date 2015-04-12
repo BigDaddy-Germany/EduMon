@@ -87,4 +87,8 @@ EduMon.Util = new function() {
     this.padRight = function(base, add, length) {
         return (base + genPadding(add, length)).slice(length)
     }
+    
+	String.prototype.endsWith = function(suffix) {
+		return this.indexOf(suffix, this.length - suffix.length) !== -1;
+	};
 };

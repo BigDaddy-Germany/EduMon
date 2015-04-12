@@ -1,0 +1,54 @@
+<div id="dialogContainer">
+	<header>
+		<h2>Verbindungseinstellungen</h2>
+	</header>
+	<form>
+		Server: <input type="text" id="serverUrl"><br><br>
+		Passwort: <input type="text" id="moderatorPassphrase"><br><br>
+	</form>
+	<footer>
+		<button id="dialogBtnCancel" type="button" class="btn btn-default">Abbrechen</button>
+		<button id="dialogBtnSubmit" type="button" class="btn btn-success">Verbinden und speichern</button>
+	</footer>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	var messaging = EduMon.Prefs.currentLecture.messaging;
+
+	var hasSuffix = messaging.serverUrl.endsWith("/mailbox.php");
+	$("#serverUrl").val(messaging.serverUrl.replace("/mailbox.php",""));
+	$("#moderatorPassphrase").val(messaging.moderatorPassphrase);
+
+	$("#dialogBtnSubmit").click(function(){
+		EduMon.Gui.setDialogBlock(1);
+
+		var serverUrl = $("#serverUrl").val()+(hasSuffix?"/mailbox.php":"");
+		var moderatorPassphrase = $("#moderatorPassphrase").val();
+
+		$.ajax(serverUrl+"?ping",{
+			cache: false,
+			complete: function(xhr, status){
+				if (status==="success" && xhr.status===242){
+					messaging.serverUrl = serverUrl;
+					messaging.moderatorPassphrase = moderatorPassphrase;
+					EduMon.Gui.showToast("Verbindungseinstellungen aktualisiert.");
+					EduMon.Gui.closeDialog();
+				} else {
+					var info = "Die Verbindung konnte nicht erfolgreich aufgebaut werden:<br>";
+					if (xhr.status===500){
+						info += xhr.responseText;
+					} else {
+						info += "["+xhr.status+"] "+status;
+					}
+					EduMon.Gui.showPopup("Fehler beim Verbindungstest",info,[{text:"Zurück",value:"",class:"danger"}],function(){});
+					EduMon.Gui.setDialogBlock(0);
+				}
+			}
+		});
+	});
+	$("#dialogBtnCancel").click(function(){
+		EduMon.Gui.closeDialog();
+	});
+});
+</script>
