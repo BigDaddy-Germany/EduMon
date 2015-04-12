@@ -51,7 +51,7 @@
 			if (!EduMon.Prefs.courses[courseId]) {
 				return;
 			}
-			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this lecture?', ['yes','no'], function(value) {
+			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this course?', ['yes','no'], function(value) {
 				if (value == 'yes') {
 					var courses = EduMon.Prefs.courses;
 					EduMon.Prefs.courses = courses.slice(0, courseId).concat(courses.slice(courseId+1));
@@ -60,5 +60,51 @@
 			});
 
 		});
+
+
+
+		// Add, edit and delete room
+		$('#lectureNewRoom').on('click', function() {
+			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getRoomData)
+					.then(function(newRoom) {
+						var newIndex = EduMon.Prefs.rooms.push(newRoom) - 1;
+						$('#lectureRoom').append('<option value="' + newIndex + '">' + newRoom.roomName + '</option>')
+								.children().last().attr('selected', 'selected');
+					})
+					.catch(function(data) { console.log(data); });
+
+		});
+
+		$('#lectureEditRoom').on('click', function() {
+			var roomId = $('#lectureRoom').val();
+			if (!EduMon.Prefs.rooms[roomId]) {
+				return;
+			}
+
+			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getRoomData, roomId)
+					.then(function(newRoom) {
+						EduMon.Prefs.rooms[roomId] = newRoom;
+						$('#lectureRoom').find('[value=' + roomId + ']').html(newRoom.roomName).attr('selected', 'selected');
+					})
+					.catch(function(data) { console.log(data); });
+
+		});
+
+		$('#lectureDelRoom').on('click', function() {
+			var roomId = $('#lectureRoom').val();
+			if (!EduMon.Prefs.rooms[roomId]) {
+				return;
+			}
+			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this room?', ['yes','no'], function(value) {
+				if (value == 'yes') {
+					var rooms = EduMon.Prefs.rooms;
+					EduMon.Prefs.rooms = rooms.slice(0, roomId).concat(rooms.slice(roomId+1));
+					$('#lectureRoom').find('[value=' + roomId + ']').remove();
+				}
+			});
+
+		});
+
+
 	})
 </script>

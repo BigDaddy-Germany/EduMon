@@ -3,6 +3,7 @@
         - EduMon.Gui
  */
 
+Promise = Promise || {};
 
 /**
  * This class performs the interaction with the user via pop ups etc.
@@ -11,6 +12,54 @@
 EduMon.UserInteraction = new function() {
     var gui = EduMon.Gui;
     var that = this;
+
+
+    /**
+     * Starts the lecture manager and returns the chosen lecture
+     * @param {Boolean} [replaceStartByOk=false] Indicates, whether the start lecture button should be replaced by OK
+     * @param {int} [selectedLectureId] If a lecture should be selected, the ID can be passed here
+     * @return {Promise} fulfill gets the selected lecture ID
+     */
+    this.selectLecture = function(replaceStartByOk, selectedLectureId) {
+        replaceStartByOk = replaceStartByOk || false;
+
+        // get the selected lecture
+        var valueCalculator = function() {
+            return $('#startId').val().trim();
+        };
+
+        // load all lectures and insert them into the select
+        var initializer = function() {
+            var lectureSelect = $('#startId');
+            var lectures = EduMon.Prefs.lectures;
+
+            for (var i = 0; i < lectures.length; i++) {
+                lectureSelect.append('<option value="' + i + '">' + lectures[i].lectureName + '</option>')
+            }
+
+            if (replaceStartByOk) {
+                $('#dialogBtnSubmit').html('OK');
+            }
+
+            if (selectedLectureId) {
+                lectureSelect.find('option[value=' + selectedLectureId + ']').attr('selected', 'selected');
+            }
+        };
+
+        // check, whether the given lecture exists
+        var validator = function(value) {
+            if (!EduMon.Prefs.lectures[value]) {
+                return 'Please select a valid lecture.';
+            }
+            return true;
+        };
+
+        return new Promise(function(fulfill, reject) {
+            that.promisingDialog('lectureManager', valueCalculator, initializer, validator)
+                .then(fulfill)
+                .catch(reject);
+        });
+    };
 
 
     /**
@@ -103,6 +152,10 @@ EduMon.UserInteraction = new function() {
                 line.find('.courseMemberGroup').val(courseData.students[i].group);
             }
 
+            // add new lines to the member form by clicking on the add button
+            // set the delete listeners
+            $('.courseMemberDelete').off('click').on('click', courseDeleteMember);
+
         };
 
         // checks, that names are unique
@@ -144,9 +197,141 @@ EduMon.UserInteraction = new function() {
      * @return {Promise} fulfill gets the updated lecture data
      */
     this.getLectureData = function(lectureId) {
-        // todo implement me
-        return new Promise();
+
+        // get the values out of the fields
+        var valueCalculator = function() {
+            var lectureName = $('#lectureName').val().trim();
+            var lectureRoom = $('#lectureRoom').val().trim();
+            var lectureCourse = $('#lectureCourse').val().trim();
+
+            return EduMon.Data.Lecture(lectureName, lectureRoom, lectureCourse);
+        };
+
+
+        // load saved lecture and initialize input fields
+        var initializer = function() {
+            // fill the selects for room and course with options
+            var roomSelect = $('#lectureRoom');
+            var courseSelect = $('#lectureCourse');
+
+            var rooms = EduMon.Prefs.rooms;
+            var courses = EduMon.Prefs.courses;
+
+            for (var i = 0; i < rooms.length; i++) {
+                roomSelect.append('<option value="' + i + '">' + rooms[i].roomName + '</option>');
+            }
+            for (i = 0; i < courses.length; i++) {
+                courseSelect.append('<option value="' + i + '">' + courses[i].name + '</option>');
+            }
+
+            var lecture = EduMon.Prefs.lectures[lectureId];
+            if (!lecture) {
+                return;
+            }
+
+            $('#lectureName').val(lecture.lectureName);
+            roomSelect.val(lecture.room);
+            courseSelect.val(lecture.course);
+        };
+
+
+        // checks, that all fields are selected and room and course do exist
+        var validator  = function(values) {
+            if (values.lectureName == '') {
+                return 'The lecture name may not be empty.';
+            }
+            if (!EduMon.Prefs.rooms[values.room]) {
+                return 'The selected room does not exist.';
+            }
+            if (!EduMon.Prefs.courses[values.course]) {
+                return 'The selected course does not exist.';
+            }
+            return true;
+        };
+
+        return new Promise(function(fulfill, reject) {
+            that.promisingDialog('editLecture', valueCalculator, initializer, validator)
+                .then(fulfill)
+                .catch(reject);
+        });
     };
+
+
+    /**
+     * Get the room data updated by the user
+     * @param {id} roomId the room's id
+     * @return {Promise} fulfill gets the updated room data
+     */
+    this.getRoomData = function(roomId) {
+
+        // get the values out of the fields
+        var valueCalculator = function() {
+            var roomName = $('#roomName').val().trim();
+            var roomX = parseInt($('#roomX').val().trim());
+            var roomY = parseInt($('#roomY').val().trim());
+
+            return EduMon.Data.Room(roomName, roomX, roomY);
+        };
+
+        // load saved room and initialize fields
+        var initializer = function() {
+            var room = EduMon.Prefs.rooms[roomId];
+            if (!room) {
+                return;
+            }
+
+            $('#roomName').val(room.roomName);
+            $('#roomX').val(room.width);
+            $('#roomY').val(room.height);
+        };
+
+        // check, that all values are valid
+        var validator = function(values) {
+            if (values.roomName == '') {
+                return 'The room name may not be empty.';
+            }
+            if (isNaN(values.width) || isNaN(values.height)) {
+                return 'Please enter valid values for width and height.';
+            }
+            return true;
+        };
+
+        return new Promise(function(fulfill, reject) {
+            that.promisingDialog('editRoom', valueCalculator, initializer, validator)
+                .then(fulfill)
+                .catch(reject);
+        });
+    };
+
+
+
+    /**
+     * Opens a dialog and returns a promise to get the values entered by the user
+     * @param {String} dialogId the dialog's ID
+     * @param {Array} formIds all form IDs to return their content
+     * @return {Promise} fulfill will get a map from field IDs to their content
+     */
+    this.simplePromisingFormDialog = function(dialogId, formIds) {
+        return new Promise(function(fulfill, reject) {
+            var valueCalculator = function() {
+                var values = {};
+                formIds.forEach(function (formId) {
+                    var formField = $('#' + formId);
+                    if (formField) {
+                        values[formId] = formField.val();
+                    }
+                });
+                return values;
+            };
+
+            that.promisingDialog(dialogId, valueCalculator)
+                .then(fulfill)
+                .catch(reject);
+        });
+    };
+
+
+
 
     /**
      * Closes dialog, if lastOpenedDialog is undefined, otherwise switches to it
