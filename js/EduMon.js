@@ -29,10 +29,10 @@ EduMon = new function() {
 
 		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
 
+		//UI preparations
 		this.Timeline.init();
 		this.Gui.init();
 
-		this.Gui.init();
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
 	};
