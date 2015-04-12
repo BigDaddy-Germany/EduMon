@@ -240,6 +240,16 @@
 // if everything is okay, we can start
 	if (http_response_code() == 200) {
 
+		if (isset($_GET['ping'])) {
+			if (count($errorMessages)>0) {
+				http_response_code(500);
+				die(implode(" ",$errorMessages));
+			} else {
+				http_response_code(242);
+				die();
+			}
+		}
+
 		// delete old database entries
 		$stmt = $db->prepare("DELETE FROM packages WHERE time < :timestamp");
 		$stmt->bindValue(':timestamp', time() - 24 * 3600, SQLITE3_INTEGER);
