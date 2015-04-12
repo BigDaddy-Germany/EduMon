@@ -46,6 +46,8 @@ EduMon.UserInteraction = new function() {
             if (selectedLectureId) {
                 lectureSelect.find('option[value=' + selectedLectureId + ']').attr('selected', 'selected');
             }
+
+            lectureSelect.sortSelectBox();
         };
 
         // check, whether the given lecture exists
@@ -231,6 +233,9 @@ EduMon.UserInteraction = new function() {
                     courseSelect.append('<option value="' + i + '">' + courses[i].name + '</option>');
                 }
             }
+
+            courseSelect.sortSelectBox();
+            roomSelect.sortSelectBox();
 
             var lecture = EduMon.Prefs.lectures[lectureId];
             if (!lecture) {
