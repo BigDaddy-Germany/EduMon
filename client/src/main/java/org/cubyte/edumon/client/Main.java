@@ -9,6 +9,7 @@ import org.cubyte.edumon.client.controller.OptionsController;
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
 import org.cubyte.edumon.client.messaging.messagebody.BreakRequest;
+import org.cubyte.edumon.client.messaging.messagebody.NameList;
 import org.cubyte.edumon.client.messaging.messagebody.SensorData;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 import org.cubyte.edumon.client.sensorlistener.KeyListener;
@@ -91,21 +92,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        /*// temporary
-        final Main mainMod = new Main();
-        mainMod.setServer("http://vps2.code-infection.de/edumon");
-        mainMod.setRoom("170C");
-        final MessageQueue messageQueueMod = new MessageQueue(mainMod, true);
-        final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Jonas Dann");
-        list.add("Phillip Schichtel");
-        list.add("Marco Dörfler");
-        list.add("Niko Berkmann");
-        messageQueueMod.queue(messageFactoryMod.create(new NameList(list, "160C", new Dimensions(5, 5))));
-        messageQueueMod.send();
-        */// temporary
-
         Scene.setApp(this);
         stage.setResizable(false);
         this.stage = stage;
@@ -333,6 +319,18 @@ public class Main extends Application {
         clientConfig.sendMicData = sendMicData;
         clientConfig.save();
     }
+
+    /*public void addNameList(String room, NameList nameList) {
+        clientConfig.addNameList(room, nameList);
+    }
+
+    public void updateNameList(String room) {
+        clientConfig.updateNameList(room);
+    }
+
+    public void getNameList(String room) {
+        clientConfig.getNameList(room);
+    }*/
 
     public ScheduledExecutorService getScheduledExecutorService() {
         return scheduledExecutorService;
