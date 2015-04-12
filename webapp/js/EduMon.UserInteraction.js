@@ -194,7 +194,7 @@ EduMon.UserInteraction = new function() {
             if (!EduMon.Prefs.rooms[values.room]) {
                 return 'The selected room does not exist.';
             }
-            if (!EduMon.Prefs.course[values.course]) {
+            if (!EduMon.Prefs.courses[values.course]) {
                 return 'The selected course does not exist.';
             }
             return true;
@@ -202,6 +202,53 @@ EduMon.UserInteraction = new function() {
 
         return new Promise(function(fulfill, reject) {
             that.promisingDialog('editLecture', valueCalculator, initializer, validator)
+                .then(fulfill)
+                .catch(reject);
+        });
+    };
+
+
+    /**
+     * Get the room data updated by the user
+     * @param {id} roomId the room's id
+     * @return {Promise} fulfill gets the updated room data
+     */
+    this.getRoomData = function(roomId) {
+
+        // get the values out of the fields
+        var valueCalculator = function() {
+            var roomName = $('#roomName').val().trim();
+            var roomX = parseInt($('#roomX').val().trim());
+            var roomY = parseInt($('#roomY').val().trim());
+
+            return EduMon.Data.Room(roomName, roomX, roomY);
+        };
+
+        // load saved room and initialize fields
+        var initializer = function() {
+            var room = EduMon.Prefs.rooms[roomId];
+            if (!room) {
+                return;
+            }
+
+            $('#roomName').val(room.roomName);
+            $('#roomX').val(room.width);
+            $('#roomY').val(room.height);
+        };
+
+        // check, that all values are valid
+        var validator = function(values) {
+            if (values.roomName == '') {
+                return 'The room name may not be empty.';
+            }
+            if (isNaN(values.width) || isNaN(values.height)) {
+                return 'Please enter valid values for width and height.';
+            }
+            return true;
+        };
+
+        return new Promise(function(fulfill, reject) {
+            that.promisingDialog('editRoom', valueCalculator, initializer, validator)
                 .then(fulfill)
                 .catch(reject);
         });
