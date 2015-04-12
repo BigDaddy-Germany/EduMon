@@ -238,7 +238,7 @@
 			http_response_code(500);
 			die(implode(" ",$errorMessages));
 		} else {
-			http_response_code(200);
+			http_response_code(202);
 			die("EduMon");
 		}
 	}

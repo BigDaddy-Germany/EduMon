@@ -26,16 +26,18 @@ $(function() {
 		var serverUrl = $("#serverUrl").val()+(hasSuffix?"/mailbox.php":"");
 		var moderatorPassphrase = $("#moderatorPassphrase").val();
 
-		$.ajax(serverUrl+"?ping",{
+		$.ajax(serverUrl+"?ping&moderatorPassphrase="+moderatorPassphrase,{
 			cache: false,
+			dataType: "text",
 			complete: function(xhr, status){
-				if (status==="success" && xhr.status===242){
+				if (status==="success" && xhr.status===202 && responseText==="EduMon"){
 					messaging.serverUrl = serverUrl;
 					messaging.moderatorPassphrase = moderatorPassphrase;
 					EduMon.Gui.showToast("Verbindungseinstellungen aktualisiert.");
+					EduMon.updateConnection();
 					EduMon.Gui.closeDialog();
 				} else {
-					var info = "Die Verbindung konnte nicht erfolgreich aufgebaut werden:<br>";
+					var info = "Die Verbindung konnte nicht aufgebaut werden:<br>";
 					if (xhr.status===500){
 						info += xhr.responseText;
 					} else {
