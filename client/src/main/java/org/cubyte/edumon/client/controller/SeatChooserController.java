@@ -19,12 +19,11 @@ import org.cubyte.edumon.client.messaging.messagebody.util.Dimensions;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
-import static org.cubyte.edumon.client.Main.Scene.LOGIN_CONFIRM;
-import static org.cubyte.edumon.client.Main.Scene.NAME_CHOOSER;
+import static org.cubyte.edumon.client.Scene.LOGIN_CONFIRM;
+import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 
 public class SeatChooserController implements Controller {
     private Main app;
-    private String name;
     private Dimensions dimensions;
     @FXML
     private Pane pane;
@@ -57,9 +56,8 @@ public class SeatChooserController implements Controller {
         this.app = app;
     }
 
-    public SeatChooserController setRoomAndName(String room, String name) {
-        this.name = name;
-        this.roomAndName.setText("Raum " + room + " | Name: " + name);
+    public SeatChooserController setInfoBar() {
+        this.roomAndName.setText("Raum " + app.getRoom() + " | " + app.getName());
         return this;
     }
 
@@ -76,7 +74,7 @@ public class SeatChooserController implements Controller {
                 double columnWidth = 573d / dimensions.width;
                 for(int x = 0; x < dimensions.width; x++) {
                     for(int y = 0; y < dimensions.height; y++) {
-                        final Hyperlink link = new Hyperlink(name);
+                        final Hyperlink link = new Hyperlink(app.getName());
                         final int seatX = x; final int seatY = y + 1;
                         link.setPrefSize(columnWidth, rowHeight);
                         link.setAlignment(Pos.CENTER);
@@ -100,7 +98,8 @@ public class SeatChooserController implements Controller {
                         link.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent mouseEvent) {
-                                app.getQueue().queue(app.getFactory().create(new WhoAmI(name, new Position(dimensions.width - seatX, seatY))));
+                                app.setSeat(new Position(dimensions.width - seatX, seatY));
+                                app.getQueue().queue(app.getFactory().create(new WhoAmI(app.getName(), app.getSeat())));
                                 app.getQueue().send();
                                 app.changeScene(LOGIN_CONFIRM);
                                 ((LoginConfirmController) LOGIN_CONFIRM.getController()).confirmLogin();

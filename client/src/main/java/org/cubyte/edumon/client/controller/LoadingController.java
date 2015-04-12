@@ -11,13 +11,12 @@ import org.cubyte.edumon.client.messaging.Message;
 import org.cubyte.edumon.client.messaging.MessageQueue;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
 
-import java.util.Queue;
 import java.util.concurrent.*;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
-import static org.cubyte.edumon.client.Main.Scene.LOGIN;
-import static org.cubyte.edumon.client.Main.Scene.NAME_CHOOSER;
-import static org.cubyte.edumon.client.Main.Scene.SEAT_CHOOSER;
+import static org.cubyte.edumon.client.Scene.LOGIN;
+import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
+import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
 public class LoadingController implements Victim<Message>, Controller {
     private Main app;
@@ -43,8 +42,8 @@ public class LoadingController implements Victim<Message>, Controller {
         this.app = app;
     }
 
-    public void setRoomAndServer(String room, String server) {
-        this.roomAndServer.setText("Raum " + room + " | Server: " + server);
+    public void setInfoBar() {
+        this.roomAndServer.setText("Raum " + app.getRoom() + " | Server: " + app.getServer());
     }
 
     public void getNameList() {
@@ -78,7 +77,7 @@ public class LoadingController implements Victim<Message>, Controller {
     @Override
     public void take(Message bullet) {
         NameList nameList = ((NameList) bullet.body);
-        //TODO save nameList somewhere in config
+        //TODO save nameList somewhere in config???
         ((NameChooserController)NAME_CHOOSER.getController()).setNameList(nameList.names);
         ((SeatChooserController)SEAT_CHOOSER.getController()).storeDimensions(nameList.dimensions);
         app.changeScene(NAME_CHOOSER);

@@ -45,7 +45,6 @@ public class LoginConfirmController implements Controller {
             @Override
             public void run() {
                 scheduledFuture.cancel(true);
-                app.hide();
             }
         }, seconds + 1, SECONDS);
     }

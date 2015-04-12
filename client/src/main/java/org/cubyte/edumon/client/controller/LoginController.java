@@ -1,7 +1,5 @@
 package org.cubyte.edumon.client.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
@@ -10,13 +8,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
-import org.cubyte.edumon.client.eventsystem.Victim;
-import org.cubyte.edumon.client.messaging.Message;
-import org.cubyte.edumon.client.messaging.messagebody.NameList;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
-import static org.cubyte.edumon.client.Main.Scene.*;
-import static org.cubyte.edumon.client.Main.Scene.LOADING;
+import static org.cubyte.edumon.client.Scene.*;
+import static org.cubyte.edumon.client.Scene.LOADING;
 
 public class LoginController implements Controller {
     private Main app;
@@ -61,9 +56,9 @@ public class LoginController implements Controller {
         String room = this.room.getText();
         app.setRoom(room);
         app.setServer(serverAddress);
-        ((NameChooserController) NAME_CHOOSER.getController()).setRoom(room);
+        ((NameChooserController) NAME_CHOOSER.getController()).setInfoBar();
         LoadingController loadingController = (LoadingController) LOADING.getController();
-        loadingController.setRoomAndServer(room, serverAddress);
+        loadingController.setInfoBar();
         app.changeScene(LOADING);
         loadingController.getNameList();
     }
