@@ -101,8 +101,26 @@ EduMon.UserInteraction = new function() {
 
         };
 
+        // checks, that names are unique
+        var validator = function() {
+            var givenNames = [];
+            var duplicate = false;
+            $('.courseMemberName').each(function() {
+                var thisName = $(this).val();
+                if (givenNames.indexOf(thisName) != -1) {
+                    duplicate = true;
+                }
+                givenNames.push(thisName);
+            });
+
+            if (duplicate) {
+                return 'Names of students have to be unique.';
+            }
+            return true;
+        };
+
         return new Promise(function(fulfill, reject) {
-            that.promisingDialog('editCourse', valueCalculator, initializer)
+            that.promisingDialog('editCourse', valueCalculator, initializer, validator)
                 .then(fulfill)
                 .catch(reject);
         });
@@ -157,9 +175,13 @@ EduMon.UserInteraction = new function() {
      * @param {String} dialogId the ID to open the dialog
      * @param {Function} valueCalculator a function to calculate the values, the user entered
      * @param {Function} [initializer] a function, which initializes the new opened dialog
+     * @param {Function} [validator] a function, which validates the data before submitting it.
+     *                      It returns true in case of success and an error message in case of failure
      * @return {Promise} fulfill gets the calculated values
      */
-    this.promisingDialog = function(dialogId, valueCalculator, initializer) {
+    this.promisingDialog = function(dialogId, valueCalculator, initializer, validator) {
+        validator = validator || function() { return true; };
+
         return new Promise(function(fulfill, reject) {
             var lastOpenedDialog = gui.getOpenedDialog();
             var promise;
@@ -189,13 +211,18 @@ EduMon.UserInteraction = new function() {
                     $('#dialogBtnSubmit')
                         .off('click')
                         .on('click', function() {
-                            var values = valueCalculator();
+                            var status = validator();
+                            if (status != true) {
+                                EduMon.Gui.showPopup("Error", status, ['ok']);
+                            } else {
+                                var values = valueCalculator();
 
-                            switchOrClose(lastOpenedDialog)
-                                .then(function() {
-                                    fulfill(values);
-                                })
-                                .catch(reject);
+                                switchOrClose(lastOpenedDialog)
+                                    .then(function () {
+                                        fulfill(values);
+                                    })
+                                    .catch(reject);
+                            }
                         });
                 })
                 .catch(reject);
