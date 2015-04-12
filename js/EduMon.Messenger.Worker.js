@@ -32,18 +32,20 @@ var commands = {
 		if ("moderatorPassphrase" in data) moderatorPassphrase = encodeURIComponent(data.moderatorPassphrase);
 		if ("interval"            in data) interval = data.interval;
 		configured = true;
+		if (timer!==-1){
+			console.log("Worker started and configured, queue will be processed");
+		} 
 	},
 	start: function() {
 		if (!configured){
-			console.log("Worker cannot be started: Not yet configured");
-		} else {
-			if (timer !== undefined) {
-				clearInterval(timer);
-				console.log("Queue processing was already running, stopped it!");
-			}
-			console.log('Queue processing started.');
-			timer = setInterval(processQueue, interval);
+			console.log("Warning: Worker started, but will only send once configured");
+		} 
+		if (timer !== -1) {
+			clearInterval(timer);
+			console.log("Queue timer was already running, restarted it!");
 		}
+		timer = setInterval(processQueue, interval);
+		console.log('Queue timer started.');
 	},
 	stop: function() {
 		clearInterval(timer);
@@ -80,6 +82,10 @@ function handleEvent(event) {
 
 /* Send queued packets */
 function processQueue() {
+	if (!configured){
+		return;
+	}
+
 	var toBeSent = outgoing;
 	outgoing = [];
 

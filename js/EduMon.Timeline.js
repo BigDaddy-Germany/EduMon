@@ -72,7 +72,8 @@ EduMon.Timeline = new function() {
 	};
 
 	this.restart = function(){
-		location.reload();
+		//TODO intended?
+		that.reset();
 	};
 
 	var tick = function(onlyUpdate) {
