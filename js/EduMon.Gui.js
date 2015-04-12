@@ -174,10 +174,14 @@ EduMon.Gui = new function() {
 	 * @param {String} message Message to be displayed
 	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
 	 * @param {Function} callback Function to be called on button click, will be given button value as parameter
+	 * @param {Boolean} [attentionAbort] If activated and another popup is already open, attenion box will flash instead of an error being thrown
 	 */
-	this.showPopup = function(title, message, buttons, callback) {
-		if (popupOpened){
+	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
+		if (popupOpened && attentionAbort!==true){
 			throw "Cannot open another popup. The current one has to be closed first";
+		} else if (popupOpened && attentionAbort===true){
+			this.attention();
+			return;
 		}
 		popupOpened = 1;
 		$("#layercontainer").show();
@@ -265,5 +269,9 @@ EduMon.Gui = new function() {
 						);
 			}
 		}
+	};
+
+	this.attention = function(){
+		$("#attention").stop(true,true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
 	};
 };

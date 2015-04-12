@@ -4,6 +4,7 @@ EduMon.Timeline = new function() {
 	var tick_interval = 2; //in seconds
 	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
 	var timer;
+	var lectureOver = false;
 	
 	var timeline; //comfort
 
@@ -22,6 +23,7 @@ EduMon.Timeline = new function() {
 		if (timeline.status!=="play"){
 			timeline.slices.push({seconds:0,type:"lecture"});
 			setPreviousEnd();
+			EduMon.Gui.showToast("Vorlesung läuft!");
 			timeline.status = "play";
 			timeline.start = getTime();
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
@@ -32,16 +34,28 @@ EduMon.Timeline = new function() {
 		if (timeline.status==="play"){
 			timeline.slices.push({seconds:0,type:"break"});
 			setPreviousEnd();
+			EduMon.Gui.showToast("Vorlesung pausiert.");
 			timeline.status = "pause";
 		} else throw "Timeline-Unterbrechung nicht erlaubt, Timer lief nicht";
 		updateTimeline();
 	};
 
 	this.stop = function() {
-		clearInterval(timer);
-		timeline.status = "stop";
-		updateTimeline();
-		//TODO is irreversible - shall it be? (logic: you can only finish a lecture once)
+		EduMon.Gui.showPopup("Vorlesung beenden?","Eine beendete Vorlesung kann nicht wieder aufgenommen werden. Möchten Sie die Vorlesung jetzt beenden und die Auswertung einsehen?",
+				["yes","no"],function(result){
+					if (result==="yes"){
+						clearInterval(timer);
+						EduMon.Gui.showToast("Vorlesung beendet.");
+						timeline.status = "stop";
+						lectureOver = true;
+						updateTimeline();
+					}
+				},true);
+	};
+
+	this.restart = function(){
+		alert("warn user here"); //TODO
+		location.reload();
 	};
 	
 	var tick = function(onlyUpdate) {
@@ -63,6 +77,7 @@ EduMon.Timeline = new function() {
 		$("#flowbox").find(".glyphicon-play").click(function(){that.play();});
 		$("#flowbox").find(".glyphicon-pause").click(function(){that.pause();});
 		$("#flowbox").find(".glyphicon-stop").click(function(){that.stop();});
+		$("#flowbox").find(".glyphicon-fast-backward").click(function(){that.restart();});
 	};
 
 	var updateTimeline = function(){
@@ -146,11 +161,9 @@ EduMon.Timeline = new function() {
 			.addClass("glyphicon-"+timeline.status);
 
 		//display fitting control buttons
-		$("#flowbox").find(".glyphicon-play").toggle(timeline.status!=="play");
+		$("#flowbox").find(".glyphicon-play").toggle(timeline.status!=="play" && !lectureOver);
 		$("#flowbox").find(".glyphicon-pause").toggle(timeline.status==="play");
 		$("#flowbox").find(".glyphicon-stop").toggle(timeline.status!=="stop");
+		$("#flowbox").find(".glyphicon-fast-backward").toggle(lectureOver);
 	};
-
-	//TODO create "updateControls" and implement their functionaltiy
-
 };

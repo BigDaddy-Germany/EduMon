@@ -4,6 +4,17 @@
 	position: relative;
 }
 
+#attention {
+	display: none;
+	position: absolute;
+	top: 7px;
+	left: 7px;
+	right: 7px;
+	bottom: 107px;
+	border: 9px solid #FF2222;
+	border-radius: 10px;
+}
+
 #layercontainer {
 	display: none;
 	position: absolute;
