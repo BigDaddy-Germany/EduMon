@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
+import org.cubyte.edumon.client.RoomState;
 import org.cubyte.edumon.client.eventsystem.Victim;
 import org.cubyte.edumon.client.messaging.Message;
 import org.cubyte.edumon.client.messaging.MessageQueue;
@@ -16,7 +17,6 @@ import java.util.concurrent.*;
 import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOGIN;
 import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
-import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
 public class LoadingController implements Victim<Message>, Controller {
     private Main app;
@@ -50,25 +50,30 @@ public class LoadingController implements Victim<Message>, Controller {
     }
 
     public void getNameList() {
-        final MessageQueue queue = app.getQueue();
-        if(!queue.ping()) {
-            app.changeScene(LOGIN);
-            ((LoginController)LOGIN.getController()).serverNotReachable();
-            return;
+        RoomState state = app.getRoomState();
+        if(state == null) {
+            final MessageQueue queue = app.getQueue();
+            if (!queue.ping()) {
+                app.changeScene(LOGIN);
+                ((LoginController) LOGIN.getController()).serverNotReachable();
+                return;
+            }
+            send = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    queue.send();
+                }
+            }, 0, 5, TimeUnit.SECONDS);
+            execute = app.getScheduledExecutorService().submit(new Runnable() {
+                @Override
+                public void run() {
+                    queue.execute();
+                    send.cancel(true);
+                }
+            });
+        } else {
+            toNameChooser();
         }
-        send = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                queue.send();
-            }
-        }, 0, 5, TimeUnit.SECONDS);
-        execute = app.getScheduledExecutorService().submit(new Runnable() {
-            @Override
-            public void run() {
-                queue.execute();
-                send.cancel(true);
-            }
-        });
     }
 
     @FXML
@@ -81,9 +86,12 @@ public class LoadingController implements Victim<Message>, Controller {
     @Override
     public void take(Message bullet) {
         NameList nameList = ((NameList) bullet.body);
-        //TODO save nameList somewhere in config???
-        ((NameChooserController)NAME_CHOOSER.getController()).setNameList(nameList.names);
-        ((SeatChooserController)SEAT_CHOOSER.getController()).storeDimensions(nameList.dimensions);
+        app.addRoomState(nameList);
+        toNameChooser();
+    }
+
+    private void toNameChooser() {
+        ((NameChooserController)NAME_CHOOSER.getController()).setNameList();
         app.changeScene(NAME_CHOOSER);
     }
 }

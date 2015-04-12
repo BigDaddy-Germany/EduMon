@@ -24,7 +24,6 @@ import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 
 public class SeatChooserController implements Controller {
     private Main app;
-    private Dimensions dimensions;
     @FXML
     private Pane pane;
     @FXML
@@ -59,14 +58,11 @@ public class SeatChooserController implements Controller {
         return this;
     }
 
-    public void storeDimensions(Dimensions dimensions) {
-        this.dimensions = dimensions;
-    }
-
     public void setDimensions() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                final Dimensions dimensions = app.getRoomState().nameList.dimensions;
                 seatingplan.getChildren().removeAll(seatingplan.getChildren());
                 double rowHeight = 300d / dimensions.height;
                 double columnWidth = 573d / dimensions.width;
@@ -105,7 +101,7 @@ public class SeatChooserController implements Controller {
                         });
                         seatingplan.add(link, x, y);
                     }
-                }
+                } //TODO profocus seat from config
             }
         });
     }

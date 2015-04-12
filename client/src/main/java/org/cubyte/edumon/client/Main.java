@@ -92,6 +92,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        // Prevent JavaFX from closing the jfx thread when all stages are hidden
+        Platform.setImplicitExit(false);
+
         Scene.setApp(this);
         stage.setResizable(false);
         this.stage = stage;
@@ -153,13 +156,18 @@ public class Main extends Application {
             });
             return;
         }
-        stage.hide();
-        optionsController.setOptions(true);
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        Platform.runLater(new Runnable() {
             @Override
-            public void handle(WindowEvent windowEvent) {
+            public void run() {
                 stage.hide();
-                windowEvent.consume();
+                optionsController.setOptions(true);
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        stage.hide();
+                        windowEvent.consume();
+                    }
+                });
             }
         });
 
@@ -171,21 +179,36 @@ public class Main extends Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 messageQueue.queue(messageFactory.create(new BreakRequest()));
-                notificationSystem.showBreakRequestConfirm();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        notificationSystem.showBreakRequestConfirm();
+                    }
+                });
             }
         });
         MenuItem optionsItem = new MenuItem("Optionen");
         optionsItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stage.show();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        stage.show();
+                    }
+                });
             }
         });
         MenuItem logoutItem = new MenuItem("Logout");
         logoutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetToLogin();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        resetToLogin();
+                    }
+                });
             }
         });
         MenuItem exitItem = new MenuItem("Anwendung schließen");
@@ -249,6 +272,12 @@ public class Main extends Application {
                 messageQueue.send();
             }
         }, 0, 1, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                clientConfig.updateRoomStateTimeStamp();
+            }
+        }, 5, 5, TimeUnit.MINUTES);
     }
 
     public void changeScene(final org.cubyte.edumon.client.Scene scene) {
@@ -278,11 +307,11 @@ public class Main extends Application {
     }
 
     public String getName() {
-        return clientConfig.name;
+        return clientConfig.getRoomState().name;
     }
 
     public Position getSeat() {
-        return clientConfig.seat;
+        return clientConfig.getRoomState().seat;
     }
 
     public void setServer(String server) {
@@ -296,12 +325,15 @@ public class Main extends Application {
     }
 
     public void setName(String name) {
-        clientConfig.name = name;
+        if (!name.equals(clientConfig.getRoomState().name)) {
+            clientConfig.getRoomState().setSeat(null);
+        }
+        clientConfig.getRoomState().setName(name);
         clientConfig.save();
     }
 
     public void setSeat(Position seat) {
-        clientConfig.seat = seat;
+        clientConfig.getRoomState().setSeat(seat);
         clientConfig.save();
     }
 
@@ -320,17 +352,13 @@ public class Main extends Application {
         clientConfig.save();
     }
 
-    /*public void addNameList(String room, NameList nameList) {
-        clientConfig.addNameList(room, nameList);
+    public void addRoomState(NameList nameList) {
+        clientConfig.addRoomState(messageQueue.getSessionId(), nameList);
     }
 
-    public void updateNameList(String room) {
-        clientConfig.updateNameList(room);
+    public RoomState getRoomState() {
+        return clientConfig.getRoomState();
     }
-
-    public void getNameList(String room) {
-        clientConfig.getNameList(room);
-    }*/
 
     public ScheduledExecutorService getScheduledExecutorService() {
         return scheduledExecutorService;

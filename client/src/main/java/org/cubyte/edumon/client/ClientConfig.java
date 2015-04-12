@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
-import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +15,6 @@ import java.util.Map;
 public class ClientConfig {
     public String server;
     public String room;
-    public String name;
-    public Position seat;
     public boolean sendKeyData;
     public boolean sendMouseData;
     public boolean sendMicData;
@@ -48,15 +45,12 @@ public class ClientConfig {
 
     @JsonCreator
     public ClientConfig(@JsonProperty("server") String server, @JsonProperty("room") String room,
-                        @JsonProperty("name") String name, @JsonProperty("seat") Position seat,
                         @JsonProperty("sendKeyData") boolean sendKeyData,
                         @JsonProperty("sendMouseData") boolean sendMouseData,
                         @JsonProperty("sendMicData") boolean sendMicData,
-                        @JsonProperty("roomNameListMap") Map<String, RoomState> roomStateMap) {
+                        @JsonProperty("roomStateMap") Map<String, RoomState> roomStateMap) {
         this.server = server;
         this.room = room;
-        this.name = name;
-        this.seat = seat;
         this.sendKeyData = sendKeyData;
         this.sendMouseData = sendMouseData;
         this.sendMicData = sendMicData;
@@ -71,12 +65,13 @@ public class ClientConfig {
         } catch(IOException e) {
             System.err.println("Could not read config.");
             System.err.println(e.getMessage());
-            config = new ClientConfig("http://vps2.code-infection.de/edumon", "", "", null, true, true, true, new HashMap<String, RoomState>());
+            config = new ClientConfig("http://vps2.code-infection.de/edumon", null, true, true, true, new HashMap<String, RoomState>());
         }
         return config;
     }
 
     public void save() {
+        cleanRoomStateMap();
         try {
             mapper.writeValue(file, this);
         } catch (IOException e) {
@@ -85,33 +80,28 @@ public class ClientConfig {
         }
     }
 
-    /*public void addRoomState(String room, NameList nameList) {
-        roomNameListMap.put(room, new Tuple<>(nameList, new Date()));
+    public void addRoomState(String sessionId, NameList nameList) {
+        roomStateMap.put(room, new RoomState(sessionId, nameList));
     }
 
-    public void updateRoomStateTimeStamp(String room) {
-        Tuple<NameList, Date> old = roomNameListMap.get(room);
-        roomNameListMap.put(room, new Tuple<>(old.getT1(), new Date()));
+    public void updateRoomStateTimeStamp() {
+        roomStateMap.get(room).timestamp = new Date();
     }
 
-    public NameList getRoomState(String room) {
-        Tuple<NameList, Date> nameList = roomNameListMap.get(room);
-        if (nameList.getT2().getTime() > new Date().getTime() - 3600 * 1000) {
-            return nameList.getT1();
+    @JsonIgnore
+    public RoomState getRoomState() {
+        RoomState state = roomStateMap.get(room);
+        if (state != null && !state.isOutdated()) {
+            return state;
         }
         return null;
-    }*/ // TODO
-
-    public void cleanRoomStateMap() {
-
     }
 
-    public class RoomState {
-        public String sessionId;
-        public String server;
-        public String name;
-        public Position seat;
-        public NameList nameList;
-        public Date timestamp;
+    public void cleanRoomStateMap() {
+        for(Map.Entry<String, RoomState> entry: roomStateMap.entrySet()) {
+            if (entry.getValue().isOutdated()) {
+                roomStateMap.remove(entry.getKey());
+            }
+        }
     }
 }

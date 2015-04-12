@@ -12,9 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOGIN;
@@ -69,16 +66,20 @@ public class NameChooserController implements Controller {
     }
 
     private void handleNext() {
-        app.setName((String) nameList.getSelectionModel().getSelectedItem());
+        String name = (String) nameList.getSelectionModel().getSelectedItem();
+        if (name == null) {
+            return;
+        }
+        app.setName(name);
         ((SeatChooserController) SEAT_CHOOSER.getController()).setInfoBar().setDimensions();
         app.changeScene(SEAT_CHOOSER);
     }
 
-    public void setNameList(final List<String> list) {
+    public void setNameList() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                nameList.setItems(FXCollections.observableArrayList(list));
+                nameList.setItems(FXCollections.observableArrayList(app.getRoomState().nameList.names)); //TODO prefocus name from config
             }
         });
     }
