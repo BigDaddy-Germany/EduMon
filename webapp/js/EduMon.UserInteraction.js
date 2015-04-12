@@ -3,6 +3,7 @@
         - EduMon.Gui
  */
 
+Promise = Promise || {};
 
 /**
  * This class performs the interaction with the user via pop ups etc.
@@ -11,6 +12,54 @@
 EduMon.UserInteraction = new function() {
     var gui = EduMon.Gui;
     var that = this;
+
+
+    /**
+     * Starts the lecture manager and returns the chosen lecture
+     * @param {Boolean} [replaceStartByOk=false] Indicates, whether the start lecture button should be replaced by OK
+     * @param {int} [selectedLectureId] If a lecture should be selected, the ID can be passed here
+     * @return {Promise} fulfill gets the selected lecture ID
+     */
+    this.selectLecture = function(replaceStartByOk, selectedLectureId) {
+        replaceStartByOk = replaceStartByOk || false;
+
+        // get the selected lecture
+        var valueCalculator = function() {
+            return $('#startId').val().trim();
+        };
+
+        // load all lectures and insert them into the select
+        var initializer = function() {
+            var lectureSelect = $('#startId');
+            var lectures = EduMon.Prefs.lectures;
+
+            for (var i = 0; i < lectures.length; i++) {
+                lectureSelect.append('<option value="' + i + '">' + lectures[i].lectureName + '</option>')
+            }
+
+            if (replaceStartByOk) {
+                $('#dialogBtnSubmit').html('OK');
+            }
+
+            if (selectedLectureId) {
+                lectureSelect.find('option[value=' + selectedLectureId + ']').attr('selected', 'selected');
+            }
+        };
+
+        // check, whether the given lecture exists
+        var validator = function(value) {
+            if (!EduMon.Prefs.lectures[value]) {
+                return 'Please select a valid lecture.';
+            }
+            return true;
+        };
+
+        return new Promise(function(fulfill, reject) {
+            that.promisingDialog('lectureManager', valueCalculator, initializer, validator)
+                .then(fulfill)
+                .catch(reject);
+        });
+    };
 
 
     /**
