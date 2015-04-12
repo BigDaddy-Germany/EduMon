@@ -55,6 +55,24 @@ EduMon.Data = new function() {
 	};
 
 	/**
+	 * Creates a new timeline object
+	 */
+	this.Timeline = function Timeline() {
+		return {
+			status: "stop", // "stop" | "play" | "pause"
+				totalSeconds: 1, //start value 1 is intended
+				start: "",
+				slices: [/*
+							Elements:
+							seconds: 1337,
+							type: "lecture" | "break",
+							end: "12:30"
+							*/]
+		};
+	};
+
+
+	/**
 	 * Creates a current lecture object containing the real data (not only IDs)
 	 * @param {int} lectureId the lecture's ID
 	 * @returns {{
@@ -119,17 +137,7 @@ EduMon.Data = new function() {
 					]
 				*/],
 
-				timeline: {
-					status: "stop", // "stop" | "play" | "pause"
-					totalSeconds: 1, //start value 1 is intended
-					start: "",
-					slices: [/*
-						Elements:
-						seconds: 1337,
-						type: "lecture" | "break",
-						end: "12:30"
-					*/]
-				},
+				timeline: new EduMon.Data.Timeline(),
 
 				analytics: {
 					globalReferenceValues: {/*

@@ -251,6 +251,7 @@ EduMon = new function() {
 
 	this.initLecture = function(){
 		that.updateConnection();
+		EduMon.Timeline.reset();
 		EduMon.Gui.initSeating();
 		broadcastCurrentLecture();
 		EduMon.sendPacket({command:'start'});
