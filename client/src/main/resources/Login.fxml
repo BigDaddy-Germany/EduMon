@@ -9,7 +9,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoginController">
+<AnchorPane fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoginController">
   <children>
     <GridPane id="GridPane" alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" rotate="0.0">
       <children>
@@ -28,7 +28,7 @@
             <Insets left="3.0" />
           </GridPane.margin>
         </Label>
-        <TextField id="" fx:id="room" prefWidth="259.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+        <TextField id="" fx:id="room" onAction="#handleNext" prefWidth="259.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
         <Button mnemonicParsing="false" onAction="#handleNext" text="Weiter" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
         <Hyperlink fx:id="serverLink" onAction="#handlePopup" text="Server: cubeisland.org" textFill="#404040" GridPane.columnIndex="0" GridPane.rowIndex="3">
@@ -52,12 +52,12 @@
         <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
-    <Pane id="" fx:id="popup" layoutX="75.0" layoutY="200.0" opacity="1.0" prefHeight="110.0" prefWidth="450.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" styleClass="" visible="false">
+    <Pane id="" fx:id="popup" layoutX="75.0" layoutY="200.0" opacity="1.0" prefHeight="110.0" prefWidth="450.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" styleClass="null" visible="false">
       <children>
         <Label layoutX="14.0" layoutY="14.0" text="Bitte geben Sie den Server an" />
         <Button layoutX="14.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleClose" text="Schließen" />
         <Button layoutX="348.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleServerSave" text="Speichern" />
-        <TextField fx:id="server" layoutX="14.0" layoutY="33.0" prefWidth="422.0" />
+        <TextField fx:id="server" layoutX="14.0" layoutY="33.0" onAction="#handleServerSave" prefWidth="422.0" />
       </children>
     </Pane>
   </children>

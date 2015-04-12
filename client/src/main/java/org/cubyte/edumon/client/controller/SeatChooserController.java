@@ -1,20 +1,26 @@
 package org.cubyte.edumon.client.controller;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.messaging.messagebody.WhoAmI;
 import org.cubyte.edumon.client.messaging.messagebody.util.Dimensions;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
+import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Main.Scene.LOGIN_CONFIRM;
 import static org.cubyte.edumon.client.Main.Scene.NAME_CHOOSER;
 
@@ -23,9 +29,23 @@ public class SeatChooserController implements Controller {
     private String name;
     private Dimensions dimensions;
     @FXML
+    private Pane pane;
+    @FXML
     private Label roomAndName;
     @FXML
     private GridPane seatingplan;
+
+    @FXML
+    private void initialize() {
+        pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == ESCAPE) {
+                    handleBack();
+                }
+            }
+        });
+    }
 
     @FXML
     private void handleBack() {
@@ -61,21 +81,25 @@ public class SeatChooserController implements Controller {
                         link.setPrefSize(columnWidth, rowHeight);
                         link.setAlignment(Pos.CENTER);
                         link.setStyle("-fx-text-fill: #fff;");
-                        link.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                        link.focusedProperty().addListener(new ChangeListener<Boolean>() {
                             @Override
-                            public void handle(MouseEvent mouseEvent) {
-                                link.setStyle("-fx-text-fill: #000;");
+                            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+                                if (newValue) {
+                                    link.setStyle("-fx-text-fill: #000;");
+                                } else {
+                                    link.setStyle("-fx-text-fill: #fff;");
+                                }
                             }
                         });
-                        link.setOnMouseExited(new EventHandler<MouseEvent>() {
+                        link.setOnMouseMoved(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent mouseEvent) {
-                                link.setStyle("-fx-text-fill: #fff;");
+                                link.requestFocus();
                             }
                         });
-                        link.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        link.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
-                            public void handle(MouseEvent mouseEvent) {
+                            public void handle(ActionEvent mouseEvent) {
                                 app.getQueue().queue(app.getFactory().create(new WhoAmI(name, new Position(dimensions.width - seatX, seatY))));
                                 app.getQueue().send();
                                 app.changeScene(LOGIN_CONFIRM);

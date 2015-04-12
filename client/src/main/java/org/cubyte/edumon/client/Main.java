@@ -61,6 +61,10 @@ public class Main extends Application {
         micListener = new MicListener();
         String separator = File.separator;
         if ("\\".equals(separator)) {
+            File folder = new File(System.getenv("APPDATA") + separator + "EduMon");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
             appData = new File(System.getenv("APPDATA") + separator + "EduMon" + separator + "config");
         } else {
             File folder = new File(System.getProperty("user.home") + separator + ".EduMon");
@@ -72,7 +76,7 @@ public class Main extends Application {
         final ObjectMapper mapper = new ObjectMapper();
         clientConfig = new ClientConfig("", "");
         try {
-            ClientConfig config = mapper.readValue(appData, ClientConfig.class); // TODO create dir
+            ClientConfig config = mapper.readValue(appData, ClientConfig.class);
             clientConfig.server = config.server;
             clientConfig.room = config.room;
         } catch(IOException e) {
@@ -82,7 +86,7 @@ public class Main extends Application {
 
         // set config defaults
         if ("".equals(getServer()))
-            setServer("http://vps2.code-infection.de/edumon/mailbox.php");
+            setServer("http://vps2.code-infection.de/edumon");
         if ("".equals(getRoom()))
             setRoom("160C");
 
@@ -107,7 +111,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         // temporary
         final Main mainMod = new Main();
-        mainMod.setServer("http://vps2.code-infection.de/edumon/mailbox.php");
+        mainMod.setServer("http://vps2.code-infection.de/edumon");
         mainMod.setRoom("170C");
         final MessageQueue messageQueueMod = new MessageQueue(mainMod, true);
         final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");

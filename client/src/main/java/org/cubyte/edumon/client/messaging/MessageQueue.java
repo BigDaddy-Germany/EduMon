@@ -18,6 +18,7 @@ import org.cubyte.edumon.client.messaging.messagebody.BodyDeserializer;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -53,13 +54,17 @@ public class MessageQueue extends Revolver<Message> {
 
     public void send() {
         int queueSize = queuedMessages.size();
+        ArrayList<Message> removedMessages = new ArrayList<>();
         String jsonString = "";
         if (queueSize > 0) {
+            Message message;
             StringWriter writer = new StringWriter();
             jsonString = "[";
             for (int i = 0; i < queueSize; i++) {
                 try {
-                    mapper.writeValue(writer, queuedMessages.poll());
+                    message = queuedMessages.poll();
+                    removedMessages.add(message);
+                    mapper.writeValue(writer, message);
                 } catch (IOException e) {
                     System.err.println("Could not write Json value.");
                     System.err.println(e.getMessage());
@@ -76,13 +81,17 @@ public class MessageQueue extends Revolver<Message> {
             }
         }
 
-        String address = owner.getServer() + "?room=" + owner.getRoom();
+        String address = owner.getServer() + "/mailbox.php?room=" + owner.getRoom();
         if (isModerator) {address += "&moderatorPassphrase=alohomora";}
         HttpPost post = new HttpPost(address);
         post.setEntity(new StringEntity(jsonString, ContentType.create("application/json", "utf-8")));
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
-            //TODO handle server not found
+            if(response.getStatusLine().getStatusCode() != 200) {
+                System.err.println("Something didn't work!!!");
+                queuedMessages.addAll(removedMessages);
+                return;
+            }
             Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
             sessionId = jsonResponse.clientId;
             for (Message message: jsonResponse.inbox) {
@@ -95,11 +104,24 @@ public class MessageQueue extends Revolver<Message> {
                 System.err.println(errorMessage);
             }
         } catch (IOException e) {
-            System.err.println("Could not get response.");
+            System.err.println("Could not parse response.");
             System.err.println(e.getMessage());
-            e.printStackTrace(System.err);
-            //TODO reenter messages to queue
+            queuedMessages.addAll(removedMessages);
         }
+    }
+
+    public boolean ping() {
+        HttpPost post = new HttpPost(owner.getServer() + "/mailbox.php");
+        try (CloseableHttpResponse response = httpClient.execute(post)) {
+            Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
+            if (jsonResponse.errorMessages.size() == 1) {
+                if ("Please select a valid room.".equals(jsonResponse.errorMessages.get(0))) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+        }
+        return false;
     }
 
     public void queue(Message message) {

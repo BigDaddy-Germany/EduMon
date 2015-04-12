@@ -12,7 +12,7 @@ import java.util.*;
 
 public class Message implements Bullet {
     public enum Type {
-        // Don't change the order of the elements!!! //TODO use index
+        // Don't change the order of the elements!!!
         NONE(0),
         NAME_LIST(1),
         WHO_AM_I(2),

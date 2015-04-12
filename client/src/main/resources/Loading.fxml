@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoadingController">
+<AnchorPane id="AnchorPane" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoadingController">
   <children>
     <ProgressIndicator layoutX="281.0" layoutY="181.0" progress="-1.0" />
     <Label layoutX="99.0" layoutY="235.0" prefHeight="51.0" prefWidth="401.0" text="Die Raumdaten können nicht geladen werden. Sie müssen warten bis sich Ihr Veranstaltungsleiter angemeldet hat oder Sie haben den falschen Raum oder Server angegeben." textAlignment="CENTER" textOverrun="ELLIPSIS" wrapText="true" />
