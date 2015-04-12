@@ -1,6 +1,9 @@
 EduMon.Gui = new function() {
 	var that = this;
 
+	var seatUpdateInterval = 2000; //milliseconds
+	var seatUpdateTimer = undefined;
+
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
 	var openedDialog = undefined;
@@ -219,7 +222,7 @@ EduMon.Gui = new function() {
 		popupOpened = 0;
 	};
 
-	var prepareSeats = function(){
+	this.initSeating = function(){
 		$("#seats td").each(function(index,element){
 			$(this).empty()
 			.append($("<div/>").addClass("person")
@@ -227,6 +230,13 @@ EduMon.Gui = new function() {
 				.append($("<div/>").addClass("group").html("&nbsp;"))
 				);
 		});
+
+		if (seatUpdateTimer!==undefined){
+			clearInterval(seatUpdateTimer);
+		}
+		seatUpdateTimer = setInterval(function(){
+			updateStudents();
+		},seatUpdateInterval);
 	};
 
 	/**
@@ -256,11 +266,7 @@ EduMon.Gui = new function() {
 		seat.find(".person .group").text(group);
 	}
 
-	this.init = function(){
-		prepareSeats();
-	};
-
-	this.updateStudents = function(){
+	var updateStudents = function(){
 		for (var key in EduMon.Prefs.currentLecture.activeStudents){
 			if (EduMon.Prefs.currentLecture.activeStudents.hasOwnProperty(key)){
 				var student = EduMon.Prefs.currentLecture.activeStudents[key];
