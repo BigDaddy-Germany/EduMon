@@ -27,6 +27,13 @@ EduMon.Analytics = function() {
         mouseClicks: 1
     };
 
+    var fieldMapping = {
+        keys: 'keyboard',
+        mdist: 'mouseDistance',
+        mclicks: 'mouseClicks',
+        volume: 'microphone'
+    };
+
 
     /**
      * Processes data sent by the client
@@ -45,7 +52,7 @@ EduMon.Analytics = function() {
         // create new history entry for given set of data
         var historyEntry = { time: time };
         util.forEachField(data, function(key, value) {
-            historyEntry[key] = value;
+            historyEntry[fieldMapping[key]] = value;
         });
         student.history.push(historyEntry);
 
@@ -192,8 +199,10 @@ EduMon.Analytics = function() {
 
             // iterate over properties to calculate final rating now
             util.forEachField(weights, function(propertyName, weight) {
-                theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
-                sumPropertyWeights += weight;
+                if (senderValue[propertyName]) {
+                    theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
+                    sumPropertyWeights += weight;
+                }
             });
 
             theReallyFinalIndex /= sumPropertyWeights;
@@ -221,7 +230,7 @@ EduMon.Analytics = function() {
         }
 
         var newHistory = history.filter(function(historyEntry) {
-            return historyEntry.time > Math.round((new Date()) / 1000) - evaluationPeriod;
+            return historyEntry.time > Math.round((new Date().getTime()) / 1000) - evaluationPeriod;
         });
 
 
