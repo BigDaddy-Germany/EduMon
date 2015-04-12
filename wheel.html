@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lunch Wheel</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="lib/jquery/js/jquery.min.js"></script>
+        <script type="text/javascript" src="lib/excanvas/js/excanvas.js"></script>
+
+        <script type="text/javascript">
+
+            function Wheel(canvas, segments) {
+
+                var context = canvas.getContext('2d');
+
+                var PI = Math.PI;
+                var HALF_PI = PI / 2;
+                var TAU = 2 * PI;
+
+                var timerHandle = -1;
+                var timerDelay = 33;
+
+                var angleCurrent = 0;
+                var angleDelta = 0;
+
+                var size = 290;
+
+                var colors = ['#ffff00', '#ffc700', '#ff9100', '#ff6301', '#ff0000', '#c6037e', '#713697', '#444ea1', '#2772b2', '#0297ba', '#008e5b', '#8ac819'];
+
+                var segmentColors = [];
+
+                var maxSpeed = Math.PI / 16;
+
+                var upTime = 1000;
+                var downTime = 17000;
+
+                var spinStart = 0;
+
+                var centerX = 300;
+                var centerY = 300;
+
+                initializeData();
+
+                function initializeData() {
+                    // Ensure we start mid way on a item
+                    //var r = Math.floor(Math.random() * wheel.segments.length);
+                    var r = 0;
+                    angleCurrent = ((r + 0.5) / segments.length) * TAU;
+
+                    var len = segments.length;
+                    var colorLen = colors.length;
+
+                    // Generate a color cache (so we have consistent coloring)
+                    var newSegmentColors = [];
+                    for (var i = 0; i < len; i++) {
+                        newSegmentColors.push(colors[modulo(hashString(segments[i]), colorLen)]);
+                    }
+
+                    segmentColors = newSegmentColors;
+
+                    draw();
+                }
+
+                function modulo(a, n) {
+                    return ((a % n) + n) % n;
+                }
+
+                /**
+                 * Calculates the hash code
+                 *
+                 * @param {String} a the input string
+                 * @returns {number} the string hash code
+                 */
+                function hashString(a) {
+                    // See http://www.cse.yorku.ca/~oz/hash.html
+                    var hash = 5381;
+                    for (i = 0; i < a.length; i++) {
+                        char = a.charCodeAt(i);
+                        hash = ((hash << 5) + hash) + char;
+                        hash = hash & hash; // Convert to 32bit integer
+                    }
+                    return hash;
+                }
+
+                this.spin = function() {
+
+                    // Start the wheel only if it's not already spinning
+                    if (timerHandle == -1) {
+                        spinStart = new Date().getTime();
+                        maxSpeed = PI / (16 + Math.random()); // Randomly vary how hard the spin is
+
+                        timerHandle = setInterval(onTimerTick, timerDelay);
+                    }
+                };
+
+                function onTimerTick() {
+                    draw();
+
+                    var duration = (new Date().getTime() - spinStart);
+                    var progress = 0;
+                    var finished = false;
+
+                    if (duration < upTime) {
+                        progress = duration / upTime;
+                        angleDelta = maxSpeed * Math.sin(progress * HALF_PI);
+                    } else {
+                        progress = duration / downTime;
+                        angleDelta = maxSpeed * Math.sin(progress * HALF_PI + HALF_PI);
+                        if (progress >= 1) {
+                            finished = true;
+                        }
+                    }
+
+                    angleCurrent += angleDelta;
+                    while (angleCurrent >= TAU)
+                        // Keep the angle in a reasonable range
+                        angleCurrent -= TAU;
+
+                    if (finished) {
+                        clearInterval(timerHandle);
+                        timerHandle = -1;
+                        angleDelta = 0;
+                    }
+                }
+
+                function draw() {
+                    clear();
+                    drawWheel();
+                    drawNeedle();
+                }
+
+                function clear() {
+                    context.clearRect(0, 0, 1000, 800);
+                }
+
+                function drawNeedle() {
+                    context.lineWidth = 1;
+                    context.strokeStyle = '#000000';
+                    context.fileStyle = '#ffffff';
+
+                    context.beginPath();
+
+                    context.moveTo(centerX + size - 40, centerY);
+                    context.lineTo(centerX + size + 20, centerY - 10);
+                    context.lineTo(centerX + size + 20, centerY + 10);
+                    context.closePath();
+
+                    context.stroke();
+                    context.fill();
+
+                    // Which segment is being pointed to?
+                    var i = segments.length - Math.floor((angleCurrent / TAU) * segments.length) - 1;
+
+                    // Now draw the winning name
+                    context.textAlign = "left";
+                    context.textBaseline = "middle";
+                    context.fillStyle = '#000000';
+                    context.font = "2em Arial";
+                    context.fillText(segments[i], centerX + size + 25, centerY);
+                }
+
+                function drawSegment(key, lastAngle, angle) {
+                    var value = segments[key];
+
+                    context.save();
+                    context.beginPath();
+
+                    // Start in the centre
+                    context.moveTo(centerX, centerY);
+                    context.arc(centerX, centerY, size, lastAngle, angle, false); // Draw a arc around the edge
+                    context.lineTo(centerX, centerY); // Now draw a line back to the centre
+
+                    // Clip anything that follows to this area
+                    //ctx.clip(); // It would be best to clip, but we can double performance without it
+                    context.closePath();
+
+                    context.fillStyle = segmentColors[key];
+                    context.fill();
+                    context.stroke();
+
+                    // Now draw the text
+                    context.save(); // The save ensures this works on Android devices
+                    context.translate(centerX, centerY);
+                    context.rotate((lastAngle + angle) / 2);
+
+                    context.fillStyle = '#000000';
+                    context.fillText(value.substr(0, 20), size / 2 + 20, 0);
+                    context.restore();
+
+                    context.restore();
+                }
+
+                function drawWheel() {
+
+                    context.lineWidth = 1;
+                    context.strokeStyle = '#000000';
+                    context.textBaseline = "middle";
+                    context.textAlign = "center";
+                    context.font = "1.4em Arial";
+
+                    var lastAngle = angleCurrent;
+                    var len = segments.length;
+
+                    for (var i = 1; i <= len; i++) {
+                        var angle = TAU * (i / len) + angleCurrent;
+                        drawSegment(i - 1, lastAngle, angle);
+                        lastAngle = angle;
+                    }
+
+                    // Draw a center circle
+                    context.beginPath();
+                    context.arc(centerX, centerY, 20, 0, TAU, false);
+                    context.closePath();
+
+                    context.fillStyle = '#ffffff';
+                    context.strokeStyle = '#000000';
+                    context.fill();
+                    context.stroke();
+
+                    // Draw outer circle
+                    context.beginPath();
+                    context.arc(centerX, centerY, size, 0, TAU, false);
+                    context.closePath();
+
+                    context.lineWidth = 10;
+                    context.strokeStyle = '#000000';
+                    context.stroke();
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="wheel">
+            <canvas id="canvas" width="1000" height="600"></canvas>
+        </div>
+        <script>
+            var canvas = document.getElementById('canvas');
+            var w = new Wheel(canvas, [
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pasta',
+                'Pizza'
+            ]);
+            $(canvas).on('click', w.spin);
+        </script>
+    </body>
+</html>
