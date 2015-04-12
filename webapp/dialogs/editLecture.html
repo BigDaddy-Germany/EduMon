@@ -51,7 +51,7 @@
 			if (!EduMon.Prefs.courses[courseId]) {
 				return;
 			}
-			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this lecture?', ['yes','no'], function(value) {
+			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this course?', ['yes','no'], function(value) {
 				if (value == 'yes') {
 					var courses = EduMon.Prefs.courses;
 					EduMon.Prefs.courses = courses.slice(0, courseId).concat(courses.slice(courseId+1));

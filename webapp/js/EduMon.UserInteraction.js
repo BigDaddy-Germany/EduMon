@@ -161,11 +161,6 @@ EduMon.UserInteraction = new function() {
 
         // load saved lecture and initialize input fields
         var initializer = function() {
-            var lecture = EduMon.Prefs.lectures[lectureId];
-            if (!lecture) {
-                return;
-            }
-
             // fill the selects for room and course with options
             var roomSelect = $('#lectureRoom');
             var courseSelect = $('#lectureCourse');
@@ -178,6 +173,11 @@ EduMon.UserInteraction = new function() {
             }
             for (i = 0; i < courses.length; i++) {
                 courseSelect.append('<option value="' + i + '">' + courses[i].name + '</option>');
+            }
+
+            var lecture = EduMon.Prefs.lectures[lectureId];
+            if (!lecture) {
+                return;
             }
 
             $('#lectureName').val(lecture.lectureName);
@@ -253,6 +253,36 @@ EduMon.UserInteraction = new function() {
                 .catch(reject);
         });
     };
+
+
+
+    /**
+     * Opens a dialog and returns a promise to get the values entered by the user
+     * @param {String} dialogId the dialog's ID
+     * @param {Array} formIds all form IDs to return their content
+     * @return {Promise} fulfill will get a map from field IDs to their content
+     */
+    this.simplePromisingFormDialog = function(dialogId, formIds) {
+        return new Promise(function(fulfill, reject) {
+            var valueCalculator = function() {
+                var values = {};
+                formIds.forEach(function (formId) {
+                    var formField = $('#' + formId);
+                    if (formField) {
+                        values[formId] = formField.val();
+                    }
+                });
+                return values;
+            };
+
+            that.promisingDialog(dialogId, valueCalculator)
+                .then(fulfill)
+                .catch(reject);
+        });
+    };
+
+
+
 
     /**
      * Closes dialog, if lastOpenedDialog is undefined, otherwise switches to it

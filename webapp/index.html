@@ -71,7 +71,9 @@
 							<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
 							<br>
 							Direct Direct Dialogs:
+							<input type="button" value="Demo: Lecture start" onclick="EduMon.Gui.showDialog('lectureManager')">
 							<input type="button" value="Demo: Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
+							<input type="button" value="Demo: Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
 							<input type="button" value="Demo: Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
 							<input type="button" value="Demo: CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
 							<br>
