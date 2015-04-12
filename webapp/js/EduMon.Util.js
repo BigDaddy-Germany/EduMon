@@ -1,4 +1,7 @@
+EduMon = window.EduMon || {};
 EduMon.Util = new function() {
+
+    var that = this;
 
     /**
      * Iterates over a field and calls the given functor
@@ -82,10 +85,21 @@ EduMon.Util = new function() {
 
     this.padLeft = function(base, add, length) {
         return (genPadding(add, length) + base).slice(-length)
-    }
+    };
 
     this.padRight = function(base, add, length) {
         return (base + genPadding(add, length)).slice(length)
+    };
+
+    this.openWindow = function(url, options, name) {
+        var splitter = '';
+        var features = '';
+        that.forEachField(options, function(k, v) {
+            features += splitter + k + '=' + v;
+            splitter = ',';
+        });
+
+        return window.open(url, '_' + name, features);
     }
     
 	String.prototype.endsWith = function(suffix) {

@@ -1,6 +1,5 @@
 /* Message-Worker communicates with the message server */
 
-EduMon = {};
 importScripts('EduMon.Util.js');
 
 //config
