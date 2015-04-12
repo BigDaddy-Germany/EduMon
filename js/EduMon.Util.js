@@ -71,4 +71,20 @@ EduMon.Util = new function() {
         };
 
     };
+
+    var genPadding = function(str, length) {
+        var pre = "";
+        while (pre.length < length) {
+            pre += str;
+        }
+        return pre;
+    };
+
+    this.padLeft = function(base, add, length) {
+        return (genPadding(add, length) + base).slice(-length)
+    }
+
+    this.padRight = function(base, add, length) {
+        return (base + genPadding(add, length)).slice(length)
+    }
 };
