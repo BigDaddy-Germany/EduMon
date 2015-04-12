@@ -3,6 +3,7 @@
 		<h2>Edit Lecture</h2>
 		<h3>Please insert your content here</h3>
 	</header>
+		<input type="hidden" id="whoami">
 		Please insert data etc.:<br><br>
 		Lecture name: <input type="text" id="lectureName"><br><br>
 		Room: <select id="lectureRoom" style="width: 200px;"></select>
@@ -23,7 +24,7 @@
 		$('#lectureNewCourse').on('click', function() {
 			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getCourseData)
 					.then(function(newCourse) {
-						var newIndex = EduMon.Prefs.courses.push(newCourse) - 1;
+						var newIndex = EduMon.Prefs.courses.insertIntoFirstFreeSlot(newCourse);
 						$('#lectureCourse').append('<option value="' + newIndex + '">' + newCourse.name + '</option>')
 								.children().last().attr('selected', 'selected');
 					})
@@ -53,9 +54,7 @@
 			}
 			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this course?', ['yes','no'], function(value) {
 				if (value == 'yes') {
-					var courses = EduMon.Prefs.courses;
-					EduMon.Prefs.courses = courses.slice(0, courseId).concat(courses.slice(courseId+1));
-					$('#lectureCourse').find('[value=' + courseId + ']').remove();
+					EduMon.UserInteraction.checkAndDelete('course', courseId, $('#lectureCourse'));
 				}
 			});
 
@@ -67,7 +66,7 @@
 		$('#lectureNewRoom').on('click', function() {
 			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getRoomData)
 					.then(function(newRoom) {
-						var newIndex = EduMon.Prefs.rooms.push(newRoom) - 1;
+						var newIndex = EduMon.Prefs.rooms.insertIntoFirstFreeSlot(newRoom);
 						$('#lectureRoom').append('<option value="' + newIndex + '">' + newRoom.roomName + '</option>')
 								.children().last().attr('selected', 'selected');
 					})
@@ -97,9 +96,7 @@
 			}
 			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this room?', ['yes','no'], function(value) {
 				if (value == 'yes') {
-					var rooms = EduMon.Prefs.rooms;
-					EduMon.Prefs.rooms = rooms.slice(0, roomId).concat(rooms.slice(roomId+1));
-					$('#lectureRoom').find('[value=' + roomId + ']').remove();
+					EduMon.UserInteraction.checkAndDelete('room', roomId, $('#lectureRoom'));
 				}
 			});
 

@@ -172,6 +172,7 @@ EduMon.Data = new function() {
 		}
 	};
 
+	// todo comment me
 	this.createBasePacket = function(type, to, body){
 		return {
 			"type":+type,
@@ -184,5 +185,55 @@ EduMon.Data = new function() {
 		};
 	};
 
+	/**
+	 * Checks, whether the deletion of a resource is allowed
+	 * @param {String} resourceType the resource's type
+	 * @param {int} resourceId the resource's ID
+	 * @param {int|boolean} [allowedUser=false] this user is allowed and causes no deletion error
+	 * @return {int} the calculated error code (1: last one, 2: still used)
+	 */
+	this.checkDeletionErrors = function(resourceType, resourceId, allowedUser) {
+		allowedUser = allowedUser || false;
+
+		var identifyingKey;
+		var potentialUser;
+		var storageLocation;
+
+		switch (resourceType) {
+			case 'room':
+				identifyingKey = 'room';
+				potentialUser = EduMon.Prefs.lectures;
+				storageLocation = EduMon.Prefs.rooms;
+				break;
+
+			case 'course':
+				identifyingKey = 'course';
+				potentialUser = EduMon.Prefs.lectures;
+				storageLocation = EduMon.Prefs.courses;
+				break;
+
+			case 'lecture':
+				identifyingKey = '';
+				potentialUser = [];
+				storageLocation = EduMon.Prefs.lectures;
+				break;
+
+			default:
+				throw 'Unknown resource type';
+				break;
+		}
+
+		if (storageLocation.length < 2) {
+			return 1;
+		}
+
+		for (var i = 0; i < potentialUser.length; ++i) {
+			if (potentialUser[i][identifyingKey] == resourceId && i != allowedUser) {
+				return 2;
+			}
+		}
+
+		return 0;
+	};
 
 };

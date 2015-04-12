@@ -75,6 +75,7 @@ EduMon.Util = new function() {
 
     };
 
+    // todo comment me
     var genPadding = function(str, length) {
         var pre = "";
         while (pre.length < length) {
@@ -83,10 +84,12 @@ EduMon.Util = new function() {
         return pre;
     };
 
+    // todo comment me
     this.padLeft = function(base, add, length) {
         return (genPadding(add, length) + base).slice(-length)
     };
 
+    // todo comment me
     this.padRight = function(base, add, length) {
         return (base + genPadding(add, length)).slice(length)
     };
@@ -100,9 +103,53 @@ EduMon.Util = new function() {
         });
 
         return window.open(url, '_' + name, features);
+    };
+};
+
+
+
+
+
+/**
+ * Checks, whether a String end with a given suffix
+ * @param {String} suffix the given suffix
+ * @return {boolean} True, if the String ends with the given suffix
+ */
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
+
+
+/**
+ * Inserts the given element into the first free slot (undefined)
+ * @param {Object} element the element to insert
+ * @return {int} The element's new index
+ */
+Array.prototype.insertIntoFirstFreeSlot = function(element) {
+    var newIndex;
+
+    for (var i = 0; i < this.length + 1; ++i) {
+        // Because we go to length + 1, there is at least this "free slot"
+        if (this[i] === undefined) {
+            this[i] = element;
+            newIndex = i;
+            break;
+        }
     }
-    
-	String.prototype.endsWith = function(suffix) {
-		return this.indexOf(suffix, this.length - suffix.length) !== -1;
-	};
+
+    return newIndex;
+};
+
+/**
+ * Calculates the first used index
+ * @return {number} the calculated index
+ */
+Array.prototype.firstUsedElement = function() {
+    var firstUsed;
+
+    for (var i = 0; i < this.length; ++i) {
+        if (this[i]) {
+            return i;
+        }
+    }
 };

@@ -19,7 +19,7 @@
         $('#startNew').on('click', function() {
             EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getLectureData)
                     .then(function(newLecture) {
-                        var newIndex = EduMon.Prefs.lectures.push(newLecture) - 1;
+                        var newIndex = EduMon.Prefs.lectures.insertIntoFirstFreeSlot(newLecture);
                         $('#startId').append('<option value="' + newIndex + '">' + newLecture.lectureName + '</option>')
                                 .children().last().attr('selected', 'selected');
                     })
@@ -49,9 +49,7 @@
             }
             EduMon.Gui.showPopup('Delete', 'Do you really want to delete this lecture?', ['yes','no'], function(value) {
                 if (value == 'yes') {
-                    var lectures = EduMon.Prefs.lectures;
-                    EduMon.Prefs.lectures = lectures.slice(0, startId).concat(lectures.slice(startId+1));
-                    $('#startId').find('[value=' + startId + ']').remove();
+                    EduMon.UserInteraction.checkAndDelete('lecture', startId, $('#startId'));
                 }
             });
 
