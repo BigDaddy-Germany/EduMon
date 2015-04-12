@@ -344,9 +344,11 @@
 				*/
 
 				// if new lecture starts (message type 1), delete all packages inside this room now
-				$stmt = $db->prepare("DELETE FROM packages WHERE room = :room");
-				$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT);
-				$stmt->execute();
+				if ($package['type'] == 1) {
+					$stmt = $db->prepare("DELETE FROM packages WHERE room = :room");
+					$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT);
+					$stmt->execute();
+				}
 
 				// insert new package into database
 
