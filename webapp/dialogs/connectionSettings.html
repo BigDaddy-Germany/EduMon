@@ -37,13 +37,17 @@ $(function() {
 					EduMon.updateConnection();
 					EduMon.Gui.closeDialog();
 				} else {
-					var info = "Die Verbindung konnte nicht aufgebaut werden:<br>";
+					var info = "Die Verbindung konnte nicht aufgebaut werden:<br><i>";
 					if (xhr.status===500){
 						info += xhr.responseText;
 					} else {
-						info += "["+xhr.status+"] "+status;
+						if (xhr.status===0){
+							info += "Server nicht gefunden.";
+						} else {
+							info += "["+xhr.status+"] "+status;
+						}
 					}
-					EduMon.Gui.showPopup("Fehler beim Verbindungstest",info,[{text:"Zurück",value:"",class:"danger"}],function(){});
+					EduMon.Gui.showPopup("Fehler beim Verbindungstest",info+"</i>",[{text:"Zurück",value:"",class:"danger"}],function(){});
 					EduMon.Gui.setDialogBlock(0);
 				}
 			}
