@@ -247,7 +247,7 @@ EduMon.Gui = new function() {
 		var seats = $("#seats").find("tbody");
         if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
 		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
-		var seat = seats.children().eq(seatsInfo.height-row).children().eq(seatsInfo.width-number);
+		var seat = seats.children().eq(seatsInfo.height-row).children().eq(number-1);
 
 		var colorCoding = {low:"#4CAF50",mid:"#FF5722",high:"#F44336"};
 		var color =                 colorCoding.low;
