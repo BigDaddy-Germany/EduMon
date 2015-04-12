@@ -43,6 +43,10 @@ public class Main extends Application {
     private final ClientConfig clientConfig;
     private Stage stage;
     private final ScheduledExecutorService scheduledExecutorService;
+    private final NotificationSystem notificationSystem;
+
+    private int sentCounter = 0;
+    private int receivedCounter = 0;
 
     public Main() {
         keyListener = new KeyListener();
@@ -62,6 +66,7 @@ public class Main extends Application {
         }
 
         scheduledExecutorService = Executors.newScheduledThreadPool(5);
+        notificationSystem = new NotificationSystem();
     }
 
     public static void main(String[] args) {
@@ -86,7 +91,7 @@ public class Main extends Application {
         messageQueueMod.send();
         */// temporary
 
-        org.cubyte.edumon.client.Scene.setApp(this);
+        Scene.setApp(this);
         stage.setResizable(false);
         this.stage = stage;
         resetToLogin();
@@ -126,25 +131,29 @@ public class Main extends Application {
         micListener.fetchLevel();
     }
 
-    private void addAppToSystemTray() {
+    public boolean canRunInBackground() {
         String os = System.getProperty("os.name").toLowerCase();
+        return SystemTray.isSupported() && (os.contains("win") || os.contains("mac"));
+    }
+
+    private void addAppToSystemTray() {
         final OptionsController optionsController = (OptionsController) OPTIONS.getController();
         optionsController.sendKeyData(clientConfig.sendKeyData).sendMouseData(clientConfig.sendMouseData)
                 .sendMicData(clientConfig.sendMicData).setDataOverview();
-        stage.setTitle("Optionen");
+        stage.setTitle("EduMon Client");
         changeScene(OPTIONS);
-        if (!SystemTray.isSupported() || (!os.contains("win") && !os.contains("mac"))) {
+        if (!canRunInBackground()) {
+            optionsController.setOptions(false);
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent windowEvent) {
-                    optionsController.showPopup();
-                    windowEvent.consume();
+                    exit();
                 }
             });
             return;
         }
         stage.hide();
-        optionsController.hideSendBreakrequest();
+        optionsController.setOptions(true);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
@@ -161,7 +170,7 @@ public class Main extends Application {
             @Override
             public void actionPerformed(ActionEvent e) {
                 messageQueue.queue(messageFactory.create(new BreakRequest()));
-                trayIcon.displayMessage("Hallo", "Du hast eine Pausenanfrage gesendet", TrayIcon.MessageType.INFO); // TODO maybe do it as Popup
+                notificationSystem.showBreakRequestConfirm();
             }
         });
         MenuItem optionsItem = new MenuItem("Optionen");
@@ -321,5 +330,29 @@ public class Main extends Application {
         }
         System.runFinalization();
         System.exit(0);
+    }
+
+    public void incSent(int n) {
+        sentCounter += n;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ((OptionsController) OPTIONS.getController()).setSent(sentCounter);
+            }
+        });
+    }
+
+    public void incReceived(int n) {
+        receivedCounter += n;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ((OptionsController) OPTIONS.getController()).setReceived(receivedCounter);
+            }
+        });
+    }
+
+    public NotificationSystem getNotificationSystem() {
+        return notificationSystem;
     }
 }

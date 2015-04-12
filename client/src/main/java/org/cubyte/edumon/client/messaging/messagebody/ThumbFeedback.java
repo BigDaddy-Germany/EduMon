@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ThumbFeedback {
     public final int id;
-    public final float thumb;
+    public final float value;
 
     @JsonCreator
-    public ThumbFeedback(@JsonProperty("id") int id, @JsonProperty("thumb") float thumb) {
+    public ThumbFeedback(@JsonProperty("id") int id, @JsonProperty("value") float value) {
         this.id = id;
-        this.thumb =thumb;
+        this.value = value;
     }
 
     @Override
@@ -20,13 +20,13 @@ public class ThumbFeedback {
 
         ThumbFeedback that = (ThumbFeedback) o;
 
-        return id == that.id && Float.compare(that.thumb, thumb) == 0;
+        return id == that.id && Float.compare(that.value, value) == 0;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + (thumb != +0.0f ? Float.floatToIntBits(thumb) : 0);
+        result = 31 * result + (value != +0.0f ? Float.floatToIntBits(value) : 0);
         return result;
     }
 }

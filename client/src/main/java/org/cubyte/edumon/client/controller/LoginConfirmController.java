@@ -22,30 +22,35 @@ public class LoginConfirmController implements Controller {
     }
 
     public void confirmLogin() {
-        seconds = 3;
-        final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String text = "Die Applikation wird nun im Hintergrund ausgeführt";
-                        for (int i = 0; i < seconds; i++) {
-                            text += ".";
+        if (app.canRunInBackground()) {
+            seconds = 3;
+            final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            String text = "Die Applikation wird nun im Hintergrund ausgeführt";
+                            for (int i = 0; i < seconds; i++) {
+                                text += ".";
+                            }
+                            time.setText(text);
                         }
-                        time.setText(text);
+                    });
+                    if (seconds > 0) {
+                        seconds--;
                     }
-                });
-                if (seconds > 0) {
-                    seconds--;
                 }
-            }
-        }, 1, 1, SECONDS);
-        app.getScheduledExecutorService().schedule(new Runnable() {
-            @Override
-            public void run() {
-                scheduledFuture.cancel(true);
-            }
-        }, seconds + 1, SECONDS);
+            }, 1, 1, SECONDS);
+            app.getScheduledExecutorService().schedule(new Runnable() {
+                @Override
+                public void run() {
+                    scheduledFuture.cancel(true);
+                    app.startBackgroundExecution();
+                }
+            }, seconds + 1, SECONDS);
+        } else {
+            app.startBackgroundExecution();
+        }
     }
 }

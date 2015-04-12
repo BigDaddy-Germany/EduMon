@@ -4,13 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Separator;
 import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.messaging.messagebody.BreakRequest;
 
 public class OptionsController implements Controller {
     private Main app;
-
+    @FXML
+    private Label title;
     @FXML
     private Label room;
     @FXML
@@ -20,9 +21,15 @@ public class OptionsController implements Controller {
     @FXML
     private Label seat;
     @FXML
-    private Pane popup;
+    private Label sent;
     @FXML
-    private Button sendBreakrequest;
+    private Label received;
+    @FXML
+    private Separator separator;
+    @FXML
+    private Button sendBreakRequest;
+    @FXML
+    private Button logout;
     @FXML
     private CheckBox keySensor;
     @FXML
@@ -42,19 +49,14 @@ public class OptionsController implements Controller {
 
     @FXML
     private void handleSendBreakrequest() {
-        app.getQueue().queue(app.getFactory().create(new BreakRequest())); //TODO show confirmation
+        app.getQueue().queue(app.getFactory().create(new BreakRequest()));
+        app.getNotificationSystem().showBreakRequestConfirm();
     }
 
     @FXML
     private void handleCloseApp() {
         app.exit();
     }
-
-    @FXML
-    private void handleCancel() {
-        popup.setVisible(false);
-    }
-
     @FXML
     private void handleSendKeyData() {
         app.setSendKeyData(keySensor.isSelected());
@@ -88,10 +90,21 @@ public class OptionsController implements Controller {
         seat.setText("Reihe " + app.getSeat().y + " Sitzplatz " + app.getSeat().x);
     }
 
-    public void showPopup() {
-        popup.setVisible(true);
+    public void setOptions(boolean isOptions) {
+        sendBreakRequest.setVisible(!isOptions);
+        logout.setVisible(!isOptions);
+        separator.setVisible(!isOptions);
+        if (isOptions) {
+            title.setText("Optionen");
+        } else {
+            title.setText("EduMon Client");
+        }
     }
-    public void hideSendBreakrequest() {
-        sendBreakrequest.setVisible(false);
+
+    public void setSent(int n) {
+        sent.setText(n + " gesendet");
+    }
+    public void setReceived(int n) {
+        received.setText(n + " empfangen");
     }
 }

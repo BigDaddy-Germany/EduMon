@@ -88,13 +88,15 @@ public class MessageQueue extends Revolver<Message> {
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
             if(response.getStatusLine().getStatusCode() != 200) {
-                System.err.println("Something didn't work!!!");
+                //System.err.println("Something didn't work!!!");
                 queuedMessages.addAll(removedMessages);
                 return;
             }
+            owner.incSent(queueSize);
             Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
             sessionId = jsonResponse.clientId;
             for (Message message: jsonResponse.inbox) {
+                owner.incReceived(1);
                 load(message);
             }
             if (jsonResponse.errorMessages.size() > 0) {
@@ -106,12 +108,12 @@ public class MessageQueue extends Revolver<Message> {
         } catch (IOException e) {
             System.err.println("Could not parse response.");
             System.err.println(e.getMessage());
-            queuedMessages.addAll(removedMessages);
         }
     }
 
     public boolean ping() {
         HttpPost post = new HttpPost(owner.getServer() + "/mailbox.php");
+        owner.incSent(1);
         try (CloseableHttpResponse response = httpClient.execute(post)) {
             Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
             if (jsonResponse.errorMessages.size() == 1) {

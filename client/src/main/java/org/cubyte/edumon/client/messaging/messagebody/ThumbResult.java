@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ThumbResult implements MessageBody {
+    public final int id;
     public final float average;
 
     @JsonCreator
-    public ThumbResult(@JsonProperty("average") float average) {
+    public ThumbResult(@JsonProperty("id") int id, @JsonProperty("average") float average) {
+        this.id = id;
         this.average = average;
     }
 
@@ -18,11 +20,14 @@ public class ThumbResult implements MessageBody {
 
         ThumbResult that = (ThumbResult) o;
 
-        return Float.compare(that.average, average) == 0;
+        return Float.compare(that.average, average) == 0 && id == that.id;
+
     }
 
     @Override
     public int hashCode() {
-        return (average != +0.0f ? Float.floatToIntBits(average) : 0);
+        int result = id;
+        result = 31 * result + (average != +0.0f ? Float.floatToIntBits(average) : 0);
+        return result;
     }
 }

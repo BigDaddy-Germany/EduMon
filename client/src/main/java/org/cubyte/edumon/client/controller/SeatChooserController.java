@@ -103,7 +103,6 @@ public class SeatChooserController implements Controller {
                                 app.getQueue().send();
                                 app.changeScene(LOGIN_CONFIRM);
                                 ((LoginConfirmController) LOGIN_CONFIRM.getController()).confirmLogin();
-                                app.startBackgroundExecution();
                             }
                         });
                         seatingplan.add(link, x, y);
