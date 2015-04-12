@@ -210,11 +210,6 @@
 		http_response_code(500);
 	}
 
-	if (!isset($_GET['room']) or !is_string($_GET['room'])) {
-		$errorMessages[] = 'Please select a valid room.';
-		http_response_code(400);
-	}
-
 
 // check whether this client is the moderator
 	if (isset($_GET['moderatorPassphrase'])) {
@@ -243,9 +238,15 @@
 			http_response_code(500);
 			die(implode(" ",$errorMessages));
 		} else {
-			http_response_code(242);
-			die();
+			http_response_code(200);
+			die("EduMon");
 		}
+	}
+
+
+	if (!isset($_GET['room']) or !is_string($_GET['room'])) {
+		$errorMessages[] = 'Please select a valid room.';
+		http_response_code(400);
 	}
 
 
