@@ -34,7 +34,9 @@ EduMon.UserInteraction = new function() {
             var lectures = EduMon.Prefs.lectures;
 
             for (var i = 0; i < lectures.length; i++) {
-                lectureSelect.append('<option value="' + i + '">' + lectures[i].lectureName + '</option>')
+                if (lectures[i]) {
+                    lectureSelect.append('<option value="' + i + '">' + lectures[i].lectureName + '</option>')
+                }
             }
 
             if (replaceStartByOk) {
@@ -44,6 +46,8 @@ EduMon.UserInteraction = new function() {
             if (selectedLectureId) {
                 lectureSelect.find('option[value=' + selectedLectureId + ']').attr('selected', 'selected');
             }
+
+            lectureSelect.sortSelectBox();
         };
 
         // check, whether the given lecture exists
@@ -74,6 +78,8 @@ EduMon.UserInteraction = new function() {
 
         return new Promise(function(fulfill, reject) {
             var oldDialog = $('#dialogContainer').clone(true, true);
+
+            // todo apply instead of call ??
             dialogOpener.call(dialogOpener, newArguments)
                 .then(function(data) {
                     $('#dialogContainer').replaceWith(oldDialog);
@@ -218,16 +224,25 @@ EduMon.UserInteraction = new function() {
             var courses = EduMon.Prefs.courses;
 
             for (var i = 0; i < rooms.length; i++) {
-                roomSelect.append('<option value="' + i + '">' + rooms[i].roomName + '</option>');
+                if (rooms[i]) {
+                    roomSelect.append('<option value="' + i + '">' + rooms[i].roomName + '</option>');
+                }
             }
             for (i = 0; i < courses.length; i++) {
-                courseSelect.append('<option value="' + i + '">' + courses[i].name + '</option>');
+                if (courses[i]) {
+                    courseSelect.append('<option value="' + i + '">' + courses[i].name + '</option>');
+                }
             }
+
+            courseSelect.sortSelectBox();
+            roomSelect.sortSelectBox();
 
             var lecture = EduMon.Prefs.lectures[lectureId];
             if (!lecture) {
                 return;
             }
+
+            $('#whoami').val(lectureId);
 
             $('#lectureName').val(lecture.lectureName);
             roomSelect.val(lecture.room);
@@ -410,5 +425,63 @@ EduMon.UserInteraction = new function() {
                 .catch(reject);
         });
     };
+
+
+    this.checkAndDelete = function(resourceType, resourceId, domSelect) {
+        // check, whether deletion is allowed
+        var allowedUser = false;
+        var whoAmI = $('#whoami').val();
+        if (whoAmI != '') {
+            allowedUser = whoAmI;
+        }
+
+        var deletionErrors = EduMon.Data.checkDeletionErrors(resourceType, resourceId, allowedUser);
+
+        if (!deletionErrors) {
+            var storage;
+            var whereAmI;
+
+            switch (resourceType) {
+                case 'room':
+                    storage = EduMon.Prefs.rooms;
+                    whereAmI = EduMon.Prefs.lectures;
+                    break;
+                case 'course':
+                    storage = EduMon.Prefs.courses;
+                    whereAmI = EduMon.Prefs.lectures;
+                    break;
+                case 'lecture':
+                    storage = EduMon.Prefs.lectures;
+                    whereAmI = [];
+                    break;
+                default:
+                    throw 'Unknown resource type.';
+            }
+
+            storage[resourceId] = undefined;
+            domSelect.find('[value=' + resourceId + ']').remove();
+
+            if (whereAmI[whoAmI] && whereAmI[whoAmI][resourceType] == resourceId) {
+                whereAmI[whoAmI][resourceType] = storage.firstUsedElement();
+            }
+
+
+        } else {
+            var errorMsg;
+            switch(deletionErrors) {
+                case 1:
+                    errorMsg = 'There has to be at least one entity.';
+                    break;
+                case 2:
+                    errorMsg = 'This entity is still used.';
+                    break;
+                case 3:
+                    errorMsg = 'Unknown deletion error.';
+                    break;
+            }
+
+            EduMon.Gui.showPopup('Error', errorMsg, ['ok']);
+        }
+    }
 
 };
