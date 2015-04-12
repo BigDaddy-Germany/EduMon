@@ -5,8 +5,10 @@
 	</header>
 		Please insert data etc.:<br><br>
 		Lecture name: <input type="text" id="lectureName"><br><br>
-		Room: <select multiple="multiple" id="lectureRoom" style="height: 40px;"></select><span id="lecutreEditRoom">[edit]</span><span id="lecutreNewRoom">[add]</span><br>
-		Course: <select multiple="multiple" id="lectureCourse" style="height: 40px;"></select><span id="lecutreEditCourse">[edit]</span><span id="lecutreNewCourse">[add]</span><br>
+		Room: <select id="lectureRoom" style="width: 200px;"></select>
+			<span id="lectureEditRoom">[edit]</span><span id="lectureNewRoom">[add]</span><span id="lectureDelRoom">[del]</span><br>
+		Course: <select id="lectureCourse" style="width: 200px;"></select>
+			<span id="lectureEditCourse">[edit]</span><span id="lectureNewCourse">[add]</span><span id="lectureDelCourse">[del]</span><br>
 
 	<footer>
 		<button id="dialogBtnBack" type="button" class="btn btn-default">Abort</button>
@@ -17,5 +19,46 @@
 <script type="text/javascript">
 	$(function() {
 
+		// Add, edit and delete course
+		$('#lectureNewCourse').on('click', function() {
+			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getCourseData)
+					.then(function(newCourse) {
+						var newIndex = EduMon.Prefs.courses.push(newCourse) - 1;
+						$('#lectureCourse').append('<option value="' + newIndex + '">' + newCourse.name + '</option>')
+								.children().last().attr('selected', 'selected');
+					})
+					.catch(function(data) { console.log(data); });
+
+		});
+
+		$('#lectureEditCourse').on('click', function() {
+			var courseId = $('#lectureCourse').val();
+			if (!EduMon.Prefs.courses[courseId]) {
+				return;
+			}
+
+			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.getCourseData, courseId)
+					.then(function(newCourse) {
+						EduMon.Prefs.courses[courseId] = newCourse;
+						$('#lectureCourse').find('[value=' + courseId + ']').html(newCourse.name).attr('selected', 'selected');
+					})
+					.catch(function(data) { console.log(data); });
+
+		});
+
+		$('#lectureDelCourse').on('click', function() {
+			var courseId = $('#lectureCourse').val();
+			if (!EduMon.Prefs.courses[courseId]) {
+				return;
+			}
+			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this lecture?', ['yes','no'], function(value) {
+				if (value == 'yes') {
+					var courses = EduMon.Prefs.courses;
+					EduMon.Prefs.courses = courses.slice(0, courseId).concat(courses.slice(courseId+1));
+					$('#lectureCourse').find('[value=' + courseId + ']').remove();
+				}
+			});
+
+		});
 	})
 </script>

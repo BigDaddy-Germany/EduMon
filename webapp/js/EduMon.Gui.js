@@ -180,7 +180,6 @@ EduMon.Gui = new function() {
 	 * @param {Boolean} [attentionAbort] If activated and another popup is already open, attenion box will flash instead of an error being thrown
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
-		callback = callback || function() {};
 		if (popupOpened && attentionAbort!==true){
 			throw "Cannot open another popup. The current one has to be closed first";
 		} else if (popupOpened && attentionAbort===true){

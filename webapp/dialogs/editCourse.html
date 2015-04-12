@@ -88,9 +88,7 @@
 		// listener to import csv data
 		$('#courseCsvImport').on('click', function() {
 
-			EduMon.UserInteraction.openStackedDialog(
-					EduMon.UserInteraction.importCsvContent,
-					[])
+			EduMon.UserInteraction.openStackedDialog(EduMon.UserInteraction.importCsvContent)
 					.then(function(data) {
 						importCsvData(data);
 					})
