@@ -30,7 +30,7 @@ $(function() {
 			cache: false,
 			dataType: "text",
 			complete: function(xhr, status){
-				if (status==="success" && xhr.status===202 && responseText==="EduMon"){
+				if (status==="success" && xhr.status===202 && xhr.responseText==="EduMon"){
 					messaging.serverUrl = serverUrl;
 					messaging.moderatorPassphrase = moderatorPassphrase;
 					EduMon.Gui.showToast("Verbindungseinstellungen aktualisiert.");
