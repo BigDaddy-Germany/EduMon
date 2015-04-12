@@ -36,10 +36,6 @@
 			var lineCount = $('.courseMemberLine').length;
 			if (lineCount > 1) {
 				member.remove();
-
-				if (lineCount == 2) {
-					$('.courseMemberDelete').css('display', 'none');
-				}
 			}
 		}
 
@@ -50,29 +46,37 @@
 			var lastLine = $('.courseMemberLine').last();
 			lastLine.after(lastLine[0].outerHTML);
 
-			// set the delete listeners and make the button visible again (at least one additional field, yet)
+			// set the delete listeners again (at least one additional field, yet)
 			$('.courseMemberDelete')
-					.css('display', '')
 					.off('click')
 					.on('click', deleteMember);
 		}
 
 		/**
-		 * Creates an object to stash the current data
-		 * @return {Object} the object containing all the data
+		 * Imports the data gotten by the CSV importer
+		 * @param {Array} csvData The given CSV data
 		 */
-		function createStashObject() {
-			return $('#dialogContainer').clone(true, true);
-		}
+		function importCsvData(csvData) {
+			var existingNames = [];
+			$('.courseMemberName').each(function() {
+				existingNames.push($(this).val());
+			});
 
-		/**
-		 * Restores the given stashed data to fill the fields again
-		 * @param {Object} stashedData the data stashed before
-		 */
-		function restoreStashedData(stashedData) {
-			if (stashedData) {
-				$('#dialogContainer').replaceWith(stashedData);
-			}
+			csvData.forEach(function(dataLine) {
+				var nameIndex = existingNames.indexOf(dataLine[0]);
+
+				if (nameIndex == -1) {
+					addLine();
+					existingNames.push(dataLine[0]);
+					nameIndex = existingNames.length - 1;
+				}
+
+				var nameFields = $('.courseMemberName');
+				var groupFields = $('.courseMemberGroup');
+
+				nameFields.eq(nameIndex).val(dataLine[0]);
+				groupFields.eq(nameIndex).val(dataLine[1]);
+			});
 		}
 
 		// add new lines to the member form by clicking on the add button
@@ -85,16 +89,13 @@
 		$('#courseCsvImport').on('click', function() {
 
 			EduMon.UserInteraction.openStackedDialog(
-					createStashObject(),
 					EduMon.UserInteraction.importCsvContent,
 					[])
 					.then(function(data) {
-						restoreStashedData(data[0]);
-						console.log(data[1]);
+						importCsvData(data);
 					})
 					.catch(function(data) {
-						restoreStashedData(data[0]);
-						console.log(data[1]);
+						console.log(data);
 					});
 
 		});

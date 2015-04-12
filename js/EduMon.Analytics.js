@@ -54,6 +54,8 @@ EduMon.Analytics = function() {
         util.forEachField(data, function(key, value) {
             historyEntry[fieldMapping[key]] = value;
         });
+        // todo better way?
+        student.history = student.history || [];
         student.history.push(historyEntry);
 
         student.micHistory.push({

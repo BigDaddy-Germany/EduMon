@@ -14,23 +14,25 @@ EduMon.UserInteraction = new function() {
 
 
     /**
-     * Executes the given dialog function returning a promise and
-     * returns both the data persisted before and the new calculated data
-     * @param {Object} persistedData the data persisted before
+     * Executes the given dialog function returning a promise
+     * The previous dialog will be stashed and restored
      * @param {Function} dialogOpener the function to open the dialog
      * @param {Array} arguments all parameters to call the function
      * @return {Promise} fulfill gets both the persisted data and the new calculated data as an array
      */
-    this.openStackedDialog = function(persistedData, dialogOpener, arguments) {
-        var newArguments = arguments.slice(2);
+    this.openStackedDialog = function(dialogOpener, arguments) {
+        var newArguments = arguments.slice(1);
 
         return new Promise(function(fulfill, reject) {
+            var oldDialog = $('#dialogContainer').clone(true, true);
             dialogOpener.call(newArguments)
                 .then(function(data) {
-                    fulfill([persistedData, data]);
+                    $('#dialogContainer').replaceWith(oldDialog);
+                    fulfill(data);
                 })
                 .catch(function(data) {
-                    reject([persistedData, data]);
+                    $('#dialogContainer').replaceWith(oldDialog);
+                    reject(data);
                 })
         });
     };
