@@ -239,14 +239,18 @@ EduMon = new function() {
 	};
 
 	this.initLecture = function(){
+		that.updateConnection();
+		EduMon.Gui.initSeating();
+		broadcastCurrentLecture();
+		EduMon.sendPacket({command:'start'});
+	};
+
+	this.updateConnection = function(){
 		that.sendPacket({command:"config",
 			url: EduMon.Prefs.currentLecture.messaging.serverUrl,
 			room: EduMon.Prefs.currentLecture.room.roomName,
 			moderatorPassphrase:EduMon.Prefs.currentLecture.messaging.moderatorPassphrase
 		});
-		EduMon.Gui.initSeating();
-		broadcastCurrentLecture();
-		EduMon.sendPacket({command:'start'});
 	};
 
 	this.stopLecture = function(){
