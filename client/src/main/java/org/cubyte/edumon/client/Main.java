@@ -104,7 +104,7 @@ public class Main extends Application {
         // temporary
         final Main mainMod = new Main();
         mainMod.setServer("http://vps2.code-infection.de/edumon/mailbox.php");
-        mainMod.setRoom("160C");
+        mainMod.setRoom("170C");
         final MessageQueue messageQueueMod = new MessageQueue(mainMod, true);
         final MessageFactory messageFactoryMod = new MessageFactory(mainMod, "BROADCAST");
         ArrayList<String> list = new ArrayList<>();

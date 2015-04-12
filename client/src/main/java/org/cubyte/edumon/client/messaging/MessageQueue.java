@@ -18,12 +18,14 @@ import org.cubyte.edumon.client.messaging.messagebody.BodyDeserializer;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.io.*;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageQueue extends Revolver<Message> {
     private Main owner;
 
-    private CopyOnWriteArrayList<Message> queuedMessages;
+    private BlockingQueue<Message> queuedMessages;
     private CloseableHttpClient httpClient;
     private CookieStore cookieStore;
     private String sessionId;
@@ -37,7 +39,7 @@ public class MessageQueue extends Revolver<Message> {
     public MessageQueue(Main owner, boolean isModerator) {
         this.owner = owner;
 
-        this.queuedMessages = new CopyOnWriteArrayList<>();
+        this.queuedMessages = new LinkedBlockingQueue<>();
         this.cookieStore = new BasicCookieStore();
         this.httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         this.sessionId = "";
@@ -57,7 +59,7 @@ public class MessageQueue extends Revolver<Message> {
             jsonString = "[";
             for (int i = 0; i < queueSize; i++) {
                 try {
-                    mapper.writeValue(writer, queuedMessages.get(i));
+                    mapper.writeValue(writer, queuedMessages.poll());
                 } catch (IOException e) {
                     System.err.println("Could not write Json value.");
                     System.err.println(e.getMessage());
@@ -96,9 +98,8 @@ public class MessageQueue extends Revolver<Message> {
             System.err.println("Could not get response.");
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
-            return;
+            //TODO reenter messages to queue
         }
-        queuedMessages.clear();
     }
 
     public void queue(Message message) {
