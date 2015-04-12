@@ -15,6 +15,17 @@ EduMon.Util = new function() {
 
 
     /**
+     * Counts the number of a given objects own properties
+     * @param {object} object with attributes to count
+     */
+    this.countFields = function(object) {
+		var count = 0;
+		this.forEachField(object,function(){count++;});
+		return count;
+    };
+
+
+    /**
      * BitSet class to use bitwise operators without thinking about them
      * @param {int} [startValue=0] the start value
      */

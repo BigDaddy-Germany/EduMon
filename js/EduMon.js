@@ -92,7 +92,19 @@ EduMon = new function() {
 				Client asks for break
 				body: {}
 				 */
-				// todo @Niko: Break Request
+				if (EduMon.Prefs.currentLecture.timeline.status==="play"){
+					var analytics = EduMon.Prefs.currentLecture.analytics;
+					var numStudents = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
+					analytics.breakRequests++;
+
+					var style = "info";
+					if (analytics.breakRequests>(numStudents*0.2)) style = "warning";
+					if (analytics.breakRequests>(numStudents*0.5)) style = "danger";
+
+					EduMon.Gui.showFeedMessage(style,"Pausenanfrage",
+							(analytics.breakRequests>1 ? analytics.breakRequests+" Teilnehmer bitten" : "Ein Teilnehmer bittet")+" um eine Pause."
+							);
+				}
 				break;
 
 			default:

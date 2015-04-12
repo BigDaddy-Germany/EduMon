@@ -36,6 +36,7 @@ EduMon.Timeline = new function() {
 			setPreviousEnd();
 			EduMon.Gui.showToast("Vorlesung pausiert.");
 			timeline.status = "pause";
+			EduMon.Prefs.currentLecture.analytics.breakRequests = 0;
 		} else throw "Timeline-Unterbrechung nicht erlaubt, Timer lief nicht";
 		updateTimeline();
 	};
