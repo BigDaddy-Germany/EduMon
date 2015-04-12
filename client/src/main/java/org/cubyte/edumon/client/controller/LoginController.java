@@ -60,6 +60,7 @@ public class LoginController implements Controller {
         LoadingController loadingController = (LoadingController) LOADING.getController();
         loadingController.setInfoBar();
         app.changeScene(LOADING);
+        app.getQueue().resetSessionId();
         loadingController.getNameList();
     }
 

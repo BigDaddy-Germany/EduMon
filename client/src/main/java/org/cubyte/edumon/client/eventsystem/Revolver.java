@@ -8,8 +8,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Revolver<T extends Bullet> {
-    private BlockingQueue<T> bullets;
-    private Map<Class, List<Victim>> bulletVictimMap;
+    private final BlockingQueue<T> bullets;
+    private final Map<Class, List<Victim>> bulletVictimMap;
 
     public Revolver() {
         bullets = new LinkedBlockingQueue<>();
@@ -39,10 +39,18 @@ public class Revolver<T extends Bullet> {
     }
 
     public void load(T bullet) {
-        bullets.add(bullet);
+        try {
+            bullets.put(bullet);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean hasBullets() {
         return bullets.size() > 0;
+    }
+
+    public boolean peek() {
+        return bullets.peek() != null;
     }
 }

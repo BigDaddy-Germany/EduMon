@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -65,7 +66,21 @@ public class Main extends Application {
             System.err.println(e.getMessage());
         }
 
-        scheduledExecutorService = Executors.newScheduledThreadPool(5);
+        scheduledExecutorService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
+            int id = 0;
+            @Override
+            public Thread newThread(Runnable r) {
+                id++;
+                Thread t = new Thread(r, "test" + id);
+                t.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+                    @Override
+                    public void uncaughtException(Thread t, Throwable e) {
+                        System.out.println(t.getName());
+                    }
+                });
+                return t;
+            }
+        });
         notificationSystem = new NotificationSystem();
     }
 
@@ -286,18 +301,22 @@ public class Main extends Application {
 
     public void setServer(String server) {
         clientConfig.server = server;
+        clientConfig.save();
     }
 
     public void setRoom(String room) {
         clientConfig.room = room;
+        clientConfig.save();
     }
 
     public void setName(String name) {
         clientConfig.name = name;
+        clientConfig.save();
     }
 
     public void setSeat(Position seat) {
         clientConfig.seat = seat;
+        clientConfig.save();
     }
 
     public void setSendKeyData(boolean sendKeyData) {

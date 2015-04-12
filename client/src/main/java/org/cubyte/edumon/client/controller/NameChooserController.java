@@ -1,5 +1,6 @@
 package org.cubyte.edumon.client.controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.ESCAPE;
@@ -72,8 +74,13 @@ public class NameChooserController implements Controller {
         app.changeScene(SEAT_CHOOSER);
     }
 
-    public void setNameList(ArrayList<String> nameList) {
-        this.nameList.setItems(FXCollections.observableArrayList(nameList));
+    public void setNameList(final List<String> list) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                nameList.setItems(FXCollections.observableArrayList(list));
+            }
+        });
     }
 
     public void setInfoBar() {

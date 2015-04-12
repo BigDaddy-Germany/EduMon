@@ -133,4 +133,9 @@ public class MessageQueue extends Revolver<Message> {
     public String getSessionId() {
         return sessionId;
     }
+
+    public void resetSessionId() {
+        sessionId = "";
+        cookieStore.clear();
+    }
 }

@@ -44,8 +44,6 @@ public class SeatChooserController implements Controller {
         });
     }
 
-    //TODO save config when app goes into background
-
     @FXML
     private void handleBack() {
         app.changeScene(NAME_CHOOSER);

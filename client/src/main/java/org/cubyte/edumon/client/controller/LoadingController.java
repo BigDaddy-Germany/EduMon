@@ -20,6 +20,8 @@ import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
 public class LoadingController implements Victim<Message>, Controller {
     private Main app;
+    private ScheduledFuture<?> send;
+    private Future<?> execute;
     @FXML
     private Pane pane;
     @FXML
@@ -40,6 +42,7 @@ public class LoadingController implements Victim<Message>, Controller {
     @Override
     public void setApp(Main app) {
         this.app = app;
+        this.app.getQueue().aimAt(NameList.class, this);
     }
 
     public void setInfoBar() {
@@ -53,18 +56,17 @@ public class LoadingController implements Victim<Message>, Controller {
             ((LoginController)LOGIN.getController()).serverNotReachable();
             return;
         }
-        queue.aimAt(NameList.class, this);
-        final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
+        send = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 queue.send();
             }
         }, 0, 5, TimeUnit.SECONDS);
-        app.getScheduledExecutorService().execute(new Runnable() {
+        execute = app.getScheduledExecutorService().submit(new Runnable() {
             @Override
             public void run() {
                 queue.execute();
-                scheduledFuture.cancel(true);
+                send.cancel(true);
             }
         });
     }
@@ -72,6 +74,8 @@ public class LoadingController implements Victim<Message>, Controller {
     @FXML
     private void handleCancel() {
         app.changeScene(LOGIN);
+        send.cancel(true);
+        execute.cancel(true);
     }
 
     @Override
