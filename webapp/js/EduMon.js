@@ -35,6 +35,11 @@ EduMon = new function() {
 
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
+
+		this.tryRestoreApp();
+		this.enablePersistApp();
+
+		EduMon.sendPacket({command:'start'});
 	};
 
 
@@ -254,7 +259,6 @@ EduMon = new function() {
 		EduMon.Timeline.reset();
 		EduMon.Gui.initSeating();
 		broadcastCurrentLecture();
-		EduMon.sendPacket({command:'start'});
 	};
 
 	this.updateConnection = function(){
@@ -276,6 +280,22 @@ EduMon = new function() {
 		});
 	};
 
+	this.enablePersistApp = function(){
+		setTimeout(function(){
+			setInterval(function(){
+				localStorage.setItem("EduMon.Prefs",JSON.stringify(EduMon.Prefs));
+				EduMon.Gui.showToast("App state saved");
+			},10000); //persist every 10sec
+		},5000); //start persisting app after 5sec
+	};
+
+	this.tryRestoreApp = function(){
+		var stored = localStorage.getItem("EduMon.Prefs");
+		if (stored!==null){
+			EduMon.Prefs = JSON.parse(stored);
+			EduMon.Gui.showToast("App loaded");
+		}
+	};
 
 	/* Queue packet for sending */
 	this.sendPacket = function(packet){
