@@ -150,7 +150,9 @@ EduMon.Data = new function() {
 								sender2: 0.23
 							}
 						}
-					*/}
+					*/},
+
+					breakRequests: 0
 				}
 			};
 		}
