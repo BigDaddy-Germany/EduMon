@@ -284,7 +284,7 @@ EduMon.Gui = new function() {
 	};
 
 	this.init = function(){
-		$("#btnSettings").click(function(){
+		$("#btnSettings").off("click").click(function(){
 			EduMon.Gui.showDialog("connectionSettings",true);
 		});
 	};

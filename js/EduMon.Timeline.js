@@ -3,11 +3,9 @@ EduMon.Timeline = new function() {
 
 	var tick_interval = 2; //in seconds
 	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
-	var timer;
+	var timer = undefined;
 	var lectureStarted = false;
 	var lectureOver = false;
-	
-	var timeline; //comfort
 
 	var getTime = function(){
 		var now = new Date();
@@ -15,12 +13,26 @@ EduMon.Timeline = new function() {
 	}
 
 	var setPreviousEnd = function(){
+		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.slices.length>1){
 			timeline.slices[timeline.slices.length-2].end = getTime();
 		}
 	}
 
+	this.reset = function(){
+		if (timer!==undefined){
+			clearInterval(timer);
+		}
+		lectureStarted = false;
+		lectureOver = false;
+		$("#progressdisplay").empty();
+		$("#hourdisplay").empty();
+		EduMon.Prefs.currentLecture.timeline = new EduMon.Data.Timeline();
+		that.init();
+	};
+
 	this.play = function() {
+		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.status!=="play"){
 			timeline.slices.push({seconds:0,type:"lecture"});
 			setPreviousEnd();
@@ -33,6 +45,7 @@ EduMon.Timeline = new function() {
 	};
 
 	this.pause = function() {
+		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.status==="play"){
 			timeline.slices.push({seconds:0,type:"break"});
 			setPreviousEnd();
@@ -44,6 +57,7 @@ EduMon.Timeline = new function() {
 	};
 
 	this.stop = function() {
+		var timeline = EduMon.Prefs.currentLecture.timeline;
 		EduMon.Gui.showPopup("Vorlesung beenden?","Eine beendete Vorlesung kann nicht wieder aufgenommen werden. Möchten Sie die Vorlesung jetzt beenden und die Auswertung einsehen?",
 				["yes","no"],function(result){
 					if (result==="yes"){
@@ -58,11 +72,11 @@ EduMon.Timeline = new function() {
 	};
 
 	this.restart = function(){
-		alert("warn user here"); //TODO
 		location.reload();
 	};
-	
+
 	var tick = function(onlyUpdate) {
+		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (onlyUpdate!==true && EduMon.Prefs.currentLecture.timeline.status!=="stop"){
 			var currentSlice = timeline.slices[timeline.slices.length-1];
 			currentSlice.seconds += tick_value;
@@ -74,17 +88,17 @@ EduMon.Timeline = new function() {
 	this.init = function(){
 		//Timer is always active, but timer tick does not always trigger action
 		//this prevents seconds getting lost
-		timeline = EduMon.Prefs.currentLecture.timeline;
 		timer = setInterval(tick, tick_interval*1000);
 		updateTimeline();
 
-		$("#flowbox").find(".glyphicon-play").click(function(){that.play();});
-		$("#flowbox").find(".glyphicon-pause").click(function(){that.pause();});
-		$("#flowbox").find(".glyphicon-stop").click(function(){that.stop();});
-		$("#flowbox").find(".glyphicon-fast-backward").click(function(){that.restart();});
+		$("#btnPlay").off("click").click(function(){that.play();});
+		$("#btnPause").off("click").click(function(){that.pause();});
+		$("#btnStop").off("click").click(function(){that.stop();});
+		$("#btnRestart").off("click").click(function(){that.restart();});
 	};
 
 	var updateTimeline = function(){
+		var timeline = EduMon.Prefs.currentLecture.timeline;
 		var totalPercentage = 0; //remember how full the bar is
 		var barPercentage;
 		var barActiveClass = "";
@@ -105,12 +119,12 @@ EduMon.Timeline = new function() {
 				hourDisplay.append($("<span/>").addClass("hour"));
 
 				/*if (isFirstBar){ //insert lecture start time
-					hourDisplay.children().eq(0).append(
-							$("<span/>")
-							.addClass("start")
-							.text(timeline.start)
-							);
-				}*/
+				  hourDisplay.children().eq(0).append(
+				  $("<span/>")
+				  .addClass("start")
+				  .text(timeline.start)
+				  );
+				  }*/
 				if (timeline.slices[i].type==="lecture"){ //when opening a new lecture slice, insert end time of the previous one as start
 					var startTime = timeline.start;
 					if (i>0){
@@ -165,9 +179,9 @@ EduMon.Timeline = new function() {
 			.addClass("glyphicon-"+timeline.status);
 
 		//display fitting control buttons
-		$("#flowbox").find(".glyphicon-play").toggle(timeline.status!=="play" && !lectureOver);
-		$("#flowbox").find(".glyphicon-pause").toggle(timeline.status==="play");
-		$("#flowbox").find(".glyphicon-stop").toggle(timeline.status!=="stop");
-		$("#flowbox").find(".glyphicon-fast-backward").toggle(lectureOver);
+		$("#btnPlay").toggle(timeline.status!=="play" && !lectureOver);
+		$("#btnPause").toggle(timeline.status==="play");
+		$("#btnStop").toggle(timeline.status!=="stop");
+		$("#btnRestart").toggle(lectureOver);
 	};
 };
