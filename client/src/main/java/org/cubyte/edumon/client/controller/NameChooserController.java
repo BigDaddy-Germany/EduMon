@@ -52,7 +52,7 @@ public class NameChooserController implements Controller {
                     handleBack();
                 }
             }
-        });
+        }); //TODO handle key input and search for names
     }
 
     @Override

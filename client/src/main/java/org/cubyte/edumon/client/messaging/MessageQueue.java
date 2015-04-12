@@ -7,17 +7,20 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.cookie.BasicClientCookie;
 import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.eventsystem.Revolver;
 import org.cubyte.edumon.client.messaging.messagebody.BodyDeserializer;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.io.*;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -29,7 +32,6 @@ public class MessageQueue extends Revolver<Message> {
     private BlockingQueue<Message> queuedMessages;
     private CloseableHttpClient httpClient;
     private CookieStore cookieStore;
-    private String sessionId;
     private boolean isModerator;
     private ObjectMapper mapper;
 
@@ -43,7 +45,6 @@ public class MessageQueue extends Revolver<Message> {
         this.queuedMessages = new LinkedBlockingQueue<>();
         this.cookieStore = new BasicCookieStore();
         this.httpClient = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
-        this.sessionId = "";
         this.isModerator = isModerator;
         SimpleModule module = new SimpleModule("CustomBodyDeserializer", new Version(1, 0, 0, "", "org.cubyte", "edumon-client"));
         module.addDeserializer(MessageBody.class, new BodyDeserializer());
@@ -94,7 +95,6 @@ public class MessageQueue extends Revolver<Message> {
             }
             owner.incSent(queueSize);
             Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
-            sessionId = jsonResponse.clientId;
             for (Message message: jsonResponse.inbox) {
                 owner.incReceived(1);
                 load(message);
@@ -130,12 +130,23 @@ public class MessageQueue extends Revolver<Message> {
         queuedMessages.add(message);
     }
 
+    public void setSessionId() {
+        BasicClientCookie cookie = new BasicClientCookie("EDUMONSESSID", owner.getRoomState().sessionId);
+        cookie.setDomain(URI.create(owner.getServer()).getHost());
+        cookie.setPath("/");
+        cookieStore.addCookie(cookie);
+    }
+
     public String getSessionId() {
-        return sessionId;
+        for (Cookie cookie: cookieStore.getCookies()) {
+            if ("EDUMONSESSID".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     public void resetSessionId() {
-        sessionId = "";
         cookieStore.clear();
     }
 }

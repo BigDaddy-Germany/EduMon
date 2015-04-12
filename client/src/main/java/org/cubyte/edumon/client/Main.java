@@ -326,14 +326,14 @@ public class Main extends Application {
 
     public void setName(String name) {
         if (!name.equals(clientConfig.getRoomState().name)) {
-            clientConfig.getRoomState().setSeat(null);
+            clientConfig.getRoomState().seat = null;
         }
-        clientConfig.getRoomState().setName(name);
+        clientConfig.getRoomState().name = name;
         clientConfig.save();
     }
 
     public void setSeat(Position seat) {
-        clientConfig.getRoomState().setSeat(seat);
+        clientConfig.getRoomState().seat = seat;
         clientConfig.save();
     }
 

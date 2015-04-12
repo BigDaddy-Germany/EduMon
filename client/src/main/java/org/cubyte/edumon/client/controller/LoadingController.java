@@ -72,6 +72,7 @@ public class LoadingController implements Victim<Message>, Controller {
                 }
             });
         } else {
+            app.getQueue().setSessionId();
             toNameChooser();
         }
     }

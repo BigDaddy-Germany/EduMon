@@ -3,6 +3,7 @@ package org.cubyte.edumon.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.http.cookie.Cookie;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
@@ -38,13 +39,5 @@ public class RoomState {
             return true;
         }
         return false;
-    }
-
-    public void setSeat(Position seat) {
-        this.seat = seat;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
