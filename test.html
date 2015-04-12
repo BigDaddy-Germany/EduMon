@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>Test</title>
+    <meta charset="UTF-8">
+    <script src="lib/jquery/js/jquery.min.js"></script>
+    <script src="js/EduMon.Util.js"></script>
+    <script src="js/EduMon.Wheel.js"></script>
+    <script src="js/EduMon.Wheel.Controller.js"></script>
+    <script>
+        $(function() {
+            var button = $('button').first();
+            button.on('click', function() {
+                var wheel = EduMon.Util.openWindow("wheel.html", "blank", {
+
+                });
+
+                $(wheel).ready(function() {
+
+                    var controller = new EduMon.Wheel.Controller(wheel, {
+                        wheelFinished: function(segment) {
+                            alert("Aand the winner is: " + segment[0]);
+                        }
+                    });
+
+                    $(window).on('keydown', function(e) {
+                        if (e.which == 32) {
+                            controller.invoke('showWheel', [
+                                ["Phillip Schichtel", 1.0],
+                                ["Jonas Dann", 1.0],
+                                ["Niko Berkmann", 1.0],
+                                ["Marco Dörfler", 1.0]
+                            ]);
+                        }
+                    })
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <button type="button">Klick mich, ich bin ein Button!</button>
+</body>
+</html>

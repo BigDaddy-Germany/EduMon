@@ -1,3 +1,4 @@
+EduMon = window.EduMon || {};
 EduMon.Math = new function() {
     var that = this;
 
