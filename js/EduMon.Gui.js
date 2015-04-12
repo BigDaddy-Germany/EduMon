@@ -176,7 +176,7 @@ EduMon.Gui = new function() {
 	 * @param {String} title Popup title
 	 * @param {String} message Message to be displayed
 	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
-	 * @param {Function} callback Function to be called on button click, will be given button value as parameter
+	 * @param {Function} [callback] Function to be called on button click, will be given button value as parameter
 	 * @param {Boolean} [attentionAbort] If activated and another popup is already open, attenion box will flash instead of an error being thrown
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {

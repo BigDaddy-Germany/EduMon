@@ -83,6 +83,7 @@
 							<input type="button" value="Demo: Typ 7 OUT" onclick="EduMon.sendDemo(7)">
 							<br>
 							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+							<input type="button" value="Demo: Lecture edit" onclick="EduMon.Gui.showDialog('editLecture')">
 							<input type="button" value="Demo: Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
 							<input type="button" value="Demo: CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
 							<input type="button" value="Demo: Toast" onclick="EduMon.Gui.showToast('Testtoast')">
