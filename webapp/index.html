@@ -70,7 +70,8 @@
 							<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})">
 							<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
 							<br>
-							Direct Direct Dialogs:
+							<input type="button" value="Lecture Starter" onclick="EduMon.lectureStartDialog();">
+							| Direct Dialogs:
 							<input type="button" value="Demo: Lecture Manager" onclick="EduMon.UserInteraction.selectLecture().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
 							<input type="button" value="Demo: Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
 							<input type="button" value="Demo: Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">

@@ -238,6 +238,17 @@ EduMon = new function() {
 		return packet;
 	};
 
+	this.lectureStartDialog = function() {
+		EduMon.UserInteraction.selectLecture()
+			.then(function(lectureId) {
+				EduMon.Prefs.currentLecture = EduMon.Data.createCurrentLecture(lectureId);
+				that.initLecture();
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
+	};
+
 	this.initLecture = function(){
 		that.updateConnection();
 		EduMon.Gui.initSeating();

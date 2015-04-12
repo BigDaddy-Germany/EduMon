@@ -57,7 +57,16 @@
 	function courseImportCsvData(csvData) {
 		var existingNames = [];
 		$('.courseMemberName').each(function() {
-			existingNames.push($(this).val());
+			// delete empty rows
+			var thisInput = $(this);
+			var thisName = thisInput.val().trim();
+			if (thisName == '') {
+				// dummy event to delete line
+				var event = {target: thisInput};
+				courseDeleteMember(event);
+			} else {
+				existingNames.push(thisName);
+			}
 		});
 
 		csvData.forEach(function(dataLine) {
