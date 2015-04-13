@@ -6,7 +6,7 @@
     <script src="lib/jquery/js/jquery.min.js"></script>
     <script src="js/EduMon.Util.js"></script>
     <script src="js/EduMon.Wheel.js"></script>
-    <script src="js/EduMon.Wheel.Controller.js"></script>
+    <script src="js/EduMon.XWindowRPC.js"></script>
     <script>
         $(function() {
             var button = $('button').first();
@@ -17,7 +17,7 @@
 
                 $(wheel).ready(function() {
 
-                    var controller = new EduMon.Wheel.Controller(wheel, {
+                    var controller = new EduMon.XWindowRPC(wheel, {
                         wheelFinished: function(segment) {
                             alert("Aand the winner is: " + segment[0]);
                         }
