@@ -19,7 +19,7 @@ EduMon.Feedback = new function() {
 			"studentVoting": {}
 		};
 
-		that.sendPacket(packet);
+		EduMon.sendPacket(packet);
 		return packet;
 	};
 };
