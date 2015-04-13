@@ -37,20 +37,6 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 	shuffle(segments);
 	initializeData(true);
 
-	function updateUnit() {
-		if (segments.length == 0) {
-			throw "No segments supplied!";
-		}
-		if (segments.length === 1) {
-			weights = segments[0][1];
-		} else {
-			weights = EduMon.Math.sumOver(0, segments.length, function (i) {
-				return segments[i][1]
-			});
-		}
-		unit = TAU / weights;
-	}
-
 	function initializeData(resetAngle) {
 		activeSegment = null;
 		updateUnit();
@@ -69,6 +55,21 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 		draw();
 	}
 
+
+	function updateUnit() {
+		if (segments.length == 0) {
+			throw "No segments supplied!";
+		}
+		if (segments.length === 1) {
+			weights = segments[0][1];
+		} else {
+			weights = EduMon.Math.sumOver(0, segments.length, function (i) {
+				return segments[i][1]
+			});
+		}
+		unit = TAU / weights;
+	}
+
 	function invertColor(color) {
 		var red = (parseInt(color.substring(1, 3), 16));
 		var green = (parseInt(color.substring(3, 5), 16));
@@ -77,12 +78,48 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 		var hsv = EduMon.Math.rgbToHsv(red, green, blue);
 		var rgb = EduMon.Math.hsvToRgb((hsv[0] + 180) % 360, hsv[1], hsv[1] < .5 ? 1 : 0);
 
-		red = EduMon.Util.padLeft(rgb[0].toString(16), '0', 2);
-		green = EduMon.Util.padLeft(rgb[1].toString(16), '0', 2);
-		blue = EduMon.Util.padLeft(rgb[2].toString(16), '0', 2);
+		return stringifyRGB.apply(stringifyRGB, rgb);
+	}
+
+	function stringifyRGB(red, green, blue) {
+		red = EduMon.Util.padLeft(red.toString(16), '0', 2);
+		green = EduMon.Util.padLeft(green.toString(16), '0', 2);
+		blue = EduMon.Util.padLeft(blue.toString(16), '0', 2);
 
 		return "#" + red + green + blue;
+	}
 
+	function generateColorsHSV(step) {
+		step = step || 30;
+
+		var colors = [];
+		for (var hue = 0; hue < 360; hue += step) {
+			var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 1, 1)))
+			if (colors.indexOf(c) < 0) {
+				colors.push(c);
+			}
+		}
+		return colors;
+	}
+
+	function generateColorsRGB(step) {
+		step = step || 128;
+		var base = [];
+		var i = 0;
+		do {
+			base.push(Math.min(i, 255));
+			i += step;
+		} while (i <= 256);
+
+		var colors = [];
+		for (var r = 0; r < base.length; ++r) {
+			for (var g = 0; g < base.length; ++g) {
+				for (var b = 0; b < base.length; ++b) {
+					colors.push(stringifyRGB(base[r], base[g], base[b]))
+				}
+			}
+		}
+		return colors;
 	}
 
 	function modulo(a, n) {
