@@ -8,14 +8,12 @@ EduMon.Analytics = function() {
     var util = EduMon.Util;
     var math = EduMon.Math;
 
+    var currentLecture = EduMon.Prefs.currentLecture;
     var analytics = EduMon.Prefs.currentLecture.analytics;
-    var activeStudents = EduMon.Prefs.currentLecture.activeStudents;
-    var globalReferenceValues = analytics.globalReferenceValues;
-    var feedbackValues = analytics.studentFeedback;
 
-    var micNormalizationPeriod = 60*5;
+    var micNormalizationPeriod = 60*10;
     var micMinimumEntries = 10;
-    var curValPeriod = 5;
+    var curValPeriod = 10;
     var minimalGlobalReferenceValues = 5;
     
     var upperBoundGiniFactor = 0.8;
@@ -42,25 +40,35 @@ EduMon.Analytics = function() {
      * @param {Object} data the body
      */
     this.processData = function(sender, time, data) {
+
+        currentLecture = EduMon.Prefs.currentLecture;
+        analytics = EduMon.Prefs.currentLecture.analytics;
+
         /*
          Packet Body format
          body: { keys: 69, mdist: 999, mclicks: 23, volume: 0.42 }
          */
 
-        var student = activeStudents[sender];
+        if (!currentLecture.activeStudents[sender]) {
+            return;
+        }
+        var student = currentLecture.activeStudents[sender];
 
         // create new history entry for given set of data
         var historyEntry = { time: time };
         util.forEachField(data, function(key, value) {
-            historyEntry[fieldMapping[key]] = value;
+            if (fieldMapping[key]) {
+                historyEntry[fieldMapping[key]] = value;
+            }
         });
         // todo better way?
         student.history = student.history || [];
         student.history.push(historyEntry);
 
+        student.micHistory = student.micHistory || [];
         student.micHistory.push({
             time: time,
-            value: data.microphone
+            value: historyEntry.microphone
         });
 
         // remove old history entry (and the new one, if it is too old)
@@ -75,7 +83,7 @@ EduMon.Analytics = function() {
             delete currentValues.microphone;
         }
 
-        globalReferenceValues[sender] = currentValues;
+        analytics.globalReferenceValues[sender] = currentValues;
 
         calculateAllDisturbances();
     };
@@ -106,7 +114,7 @@ EduMon.Analytics = function() {
         Package body format:
         body: { id: 123, value: 0.69 }
          */
-        var feedback = feedbackValues[data.id];
+        var feedback = analytics.feedbackValues[data.id];
         if (!feedback) {
             return;
         }
@@ -130,18 +138,18 @@ EduMon.Analytics = function() {
      * This is really fancy magic including but not limited to unicorns :)
      */
     var calculateAllDisturbances = function() {
-        var setOfValues = {};
+        var setsOfValues = {};
         var averageValues = {};
         var minimumValues = {};
         var maximumValues = {};
 
         // iterate over all senders to get minimum, maximum average of each property
         util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
-            util.forEachField(referenceValue, function(propertyName, values) {
-                if (setOfValues[propertyName]) {
-                    setOfValues[propertyName].push(values);
+            util.forEachField(referenceValue, function(propertyName, value) {
+                if (setsOfValues[propertyName]) {
+                    setsOfValues[propertyName].push(value);
                 } else {
-                    setOfValues[propertyName] = [values];
+                    setsOfValues[propertyName] = [value];
                 }
             });
         });
@@ -151,7 +159,7 @@ EduMon.Analytics = function() {
         var scales = {};
 
         // iterate over properties to calculate scaling function
-        util.forEachField(setOfValues, function(propertyName, values) {
+        util.forEachField(setsOfValues, function(propertyName, values) {
             // only calculate the index, if the minimal number is reached
             if (values.length >= minimalGlobalReferenceValues) {
 
@@ -174,6 +182,9 @@ EduMon.Analytics = function() {
                  */
                 function scaleFunctionCreator(lowerLimit, averageValue, upperLimit) {
                     return function(x) {
+                        if (x < lowerLimit) {
+                            return 0;
+                        }
                         if (x < upperLimit) {
                             return math.linearIntervalFunction(
                                 [lowerLimit, 0],
@@ -188,7 +199,7 @@ EduMon.Analytics = function() {
                 scales[propertyName] = scaleFunctionCreator(
                     minimumValues[propertyName],
                     averageValues[propertyName],
-                    maximumValues[propertyName]
+                    upperLimit
                 );
             }
         });
@@ -201,16 +212,16 @@ EduMon.Analytics = function() {
 
             // iterate over properties to calculate final rating now
             util.forEachField(weights, function(propertyName, weight) {
-                if (senderValue[propertyName]) {
+                if (senderValue[propertyName] && scales[propertyName]) {
                     theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
                     sumPropertyWeights += weight;
                 }
             });
 
-            theReallyFinalIndex /= sumPropertyWeights;
-
-
-            activeStudents[sender].disturbance = theReallyFinalIndex;
+            if (sumPropertyWeights > 0) {
+                theReallyFinalIndex /= sumPropertyWeights;
+                currentLecture.activeStudents[sender].disturbance = theReallyFinalIndex;
+            }
         });
 
     };
@@ -237,14 +248,18 @@ EduMon.Analytics = function() {
 
 
         /*
-            If it is not the history, everything is okay
-            If it is the history entry, we have to check, that at least the minimum number of
+            If it is not the microphone history, everything is okay
+            If it is the microphone history entry, we have to check, that at least the minimum number of
             entries remain in the history
          */
-        if (!isMicHistory) {
+        if (!isMicHistory || newHistory.length >= micMinimumEntries) {
             return newHistory;
         } else {
-            return newHistory.slice(newHistory.length-micMinimumEntries);
+            if (history.length >= micMinimumEntries) {
+                return history.slice(history.length - micMinimumEntries);
+            } else {
+                return history;
+            }
         }
     };
 
@@ -264,11 +279,13 @@ EduMon.Analytics = function() {
         var historyCount = 0;
 
         micHistory.forEach(function(historyEntry) {
-            historyAverage += historyEntry.value;
-            ++historyCount;
+            if ($.isNumeric(historyEntry.value)) {
+                historyAverage += historyEntry.value;
+                ++historyCount;
+            }
         });
 
-        if (historyCount == 0) {
+        if (historyCount < micMinimumEntries) {
             return false;
         }
 
@@ -287,7 +304,7 @@ EduMon.Analytics = function() {
 
         history.forEach(function(historyEntry) {
             util.forEachField(historyEntry, function(historyKey, value) {
-                if (historyKey != 'time') {
+                if (historyKey != 'time' && $.isNumeric(value)) {
                     historyAverage[historyKey] = historyAverage[historyKey] + value || value;
                     historyCount[historyKey] = historyCount[historyKey] + 1 || 1;
                 }

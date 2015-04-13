@@ -40,7 +40,7 @@ EduMon = new function() {
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
 
-		//this.tryRestoreApp(); //TODO reactivate once properly implemented
+		this.tryRestoreApp(); //TODO reactivate once properly implemented
 		this.enablePersistApp();
 
 		EduMon.sendPacket({command:'start'});
@@ -228,7 +228,7 @@ EduMon = new function() {
 
 		// if error code is 0, user can be logged in
 		if (errorBits.equals(0)) {
-			activeStudents[sender] = activeStudents[sender] || {
+			activeStudents[sender] = {
 				name: name,
 				group: groupForName,
 				seat: seat,
@@ -238,7 +238,7 @@ EduMon = new function() {
 			};
 
 			seatingPlan[seat.x] = seatingPlan[seat.x] || [];
-			seatingPlan[seat.x][seat.y] = seatingPlan[seat.x][seat.y] || sender;
+			seatingPlan[seat.x][seat.y] = sender;
 		}
 
 		responsePacket.body.successCode = errorBits.bits;
