@@ -61,9 +61,23 @@
 				modes.drop(segment);
 			});
 
+			var minDelay = 2000;
+			var start = 0;
 			$(window).on('keydown', function(e) {
 				if (e.which === 32) {
-					w.start();
+					w.beginSpinning();
+					start = Date.now();
+				}
+			}).on('keyup', function(e) {
+				if (e.which === 32) {
+					var now = Date.now();
+					var delta = now - start;
+					console.log(" " + start + "\n+ " + now + " = " + delta);
+					if (delta < minDelay) {
+						setTimeout(w.endSpinning, minDelay - delta);
+					} else {
+						w.endSpinning();
+					}
 				}
 			});
 

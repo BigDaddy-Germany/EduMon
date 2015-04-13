@@ -1,37 +1,33 @@
 EduMon = window.EduMon || {};
 EduMon.Wheel = function (canvas, segments, onFinish) {
+	var that = this;
 	var context = canvas.getContext('2d');
 
 	var PI = Math.PI;
-	var HALF_PI = PI / 2;
 	var TAU = 2 * PI;
 
+	var timer = -1;
+	var targetFPS = 60;
 
-	var weights = 0;
-	var unit = 1;
-
-	var timerHandle = -1;
-	var timerDelay = 33;
+	var RPS = TAU / targetFPS;
+	var targetVelocity = 3.5 * RPS;
+	var speedUp  =  .1 * RPS;
+	var slowDown = -.08 * RPS;
 
 	var currentAngle = 0;
-	var angleDelta = 0;
+	var velocity = 0;
+	var acceleration = speedUp;
 
-	var size = 290;
 
 	var colors = ['#000000', '#ffff00', '#ffc700', '#ff9100', '#ff6301', '#ff0000', '#c6037e', '#713697', '#444ea1', '#2772b2', '#0297ba', '#008e5b', '#8ac819'];
-
 	var segmentColors = [];
 
-	var maxSpeed = PI / 16;
-
-	var upTime = 1000;
-	var downTime = /*1*/7000;
-
-	var spinStart = 0;
-
+	var size = 290;
 	var centerX = 300;
 	var centerY = 300;
 
+	var weights = 0;
+	var unit = 1;
 	var activeSegment = null;
 
 	shuffle(segments);
@@ -94,7 +90,7 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 
 		var colors = [];
 		for (var hue = 0; hue < 360; hue += step) {
-			var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 1, 1)))
+			var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 1, 1)));
 			if (colors.indexOf(c) < 0) {
 				colors.push(c);
 			}
@@ -163,10 +159,10 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 		return hash;
 	}
 
-	this.start = function () {
+	this.beginSpinning = function () {
 
 		// Start the wheel only if it's not already spinning
-		if (timerHandle == -1) {
+		if (timer == -1) {
 
 			initializeData();
 
@@ -176,44 +172,48 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 				return;
 			}
 
-			spinStart = new Date().getTime();
-			maxSpeed = PI / (16 + Math.random()); // Randomly vary how hard the spin is
+			velocity = 0;
+			acceleration = speedUp;
 
-			timerHandle = setInterval(onTimerTick, timerDelay);
+			timer = setInterval(onTick, Math.round(1000 / targetFPS));
 		}
 	};
 
-	function onTimerTick() {
-		draw();
+	this.endSpinning = function() {
+		acceleration = slowDown;
+	};
 
-		var duration = (new Date().getTime() - spinStart);
-		var progress = 0;
-		var finished = false;
+	this.stopSpinning = function() {
+		if (timer != -1) {
+			clearInterval(timer);
+			acceleration = 0;
+			velocity = 0;
 
-		if (duration < upTime) {
-			progress = duration / upTime;
-			angleDelta = maxSpeed * Math.sin(progress * HALF_PI);
-		} else {
-			progress = duration / downTime;
-			angleDelta = maxSpeed * Math.sin(progress * HALF_PI + HALF_PI);
-			if (progress >= 1) {
-				finished = true;
-			}
-		}
+			timer = -1;
 
-		currentAngle += angleDelta;
-		while (currentAngle >= TAU)
-			// Keep the angle in a reasonable range
-			currentAngle -= TAU;
-
-		if (finished) {
-			clearInterval(timerHandle);
-			timerHandle = -1;
-			angleDelta = 0;
 			if (typeof onFinish == 'function') {
 				onFinish(activeSegment);
 			}
 		}
+	};
+
+
+	function onTick() {
+		draw();
+
+		velocity += acceleration;
+		if (velocity > targetVelocity) {
+			velocity = targetVelocity;
+			acceleration = 0;
+		}
+
+		if (velocity < 0) {
+			that.stopSpinning();
+			return;
+		}
+
+		currentAngle += velocity;
+		currentAngle %= 360;
 	}
 
 	function draw() {
