@@ -52,6 +52,27 @@
 							<a href="#" id="btnSettings" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-cog"></a>
 						</div>
 					</div>
+					<div id="devbox" class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">DEVELOPER</h3>
+						</div>
+						<div class="panel-body">
+							Test:<br>
+							<input type="button" value="Start Lecture" onclick="EduMon.lectureStartDialog();"><br>
+							System:<br>
+							<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})"><br>
+							<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})"><br>
+							UI Dialogs:<br>
+							<input type="button" value="Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })"><br>
+							<input type="button" value="Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })"><br>
+							<input type="button" value="Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });"><br>
+							<input type="button" value="CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });"><br>
+							Framework:<br>
+							<input type="button" value="Dialog" onclick="EduMon.Gui.showDialog('dummy')"><br>
+							<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')"><br>
+							<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);},true)"><br>
+						</div>
+					</div>
 				</div>
 
 				<div id="centerpanel" class="panel mypanel">
@@ -64,26 +85,7 @@
 								</table>
 							</div>
 						</div>
-						<div id="frontdesk">
-							<input type="button" value="INIT LECTURE (load current, broadcast, start seating plan refresher)" onclick="EduMon.initLecture()">
-							| Manual Worker Control: 
-							<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})">
-							<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
-							<br>
-							<input type="button" value="Lecture Starter" onclick="EduMon.lectureStartDialog();">
-							| Direct Dialogs:
-							<input type="button" value="Demo: Lecture Manager" onclick="EduMon.UserInteraction.selectLecture().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
-							<input type="button" value="Demo: Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
-							<input type="button" value="Demo: Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
-							<input type="button" value="Demo: Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
-							<input type="button" value="Demo: CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
-							<br>
-							UI-Demo:
-							<input type="button" value="Demo: Dialog" onclick="EduMon.Gui.showDialog('dummy')">
-							<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')">
-							<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);},true)">
-
-						</div>
+						<div id="frontdesk"></div>
 					</div>
 
 					<div id="attention"></div>

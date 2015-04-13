@@ -8,6 +8,9 @@ EduMon.Feedback = new function() {
 	 * @return packet Copy of the sent request packet
 	 */
 	this.requestFeedback = function(type){
+		$("#btnThumbs").addClass("disabled");
+		setInterval(function(){$("#btnThumbs").removeClass("disabled");},5000);
+
 		var analytics = EduMon.Prefs.currentLecture.analytics;
 		var feedbackId = analytics.nextFeedbackId++;
 
@@ -20,6 +23,8 @@ EduMon.Feedback = new function() {
 		};
 
 		EduMon.sendPacket(packet);
+		EduMon.Gui.showToast("Daumenfeedback gestartet!");
+
 		return packet;
 	};
 };

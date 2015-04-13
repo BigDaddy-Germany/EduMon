@@ -1,5 +1,5 @@
 #buttonpanel {
-	width: 90px;
+	width: 100px;
 	min-width: 90px;
 	@include vflex;
 	justify-content: flex-start;
@@ -21,14 +21,27 @@
 	.panel-body {
 		padding: 0px;
 	}
+
+	& > div {
+		margin: 0px;
+		overflow-y: auto;
+	}
 }
 
 #flowbox {
-	margin: 0px;
 	text-align: center;
 }
 
 #actionbox {
-	@extend #flowbox;
+	text-align: center;
 	flex-grow: 1;
+}
+
+#devbox {
+	background-color: #A0C7F3;
+	font-size: 0.8em;
+	width:110px;
+	z-index:1;
+	flex-grow: 1;
+	overflow-x: visible;
 }

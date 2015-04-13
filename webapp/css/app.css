@@ -111,7 +111,7 @@ body {
   font-weight: bold; }
 
 #buttonpanel {
-  width: 90px;
+  width: 100px;
   min-width: 90px;
   display: flex;
   flex-direction: column;
@@ -128,13 +128,24 @@ body {
     padding: 10px 0px; }
   #buttonpanel .panel-body {
     padding: 0px; }
+  #buttonpanel > div {
+    margin: 0px;
+    overflow-y: auto; }
 
-#flowbox, #actionbox {
-  margin: 0px;
+#flowbox {
   text-align: center; }
 
 #actionbox {
+  text-align: center;
   flex-grow: 1; }
+
+#devbox {
+  background-color: #A0C7F3;
+  font-size: 0.8em;
+  width: 110px;
+  z-index: 1;
+  flex-grow: 1;
+  overflow-x: visible; }
 
 #centerpanel {
   flex-grow: 1;
