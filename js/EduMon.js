@@ -403,7 +403,7 @@ EduMon = new function() {
 			// shuffle all them things
 			var packet = {};
 			properties.forEach(function(property) {
-				packet[property] = 20; // EduMon.Math.randomInteger(0, 20) + i;
+				packet[property] = EduMon.Math.randomInteger(0, 20) + i;
 			});
 
 			EduMon.Analytics.processData(user, Math.round(new Date().getTime() / 1000), packet);
