@@ -9,7 +9,7 @@ EduMon.Util = new function() {
      * @param {Function} functor the functor to call (first argument is the field's name, the second one the content)
      */
     this.forEachField = function(object, functor) {
-        for (propertyName in object) {
+        for (var propertyName in object) {
             if (object.hasOwnProperty(propertyName)) {
                 functor(propertyName, object[propertyName]);
             }
@@ -75,7 +75,13 @@ EduMon.Util = new function() {
 
     };
 
-    // todo comment me
+    /**
+     * Generates string to be used for padding.
+     *
+     * @param {string} str
+     * @param {int} length
+     * @returns {string} a string consisting of str that is at least length characters long
+     */
     var genPadding = function(str, length) {
         var pre = "";
         while (pre.length < length) {
@@ -84,17 +90,40 @@ EduMon.Util = new function() {
         return pre;
     };
 
-    // todo comment me
+    /**
+     * Pads a string on the left side with a given string to the given length
+     *
+     * @param {string} base the string to pad
+     * @param {string} add the string to use as padding
+     * @param {int} length
+     * @returns {string} the padding string
+     */
     this.padLeft = function(base, add, length) {
         return (genPadding(add, length) + base).slice(-length)
     };
 
-    // todo comment me
+    /**
+     * Pads a string on the right side with a given string to the given length
+     *
+     * @param {string} base the string to pad
+     * @param {string} add the string to use as padding
+     * @param {int} length
+     * @returns {string} the padding string
+     */
     this.padRight = function(base, add, length) {
         return (base + genPadding(add, length)).slice(length)
     };
 
+    /**
+     * This is a wrapper around window.open which eases the specification of the feature spec
+     *
+     * @param {string} url the url for the window
+     * @param {Object} options the window feature specification as an object
+     * @param {string} [name=blank] the name of the window ("blank", "parent", ...)
+     * @returns {Window} the newly opened window
+     */
     this.openWindow = function(url, options, name) {
+        name = name || "blank";
         var splitter = '';
         var features = '';
         that.forEachField(options, function(k, v) {
