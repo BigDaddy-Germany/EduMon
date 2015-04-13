@@ -1,4 +1,4 @@
-EduMon = window.EduMon || {};
+EduMon = (typeof window === "undefined" ? {} : window.EduMon);
 EduMon.Util = new function() {
 
     var that = this;
@@ -190,37 +190,40 @@ Array.prototype.firstUsedElement = function() {
     }
 };
 
+if (typeof $ !== "undefined"){
 
-/**
- * Sorts option tags by their values
- */
-$.fn.sortSelectBox = function() {
-    // copy elements into array
-    var elements = [];
-    this.children().each(function() {
-        var el = $(this);
-        elements.push({ el: el, sort: el.html() });
-    });
+	/**
+	 * Sorts option tags by their values
+	 */
+	$.fn.sortSelectBox = function() {
+		// copy elements into array
+		var elements = [];
+		this.children().each(function() {
+			var el = $(this);
+			elements.push({ el: el, sort: el.html() });
+		});
 
-    // sort them using the sort key
-    elements.sort(function(a, b) {
-        var sortA = a.sort.toLowerCase();
-        var sortB = b.sort.toLowerCase();
-        if (sortA > sortB) {
-            return 1;
-        }
-        if (sortA < sortB) {
-            return -1;
-        }
-        return 0;
-    });
+		// sort them using the sort key
+		elements.sort(function(a, b) {
+			var sortA = a.sort.toLowerCase();
+			var sortB = b.sort.toLowerCase();
+			if (sortA > sortB) {
+				return 1;
+			}
+			if (sortA < sortB) {
+				return -1;
+			}
+			return 0;
+		});
 
-    // remove old html
-    this.empty();
+		// remove old html
+		this.empty();
 
-    // add all new elements
-    var that = this;
-    elements.forEach(function(el) {
-        el.el.appendTo(that);
-    });
-};
+		// add all new elements
+		var that = this;
+		elements.forEach(function(el) {
+			el.el.appendTo(that);
+		});
+	};
+
+}
