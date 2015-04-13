@@ -40,7 +40,7 @@ EduMon = new function() {
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
 
-		this.tryRestoreApp();
+		//this.tryRestoreApp(); //TODO reactivate once properly implemented
 		this.enablePersistApp();
 
 		EduMon.sendPacket({command:'start'});
@@ -341,7 +341,7 @@ EduMon = new function() {
 		setTimeout(function(){
 			setInterval(function(){
 				localStorage.setItem("EduMon.Prefs",JSON.stringify(EduMon.Prefs));
-				EduMon.Gui.showToast("App state saved");
+				//EduMon.Gui.showToast("App state saved");
 			},10000); //persist every 10sec
 		},5000); //start persisting app after 5sec
 	};

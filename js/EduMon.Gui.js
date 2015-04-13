@@ -332,5 +332,8 @@ EduMon.Gui = new function() {
 		$("#btnSettings").off("click").click(function(){
 			EduMon.Gui.showDialog("connectionSettings",true);
 		});
+		$("#btnThumbs").off("click").click(function(){
+			EduMon.Feedback.requestFeedback("thumb");
+		});
 	};
 };

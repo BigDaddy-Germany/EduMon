@@ -133,6 +133,15 @@ EduMon.Util = new function() {
 
         return window.open(url, '_' + name, features);
     };
+
+    /**
+     * Get current unix timestamp (according to browser)
+	 * @method timestampNow
+     * @returns {int} timestamp in seconds
+     */
+	this.timestampNow = function() {
+		return Math.floor(Date.now()/1000);
+	};
 };
 
 
