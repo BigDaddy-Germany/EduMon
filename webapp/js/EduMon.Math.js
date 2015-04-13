@@ -252,6 +252,17 @@ EduMon.Math = new function() {
     };
 
 
+    /**
+     * Generates an random integer
+     * @param {int} lowerLimit the lowest number
+     * @param {int} upperLimit the highest number
+     * @return {int} the generated random number
+     */
+    this.randomInteger = function(lowerLimit, upperLimit) {
+        return Math.floor(Math.random() * (upperLimit - lowerLimit)) + lowerLimit;
+    };
+
+
 	/**
 	 * Converts a RGB color to the HSV format
 	 *

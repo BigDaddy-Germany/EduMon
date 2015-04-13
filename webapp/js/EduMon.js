@@ -371,4 +371,44 @@ EduMon = new function() {
 	this.sendPacket = function(packet){
 		that.messenger.sendEvent(packet);
 	};
+
+
+	/**
+	 * devOnly
+	 */
+	this.testAllThemAnalytics = function(timeoutCall) {
+		var properties = ['keys', 'mdist', 'mclicks', 'volume'];
+		var users = ['niko', 'phillip', 'jonas', 'marco'];
+
+
+		var i = 0;
+		users.forEach(function (user) {
+			++i;
+
+			if (!timeoutCall) {
+				// set active students
+				EduMon.Prefs.currentLecture.activeStudents[user] = {
+						name: user,
+						group: user,
+						seat: {x: i, y: 1},
+						disturbance: 0,
+						history: [],
+						micHistory: []
+				};
+
+				EduMon.Prefs.currentLecture.seatingPlan[i] = [];
+				EduMon.Prefs.currentLecture.seatingPlan[i][1] = user;
+			}
+
+			// shuffle all them things
+			var packet = {};
+			properties.forEach(function(property) {
+				packet[property] = 20; // EduMon.Math.randomInteger(0, 20) + i;
+			});
+
+			EduMon.Analytics.processData(user, Math.round(new Date().getTime() / 1000), packet);
+		});
+
+		window.setTimeout(function() { EduMon.testAllThemAnalytics(true); }, 200);
+	};
 };

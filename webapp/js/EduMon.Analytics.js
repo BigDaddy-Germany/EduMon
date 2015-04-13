@@ -14,7 +14,7 @@ EduMon.Analytics = function() {
     var micNormalizationPeriod = 60*10;
     var micMinimumEntries = 10;
     var curValPeriod = 10;
-    var minimalGlobalReferenceValues = 5;
+    var minimalGlobalReferenceValues = 4;
     
     var upperBoundGiniFactor = 0.8;
 
@@ -167,7 +167,6 @@ EduMon.Analytics = function() {
                 minimumValues[propertyName] = math.min(values);
                 maximumValues[propertyName] = math.max(values);
 
-                // get function to scale student in a really fancy way with lagrange :)
                 var upperLimit = (1-math.giniIndex(values)) * maximumValues[propertyName] * upperBoundGiniFactor;
                 upperLimit = Math.max(upperLimit, maximumValues[propertyName]);
 
