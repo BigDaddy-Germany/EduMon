@@ -160,8 +160,10 @@ EduMon.Data = new function() {
 						}
 					*/},
 
+					nextFeedbackId: 1,
 					studentFeedback: {/*
 						feedbackId: {
+							type: "thumb"
 							time: 123456,
 							currentAverage: 0.175
 							studentVoting: {
@@ -183,24 +185,23 @@ EduMon.Data = new function() {
 		}
 	};
 
-	// todo comment me
 	/**
-	 * Description
+	 * Creates an empty packet (from "MODERATOR") with the common headers set
 	 * @method createBasePacket
-	 * @param {} type
-	 * @param {} to
-	 * @param {} body
+	 * @param {int} type Packet type number
+	 * @param {String} to Recipient
+	 * @param {Object} body Packet body
 	 * @return ObjectExpression
 	 */
 	this.createBasePacket = function(type, to, body){
 		return {
 			"type":+type,
-				"id":++EduMon.Prefs.currentLecture.messaging.outgoingPackageId,
-				"time":Math.floor(Date.now()/1000),
-				"from":"MODERATOR",
-				"to":to,
-				"room":EduMon.Prefs.currentLecture.room.roomName,
-				"body":body
+			"id":++EduMon.Prefs.currentLecture.messaging.outgoingPackageId,
+			"time":EduMon.Util.timestampNow(),
+			"from":"MODERATOR",
+			"to":to,
+			"room":EduMon.Prefs.currentLecture.room.roomName,
+			"body":body
 		};
 	};
 
