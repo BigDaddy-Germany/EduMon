@@ -17,6 +17,51 @@
         <script>
             var canvas = $('canvas');
 
+			var segments = [
+				['Phillip Schichtel', 1.0],
+				['Jonas Dann', 1.0],
+				['Marco Dörfler', 1.0],
+				['Niko Berkmann', 1.0],
+				['Tim Adamek', 1.0],
+				['Andreas Geis', 1.0],
+				['Nick Steyer', 1.0],
+				['Laura Hildebrand', 1.0],
+				['Steffanie XXXXXXXX', 1.0],
+				['Petra XXXXXXXXX', 1.0],
+				['Inga XXXXXXXX', 1.0],
+				['Marvin Klose', 1.0],
+				['Michael Wienecke', 1.0],
+				['Ricardo Bischof', 1.0]
+			];
+
+			var modes = {
+				half: function(segment) {
+					// half the weight of the selected segment
+					segment[1] /= 2;
+
+					// keep the weights in a stable range by keeping the smallest segment at weight 1 and scaling all other weights accordingly
+					var min = EduMon.Math.extremeValue(segments, function(a, b) { return b[1] - a[1]});
+					if (min[1] < 1) {
+						var factor = 1 / min[1];
+						for (var i = 0; i < segments.length; ++i) {
+							segments[i][1] *= factor;
+						}
+					}
+
+					console.log("" + segments);
+				},
+				drop: function(segment) {
+					segments.splice(segments.indexOf(segment), 1);
+				},
+				noop: function() {}
+			};
+
+			var w = new EduMon.Wheel(canvas[0], segments, function(segment) {
+				//modes.half(segment);
+				modes.drop(segment);
+				w.start();
+			});
+			w.start();
 
             var controller = new EduMon.Wheel.Controller(window.opener, {
                 showWheel: function(segments) {

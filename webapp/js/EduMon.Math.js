@@ -252,7 +252,14 @@ EduMon.Math = new function() {
     };
 
 
-
+	/**
+	 * Converts a RGB color to the HSV format
+	 *
+	 * @param {int} red the red value
+	 * @param {int} green the green value
+	 * @param {int} blue the blue value
+	 * @returns {*[]} an array with the 3 HSV components
+	 */
     this.rgbToHsv = function(red, green, blue) {
         red   /= 255;
         green /= 255;
@@ -279,7 +286,7 @@ EduMon.Math = new function() {
             throw "Hue calculation failed!"
         }
 
-        if (max > 0) {
+		if (max > 0) {
             saturation = delta / max;
         }
 
@@ -290,6 +297,14 @@ EduMon.Math = new function() {
         return [hue, saturation, value]
     };
 
+	/**
+	 * Converts a HSV formatted color to the RGB format.
+	 *
+	 * @param hue the hoe component
+	 * @param saturation the saturation component
+	 * @param value the value components
+	 * @returns {*[]} an array with the 3 RGB components
+	 */
     this.hsvToRgb = function(hue, saturation, value) {
 
         hue = Math.floor(hue / 60);
