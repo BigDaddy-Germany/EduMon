@@ -4,8 +4,10 @@
 EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
+	 * @method Student
 	 * @param {String} name the student's name
 	 * @param {String} group the group, the student is in
+	 * @return ObjectExpression
 	 */
 	this.Student = function Student(name, group) {
 		return {
@@ -16,8 +18,10 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new course object
+	 * @method Course
 	 * @param {String} name A name to identify the course
-	 * @param {Student[]} students An array of all students in the course
+	 * @param {} students
+	 * @return ObjectExpression
 	 */
 	this.Course = function Course(name, students) {
 		return {
@@ -28,9 +32,11 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new room object
+	 * @method Room
 	 * @param {String} roomName The room's name
 	 * @param {int} width The room's seats per row
 	 * @param {int} height The room's rows
+	 * @return ObjectExpression
 	 */
 	this.Room = function Room(roomName, width, height) {
 		return {
@@ -42,9 +48,11 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new lecture object
+	 * @method Lecture
 	 * @param {String} lectureName the lecture's display name
 	 * @param {int} room the room's ID
 	 * @param {int} course the course's ID
+	 * @return ObjectExpression
 	 */
 	this.Lecture = function Lecture(lectureName, room, course) {
 		return {
@@ -56,6 +64,8 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new timeline object
+	 * @method Timeline
+	 * @return ObjectExpression
 	 */
 	this.Timeline = function Timeline() {
 		return {
@@ -74,8 +84,6 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a current lecture object containing the real data (not only IDs)
-	 * @param {int} lectureId the lecture's ID
-	 * @returns {{
 	 * 				lectureName: {String},
 	 * 				room: {
 	 * 					roomName: {String},
@@ -85,9 +93,12 @@ EduMon.Data = new function() {
 	 * 				course: {
 	 * 					name: {String},
 	 * 					students: Array({Student})
-	 *	 			},
-	 *	 			activeStudents: {}
-	 *	 		}}
+	 *  			},
+	 *  			activeStudents: {}
+	 *  		}}
+	 * @method createCurrentLecture
+	 * @param {int} lectureId the lecture's ID
+	 * @return 
 	 */
 	this.createCurrentLecture = function(lectureId) {
 		if (EduMon.Prefs.lectures[lectureId]) {
@@ -173,6 +184,14 @@ EduMon.Data = new function() {
 	};
 
 	// todo comment me
+	/**
+	 * Description
+	 * @method createBasePacket
+	 * @param {} type
+	 * @param {} to
+	 * @param {} body
+	 * @return ObjectExpression
+	 */
 	this.createBasePacket = function(type, to, body){
 		return {
 			"type":+type,
@@ -187,10 +206,11 @@ EduMon.Data = new function() {
 
 	/**
 	 * Checks, whether the deletion of a resource is allowed
+	 * @method checkDeletionErrors
 	 * @param {String} resourceType the resource's type
 	 * @param {int} resourceId the resource's ID
-	 * @param {int|boolean} [allowedUser=false] this user is allowed and causes no deletion error
-	 * @return {int} the calculated error code (1: last one, 2: still used)
+	 * @param {} allowedUser
+	 * @return Literal
 	 */
 	this.checkDeletionErrors = function(resourceType, resourceId, allowedUser) {
 		allowedUser = allowedUser || false;

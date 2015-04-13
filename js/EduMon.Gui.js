@@ -19,9 +19,11 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Add message to newsfeed
+	 * @method showFeedMessage
 	 * @param {String} type Message type can be "info", "success", "warning" and "danger"
 	 * @param {String} title The message title
 	 * @param {String} message The html message to display
+	 * @return undefined
 	 */
 	this.showFeedMessage = function(type, title, message) {
 		countFeedMessages++;
@@ -49,6 +51,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Refresh the "n Messages"-Counter in the newsfeed panel
+	 * @method updateFeedCountView
+	 * @return undefined
 	 */
 	this.updateFeedCountView = function() {
 		$("#feedcounter").html("<span class=\"badge\">"+countFeedMessages+"</span> Nachricht"+(countFeedMessages!==1?"en":""));
@@ -56,7 +60,9 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Performs the AJAX request for dialog content. [Deduplicating code in showDialog() and switchDialog()]
+	 * @method loadDialog
 	 * @param {String} dialogid [see showDialog()]
+	 * @return Promise
 	 */
 	var loadDialog = function(dialogid) {
 		return new Promise(function(fulfill, reject) {
@@ -77,8 +83,10 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
+	 * @method showDialog
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
-	 * @param {Boolean} [attentionAbort] If activated and another dialog is already open, attention box will flash instead of an error being thrown
+	 * @param {Boolean} attentionAbort Flash for attention if dialog cannot be opened
+	 * @return Promise
 	 */
 	this.showDialog = function(dialogid, attentionAbort) {
 		var that = this;
@@ -106,7 +114,9 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Switch from the current dialog to another
+	 * @method switchDialog
 	 * @param {String} dialogid [see showDialog()]
+	 * @return Promise
 	 */
 	this.switchDialog = function(dialogid) {
 		var that = this;
@@ -124,7 +134,9 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Display or hide the loading/busy indicator of the dialog
+	 * @method setDialogBlock
 	 * @param {Boolean} blocked Set to 1 for display and 0 to hide the blocker
+	 * @return undefined
 	 */
 	this.setDialogBlock = function(blocked) {
 		if (blocked){
@@ -138,6 +150,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Close the active dialog
+	 * @method closeDialog
+	 * @return undefined
 	 */
 	this.closeDialog = function() {
 		$("#dialogcontainer").fadeOut(100,function(){
@@ -152,7 +166,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Returns the dialog's ID which is opened currently
-	 * @return {String} the dialog's ID
+	 * @method getOpenedDialog
+	 * @return openedDialog
 	 */
 	this.getOpenedDialog = function() {
 		return openedDialog;
@@ -160,7 +175,9 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Display a toast notification that disappears after a little while
+	 * @method showToast
 	 * @param {String} message Message to be displayed
+	 * @return undefined
 	 */
 	this.showToast = function(message) {
 		$("#toastlist")
@@ -177,11 +194,13 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Display a popup box
+	 * @method showPopup
 	 * @param {String} title Popup title
 	 * @param {String} message (HTML-)Message to be displayed
 	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
-	 * @param {Function} [callback] Function to be called on button click, will be given button value as parameter
-	 * @param {Boolean} [attentionAbort] If activated and another popup is already open, attention box will flash instead of an error being thrown
+	 * @param {Function} callback Function to call after popup has been answered, value of chosen button is passed as first parameter
+	 * @param {Boolean} attentionAbort Flash for attention if dialog cannot be opened
+	 * @return undefined
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
 		if (popupOpened && attentionAbort!==true){
@@ -217,6 +236,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Closes the popup box
+	 * @method closePopup
+	 * @return undefined
 	 */
 	this.closePopup = function() {
 		$("#popupcontainer").hide();
@@ -226,6 +247,11 @@ EduMon.Gui = new function() {
 		popupOpened = 0;
 	};
 
+	/**
+	 * Reload seating plan: rewrite table according to current room and start seat update timer
+	 * @method initSeating
+	 * @return undefined
+	 */
 	this.initSeating = function(){
 		if (seatUpdateTimer!==undefined){
 			clearInterval(seatUpdateTimer);
@@ -242,10 +268,14 @@ EduMon.Gui = new function() {
 	};
 
 	/**
-	 * Update a seat
+	 * Update a single seat by refreshing its text content and background level
+	 * @method updateSeat
 	 * @param {int} row Row number from 1 (front desk) to n
 	 * @param {int} number Seat number from 1 (at left from moderator view) to n
+	 * @param {String} name
+	 * @param {String} group
 	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
+	 * @return undefined
 	 */
 	var updateSeat = function(row, number, name, group, activity) {
 		var seats = $("#seats").find("tbody");
@@ -268,6 +298,11 @@ EduMon.Gui = new function() {
 		seat.find(".person .group").text(group);
 	}
 
+	/**
+	 * Updates all seats with the active students data of the current lecture
+	 * @method updateStudents
+	 * @return undefined
+	 */
 	var updateStudents = function(){
 		for (var key in EduMon.Prefs.currentLecture.activeStudents){
 			if (EduMon.Prefs.currentLecture.activeStudents.hasOwnProperty(key)){
@@ -279,10 +314,20 @@ EduMon.Gui = new function() {
 		}
 	};
 
+	/**
+	 * Flash a red border around the seating plan and layer container, mostly to indicate that interaction with an open dialog or popup is necessary
+	 * @method attention
+	 * @return undefined
+	 */
 	this.attention = function(){
 		$("#attention").stop(true,true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
 	};
 
+	/**
+	 * Initialize GUI (bind click handlers)
+	 * @method init
+	 * @return undefined
+	 */
 	this.init = function(){
 		$("#btnSettings").off("click").click(function(){
 			EduMon.Gui.showDialog("connectionSettings",true);
