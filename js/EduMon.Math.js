@@ -227,7 +227,7 @@ EduMon.Math = new function() {
      * @return {number} the result
      */
     this.applyOver = function(from, to, predicate, functor) {
-        if (from == to) {
+        if (from + 1 == to) {
             return functor(from);
         }
         var currentValue = predicate(functor(from++), functor(from++));
