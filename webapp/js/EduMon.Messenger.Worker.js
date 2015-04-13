@@ -14,7 +14,11 @@ var requests_failed = 0;
 var configured = false;
 
 
-/* Create a JSON-POST-HTTP-Request */
+/**
+ * Create a new JSON-POST-HTTP-Request 
+ * @method createRequest
+ * @return {XMLHttpRequest}
+ */
 function createRequest() {
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", url + "?room=" + room + "&moderatorPassphrase=" + moderatorPassphrase, true);
@@ -24,7 +28,12 @@ function createRequest() {
 	return xhr;
 }
 
+/* fitting function is executed if "command" attribute is present in incoming data for worker */
 var commands = {
+	/**
+	 * Configure connection
+	 * @param {Object} data Setup parameters: url, room, moderatorPassphrase, interval (in msec)
+	 */
 	config: function(data) {
 		if ("url"                 in data) url = data.url;
 		if ("room"                in data) room = encodeURIComponent(data.room);
@@ -35,6 +44,9 @@ var commands = {
 			console.log("Worker started and configured, queue will be processed");
 		} 
 	},
+	/**
+	 * Enable queue processing (is automatically paused until first configuration)
+	 */
 	start: function() {
 		if (!configured){
 			console.log("Warning: Worker started, but will only send once configured");
@@ -46,6 +58,9 @@ var commands = {
 		timer = setInterval(processQueue, interval);
 		console.log('Queue timer started.');
 	},
+	/**
+	 * Stop queue processing
+	 */
 	stop: function() {
 		clearInterval(timer);
 		timer = undefined;
@@ -53,7 +68,10 @@ var commands = {
 };
 
 
-/* Handle call for action from main app */
+/**
+ * Handle call for action from main app 
+ * @param {Object} input Inter-thread communication object
+ */
 onmessage = function (input) {
 	//Configuration command
 	var data = input.data;
@@ -72,14 +90,23 @@ onmessage = function (input) {
 };
 
 
-/* Forward incoming data to main app */
-// TODO what is the expected benefit of wrapping postMessage() with handleEvent() ?
+//TODO what is the expected benefit of wrapping postMessage() with handleEvent() ?
+/**
+ * Forward incoming data to main app
+ * @method handleEvent
+ * @param {Object} event Data to forward
+ * @return undefined
+ */
 function handleEvent(event) {
 	postMessage(event);
 }
 
 
-/* Send queued packets */
+/**
+ * Send queued packets (called by queue timer)
+ * @method processQueue
+ * @return undefined
+ */
 function processQueue() {
 	if (!configured){
 		return;

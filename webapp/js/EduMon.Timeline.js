@@ -7,11 +7,21 @@ EduMon.Timeline = new function() {
 	var lectureStarted = false;
 	var lectureOver = false;
 
+	/**
+	 * Get the current time in the format H:MM (e.g. "9:23")
+	 * @method getTime
+	 * @return {String} Time in hours and minutes
+	 */
 	var getTime = function(){
 		var now = new Date();
 		return now.getHours()+":"+("0"+now.getMinutes()).slice(-2);
 	}
 
+	/**
+	 * Set the end value of the previous (than the current) slice
+	 * @method setPreviousEnd
+	 * @return undefined
+	 */
 	var setPreviousEnd = function(){
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.slices.length>1){
@@ -19,6 +29,11 @@ EduMon.Timeline = new function() {
 		}
 	}
 
+	/**
+	 * Clears the timeline, deletes timeline data and reinitialized timeline
+	 * @method reset
+	 * @return undefined
+	 */
 	this.reset = function(){
 		if (timer!==undefined){
 			clearInterval(timer);
@@ -31,6 +46,11 @@ EduMon.Timeline = new function() {
 		that.init();
 	};
 
+	/**
+	 * Lecture-Flow-Control: start or resume a lecture block
+	 * @method play
+	 * @return undefined
+	 */
 	this.play = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.status!=="play"){
@@ -44,6 +64,11 @@ EduMon.Timeline = new function() {
 		updateTimeline();
 	};
 
+	/**
+	 * Lecture-Flow-Control: pauses the current lecture block
+	 * @method pause
+	 * @return undefined
+	 */
 	this.pause = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.status==="play"){
@@ -56,6 +81,11 @@ EduMon.Timeline = new function() {
 		updateTimeline();
 	};
 
+	/**
+	 * Lecture-Flow-Control: completely stops the lecture
+	 * @method stop
+	 * @return undefined
+	 */
 	this.stop = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		EduMon.Gui.showPopup("Vorlesung beenden?","Eine beendete Vorlesung kann nicht wieder aufgenommen werden. Möchten Sie die Vorlesung jetzt beenden und die Auswertung einsehen?",
@@ -71,11 +101,22 @@ EduMon.Timeline = new function() {
 				},true);
 	};
 
+	/**
+	 * Wrapper around reset (called by restart button)
+	 * @method restart
+	 * @return undefined
+	 */
 	this.restart = function(){
 		//TODO intended?
 		that.reset();
 	};
 
+	/**
+	 * Timeline update timer tick
+	 * @method tick
+	 * @param {Boolean} onlyUpdate Only refresh the timeline display but do not alter timeline data
+	 * @return undefined
+	 */
 	var tick = function(onlyUpdate) {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (onlyUpdate!==true && EduMon.Prefs.currentLecture.timeline.status!=="stop"){
@@ -86,6 +127,11 @@ EduMon.Timeline = new function() {
 		updateTimeline();
 	};
 
+	/**
+	 * Initialize timeline: start updaate timer and bind click handlers
+	 * @method init
+	 * @return undefined
+	 */
 	this.init = function(){
 		//Timer is always active, but timer tick does not always trigger action
 		//this prevents seconds getting lost
@@ -98,6 +144,11 @@ EduMon.Timeline = new function() {
 		$("#btnRestart").off("click").click(function(){that.restart();});
 	};
 
+	/**
+	 * Update the timeline display and the flow controls
+	 * @method updateTimeline
+	 * @return undefined
+	 */
 	var updateTimeline = function(){
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		var totalPercentage = 0; //remember how full the bar is
