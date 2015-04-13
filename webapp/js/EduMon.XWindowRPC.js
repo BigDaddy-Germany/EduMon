@@ -1,4 +1,4 @@
-EduMon.Wheel.Controller = function (target, functions) {
+EduMon.XWindowRPC = function (target, functions) {
 
 	var nextId = 1;
 	var outstandingResponses = {};

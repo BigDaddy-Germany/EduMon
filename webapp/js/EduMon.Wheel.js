@@ -34,12 +34,10 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 
 	var activeSegment = null;
 
-	initializeData();
 	shuffle(segments);
-	currentAngle = TAU - 0.5 * unit * segments[0][1];
+	initializeData(true);
 
-	function initializeData() {
-		activeSegment = null;
+	function updateUnit() {
 		if (segments.length == 0) {
 			throw "No segments supplied!";
 		}
@@ -51,18 +49,19 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 			});
 		}
 		unit = TAU / weights;
+	}
 
-
-		// Ensure we start mid way on a item
-		//currentAngle = TAU - 0.5 * unit * segments[0][1];
-
-		var len = segments.length;
-		var colorLen = colors.length;
+	function initializeData(resetAngle) {
+		activeSegment = null;
+		updateUnit();
+		if (!!resetAngle) {
+			currentAngle = TAU - 0.5 * unit * segments[0][1] - (TAU/segments.length);
+		}
 
 		// Generate a color cache (so we have consistent coloring)
 		var newSegmentColors = [];
-		for (var i = 0; i < len; i++) {
-			var color = colors[modulo(hashString(segments[i][0]), colorLen)];
+		for (var i = 0; i < segments.length; i++) {
+			var color = colors[modulo(hashString(segments[i][0]), colors.length)];
 			newSegmentColors.push([color, invertColor(color)]);
 		}
 		segmentColors = newSegmentColors;
@@ -128,16 +127,18 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 	}
 
 	this.start = function () {
-		initializeData();
-
-		if (segments.length === 1) {
-			currentAngle = PI;
-			draw();
-			return;
-		}
 
 		// Start the wheel only if it's not already spinning
 		if (timerHandle == -1) {
+
+			initializeData();
+
+			if (segments.length === 1) {
+				currentAngle = PI;
+				draw();
+				return;
+			}
+
 			spinStart = new Date().getTime();
 			maxSpeed = PI / (16 + Math.random()); // Randomly vary how hard the spin is
 

@@ -8,7 +8,7 @@
         <script src="js/EduMon.Math.js"></script>
         <script src="js/EduMon.Util.js"></script>
         <script src="js/EduMon.Wheel.js"></script>
-        <script src="js/EduMon.Wheel.Controller.js"></script>
+        <script src="js/EduMon.XWindowRPC.js"></script>
     </head>
     <body>
         <div id="wheel">
@@ -59,11 +59,15 @@
 			var w = new EduMon.Wheel(canvas[0], segments, function(segment) {
 				//modes.half(segment);
 				modes.drop(segment);
-				w.start();
 			});
-			w.start();
 
-            var controller = new EduMon.Wheel.Controller(window.opener, {
+			$(window).on('keydown', function(e) {
+				if (e.which === 32) {
+					w.start();
+				}
+			});
+
+            var controller = new EduMon.XWindowRPC(window.opener, {
                 showWheel: function(segments) {
                     var w = new EduMon.Wheel(canvas[0], segments, function(segment) {
                         controller.invoke("wheelFinished", segment);
