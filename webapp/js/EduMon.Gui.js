@@ -304,14 +304,11 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	var updateStudents = function(){
-		for (var key in EduMon.Prefs.currentLecture.activeStudents){
-			if (EduMon.Prefs.currentLecture.activeStudents.hasOwnProperty(key)){
-				var student = EduMon.Prefs.currentLecture.activeStudents[key];
-				updateSeat(student.seat.y, student.seat.x, student.name, student.group,
-						EduMon.Analytics.scaleDisturbanceToPercentage(student.disturbance)
-						);
-			}
-		}
+		EduMon.Util.forEachField(EduMon.Prefs.currentLecture.activeStudents,function(studentId,student){
+			updateSeat(student.seat.y, student.seat.x, student.name, student.group,
+				EduMon.Analytics.scaleDisturbanceToPercentage(student.disturbance)
+				);
+		});
 	};
 
 	/**
