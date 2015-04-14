@@ -258,9 +258,9 @@ EduMon.Gui = new function() {
 		}
 
 		var room = EduMon.Prefs.currentLecture.room;
-		$("#seats tbody").html(new Array(room.height+1).join('<tr>'+new Array(room.width+1).join(
-						'<td><div class="person"><div class="name">&nbsp;</div><div class="group">&nbsp;</div></div></td>'
-						)+'</tr>'));
+		$("#seats").html(new Array(room.height+1).join('<div class="srow">'+new Array(room.width+1).join(
+						'<div class="scell"><div class="person"><div class="name"></div><div class="group"></div></div></div>'
+						)+'</div>'));
 
 		seatUpdateTimer = setInterval(function(){
 			updateStudents();
@@ -278,7 +278,7 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	var updateSeat = function(row, number, name, group, activity) {
-		var seats = $("#seats").find("tbody");
+		var seats = $("#seats");
         if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
 		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
 		var seat = seats.children().eq(seatsInfo.height-row).children().eq(number-1);
