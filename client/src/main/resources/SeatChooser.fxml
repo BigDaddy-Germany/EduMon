@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="container" fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.SeatChooserController">
+<AnchorPane id="container" fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.SeatChooserController">
   <children>
     <Label alignment="CENTER" layoutX="14.0" layoutY="30.0" prefWidth="572.0" text="Tafel" textAlignment="LEFT" />
     <Label fx:id="roomAndName" layoutX="14.0" layoutY="14.0" text="Label" />
@@ -22,5 +23,10 @@
       </rowConstraints>
     </GridPane>
     <Button layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleBack" text="Zurück" />
+      <ImageView fitHeight="39.0" fitWidth="60.0" layoutX="561.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@EduMon.png" />
+         </image>
+      </ImageView>
   </children>
 </AnchorPane>

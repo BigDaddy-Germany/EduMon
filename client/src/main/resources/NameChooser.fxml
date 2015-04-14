@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.NameChooserController">
+<AnchorPane id="AnchorPane" fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.NameChooserController">
   <children>
     <ListView fx:id="nameList" layoutX="200.0" layoutY="58.0" prefHeight="328.0" prefWidth="200.0" />
     <Button layoutX="14.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleBack" text="Zurück" />
     <Label layoutX="198.0" layoutY="35.0" text="Wählen Sie Ihren Namen aus" />
     <Label fx:id="room" layoutX="14.0" layoutY="14.0" text="Label" />
+      <ImageView fitHeight="39.0" fitWidth="60.0" layoutX="561.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@EduMon.png" />
+         </image>
+      </ImageView>
   </children>
 </AnchorPane>

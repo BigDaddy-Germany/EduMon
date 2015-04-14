@@ -9,62 +9,82 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.LoginController">
+<GridPane fx:id="pane" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.LoginController">
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
   <children>
-    <GridPane id="GridPane" alignment="TOP_LEFT" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0" rotate="0.0">
-      <children>
-        <Label alignment="TOP_LEFT" prefHeight="59.0" prefWidth="154.0" text="Login" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="CENTER">
-          <font>
-            <Font size="50.0" />
-          </font>
-        </Label>
-        <ImageView fitHeight="58.999996185302734" fitWidth="140.47617758291733" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+      <GridPane id="GridPane" alignment="TOP_LEFT" layoutX="0.0" layoutY="0.0" prefHeight="300.0" prefWidth="500.0" rotate="0.0" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+          <children>
+              <Label alignment="TOP_LEFT" prefHeight="59.0" prefWidth="154.0" text="Login" textAlignment="LEFT" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+                  <font>
+                      <Font size="50.0" />
+                  </font>
+              </Label>
+              <Label text="Bitte geben Sie den Vorlesungsraum an" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BASELINE">
+                  <GridPane.margin>
+                      <Insets left="3.0" />
+                  </GridPane.margin>
+              </Label>
+              <TextField id="" fx:id="room" minHeight="25.0" onAction="#handleNext" prefWidth="259.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+              <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleNext" text="Weiter" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+              <Hyperlink fx:id="serverLink" onAction="#handlePopup" text="Server: cubeisland.org" textFill="#404040" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                  <font>
+                      <Font size="10.0" fx:id="x1" />
+                  </font>
+              </Hyperlink>
+              <Label fx:id="serverError" alignment="CENTER" font="$x1" text="Server nicht erreichbar." textFill="#cc0000" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="4">
+                  <GridPane.margin>
+                      <Insets left="3.0" />
+                  </GridPane.margin>
+              </Label>
+          </children>
+          <columnConstraints>
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          </columnConstraints>
+          <rowConstraints>
+              <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="110.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="78.0" minHeight="25.0" prefHeight="27.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="59.0" minHeight="15.0" prefHeight="15.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+              <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+         <GridPane.margin>
+            <Insets bottom="75.0" left="75.0" right="75.0" top="75.0" />
+         </GridPane.margin>
+      </GridPane>
+      <GridPane fx:id="popup" layoutX="75.0" layoutY="190.0" maxHeight="130.0" maxWidth="450.0" style="-fx-background-color: #fff; -fx-background-radius: 5px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" visible="false" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+          <columnConstraints>
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          </columnConstraints>
+          <rowConstraints>
+              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+          <children>
+              <Label text="Bitte geben Sie den Server an" />
+              <TextField fx:id="server" minHeight="25.0" onAction="#handleServerSave" prefWidth="422.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+              <Button mnemonicParsing="false" onAction="#handleServerSave" text="Speichern" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+              <Button mnemonicParsing="false" onAction="#handleClose" text="Schließen" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+          </children>
+          <padding>
+              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+          </padding>
+       <GridPane.margin>
+          <Insets top="180.0" />
+       </GridPane.margin>
+      </GridPane>
+      <ImageView fitHeight="39.0" fitWidth="60.0" layoutX="541.0" layoutY="341.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
           <image>
-            <Image url="@DHBWLogo.png" />
+              <Image url="@EduMon.png" />
           </image>
-        </ImageView>
-        <Label text="Bitte geben Sie den Vorlesungsraum an" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-          <GridPane.margin>
-            <Insets left="3.0" />
-          </GridPane.margin>
-        </Label>
-        <TextField id="" fx:id="room" onAction="#handleNext" prefWidth="259.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleNext" text="Weiter" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Hyperlink fx:id="serverLink" onAction="#handlePopup" text="Server: cubeisland.org" textFill="#404040" GridPane.columnIndex="0" GridPane.rowIndex="3">
-          <font>
-            <Font size="10.0" fx:id="x1" />
-          </font>
-        </Hyperlink>
-        <Label fx:id="serverError" alignment="CENTER" font="$x1" text="Server nicht erreichbar." textFill="#cc0000" visible="false" GridPane.columnIndex="0" GridPane.rowIndex="4">
-          <GridPane.margin>
-            <Insets left="3.0" />
-          </GridPane.margin>
-        </Label>
-      </children>
-      <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      </columnConstraints>
-      <padding>
-        <Insets bottom="75.0" left="75.0" right="75.0" top="75.0" />
-      </padding>
-      <rowConstraints>
-        <RowConstraints maxHeight="194.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="78.0" minHeight="10.0" prefHeight="27.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
-      </rowConstraints>
-    </GridPane>
-    <Pane id="" fx:id="popup" layoutX="75.0" layoutY="200.0" opacity="1.0" prefHeight="110.0" prefWidth="450.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" styleClass="null" visible="false">
-      <children>
-        <Label layoutX="14.0" layoutY="14.0" text="Bitte geben Sie den Server an" />
-        <Button layoutX="14.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleClose" text="Schließen" />
-        <Button layoutX="348.0" layoutY="76.0" mnemonicParsing="false" onAction="#handleServerSave" text="Speichern" />
-        <TextField fx:id="server" layoutX="14.0" layoutY="33.0" onAction="#handleServerSave" prefWidth="422.0" />
-      </children>
-    </Pane>
-  </children>
-</AnchorPane>
+      </ImageView>
+    </children>
+</GridPane>

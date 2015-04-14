@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.image.Image;
 import org.cubyte.edumon.client.controller.OptionsController;
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
@@ -30,17 +31,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.cubyte.edumon.client.Scene.LOGIN;
-import static org.cubyte.edumon.client.Scene.OPTIONS;
+import static org.cubyte.edumon.client.Scene.*;
 
 public class Main extends Application {
-    private static final String TRAY_ICON = "/SystemtrayIcon.png";
+    private static final String ICON = "/EduMon.png";
 
     private final KeyListener keyListener;
     private final MouseListener mouseListener;
     private final MicListener micListener;
     private final MessageQueue messageQueue;
     private final MessageFactory messageFactory;
+    private final Image appIcon;
     private TrayIcon trayIcon;
     private final ClientConfig clientConfig;
     private Stage stage;
@@ -60,8 +61,9 @@ public class Main extends Application {
         messageQueue = new MessageQueue(this);
         messageFactory = new MessageFactory(this, "MODERATOR");
 
+        appIcon = new Image(ICON);
         try {
-            trayIcon = new TrayIcon(ImageIO.read(getClass().getResourceAsStream(TRAY_ICON)));
+            trayIcon = new TrayIcon(ImageIO.read(getClass().getResourceAsStream(ICON)));
         } catch (IOException e) {
             System.err.println("Could not load tray icon.");
             System.err.println(e.getMessage());
@@ -96,8 +98,9 @@ public class Main extends Application {
         Platform.setImplicitExit(false);
 
         Scene.setApp(this);
-        stage.setResizable(false);
         this.stage = stage;
+        stage.setResizable(false);
+        stage.getIcons().add(appIcon);
         resetToLogin();
     }
 
@@ -109,6 +112,7 @@ public class Main extends Application {
                 exit();
             }
         });
+        changeScene(EMPTY);
         changeScene(LOGIN);
     }
 
@@ -149,7 +153,7 @@ public class Main extends Application {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if (!canRunInBackground()) {
+                if (!canRunInBackground() || trayIcon == null) {
                     stage.setTitle("EduMon Client");
                     optionsController.setOptions(false);
                     stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -197,7 +201,8 @@ public class Main extends Application {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        stage.show();
+                        changeScene(EMPTY);
+                        changeScene(OPTIONS);
                     }
                 });
             }
