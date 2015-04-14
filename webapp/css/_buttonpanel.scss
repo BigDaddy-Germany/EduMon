@@ -30,10 +30,12 @@
 
 #flowbox {
 	text-align: center;
+	min-height: 170px;
 }
 
 #actionbox {
 	text-align: center;
+	min-height: 280px;
 	flex-grow: 1;
 }
 

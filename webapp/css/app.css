@@ -134,10 +134,12 @@ body {
     overflow-y: auto; }
 
 #flowbox {
-  text-align: center; }
+  text-align: center;
+  min-height: 170px; }
 
 #actionbox {
   text-align: center;
+  min-height: 280px;
   flex-grow: 1; }
 
 #devbox {
@@ -445,3 +447,40 @@ body {
     padding: 5px 10px 5px 10px;
     font-size: 20px;
     cursor: pointer; }
+
+#pultup {
+  height: 90px;
+  margin: 10px 10px 0px 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: space-between;
+  align-items: flex-start;
+  overflow: hidden; }
+  #pultup .indicator {
+    height: 100%;
+    width: 90px;
+    margin-right: 10px; }
+    #pultup .indicator i {
+      font-size: 80px; }
+  #pultup .feedback {
+    height: 100%;
+    flex-grow: 1;
+    text-align: center;
+    justify-content: space-around;
+    align-content: stretch;
+    align-items: center;
+    display: flex;
+    flex-direction: column; }
+    #pultup .feedback > div {
+      flex-grow: 0;
+      flex-shrink: 1; }
+    #pultup .feedback .wheelhelp b {
+      font-weight: bold; }
+  #pultup .stats {
+    height: 100%;
+    flex-shrink: 1;
+    margin-left: 10px;
+    text-align: right;
+    font-size: 30px; }
