@@ -1,6 +1,8 @@
 package org.cubyte.edumon.client.sensorlistener;
 
 import javax.sound.sampled.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +43,11 @@ public class MicListener {
     }
 
     private float calculateLevel(List<Byte> buffer) {
-        int maxLevel = 0;
+        short maxLevel = 0;
         int level = 0;
         for (int i = 0; i < buffer.size(); i += 2) {
-            level += (buffer.get(i + 1) << 8) | buffer.get(i);
-            maxLevel = Math.max(maxLevel, (buffer.get(i + 1) << 8) | buffer.get(i));
+            level += Math.abs((buffer.get(i + 1) << 8) | buffer.get(i));
+            maxLevel = (short) Math.max(maxLevel, level);
         }
         //return (float) maxLevel / Short.MAX_VALUE;
         return (float) (level / Short.MAX_VALUE) / (buffer.size() / 2);
