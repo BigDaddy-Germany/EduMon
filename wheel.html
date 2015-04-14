@@ -35,9 +35,9 @@
 			];
 
 			var modes = {
-				half: function(segment) {
+				slimming: function(segment) {
 					// half the weight of the selected segment
-					segment[1] /= 2;
+					segment[1] *= .1;
 
 					// keep the weights in a stable range by keeping the smallest segment at weight 1 and scaling all other weights accordingly
 					var min = EduMon.Math.extremeValue(segments, function(a, b) { return b[1] - a[1]});
@@ -61,25 +61,29 @@
 				modes.drop(segment);
 			});
 
+            var task = -1;
 			var minDelay = 2000;
 			var start = -1;
 			$(window).on('keydown', function(e) {
-				if (e.which === 32 && start < 0) {
+				if (e.which === 32 && start < 0 && task === -1) {
 					w.beginSpinning();
 					start = Date.now();
 				}
 			}).on('keyup', function(e) {
-				if (e.which === 32 && start >= 0) {
+				if (e.which === 32 && start >= 0 && task === -1) {
 					var now = Date.now();
 					var delta = now - start;
-                    start = -1;
 					console.log(" " + start + "\n+ " + now + " = " + delta);
-					if (delta < minDelay) {
-						setTimeout(w.endSpinning, minDelay - delta);
-					} else {
-						w.endSpinning();
-					}
-				}
+                    if (delta < minDelay) {
+                        task = setTimeout(function () {
+                            w.endSpinning();
+                            task = -1;
+                        }, minDelay - delta);
+                    } else {
+                        w.endSpinning();
+                    }
+                    start = -1;
+                }
 			});
 
             var controller = new EduMon.XWindowRPC(window.opener, {
