@@ -1,33 +1,39 @@
 #seats {
 	width: 100%;
 	height: 100%;
-	border-spacing: 10px;
-	border-collapse: separate;
 	background-color: #FFFFFF;
+	@include vflex;
 
-	td {
-		/*
-		@include vflex;
-		flex-wrap: nowrap;
-		justify-content: space-around;
-		*/
-		background: #DDDDDD;
-		margin: 2px;
-		cursor: pointer;
+	.srow {
+		flex-grow: 1;
+		flex-basis: 0;
+		@include hflex;
 
-		.person {
-			text-align: center;
+		.scell {
+			flex-grow: 1;
+			flex-shrink: 0;
+			flex-basis: 0;
+			margin: 5px;
+			padding: 10px 2px 0px 2px;
+			word-break: break-word;
+			overflow: hidden;
+			background: #DDDDDD;
 
-			.name {
-				font-weight: bold;
+			.person {
+				text-align: center;
+
+				.name {
+					font-weight: bold;
+				}
+
+				.group {
+					font-style: italic;
+					&:not(:empty)::before { content: "("; font-style: italic; }
+					&:not(:empty)::after  { content: ")"; font-style: italic; }
+				}
 			}
 
-			.group {
-				font-style: italics;
-			}
-		}
-
-		/*.stats {
+			/*.stats {
 
 			@include hflex; 
 			flex-wrap: nowrap;
@@ -40,5 +46,6 @@
 				flex-shrink: 1;
 			}
 		}*/
-	}
+}
+}
 }
