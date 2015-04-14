@@ -18,20 +18,6 @@ EduMon.Gui = new function() {
 	var seatsInfo = {width: -1, height: -1};
 
 	/**
-	 * Deletes a given seat
-	 * @param {int} x the seat's x value
-	 * @param {int} y the seat's y value
-	 */
-	this.deleteSeat = function(x, y) {
-		var currentLecture = EduMon.Prefs.currentLecture;
-		if (currentLecture.seatingPlan[x]) {
-			delete currentLecture.seatingPlan[x][y];
-
-		}
-		// todo delete implement me
-	};
-
-	/**
 	 * Add message to newsfeed
 	 * @method showFeedMessage
 	 * @param {String} type Message type can be "info", "success", "warning" and "danger"
@@ -282,20 +268,31 @@ EduMon.Gui = new function() {
 	};
 
 	/**
+	 * Get the jQuery-DOM-element of a seat
+	 * @method getSeatElement
+	 * @param {int} number Seat number from 1 (at left from moderator view) to n (X index)
+	 * @param {int} row Row number from 1 (front desk) to n (Y index)
+	 * @return {jQuery-Element}
+	 */
+	var getSeatElement = function(number, row){
+		var seats = $("#seats");
+        if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
+		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
+		return seats.children().eq(seatsInfo.height-row).children().eq(number-1);
+	};
+
+	/**
 	 * Update a single seat by refreshing its text content and background level
 	 * @method updateSeat
-	 * @param {int} row Row number from 1 (front desk) to n
-	 * @param {int} number Seat number from 1 (at left from moderator view) to n
+	 * @param {int} number Seat number from 1 (at left from moderator view) to n (X index)
+	 * @param {int} row Row number from 1 (front desk) to n (Y index)
 	 * @param {String} name
 	 * @param {String} group
 	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
 	 * @return undefined
 	 */
-	var updateSeat = function(row, number, name, group, activity) {
-		var seats = $("#seats");
-        if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
-		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
-		var seat = seats.children().eq(seatsInfo.height-row).children().eq(number-1);
+	var updateSeat = function(number, row, name, group, activity) {
+		var seat = getSeatElement(number, row);
 
 		var colorCoding = {low:"#4CAF50",mid:"#FF5722",high:"#F44336"};
 		var color =                 colorCoding.low;
@@ -313,13 +310,28 @@ EduMon.Gui = new function() {
 	}
 
 	/**
+	 * Removes a seat from the seating plan (GUI and data base)
+	 * @param {int} x the seat's x value (seat number)
+	 * @param {int} y the seat's y value (row)
+	 */
+	this.deleteSeat = function(x, y) {
+		var currentLecture = EduMon.Prefs.currentLecture;
+		if (currentLecture.seatingPlan[x]) {
+			delete currentLecture.seatingPlan[x][y];
+		}
+		var seat = getSeatElement(x, y);
+		seat.css("background","#DDD");
+		seat.find("div").empty();
+	};
+
+	/**
 	 * Updates all seats with the active students data of the current lecture
 	 * @method updateStudents
 	 * @return undefined
 	 */
 	var updateStudents = function(){
 		EduMon.Util.forEachField(EduMon.Prefs.currentLecture.activeStudents,function(studentId,student){
-			updateSeat(student.seat.y, student.seat.x, student.name, student.group,
+			updateSeat(student.seat.x, student.seat.y, student.name, student.group,
 				EduMon.Analytics.scaleDisturbanceToPercentage(student.disturbance)
 				);
 		});
