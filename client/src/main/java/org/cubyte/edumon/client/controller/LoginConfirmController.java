@@ -23,7 +23,7 @@ public class LoginConfirmController implements Controller {
 
     public void confirmLogin() {
         if (app.canRunInBackground()) {
-            seconds = 3;
+            seconds = 2;
             final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
@@ -31,7 +31,7 @@ public class LoginConfirmController implements Controller {
                         @Override
                         public void run() {
                             String text = "Die Applikation wird nun im Hintergrund ausgeführt";
-                            for (int i = 0; i < seconds; i++) {
+                            for (int i = 0; i < seconds + 1; i++) {
                                 text += ".";
                             }
                             time.setText(text);

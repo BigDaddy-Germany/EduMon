@@ -132,6 +132,7 @@ public class Main extends Application {
         GlobalScreen.addNativeKeyListener(keyListener);
         GlobalScreen.addNativeMouseListener(mouseListener);
         GlobalScreen.addNativeMouseMotionListener(mouseListener);
+        //drain mic
         micListener.fetchLevel();
     }
 
@@ -144,22 +145,23 @@ public class Main extends Application {
         final OptionsController optionsController = (OptionsController) OPTIONS.getController();
         optionsController.sendKeyData(clientConfig.sendKeyData).sendMouseData(clientConfig.sendMouseData)
                 .sendMicData(clientConfig.sendMicData).setDataOverview();
-        stage.setTitle("EduMon Client");
         changeScene(OPTIONS);
-        if (!canRunInBackground()) {
-            optionsController.setOptions(false);
-            stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-                    exit();
-                }
-            });
-            return;
-        }
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                stage.hide();
+                if (!canRunInBackground()) {
+                    stage.setTitle("EduMon Client");
+                    optionsController.setOptions(false);
+                    stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                        @Override
+                        public void handle(WindowEvent windowEvent) {
+                            exit();
+                        }
+                    });
+                    return;
+                }
+
+                stage.setTitle("Options");
                 optionsController.setOptions(true);
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
@@ -168,6 +170,7 @@ public class Main extends Application {
                         windowEvent.consume();
                     }
                 });
+                stage.hide();
             }
         });
 
