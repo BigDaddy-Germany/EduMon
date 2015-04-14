@@ -92,7 +92,7 @@ public class LoadingController implements Victim<Message>, Controller {
     }
 
     private void toNameChooser() {
-        ((NameChooserController)NAME_CHOOSER.getController()).setNameList();
         app.changeScene(NAME_CHOOSER);
+        ((NameChooserController)NAME_CHOOSER.getController()).setNameList();
     }
 }

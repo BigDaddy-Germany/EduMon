@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.geometry.Pos;
 import org.apache.http.cookie.Cookie;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
+import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +18,8 @@ import java.util.Map;
 public class ClientConfig {
     public String server;
     public String room;
+    public String name;
+    public Position seat;
     public boolean sendKeyData;
     public boolean sendMouseData;
     public boolean sendMicData;
@@ -46,12 +50,15 @@ public class ClientConfig {
 
     @JsonCreator
     public ClientConfig(@JsonProperty("server") String server, @JsonProperty("room") String room,
+                        @JsonProperty("name") String name, @JsonProperty("seat") Position seat,
                         @JsonProperty("sendKeyData") boolean sendKeyData,
                         @JsonProperty("sendMouseData") boolean sendMouseData,
                         @JsonProperty("sendMicData") boolean sendMicData,
                         @JsonProperty("roomStateMap") Map<String, RoomState> roomStateMap) {
         this.server = server;
         this.room = room;
+        this.name = name;
+        this.seat = seat;
         this.sendKeyData = sendKeyData;
         this.sendMouseData = sendMouseData;
         this.sendMicData = sendMicData;
@@ -66,7 +73,7 @@ public class ClientConfig {
         } catch(IOException e) {
             System.err.println("Could not read config.");
             System.err.println(e.getMessage());
-            config = new ClientConfig("http://vps2.code-infection.de/edumon", null, true, true, true, new HashMap<String, RoomState>());
+            config = new ClientConfig("http://vps2.code-infection.de/edumon", null, "", null, true, true, true, new HashMap<String, RoomState>());
         }
         return config;
     }

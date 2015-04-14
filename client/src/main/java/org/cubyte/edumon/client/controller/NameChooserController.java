@@ -11,6 +11,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
+import org.cubyte.edumon.client.RoomState;
 
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.ESCAPE;
@@ -79,7 +80,16 @@ public class NameChooserController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                nameList.setItems(FXCollections.observableArrayList(app.getRoomState().nameList.names));
+                RoomState roomState = app.getRoomState();
+                if (roomState != null) {
+                    int index = roomState.nameList.names.indexOf(roomState.name);
+                    nameList.setItems(FXCollections.observableArrayList(roomState.nameList.names));
+                    if (index > 0) {
+                        nameList.getSelectionModel().selectIndices(index);
+                    } else if (index == 0) {
+                        nameList.getSelectionModel().selectFirst();
+                    }
+                }
             }
         });
     }

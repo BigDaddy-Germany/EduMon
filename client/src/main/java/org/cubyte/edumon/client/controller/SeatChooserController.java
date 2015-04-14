@@ -66,10 +66,11 @@ public class SeatChooserController implements Controller {
                 seatingplan.getChildren().removeAll(seatingplan.getChildren());
                 double rowHeight = 300d / dimensions.height;
                 double columnWidth = 573d / dimensions.width;
+                Position seat = app.getSeat();
                 for(int x = 0; x < dimensions.width; x++) {
                     for(int y = 0; y < dimensions.height; y++) {
                         final Hyperlink link = new Hyperlink(app.getName());
-                        final int seatX = x; final int seatY = y + 1;
+                        final int seatX = dimensions.width - x; final int seatY = y + 1;
                         link.setPrefSize(columnWidth, rowHeight);
                         link.setAlignment(Pos.CENTER);
                         link.setStyle("-fx-text-fill: #fff;");
@@ -92,7 +93,7 @@ public class SeatChooserController implements Controller {
                         link.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent mouseEvent) {
-                                app.setSeat(new Position(dimensions.width - seatX, seatY));
+                                app.setSeat(new Position(seatX, seatY));
                                 app.getQueue().queue(app.getFactory().create(new WhoAmI(app.getName(), app.getSeat())));
                                 app.getQueue().send();
                                 app.changeScene(LOGIN_CONFIRM);
@@ -100,6 +101,9 @@ public class SeatChooserController implements Controller {
                             }
                         });
                         seatingplan.add(link, x, y);
+                        if (seatX == seat.x && seatY == seat.y) {
+                            link.requestFocus();
+                        }
                     }
                 }
             }

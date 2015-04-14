@@ -315,11 +315,19 @@ public class Main extends Application {
     }
 
     public String getName() {
-        return clientConfig.getRoomState().name;
+        RoomState roomState = clientConfig.getRoomState();
+        if (roomState != null && !"".equals(roomState.name)) {
+            return clientConfig.getRoomState().name;
+        }
+        return clientConfig.name;
     }
 
     public Position getSeat() {
-        return clientConfig.getRoomState().seat;
+        RoomState roomState = clientConfig.getRoomState();
+        if (roomState != null && roomState.seat != null) {
+            return clientConfig.getRoomState().seat;
+        }
+        return clientConfig.seat;
     }
 
     public void setServer(String server) {
@@ -333,15 +341,23 @@ public class Main extends Application {
     }
 
     public void setName(String name) {
-        if (!name.equals(clientConfig.getRoomState().name)) {
-            clientConfig.getRoomState().seat = null;
+        RoomState roomState = clientConfig.getRoomState();
+        if (roomState != null) {
+            if (!name.equals(roomState.name)) {
+                roomState.seat = null;
+            }
+           roomState.name = name;
         }
-        clientConfig.getRoomState().name = name;
+        clientConfig.name = name;
         clientConfig.save();
     }
 
     public void setSeat(Position seat) {
-        clientConfig.getRoomState().seat = seat;
+        RoomState roomState = clientConfig.getRoomState();
+        if (roomState != null) {
+            clientConfig.getRoomState().seat = seat;
+        }
+        clientConfig.seat = seat;
         clientConfig.save();
     }
 
