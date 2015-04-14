@@ -158,12 +158,12 @@ EduMon = new function() {
 	 * @param {Object} body The body sent with the package to the server
 	 * @return int Success code as delivered to client (0 = success, >0 error codes)
 	 */
-	var processLogin = function(sender, body) {
+	this.processLogin = function(sender, body) {
 		var seat = body.seat;
 		var name = body.name;
 
-		var seatingPlan = EduMon.Prefs.currentLecture.seatingPlan;
-		var activeStudents = EduMon.Prefs.currentLecture.activeStudents;
+		var currentLecture = EduMon.Prefs.currentLecture;
+
 		var room = EduMon.Prefs.currentLecture.room;
 		var course = EduMon.Prefs.currentLecture.course;
 
@@ -178,12 +178,19 @@ EduMon = new function() {
 			body: {}
 		};
 
+		// if user is already logged in, clear data
+		var currentSession = currentLecture.activeStudents[sender];
+		if (currentSession) {
+			delete currentLecture.activeStudents[sender];
+			EduMon.Gui.deleteSeat(currentSession.seat.x, currentSession.seat.y);
+		}
+
 		// check state of chosen seat
 		// if seat exists
 		if (seat.x <= room.width && seat.y <= room.height) {
-			seatingPlan[seat.x] = seatingPlan[seat.x] || [];
+			currentLecture.seatingPlan[seat.x] = currentLecture.seatingPlan[seat.x] || [];
 
-			var seatState = seatingPlan[seat.x][seat.y];
+			var seatState = currentLecture.seatingPlan[seat.x][seat.y];
 			// if seat is blocked
 			if (seatState != undefined) {
 				errorBits.set(loginErrorCodes.seatAlreadyUsed);
@@ -205,7 +212,7 @@ EduMon = new function() {
 
 		if (nameExists) {
 			var nameState;
-			util.forEachField(activeStudents, function (sessionId, student) {
+			util.forEachField(currentLecture.activeStudents, function (sessionId, student) {
 				if (student.name == name) {
 					nameState = sessionId;
 				}
@@ -228,7 +235,7 @@ EduMon = new function() {
 
 		// if error code is 0, user can be logged in
 		if (errorBits.equals(0)) {
-			activeStudents[sender] = {
+			currentLecture.activeStudents[sender] = {
 				name: name,
 				group: groupForName,
 				seat: seat,
@@ -237,8 +244,8 @@ EduMon = new function() {
 				micHistory: []
 			};
 
-			seatingPlan[seat.x] = seatingPlan[seat.x] || [];
-			seatingPlan[seat.x][seat.y] = sender;
+			currentLecture.seatingPlan[seat.x] = currentLecture.seatingPlan[seat.x] || [];
+			currentLecture.seatingPlan[seat.x][seat.y] = sender;
 		}
 
 		responsePacket.body.successCode = errorBits.bits;
@@ -377,6 +384,12 @@ EduMon = new function() {
 	 * devOnly
 	 */
 	this.testAllThemAnalytics = function(timeoutCall) {
+
+		if (!EduMon.Prefs.currentLecture) {
+			EduMon.Gui.showPopup("Error", "Lecture must be started to use this function.", ['ok']);
+			return;
+		}
+
 		var properties = ['keys', 'mdist', 'mclicks', 'volume'];
 		var users = ['niko', 'phillip', 'jonas', 'marco'];
 

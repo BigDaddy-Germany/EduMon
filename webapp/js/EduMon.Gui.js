@@ -18,6 +18,20 @@ EduMon.Gui = new function() {
 	var seatsInfo = {width: -1, height: -1};
 
 	/**
+	 * Deletes a given seat
+	 * @param {int} x the seat's x value
+	 * @param {int} y the seat's y value
+	 */
+	this.deleteSeat = function(x, y) {
+		var currentLecture = EduMon.Prefs.currentLecture;
+		if (currentLecture.seatingPlan[x]) {
+			delete currentLecture.seatingPlan[x][y];
+
+		}
+		// todo delete implement me
+	};
+
+	/**
 	 * Add message to newsfeed
 	 * @method showFeedMessage
 	 * @param {String} type Message type can be "info", "success", "warning" and "danger"
