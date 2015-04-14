@@ -1,4 +1,4 @@
-EduMon = (typeof window === "undefined" ? {} : window.EduMon);
+EduMon = (typeof window !== "undefined" && window.EduMon) ? window.EduMon : {};
 EduMon.Util = new function() {
 
     var that = this;
