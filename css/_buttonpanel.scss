@@ -30,11 +30,20 @@
 
 #flowbox {
 	text-align: center;
+	min-height: 170px;
 }
 
 #actionbox {
 	text-align: center;
+	min-height: 280px;
 	flex-grow: 1;
+
+	#btnWheel {
+		background-image: url(../images/wheel.icon.png);
+		background-position: center center;
+		background-repeat: no-repeat;
+		background-size: 30px;
+	}
 }
 
 #devbox {

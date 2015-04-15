@@ -431,7 +431,7 @@ EduMon = new function() {
 
 	var wheelWindow = null;
 	function bindFortuneWheel() {
-		var button = $('#btnFortuneWheel');
+		var button = $('#btnWheel');
 
 		if (wheelWindow) {
 			wheelWindow = null;

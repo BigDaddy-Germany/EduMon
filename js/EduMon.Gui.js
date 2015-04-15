@@ -337,6 +337,7 @@ EduMon.Gui = new function() {
 		});
 	};
 
+
 	/**
 	 * Flash a red border around the seating plan and layer container, mostly to indicate that interaction with an open dialog or popup is necessary
 	 * @method attention
@@ -345,6 +346,42 @@ EduMon.Gui = new function() {
 	this.attention = function(){
 		$("#attention").stop(true,true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
 	};
+
+
+	/**
+	 * Update the feedback thumbs and percentage display
+	 * @method updateThumbs
+	 * @param {Float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
+	 * @return undefined
+	 */
+	this.updateThumbs = function(voting){
+		var degrees = Math.round((1-voting)*180);
+		var percent = Math.round(voting*100);
+
+		$("#pultup .feedback .thumb img:first-of-type").css("transform","rotate("+degrees+"deg)");
+		$("#pultup .feedback .thumb img:last-of-type").css("transform","rotate(-"+degrees+"deg) scaleX(-1)");
+		$("#pultup .feedback .thumb .value").text(percent+"%");
+	};
+
+
+	/**
+	 * Update star rating
+	 * @method updateRating
+	 * @param {Float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
+	 * @return undefined
+	 */
+	this.updateRating = function(voting){
+		var percent = Math.round(voting*100);
+		var stars = Math.round(voting*5);
+
+		for(var i=1; i<=5; i++){
+			var fillStar = (i<=stars);
+			$("#pultup .feedback .rating i:nth-of-type(0n+"+i+")").toggleClass("glyphicon-star",fillStar).toggleClass("glyphicon-star-empty",!fillStar);
+		}
+		$("#pultup .feedback .rating .value").text(percent+"%");
+	};
+
+
 
 	/**
 	 * Initialize GUI (bind click handlers)
