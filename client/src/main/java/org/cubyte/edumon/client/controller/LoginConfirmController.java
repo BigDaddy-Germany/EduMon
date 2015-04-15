@@ -13,6 +13,7 @@ import org.cubyte.edumon.client.messaging.messagebody.WhoAmI;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
@@ -48,17 +49,24 @@ public class LoginConfirmController implements Controller, Victim<Message> {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                infoBar.setText("Raum " + app.getRoom() + " | " + app.getName() + " | Reihe" + seat.y + " Sitzplatz " + seat.x);
+                infoBar.setText("Raum " + app.getRoom() + " | " + app.getName() + " | Reihe " + seat.y + " Sitzplatz " + seat.x);
             }
         });
 
-        app.getQueue().queue(app.getFactory().create(new WhoAmI(app.getName(), app.getSeat())));
         app.getQueue().send();
+        app.getQueue().queue(app.getFactory().create(new WhoAmI(app.getName(), app.getSeat())));
+        final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                app.getQueue().send();
+            }
+        }, 1, 3, TimeUnit.SECONDS);
 
         app.getScheduledExecutorService().execute(new Runnable() {
             @Override
             public void run() {
                 app.getQueue().execute();
+                scheduledFuture.cancel(true);
             }
         });
     }
