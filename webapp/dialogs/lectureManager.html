@@ -43,7 +43,7 @@
                         EduMon.Prefs.lectures[startId] = newLecture;
                         var startIdSelect = $('#startId');
 
-                        startIdSelect.find('[value=' + startId + ']').html(newLecture.lectureName).attr('selected', 'selected');
+                        startIdSelect.find('[value=' + startId + ']').html(newLecture.lectureName);
                         startIdSelect.sortSelectBox();
                     })
                     .catch(function(data) { console.log(data); });

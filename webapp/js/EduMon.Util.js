@@ -226,4 +226,21 @@ if (typeof $ !== "undefined"){
 		});
 	};
 
+
+    /**
+     * Clones the jQuery object and sets all select values explicitly before (To make sure, they're selected later)
+     * @param {boolean} dataAndEvents like jQuery parameter
+     * @param {boolean} deep like jQuery parameter
+     * @return {*} the cloned jQuery object
+     */
+    $.fn.cloneWithSelectState = function(dataAndEvents, deep) {
+        var initialClone = this.clone(dataAndEvents, deep);
+        var selects = $('select', this);
+        var selectsInClone = $('select', initialClone);
+        selects.each(function(i) {
+            selectsInClone.eq(i).val($(this).val());
+        });
+        return initialClone;
+    }
+
 }
