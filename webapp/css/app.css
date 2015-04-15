@@ -4,7 +4,9 @@ html {
 body {
   background-color: #EEEEEE;
   height: 100%;
-  font-family: 'Roboto', sans-serif; }
+  font-family: 'Roboto', sans-serif;
+  min-width: 1275px;
+  min-height: 580px; }
 
 @font-face {
   font-family: 'Roboto';
@@ -141,6 +143,11 @@ body {
   text-align: center;
   min-height: 280px;
   flex-grow: 1; }
+  #actionbox #btnWheel {
+    background-image: url(../images/wheel.icon.png);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 30px; }
 
 #devbox {
   background-color: #A0C7F3;
@@ -458,10 +465,18 @@ body {
   align-content: space-between;
   align-items: flex-start;
   overflow: hidden; }
+  #pultup.wheel *.thumb, #pultup.wheel *.rating {
+    display: none; }
+  #pultup.thumb *.wheel, #pultup.thumb *.rating {
+    display: none; }
+  #pultup.rating *.thumb, #pultup.rating *.wheel {
+    display: none; }
   #pultup .indicator {
     height: 100%;
     width: 90px;
     margin-right: 10px; }
+    #pultup .indicator img {
+      height: 80px; }
     #pultup .indicator i {
       font-size: 80px; }
   #pultup .feedback {
@@ -476,8 +491,30 @@ body {
     #pultup .feedback > div {
       flex-grow: 0;
       flex-shrink: 1; }
-    #pultup .feedback .wheelhelp b {
+    #pultup .feedback .wheel.choice {
+      font-size: 40px; }
+    #pultup .feedback .wheel.help b {
       font-weight: bold; }
+    #pultup .feedback .thumb .value {
+      font-size: 50px; }
+    #pultup .feedback .thumb img {
+      margin-top: -2px;
+      height: 90px;
+      transition: transform 0.5s; }
+    #pultup .feedback .thumb img:first-of-type {
+      margin-right: 30px; }
+    #pultup .feedback .thumb img:last-of-type {
+      margin-left: 30px;
+      transform: rotate(0deg) scaleX(-1); }
+    #pultup .feedback .rating .value {
+      font-size: 50px; }
+    #pultup .feedback .rating i {
+      font-size: 70px;
+      vertical-align: baseline; }
+      #pultup .feedback .rating i.glyphicon-star {
+        color: #CFAD02; }
+      #pultup .feedback .rating i.glyphicon-star-empty {
+        color: #AAAAAA; }
   #pultup .stats {
     height: 100%;
     flex-shrink: 1;

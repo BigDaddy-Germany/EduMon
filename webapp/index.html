@@ -46,7 +46,7 @@
 							<h3 class="panel-title">Aktionen</h3>
 						</div>
 						<div class="panel-body">
-							<a href="#" id="btnFortuneWheel" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-random"></a>
+							<a href="#" id="btnWheel" class="btn btn-info btn-fab btn-raised"></a>
 							<a href="#" id="btnThumbs" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-thumbs-up"></a>
 							<a href="#" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-star"></a>
 							<a href="#" id="btnSettings" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-cog"></a>
@@ -88,18 +88,34 @@
 							</div>
 						</div>
 						<div id="frontdesk">
-							<div id="pultup">
+							<div id="pultup" class="rating">
 								<div class="indicator">
-									<i class="glyphicon glyphicon-blackboard"></i>
+									<img src="images/wheel.png" class="wheel">
+									<i class="thumb  glyphicon glyphicon-info-sign"></i>
+									<i class="rating glyphicon glyphicon-info-sign"></i>
 								</div>
 								<div class="feedback">
-									<div class="wheelchoice"></div>
-									<div class="wheelhelp"><i class="glyphicon glyphicon-info-sign"></i>
+									<div class="wheel choice">Max Mustermann</div>
+									<div class="wheel help"><i class="glyphicon glyphicon-info-sign"></i>
 										Mit Glücksradfenster im Fokus: 
 										<b>Taste M</b> Modus
 										- <b>Taste A</b> Gruppe 
 										- <b>Leertaste</b> Rad drehen
 									</div>
+									<div class="thumb">
+										<img src="images/thumb.png">
+										<span class="value">42%</span>
+										<img src="images/thumb.png">
+									</div>
+									<div class="rating">
+										<i class="glyphicon glyphicon-star"></i>
+										<i class="glyphicon glyphicon-star"></i>
+										<i class="glyphicon glyphicon-star"></i>
+										<i class="glyphicon glyphicon-star-empty"></i>
+										<i class="glyphicon glyphicon-star-empty"></i>
+										<span class="value">64%</span>
+									</div>
+
 								</div>
 								<div class="stats">
 									<div class="time"><i class="glyphicon glyphicon-time"></i>&nbsp;<span class="content">00:42</span></div>
