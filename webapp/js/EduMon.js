@@ -40,7 +40,7 @@ EduMon = new function() {
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
 
-		//this.tryRestoreApp(); //TODO reactivate once properly implemented, see #43
+		this.tryRestoreApp(); //TODO reactivate once properly implemented, see #43
 		this.enablePersistApp();
 
 		bindFortuneWheel(this.Prefs);
