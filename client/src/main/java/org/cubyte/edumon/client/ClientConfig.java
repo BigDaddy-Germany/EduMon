@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.geometry.Pos;
-import org.apache.http.cookie.Cookie;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
@@ -16,20 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientConfig {
-    public String server;
-    public String room;
-    public String name;
-    public Position seat;
-    public boolean sendKeyData;
-    public boolean sendMouseData;
-    public boolean sendMicData;
-    public final Map<String, RoomState> roomStateMap;
-
     @JsonIgnore
     private static final File file;
     @JsonIgnore
     private static final ObjectMapper mapper;
-
     static {
         String separator = File.separator;
         if ("\\".equals(separator)) {
@@ -47,6 +35,14 @@ public class ClientConfig {
         }
         mapper = new ObjectMapper();
     }
+    public final Map<String, RoomState> roomStateMap;
+    public String server;
+    public String room;
+    public String name;
+    public Position seat;
+    public boolean sendKeyData;
+    public boolean sendMouseData;
+    public boolean sendMicData;
 
     @JsonCreator
     public ClientConfig(@JsonProperty("server") String server, @JsonProperty("room") String room,
@@ -70,7 +66,7 @@ public class ClientConfig {
         ClientConfig config;
         try {
             config = mapper.readValue(file, ClientConfig.class);
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.err.println("Could not read config.");
             System.err.println(e.getMessage());
             config = new ClientConfig("http://vps2.code-infection.de/edumon", null, "", null, true, true, true, new HashMap<String, RoomState>());
@@ -106,7 +102,7 @@ public class ClientConfig {
     }
 
     public void cleanRoomStateMap() {
-        for(Map.Entry<String, RoomState> entry: roomStateMap.entrySet()) {
+        for (Map.Entry<String, RoomState> entry : roomStateMap.entrySet()) {
             if (entry.getValue().isOutdated()) {
                 roomStateMap.remove(entry.getKey());
             }

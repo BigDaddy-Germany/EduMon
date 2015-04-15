@@ -39,7 +39,7 @@ public class NameChooserController implements Controller {
             @Override
             public void handle(KeyEvent keyEvent) {
                 KeyCode code = keyEvent.getCode();
-                if(code == ENTER) {
+                if (code == ENTER) {
                     handleNext();
                 } else if (code == ESCAPE) {
                     handleBack();

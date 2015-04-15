@@ -19,11 +19,11 @@ import org.cubyte.edumon.client.eventsystem.Revolver;
 import org.cubyte.edumon.client.messaging.messagebody.BodyDeserializer;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageQueue extends Revolver<Message> {
@@ -83,26 +83,28 @@ public class MessageQueue extends Revolver<Message> {
         }
 
         String address = owner.getServer() + "/mailbox.php?room=" + owner.getRoom();
-        if (isModerator) {address += "&moderatorPassphrase=alohomora";}
+        if (isModerator) {
+            address += "&moderatorPassphrase=alohomora";
+        }
         HttpPost post = new HttpPost(address);
         post.setEntity(new StringEntity(jsonString, ContentType.create("application/json", "utf-8")));
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
-            if(response.getStatusLine().getStatusCode() != 200) {
+            if (response.getStatusLine().getStatusCode() != 200) {
                 //System.err.println("Something didn't work!!!");
                 queuedMessages.addAll(removedMessages);
                 return;
             }
             owner.incSent(queueSize);
             Response jsonResponse = mapper.readValue(response.getEntity().getContent(), Response.class);
-            for (Message message: jsonResponse.inbox) {
+            for (Message message : jsonResponse.inbox) {
                 owner.incReceived(1);
                 load(message);
             }
             if (jsonResponse.errorMessages.size() > 0) {
                 System.err.println("Response error messages: ");
             }
-            for (String errorMessage: jsonResponse.errorMessages) {
+            for (String errorMessage : jsonResponse.errorMessages) {
                 System.err.println(errorMessage);
             }
         } catch (IOException e) {
@@ -138,7 +140,7 @@ public class MessageQueue extends Revolver<Message> {
     }
 
     public String getSessionId() {
-        for (Cookie cookie: cookieStore.getCookies()) {
+        for (Cookie cookie : cookieStore.getCookies()) {
             if ("EDUMONSESSID".equals(cookie.getName())) {
                 return cookie.getValue();
             }

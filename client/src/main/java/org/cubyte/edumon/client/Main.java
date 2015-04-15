@@ -24,7 +24,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -54,11 +53,11 @@ public class Main extends Application {
     private final MessageQueue messageQueue;
     private final MessageFactory messageFactory;
     private final Image appIcon;
-    private TrayIcon trayIcon;
     private final ClientConfig clientConfig;
-    private Stage stage;
     private final ScheduledExecutorService scheduledExecutorService;
     private final NotificationSystem notificationSystem;
+    private TrayIcon trayIcon;
+    private Stage stage;
     private ScheduledFuture<?> sensorFetcherFuture;
     private ScheduledFuture<?> messageSenderFuture;
     private ScheduledFuture<?> eventExecutorFuture;
@@ -122,7 +121,7 @@ public class Main extends Application {
 
                 FileWriter fileWriter = new FileWriter(desktop);
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                for(String fuck: lines) {
+                for (String fuck : lines) {
                     bufferedWriter.write(fuck + "\n");
                 }
                 bufferedWriter.flush();
@@ -422,8 +421,18 @@ public class Main extends Application {
         return clientConfig.server;
     }
 
+    public void setServer(String server) {
+        clientConfig.server = server;
+        clientConfig.save();
+    }
+
     public String getRoom() {
         return clientConfig.room;
+    }
+
+    public void setRoom(String room) {
+        clientConfig.room = room;
+        clientConfig.save();
     }
 
     public String getName() {
@@ -432,24 +441,6 @@ public class Main extends Application {
             return clientConfig.getRoomState().name;
         }
         return clientConfig.name;
-    }
-
-    public Position getSeat() {
-        RoomState roomState = clientConfig.getRoomState();
-        if (roomState != null && roomState.seat != null) {
-            return clientConfig.getRoomState().seat;
-        }
-        return clientConfig.seat;
-    }
-
-    public void setServer(String server) {
-        clientConfig.server = server;
-        clientConfig.save();
-    }
-
-    public void setRoom(String room) {
-        clientConfig.room = room;
-        clientConfig.save();
     }
 
     public void setName(String name) {
@@ -462,6 +453,14 @@ public class Main extends Application {
         }
         clientConfig.name = name;
         clientConfig.save();
+    }
+
+    public Position getSeat() {
+        RoomState roomState = clientConfig.getRoomState();
+        if (roomState != null && roomState.seat != null) {
+            return clientConfig.getRoomState().seat;
+        }
+        return clientConfig.seat;
     }
 
     public void setSeat(Position seat) {

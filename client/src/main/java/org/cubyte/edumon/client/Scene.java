@@ -27,11 +27,11 @@ public enum Scene {
         String sceneString;
         String[] split;
         javafx.scene.Scene fxScene;
-        for(Scene scene: Scene.values()) {
+        for (Scene scene : Scene.values()) {
             sceneString = scene.toString().toLowerCase();
             split = sceneString.split("_");
             sceneString = "";
-            for (String string: split) {
+            for (String string : split) {
                 sceneString += string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
             }
 
@@ -50,7 +50,7 @@ public enum Scene {
     }
 
     public static void setApp(Main app) {
-        for(Map.Entry<Scene, Controller> entry: toControllerMap.entrySet()) {
+        for (Map.Entry<Scene, Controller> entry : toControllerMap.entrySet()) {
             if (entry.getValue() != null) {
                 entry.getValue().setApp(app);
             }

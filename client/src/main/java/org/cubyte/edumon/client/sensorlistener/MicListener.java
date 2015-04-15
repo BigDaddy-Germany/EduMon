@@ -1,8 +1,6 @@
 package org.cubyte.edumon.client.sensorlistener;
 
 import javax.sound.sampled.*;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +27,10 @@ public class MicListener {
     public double fetchLevel() {
         ArrayList<Byte> audioData = new ArrayList<>();
         int available = line.available();
-        while(available > 0) {
+        while (available > 0) {
             byte[] data = new byte[available];
             line.read(data, 0, data.length);
-            for (byte b: data) {
+            for (byte b : data) {
                 audioData.add(b);
             }
             available = line.available();

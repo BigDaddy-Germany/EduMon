@@ -4,7 +4,6 @@ import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MessageFactory {
     private final Main owner;

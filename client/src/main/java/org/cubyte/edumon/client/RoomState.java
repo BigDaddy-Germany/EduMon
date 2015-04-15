@@ -3,7 +3,6 @@ package org.cubyte.edumon.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.http.cookie.Cookie;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
@@ -11,9 +10,9 @@ import java.util.Date;
 
 public class RoomState {
     public final String sessionId;
+    public final NameList nameList;
     public String name;
     public Position seat;
-    public final NameList nameList;
     public Date timestamp;
 
     @JsonCreator

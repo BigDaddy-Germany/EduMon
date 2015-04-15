@@ -67,10 +67,11 @@ public class SeatChooserController implements Controller {
                 double rowHeight = 300d / dimensions.height;
                 double columnWidth = 573d / dimensions.width;
                 Position seat = app.getSeat();
-                for(int x = 0; x < dimensions.width; x++) {
-                    for(int y = 0; y < dimensions.height; y++) {
+                for (int x = 0; x < dimensions.width; x++) {
+                    for (int y = 0; y < dimensions.height; y++) {
                         final Hyperlink link = new Hyperlink(app.getName());
-                        final int seatX = dimensions.width - x; final int seatY = y + 1;
+                        final int seatX = dimensions.width - x;
+                        final int seatY = y + 1;
                         link.setPrefSize(columnWidth, rowHeight);
                         link.setAlignment(Pos.CENTER);
                         link.setStyle("-fx-text-fill: #fff;");

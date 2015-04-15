@@ -10,8 +10,8 @@ import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
-import static org.cubyte.edumon.client.Scene.*;
 import static org.cubyte.edumon.client.Scene.LOADING;
+import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 
 public class LoginController implements Controller {
     private Main app;

@@ -12,7 +12,9 @@ import org.cubyte.edumon.client.messaging.Message;
 import org.cubyte.edumon.client.messaging.MessageQueue;
 import org.cubyte.edumon.client.messaging.messagebody.NameList;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOGIN;
@@ -51,7 +53,7 @@ public class LoadingController implements Victim<Message>, Controller {
 
     public void getNameList() {
         RoomState state = app.getRoomState();
-        if(state == null) {
+        if (state == null) {
             final MessageQueue queue = app.getQueue();
             if (!queue.ping()) {
                 app.changeScene(LOGIN);
@@ -93,6 +95,6 @@ public class LoadingController implements Victim<Message>, Controller {
 
     private void toNameChooser() {
         app.changeScene(NAME_CHOOSER);
-        ((NameChooserController)NAME_CHOOSER.getController()).setNameList();
+        ((NameChooserController) NAME_CHOOSER.getController()).setNameList();
     }
 }

@@ -59,14 +59,17 @@ public class OptionsController implements Controller {
     private void handleCloseApp() {
         app.exit();
     }
+
     @FXML
     private void handleSendKeyData() {
         app.setSendKeyData(keySensor.isSelected());
     }
+
     @FXML
     private void handleSendMouseData() {
         app.setSendMouseData(mouseSensor.isSelected());
     }
+
     @FXML
     private void handleSendMicData() {
         app.setSendMicData(micSensor.isSelected());
@@ -76,10 +79,12 @@ public class OptionsController implements Controller {
         keySensor.setSelected(sendKeyData);
         return this;
     }
+
     public OptionsController sendMouseData(boolean sendMouseData) {
         mouseSensor.setSelected(sendMouseData);
         return this;
     }
+
     public OptionsController sendMicData(boolean sendMicData) {
         micSensor.setSelected(sendMicData);
         return this;
@@ -106,6 +111,7 @@ public class OptionsController implements Controller {
     public void setSent(int n) {
         sent.setText(n + " gesendet");
     }
+
     public void setReceived(int n) {
         received.setText(n + " empfangen");
     }
