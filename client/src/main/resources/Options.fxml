@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
@@ -7,30 +8,45 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.OptionsController">
-  <children>
-    <CheckBox fx:id="keySensor" layoutX="45.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleSendKeyData" text="Übermittlung von Tastaturanschlägen" />
-    <CheckBox fx:id="mouseSensor" layoutX="45.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSendMouseData" text="Übermittlung von Mausklicks und Mausbewegungsdistanz" />
-    <CheckBox fx:id="micSensor" layoutX="45.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleSendMicData" text="Übermittlung von Lautstärkedaten" />
-    <Separator id="seperator" fx:id="separator" layoutX="45.0" layoutY="316.0" prefWidth="511.0" />
-    <Button fx:id="sendBreakRequest" layoutX="389.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleSendBreakrequest" text="Pausenanfrage stellen" />
-    <Button fx:id="logout" layoutX="45.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleLogout" text="Ausloggen" />
-    <Label fx:id="title" layoutX="45.0" layoutY="37.0" text="EduMon Client">
-      <font>
-        <Font size="24.0" />
-      </font>
-    </Label>
-    <Label fx:id="room" layoutX="45.0" layoutY="78.0" text="Raum" />
-    <Label fx:id="server" layoutX="238.0" layoutY="50.0" text="Server" textFill="#606060">
-      <font>
-        <Font size="10.0" />
-      </font>
-    </Label>
-    <Label fx:id="name" layoutX="45.0" layoutY="112.0" text="Name" />
-    <Label fx:id="seat" layoutX="45.0" layoutY="146.0" text="Sitzplatz" />
-    <Separator layoutX="45.0" layoutY="183.0" prefWidth="511.0" />
-    <Label id="packages" layoutX="300.0" layoutY="78.0" text="Pakete:" />
-    <Label fx:id="sent" layoutX="300.0" layoutY="112.0" text="0 gesendet" />
-    <Label fx:id="received" layoutX="300.0" layoutY="146.0" text="0 empfangen" />
-  </children>
-</AnchorPane>
+
+<GridPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.OptionsController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+        <children>
+          <CheckBox fx:id="keySensor" layoutX="45.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleSendKeyData" text="Übermittlung von Tastaturanschlägen" />
+          <CheckBox fx:id="mouseSensor" layoutX="45.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSendMouseData" text="Übermittlung von Mausklicks und Mausbewegungsdistanz" />
+          <CheckBox fx:id="micSensor" layoutX="45.0" layoutY="277.0" mnemonicParsing="false" onAction="#handleSendMicData" text="Übermittlung von Lautstärkedaten" />
+          <Separator id="seperator" fx:id="separator" layoutX="45.0" layoutY="316.0" prefWidth="511.0" />
+          <Button fx:id="logout" layoutX="45.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleLogout" text="Ausloggen" />
+          <Label fx:id="title" layoutX="45.0" layoutY="37.0" text="EduMon Client">
+            <font>
+              <Font size="24.0" />
+            </font>
+          </Label>
+          <Label fx:id="room" layoutX="45.0" layoutY="78.0" text="Raum" />
+          <Label fx:id="server" layoutX="238.0" layoutY="50.0" text="Server" textFill="#606060">
+            <font>
+              <Font size="10.0" />
+            </font>
+          </Label>
+          <Label fx:id="name" layoutX="45.0" layoutY="112.0" text="Name" />
+          <Label fx:id="seat" layoutX="45.0" layoutY="146.0" text="Sitzplatz" />
+          <Separator layoutX="45.0" layoutY="183.0" prefWidth="511.0" />
+          <Label id="packages" layoutX="300.0" layoutY="78.0" text="Pakete:" />
+          <Label fx:id="sent" layoutX="300.0" layoutY="112.0" text="0 gesendet" />
+          <Label fx:id="received" layoutX="300.0" layoutY="146.0" text="0 empfangen" />
+        </children>
+      </AnchorPane>
+    <Button fx:id="sendBreakRequest" mnemonicParsing="false" onAction="#handleSendBreakrequest" text="Pausenanfrage stellen" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets bottom="32.0" right="45.0" />
+         </GridPane.margin>
+      </Button>
+   </children>
+</GridPane>
