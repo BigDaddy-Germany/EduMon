@@ -184,7 +184,7 @@ EduMon = new function() {
 
 		// if user is already logged in, clear data
 		var currentSession = currentLecture.activeStudents[sender];
-		if (currentSession) {
+		if (currentSession && (seat.x != currentSession.seat.x || seat.y != currentSession.seat.y)) {
 			delete currentLecture.activeStudents[sender];
 			EduMon.Gui.deleteSeat(currentSession.seat.x, currentSession.seat.y);
 		}

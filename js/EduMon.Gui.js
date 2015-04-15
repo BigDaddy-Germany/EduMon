@@ -321,7 +321,8 @@ EduMon.Gui = new function() {
 		}
 		var seat = getSeatElement(x, y);
 		seat.css("background","#DDD");
-		seat.find("div").empty();
+		seat.find("div.name").empty();
+		seat.find("div.group").empty();
 	};
 
 	/**
