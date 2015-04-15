@@ -41,7 +41,12 @@ EduMon.XWindowRPC = function (target, functions) {
 	});
 
 	function send(data) {
-		target.postMessage(data, '*')
+		try {
+			target.postMessage(data, '*')
+		} catch (e) {
+			console.error(e);
+			console.error(data);
+		}
 	}
 
 	function sendResult(id, result) {
@@ -60,9 +65,18 @@ EduMon.XWindowRPC = function (target, functions) {
 		})
 	}
 
-	this.invoke = function(name, args) {
-		args = Array.prototype.slice.call(arguments, 1);
+	function getVerifyArgs(args) {
+		if (args.length === 0) {
+			throw "No name given!";
+		}
+		if (args.length > 1) {
+			return Array.prototype.slice.call(args, 1);
+		}
+		return [];
+	}
 
+	this.invoke = function(name, args) {
+		args = getVerifyArgs(arguments);
 		return new Promise(function (fulfill, reject) {
 			var id = nextId++;
 			outstandingResponses[id] = [fulfill, reject];
@@ -76,6 +90,7 @@ EduMon.XWindowRPC = function (target, functions) {
 	};
 
 	this.invokeLocal = function(name, args) {
+		args = getVerifyArgs(arguments);
 		var func = functions[name];
 		if (!func) {
 			throw "Function not found!";

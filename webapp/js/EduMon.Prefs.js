@@ -3,6 +3,12 @@ EduMon.Prefs = {
     rooms: [],          // an array of all rooms
     lectures: [],       // an array of all lectures
 
-    currentLecture: {}  // the current running lecture (copy everything!)
+    currentLecture: {},  // the current running lecture (copy everything!)
 
+	wheel: {
+		top: 0,
+		left: 0,
+		width: 1000,
+		height: 600
+	}
 };

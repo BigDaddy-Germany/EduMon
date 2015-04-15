@@ -9,16 +9,69 @@
         <script src="js/EduMon.Util.js"></script>
         <script src="js/EduMon.Wheel.js"></script>
         <script src="js/EduMon.XWindowRPC.js"></script>
+		<style>
+			#wheel {
+				position: relative;
+			}
+			#wheel > div {
+				position: absolute;
+				left: 620px;
+				height: 250px;
+				min-width: 300px;
+				background-color: red;
+			}
+			#wheel_upper {
+				top: 0;
+			}
+			#wheel_lower {
+				bottom: 0;
+			}
+		</style>
     </head>
     <body>
+		<h1>Course</h1>
         <div id="wheel">
             <canvas id="canvas" width="1000" height="600"></canvas>
+			<div id="wheel_upper">
+				<div>
+					<span id="message"></span>:
+				</div>
+				<div></div>
+			</div>
+			<div id="wheel_lower">
+				<div>
+					<span>Modus</span>
+					<select id="mode">
+						<option value="slim">Ausdünnend</option>
+						<option value="drop">Ausschließend</option>
+						<option value="noop">Stabil</option>
+					</select>
+				</div>
+				<div>
+					<span>Auswahl</span>
+					<select id="selection">
+						<option value="0">Studenten</option>
+						<option value="1">Gruppen</option>
+					</select>
+				</div>
+			</div>
         </div>
         <script>
 			var KEY = {
-				ENTER: 32
+				SPACE: 32,
+				M: 77,
+				A: 65,
+				F5: 116
 			};
 
+			var messages = [
+					'Glücksminister präsentiert',
+					'Exklusiv an der DHBW',
+					'Live und in Farbe',
+					'12345 ist kein sicheres Passwort'
+			];
+
+			$('#message').text(messages[Math.floor(Math.random() * messages.length)]);
 
 			var modes = {
 				slim: function(segment) {
@@ -37,74 +90,147 @@
 					console.log("" + segments);
 				},
 				drop: function(segment) {
-					segments.splice(segments.indexOf(segment), 1);
+					console.log(segment);
+					wheel.removeSegment(segment);
 				},
 				noop: function() {}
 			};
 
             var canvas = $('canvas');
-			var wheel;
+			var modeSelection = $('#mode');
+			var selectionSelection = $('#selection');
+			var wheel = new EduMon.Wheel(canvas[0], [["No segments yet :(", 1.0]]);
+			var selectedMode = modes.noop;
 
             var task = -1;
 			var minDelay = 2000;
 			var start = -1;
-			$(window).on('keydown', function(e) {
-				if (e.which === KEY.ENTER && start < 0 && task === -1) {
-					wheel.beginSpinning();
-					start = Date.now();
-				}
-			}).on('keyup', function(e) {
-				if (e.which === KEY.ENTER && start >= 0 && task === -1) {
-					var now = Date.now();
-					var delta = now - start;
-					console.log(" " + start + "\n+ " + now + " = " + delta);
-                    if (delta < minDelay) {
-                        task = setTimeout(function () {
-                            wheel.endSpinning();
-                            task = -1;
-                        }, minDelay - delta);
-                    } else {
-                        wheel.endSpinning();
-                    }
-                    start = -1;
-                }
+
+			modeSelection.on('change', function(e) {
+				selectedMode = modes[$(e.target).val()];
 			});
 
-			if (window.opener) {
-				var controller = new EduMon.XWindowRPC(window.opener, {
-					showWheel: function (mode, segments) {
-						if (!(mode in modes)) {
-							throw "Unknown mode " + mode;
-						}
-						mode = modes[mode];
-						wheel = new EduMon.Wheel(canvas[0], segments, function (segment) {
-							controller.invoke("wheelFinished", segment[0]);
-							mode(segment);
-						});
+			function beginSpinning() {
+				if (start < 0 && task === -1) {
+					wheel.beginSpinning();
+					start = Date.now();
+					return true;
+				}
+				return false;
+			}
+
+			function endSpinning() {
+				if (start >= 0 && task === -1) {
+					var delta = Date.now() - start;
+					if (delta < minDelay) {
+						task = setTimeout(function () {
+							wheel.endSpinning();
+							task = -1;
+						}, minDelay - delta);
+					} else {
+						wheel.endSpinning();
 					}
+					start = -1;
+					return true;
+				}
+				return false;
+			}
+
+			function handleKeyDown(e) {
+				switch (e.which) {
+					case KEY.SPACE:
+						if (beginSpinning()) {
+							e.preventDefault();
+						}
+						break;
+				}
+			}
+
+			function handleKeyUp(e) {
+				switch (e.which) {
+					case KEY.SPACE:
+						if (endSpinning()) {
+							e.preventDefault();
+						}
+						break;
+					case KEY.M:
+						e.preventDefault();
+							switchMode();
+						break;
+					case KEY.A:
+						e.preventDefault();
+						break;
+				}
+			}
+
+			function switchMode(mode) {
+				if (!mode) {
+					mode = modeSelection.find(':selected').next().val();
+					if (!mode) {
+						mode = modeSelection.find(':first').val();
+					}
+				}
+				selectedMode = modes[mode];
+				modeSelection.val(mode);
+			}
+
+			$(window).on('keydown', handleKeyDown).on('keyup', handleKeyUp);
+
+			if (window.opener) {
+				// we were opened by another window, setup our messenger
+				var controller = new EduMon.XWindowRPC(window.opener, {
+					showWheel: function (course) {
+
+						$(document.body).find('> h1').text(course.name);
+
+						var segments = [];
+						course.students.forEach(function(s) {
+							segments.push([s.name, 1.0]);
+						});
+						wheel.setSegments(segments, true);
+					},
+					switchSelection: function() {
+
+					},
+					switchMode: switchMode,
+
+					beginSpinning: beginSpinning,
+					endSpinning: endSpinning
 				});
+				wheel.onFinish = function (segment) {
+					controller.invoke("wheelFinished", segment[0]);
+					selectedMode(segment);
+				};
 			} else {
+				// we were opened directly, loading some dummy data
 				var segments = [
-					['Phillip Schichtel', 1.0],
-					['Jonas Dann', 1.0],
-					['Marco Dörfler', 1.0],
-					['Niko Berkmann', 1.0],
-					['Tim Adamek', 1.0],
-					['Andreas Geis', 1.0],
-					['Nick Steyer', 1.0],
-					['Laura Hildebrand', 1.0],
-					['Steffanie XXXXXXXX', 1.0],
-					['Petra XXXXXXXXX', 1.0],
-					['Inga XXXXXXXX', 1.0],
-					['Marvin Klose', 1.0],
-					['Michael Wienecke', 1.0],
-					['Ricardo Bischof', 1.0]
+					['010', 1.0],
+					['020', 1.0],
+					['030', 1.0],
+					['040', 1.0],
+					['050', 1.0],
+					['060', 1.0],
+					['070', 1.0],
+					['080', 1.0],
+					['090', 1.0],
+					['100', 1.0],
+					['110', 1.0],
+					['120', 1.0],
+					['130', 1.0],
+					['140', 1.0],
+					['150', 1.0],
+					['160', 1.0],
+					['170', 1.0],
+					['180', 1.0],
+					['190', 1.0],
+					['200', 1.0]
 				];
 
-				wheel = new EduMon.Wheel(canvas[0], segments, function(segment) {
+				wheel.setSegments(segments, true);
+				wheel.onFinish = function(segment) {
 					//modes.half(segment);
-					modes.drop(segment);
-				});
+					selectedMode(segment);
+				};
 			}
         </script>
     </body>
