@@ -35,7 +35,7 @@ public class RoomState {
 
     @JsonIgnore
     public boolean isOutdated() {
-        if (timestamp.getTime() < new Date().getTime() - 60 * 1000) {
+        if (timestamp.getTime() < new Date().getTime() - 3600 * 1000) {
             return true;
         }
         return false;

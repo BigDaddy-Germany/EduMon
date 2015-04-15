@@ -2,10 +2,13 @@ package org.cubyte.edumon.client.messaging.messagebody;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.Converter;
 
 public class ThumbRequest implements MessageBody {
     public enum FeedbackType {
-        THUMB, RATING
+        thumb, rating
     }
 
     public final int id;

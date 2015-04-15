@@ -82,7 +82,7 @@ public class NameChooserController implements Controller {
             public void run() {
                 RoomState roomState = app.getRoomState();
                 if (roomState != null) {
-                    int index = roomState.nameList.names.indexOf(roomState.name);
+                    int index = roomState.nameList.names.indexOf(app.getName());
                     nameList.setItems(FXCollections.observableArrayList(roomState.nameList.names));
                     if (index > 0) {
                         nameList.getSelectionModel().selectIndices(index);
