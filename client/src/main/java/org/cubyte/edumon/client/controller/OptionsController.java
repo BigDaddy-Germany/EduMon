@@ -45,6 +45,8 @@ public class OptionsController implements Controller {
     @FXML
     private void handleLogout() {
         app.resetToLogin();
+        app.unregisterSensorListeners();
+        app.killExecutors();
     }
 
     @FXML

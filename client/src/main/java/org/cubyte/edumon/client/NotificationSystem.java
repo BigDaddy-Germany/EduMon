@@ -15,7 +15,7 @@ import static org.cubyte.edumon.client.Scene.THUMBFEEDBACK;
 public class NotificationSystem implements Victim<Message> {
     private Stage stage;
 
-    public NotificationSystem() {
+    public NotificationSystem(final Main app) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -26,6 +26,7 @@ public class NotificationSystem implements Victim<Message> {
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 stage.setX(screenSize.getWidth() - 350);
                 stage.setY(screenSize.getHeight() - 150);
+                stage.getIcons().add(app.getAppIcon());
             }
         });
     }

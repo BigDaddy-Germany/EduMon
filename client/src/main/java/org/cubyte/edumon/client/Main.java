@@ -3,6 +3,7 @@ package org.cubyte.edumon.client;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.scene.image.Image;
@@ -24,10 +25,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,6 +45,10 @@ public class Main extends Application {
     private Stage stage;
     private final ScheduledExecutorService scheduledExecutorService;
     private final NotificationSystem notificationSystem;
+    private ScheduledFuture<?> sensorFetcherFuture;
+    private ScheduledFuture<?> messageSenderFuture;
+    private ScheduledFuture<?> eventExecutorFuture;
+    private ScheduledFuture<?> timeStampUpdaterFuture;
 
     private int sentCounter = 0;
     private int receivedCounter = 0;
@@ -64,6 +66,67 @@ public class Main extends Application {
         appIcon = new Image(ICON);
         try {
             trayIcon = new TrayIcon(ImageIO.read(getClass().getResourceAsStream(ICON)));
+
+            final PopupMenu popup = new PopupMenu();
+
+            MenuItem breakRequestItem = new MenuItem("Pausenanfrage senden");
+            breakRequestItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    messageQueue.queue(messageFactory.create(new BreakRequest()));
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            notificationSystem.showBreakRequestConfirm();
+                        }
+                    });
+                }
+            });
+            MenuItem optionsItem = new MenuItem("Optionen");
+            optionsItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            changeScene(EMPTY);
+                            changeScene(OPTIONS);
+                        }
+                    });
+                }
+            });
+            MenuItem logoutItem = new MenuItem("Logout");
+            logoutItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            SystemTray.getSystemTray().remove(trayIcon);
+                            unregisterSensorListeners();
+                            killExecutors();
+                            resetToLogin();
+                        }
+                    });
+                }
+            });
+            MenuItem exitItem = new MenuItem("Anwendung schließen");
+            exitItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    exit();
+                }
+            });
+
+            popup.add(breakRequestItem);
+            popup.addSeparator();
+            popup.add(optionsItem);
+            popup.add(logoutItem);
+            popup.add(exitItem);
+
+            trayIcon.setPopupMenu(popup);
+            trayIcon.setImageAutoSize(true);
+
         } catch (IOException e) {
             System.err.println("Could not load tray icon.");
             System.err.println(e.getMessage());
@@ -84,7 +147,7 @@ public class Main extends Application {
                 return t;
             }
         });
-        notificationSystem = new NotificationSystem();
+        notificationSystem = new NotificationSystem(this);
     }
 
     public static void main(String[] args) {
@@ -136,8 +199,20 @@ public class Main extends Application {
         GlobalScreen.addNativeKeyListener(keyListener);
         GlobalScreen.addNativeMouseListener(mouseListener);
         GlobalScreen.addNativeMouseMotionListener(mouseListener);
-        //drain mic
+        //drain sensors
+        keyListener.fetchStrokes();
+        mouseListener.fetchClicks();
+        mouseListener.fetchDistance();
         micListener.fetchLevel();
+    }
+
+    public void unregisterSensorListeners() {
+        try {
+            GlobalScreen.unregisterNativeHook();
+        } catch (NativeHookException e) {
+            System.err.println("Could not unregister Native Hook.");
+            System.err.println(e.getMessage());
+        }
     }
 
     public boolean canRunInBackground() {
@@ -149,12 +224,12 @@ public class Main extends Application {
         final OptionsController optionsController = (OptionsController) OPTIONS.getController();
         optionsController.sendKeyData(clientConfig.sendKeyData).sendMouseData(clientConfig.sendMouseData)
                 .sendMicData(clientConfig.sendMicData).setDataOverview();
-        changeScene(OPTIONS);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 if (!canRunInBackground() || trayIcon == null) {
                     stage.setTitle("EduMon Client");
+                    changeScene(OPTIONS);
                     optionsController.setOptions(false);
                     stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                         @Override
@@ -178,74 +253,19 @@ public class Main extends Application {
             }
         });
 
-        final PopupMenu popup = new PopupMenu();
-        final SystemTray tray = SystemTray.getSystemTray();
-
-        MenuItem breakRequestItem = new MenuItem("Pausenanfrage senden");
-        breakRequestItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                messageQueue.queue(messageFactory.create(new BreakRequest()));
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        notificationSystem.showBreakRequestConfirm();
-                    }
-                });
+        if (canRunInBackground() && trayIcon != null) {
+            try {
+                SystemTray.getSystemTray().add(trayIcon);
+            } catch (AWTException e) {
+                System.err.println("System tray icon could not be added.");
+                System.err.println(e.getMessage());
             }
-        });
-        MenuItem optionsItem = new MenuItem("Optionen");
-        optionsItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        changeScene(EMPTY);
-                        changeScene(OPTIONS);
-                    }
-                });
-            }
-        });
-        MenuItem logoutItem = new MenuItem("Logout");
-        logoutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        resetToLogin();
-                    }
-                });
-            }
-        });
-        MenuItem exitItem = new MenuItem("Anwendung schließen");
-        exitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                exit();
-            }
-        });
-
-        popup.add(breakRequestItem);
-        popup.addSeparator();
-        popup.add(optionsItem);
-        popup.add(logoutItem);
-        popup.add(exitItem);
-
-        trayIcon.setPopupMenu(popup);
-        trayIcon.setImageAutoSize(true);
-
-        try {
-            tray.add(trayIcon);
-        } catch (AWTException e) {
-            System.err.println("System tray icon could not be added.");
-            System.err.println(e.getMessage());
         }
     }
 
     private void scheduleExecutors() {
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+        messageQueue.clear();
+        sensorFetcherFuture = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             private int keystrokes;
             private int mouseclicks;
             private double mousedistance;
@@ -274,18 +294,31 @@ public class Main extends Application {
                 messageQueue.queue(messageFactory.create(new SensorData(keystrokes, mousedistance, mouseclicks, micLevel)));
             }
         }, 0, 1, TimeUnit.SECONDS);
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+        messageSenderFuture = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 messageQueue.send();
             }
         }, 0, 1, TimeUnit.SECONDS);
-        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+        eventExecutorFuture = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                messageQueue.execute();
+            }
+        }, 1, 1, TimeUnit.SECONDS);
+        timeStampUpdaterFuture = scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 clientConfig.updateRoomStateTimeStamp();
             }
         }, 5, 5, TimeUnit.MINUTES);
+    }
+
+    public void killExecutors() {
+        sensorFetcherFuture.cancel(true);
+        messageSenderFuture.cancel(true);
+        eventExecutorFuture.cancel(true);
+        timeStampUpdaterFuture.cancel(true);
     }
 
     public void changeScene(final org.cubyte.edumon.client.Scene scene) {
@@ -388,15 +421,14 @@ public class Main extends Application {
         return scheduledExecutorService;
     }
 
+    public Image getAppIcon() {
+        return appIcon;
+    }
+
     public void exit() {
         clientConfig.save();
 
-        try {
-            GlobalScreen.unregisterNativeHook();
-        } catch (NativeHookException e) {
-            System.err.println("Could not unregister Native Hook.");
-            System.err.println(e.getMessage());
-        }
+        unregisterSensorListeners();
         System.runFinalization();
         System.exit(0);
     }

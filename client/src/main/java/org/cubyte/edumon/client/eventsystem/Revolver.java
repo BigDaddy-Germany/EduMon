@@ -21,7 +21,7 @@ public class Revolver<T extends Bullet> {
         try {
             bullet = bullets.take();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Thread was interrupted");
         }
         if (bullet != null) {
             List<Victim> victims = bulletVictimMap.get(bullet.getBulletClass());
@@ -42,7 +42,7 @@ public class Revolver<T extends Bullet> {
         try {
             bullets.put(bullet);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Thread was interrupted");
         }
     }
 

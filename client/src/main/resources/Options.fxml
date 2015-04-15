@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.OptionsController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.OptionsController">
   <children>
     <CheckBox fx:id="keySensor" layoutX="45.0" layoutY="208.0" mnemonicParsing="false" onAction="#handleSendKeyData" text="Übermittlung von Tastaturanschlägen" />
     <CheckBox fx:id="mouseSensor" layoutX="45.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleSendMouseData" text="Übermittlung von Mausklicks und Mausbewegungsdistanz" />
@@ -30,7 +30,7 @@
     <Label fx:id="seat" layoutX="45.0" layoutY="146.0" text="Sitzplatz" />
     <Separator layoutX="45.0" layoutY="183.0" prefWidth="511.0" />
     <Label id="packages" layoutX="300.0" layoutY="78.0" text="Pakete:" />
-    <Label fx:id="sent" layoutX="300.0" layoutY="112.0" text="Gesendet" />
-    <Label fx:id="received" layoutX="300.0" layoutY="146.0" text="Empfangen" />
+    <Label fx:id="sent" layoutX="300.0" layoutY="112.0" text="0 gesendet" />
+    <Label fx:id="received" layoutX="300.0" layoutY="146.0" text="0 empfangen" />
   </children>
 </AnchorPane>

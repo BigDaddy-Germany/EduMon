@@ -149,4 +149,8 @@ public class MessageQueue extends Revolver<Message> {
     public void resetSessionId() {
         cookieStore.clear();
     }
+
+    public void clear() {
+        queuedMessages.clear();
+    }
 }
