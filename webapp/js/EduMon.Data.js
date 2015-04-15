@@ -20,7 +20,7 @@ EduMon.Data = new function() {
 	 * Creates a new course object
 	 * @method Course
 	 * @param {String} name A name to identify the course
-	 * @param {} students
+	 * @param {Student[]} students
 	 * @return ObjectExpression
 	 */
 	this.Course = function Course(name, students) {

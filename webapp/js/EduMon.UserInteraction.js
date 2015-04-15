@@ -78,9 +78,8 @@ EduMon.UserInteraction = new function() {
 
         return new Promise(function(fulfill, reject) {
             var oldDialog = $('#dialogContainer').clone(true, true);
-
-            // todo apply instead of call ??
-            dialogOpener.call(dialogOpener, newArguments)
+            
+            dialogOpener.apply(dialogOpener, newArguments)
                 .then(function(data) {
                     $('#dialogContainer').replaceWith(oldDialog);
                     fulfill(data);
