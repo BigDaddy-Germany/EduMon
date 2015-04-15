@@ -174,9 +174,8 @@ EduMon.UserInteraction = new function() {
             }
             var givenNames = [];
             var duplicate = false;
-            var memberName = $('.courseMemberName');
-            memberName.each(function() {
-                var thisName = $(this).val();
+            values.students.forEach(function(student) {
+                var thisName = student.name;
                 if (givenNames.indexOf(thisName) != -1) {
                     duplicate = true;
                 }
