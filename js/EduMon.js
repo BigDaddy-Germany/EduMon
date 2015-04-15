@@ -43,6 +43,8 @@ EduMon = new function() {
 		//this.tryRestoreApp(); //TODO reactivate once properly implemented, see #43
 		this.enablePersistApp();
 
+		bindFortuneWheel(this.Prefs);
+
 		EduMon.sendPacket({command:'start'});
 	};
 
@@ -122,7 +124,7 @@ EduMon = new function() {
 				Client asks for break
 				body: {}
 				 */
-				processBreakRequest()
+				processBreakRequest();
 				break;
 
 			default:
@@ -314,7 +316,7 @@ EduMon = new function() {
 		that.sendPacket({command:"config",
 			url: EduMon.Prefs.currentLecture.messaging.serverUrl,
 			room: EduMon.Prefs.currentLecture.room.roomName,
-			moderatorPassphrase:EduMon.Prefs.currentLecture.messaging.moderatorPassphrase
+			moderatorPassphrase: EduMon.Prefs.currentLecture.messaging.moderatorPassphrase
 		});
 	};
 
@@ -424,4 +426,50 @@ EduMon = new function() {
 
 		window.setTimeout(function() { EduMon.testAllThemAnalytics(true); }, 200);
 	};
+
+	var wheelWindow = null;
+	function bindFortuneWheel() {
+		var button = $('#btnFortuneWheel');
+
+		if (wheelWindow) {
+			wheelWindow = null;
+			wheelWindow.close();
+		}
+
+		var wheelData = EduMon.Prefs.wheel;
+
+		button.on('click', function() {
+
+			wheelWindow = EduMon.Util.openWindow("wheel.html", {
+				top: wheelData.top,
+				left: wheelData.left,
+				width: wheelData.width,
+				height: wheelData.height,
+				resizable: true
+			}, "blank");
+
+			wheelWindow.onunload = function() {
+				wheelData.top = this.screenY;
+				wheelData.left = this.screenX;
+				wheelData.width = $(this).width();
+				wheelData.height = $(this).height();
+			};
+
+			wheelWindow.onload = function() {
+				wheelWindow.focus();
+
+				var controller = new EduMon.XWindowRPC(wheelWindow, {
+					wheelFinished: function(segment) {
+						alert("Aand the winner is: " + segment);
+					}
+				});
+
+				controller.invoke('showWheel', EduMon.Prefs.currentLecture.course).then(function() {
+					EduMon.Gui.showToast("Glückrad geöffnet!");
+				}).catch(function(e) {
+					throw e;
+				});
+			};
+		});
+	}
 };

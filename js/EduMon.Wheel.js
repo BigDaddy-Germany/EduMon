@@ -1,5 +1,6 @@
 EduMon = window.EduMon || {};
-EduMon.Wheel = function (canvas, segments, onFinish) {
+EduMon.Wheel = function (canvas, segments) {
+
 	var that = this;
 	var context = canvas.getContext('2d');
 
@@ -30,7 +31,9 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 	var unit = 1;
 	var activeSegment = null;
 
-	shuffle(segments);
+	this.onFinish = null;
+
+	setAndShuffledSegments(segments);
 	initializeData(true);
 
 	function initializeData(resetAngle) {
@@ -50,6 +53,33 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 
 		draw();
 	}
+
+	function setAndShuffledSegments(newSegments) {
+		if (!newSegments || newSegments.length < 1) {
+			throw "No segments given!";
+		}
+		segments = newSegments.slice();
+		shuffle(segments);
+	}
+
+	this.setSegments = function(newSegments, reset) {
+		setAndShuffledSegments(newSegments);
+		initializeData(!!reset);
+	};
+
+	this.removeSegment = function(segment) {
+		var i = segments.indexOf(segment);
+		if (i < 0) {
+			for (var n = 0; n < segments.length; ++n) {
+				if (segments[n][0] == segment) {
+					i = n;
+				}
+			}
+		}
+		if (i >= 0) {
+			segments.splice(i, 1);
+		}
+	};
 
 
 	function updateUnit() {
@@ -191,8 +221,8 @@ EduMon.Wheel = function (canvas, segments, onFinish) {
 
 			timer = -1;
 
-			if (typeof onFinish == 'function') {
-				onFinish(activeSegment);
+			if (typeof that.onFinish == 'function') {
+				that.onFinish(activeSegment);
 			}
 		}
 	};
