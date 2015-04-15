@@ -78,9 +78,8 @@ EduMon.UserInteraction = new function() {
 
         return new Promise(function(fulfill, reject) {
             var oldDialog = $('#dialogContainer').clone(true, true);
-
-            // todo apply instead of call ??
-            dialogOpener.call(dialogOpener, newArguments)
+            
+            dialogOpener.apply(dialogOpener, newArguments)
                 .then(function(data) {
                     $('#dialogContainer').replaceWith(oldDialog);
                     fulfill(data);
@@ -174,9 +173,8 @@ EduMon.UserInteraction = new function() {
             }
             var givenNames = [];
             var duplicate = false;
-            var memberName = $('.courseMemberName');
-            memberName.each(function() {
-                var thisName = $(this).val();
+            values.students.forEach(function(student) {
+                var thisName = student.name;
                 if (givenNames.indexOf(thisName) != -1) {
                     duplicate = true;
                 }

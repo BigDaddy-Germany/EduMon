@@ -26,7 +26,7 @@
 <script type="text/javascript">
 	/**
 	 * Deletes a member row out of the form
-	 * @param {Event} event the event triggered by the click on the minus button
+	 * @param {{target: Object}} event the event triggered by the click on the minus button
 	 */
 	function courseDeleteMember(event) {
 		var member = $(event.target).parent();
@@ -56,15 +56,12 @@
 	 */
 	function courseImportCsvData(csvData) {
 		var existingNames = [];
-		$('.courseMemberName').each(function() {
+		var courseMemberName = $('.courseMemberName');
+		courseMemberName.each(function() {
 			// delete empty rows
 			var thisInput = $(this);
 			var thisName = thisInput.val().trim();
-			if (thisName == '') {
-				// dummy event to delete line
-				var event = {target: thisInput};
-				courseDeleteMember(event);
-			} else {
+			if (thisName.trim() != '') {
 				existingNames.push(thisName);
 			}
 		});
@@ -83,6 +80,16 @@
 
 			nameFields.eq(nameIndex).val(dataLine[0]);
 			groupFields.eq(nameIndex).val(dataLine[1]);
+		});
+
+		// clear empty rows
+		debugger;
+		// has to be loaded again, because of changes
+		$('.courseMemberName').each(function() {
+			if ($(this).val().trim() == '') {
+				var event = { target: this };
+				courseDeleteMember(event);
+			}
 		});
 	}
 
@@ -107,5 +114,5 @@
 					});
 
 		});
-	})
+	});
 </script>
