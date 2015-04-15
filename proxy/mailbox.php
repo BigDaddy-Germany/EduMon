@@ -147,7 +147,15 @@
 	header('Content-type: application/json; charset=utf-8');
 
 	session_name('EDUMONSESSID');
-	session_start();
+	$sessionState = @session_start();
+	if (!$sessionState) {
+		session_regenerate_id(true);
+		session_start();
+	}
+
+	if (@$_GET['logout']) {
+		session_regenerate_id(true);
+	}
 
 	// For debug purposes -> get random demo package from server
 	if (isset($_GET['demoPackages'])) {

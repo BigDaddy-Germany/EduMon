@@ -40,7 +40,7 @@ EduMon = new function() {
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
 
-		this.tryRestoreApp(); //TODO reactivate once properly implemented, see #43
+		//this.tryRestoreApp(); //TODO reactivate once properly implemented, see #43
 		this.enablePersistApp();
 
 		bindFortuneWheel(this.Prefs);
@@ -300,13 +300,18 @@ EduMon = new function() {
 	/**
 	 * Initializes the current lecture: connect to server, refresh timeline, reload seating plan, broadcast setup
 	 * @method initLecture
+	 * @param {boolean} [broadCastIt=true] should a broadcast be sended?
 	 * @return undefined
 	 */
-	this.initLecture = function(){
+	this.initLecture = function(broadCastIt){
+		broadCastIt = broadCastIt || true;
+
 		that.updateConnection();
 		EduMon.Timeline.reset();
 		EduMon.Gui.initSeating();
-		broadcastCurrentLecture();
+		if (broadCastIt) {
+			broadcastCurrentLecture();
+		}
 	};
 
 	/**
@@ -367,6 +372,20 @@ EduMon = new function() {
 		if (stored!==null){
 			EduMon.Prefs = JSON.parse(stored);
 			EduMon.Gui.showToast("App loaded");
+
+			if (EduMon.Prefs.currentLecture && EduMon.Prefs.currentLecture.course) {
+				EduMon.Gui.showPopup(
+					"Vorlesung wiederherstellen",
+					"In Ihren Einstellungen wurde eine aktive Vorlesung gefunden. Soll diese nun wiederhergestellt werden?",
+					['yes', 'no'],
+					function(chosenOption) {
+						if (chosenOption == 'yes') {
+							that.initLecture(false);
+						}
+					}
+				);
+			}
+
 			return true;
 		} else {
 			return false;
