@@ -160,7 +160,7 @@ EduMon = new function() {
 	 * @param {Object} body The body sent with the package to the server
 	 * @return int Success code as delivered to client (0 = success, >0 error codes)
 	 */
-	this.processLogin = function(sender, body) {
+	var processLogin = function(sender, body) {
 		var seat = body.seat;
 		var name = body.name;
 
