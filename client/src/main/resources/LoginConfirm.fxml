@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,14 +8,49 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.LoginConfirmController">
-  <children>
-    <Label layoutX="200.0" layoutY="183.0" text="Sie haben sich erfolgreich eingeloggt." textFill="#0c9900" />
-    <Label fx:id="time" alignment="CENTER" layoutX="14.0" layoutY="200.0" prefWidth="572.0" text="Die Applikation wird nun im Hintergrund ausgeführt..." textAlignment="LEFT" textFill="#606060" />
-      <ImageView fitHeight="39.0" fitWidth="60.0" layoutX="561.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true">
+<GridPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.LoginConfirmController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+    <Label fx:id="green" text="Sie haben sich erfolgreich eingeloggt." textFill="#0c9900" visible="false" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets top="180.0" />
+         </GridPane.margin>
+      </Label>
+    <Label fx:id="time" alignment="CENTER" prefWidth="572.0" text="Die Applikation wird nun im Hintergrund weitergeführt..." textAlignment="LEFT" textFill="#606060" visible="false" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets top="210.0" />
+         </GridPane.margin>
+      </Label>
+      <ImageView fitHeight="39.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
          <image>
             <Image url="@EduMon.png" />
          </image>
       </ImageView>
-  </children>
-</AnchorPane>
+      <ProgressIndicator fx:id="loading" maxWidth="50.0" GridPane.halignment="CENTER" />
+      <Label fx:id="wait" text="Warte auf Loginbestätigung." GridPane.halignment="CENTER" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets top="240.0" />
+         </GridPane.margin>
+      </Label>
+      <Button fx:id="cancel" mnemonicParsing="false" onAction="#handleCancel" text="Abbrechen" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets top="270.0" />
+         </GridPane.margin>
+      </Button>
+      <Label fx:id="infoBar" text="Label" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="14.0" top="14.0" />
+         </GridPane.margin>
+      </Label>
+      <Label fx:id="problems" alignment="CENTER" prefHeight="100.0" prefWidth="600.0" text="problems" textAlignment="JUSTIFY" visible="false" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets top="160.0" />
+         </GridPane.margin>
+      </Label>
+   </children>
+</GridPane>

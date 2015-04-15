@@ -14,6 +14,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import org.cubyte.edumon.client.Main;
+import org.cubyte.edumon.client.eventsystem.Victim;
+import org.cubyte.edumon.client.messaging.Message;
+import org.cubyte.edumon.client.messaging.messagebody.LoginFeedback;
 import org.cubyte.edumon.client.messaging.messagebody.WhoAmI;
 import org.cubyte.edumon.client.messaging.messagebody.util.Dimensions;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
@@ -95,10 +98,8 @@ public class SeatChooserController implements Controller {
                             @Override
                             public void handle(ActionEvent mouseEvent) {
                                 app.setSeat(new Position(seatX, seatY));
-                                app.getQueue().queue(app.getFactory().create(new WhoAmI(app.getName(), app.getSeat())));
-                                app.getQueue().send();
                                 app.changeScene(LOGIN_CONFIRM);
-                                ((LoginConfirmController) LOGIN_CONFIRM.getController()).confirmLogin();
+                                ((LoginConfirmController) LOGIN_CONFIRM.getController()).waitForConfirmation();
                             }
                         });
                         seatingplan.add(link, x, y);

@@ -84,16 +84,16 @@ public class ClientConfig {
         }
     }
 
-    public void addRoomState(String sessionId, NameList nameList) {
+    public synchronized void addRoomState(String sessionId, NameList nameList) {
         roomStateMap.put(room, new RoomState(sessionId, nameList));
     }
 
-    public void updateRoomStateTimeStamp() {
+    public synchronized void updateRoomStateTimeStamp() {
         roomStateMap.get(room).timestamp = new Date();
     }
 
     @JsonIgnore
-    public RoomState getRoomState() {
+    public synchronized RoomState getRoomState() {
         RoomState state = roomStateMap.get(room);
         if (state != null && !state.isOutdated()) {
             return state;
@@ -101,7 +101,7 @@ public class ClientConfig {
         return null;
     }
 
-    public void cleanRoomStateMap() {
+    public synchronized void cleanRoomStateMap() {
         for (Map.Entry<String, RoomState> entry : roomStateMap.entrySet()) {
             if (entry.getValue().isOutdated()) {
                 roomStateMap.remove(entry.getKey());
