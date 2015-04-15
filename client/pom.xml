@@ -62,7 +62,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.7</jdkVersion>
         <mainClass>org.cubyte.edumon.client.Main</mainClass>
-        <iconFile>${basedir}/icon</iconFile>
+        <iconFile>${project.build.sourceDirectory}/../resources/EduMon.ico</iconFile>
         <linuxName>${project.build.finalName}-linux</linuxName>
         <windowsName>${project.build.finalName}-windows.exe</windowsName>
         <osxName>${project.build.finalName}-osx</osxName>
@@ -149,24 +149,6 @@
                     </archive>
                 </configuration>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -216,24 +198,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>org.skife.maven</groupId>
-                <artifactId>really-executable-jar-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <configuration>
-                    <programFile>${linuxName}</programFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>really-executable-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -248,7 +212,7 @@
                     <downloadUrl>http://java.com/download</downloadUrl>
                     <stayAlive>false</stayAlive>
                     <restartOnCrash>false</restartOnCrash>
-                    <!--<icon>${iconFile}.ico</icon>-->
+                    <icon>${iconFile}</icon>
                     <singleInstance>
                         <mutexName>${project.artifactId}</mutexName>
                         <windowTitle>${project.name}</windowTitle>
@@ -271,16 +235,6 @@
                         <originalFilename>${windowsName}</originalFilename>
                     </versionInfo>
                 </configuration>
-                <!--
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>launch4j</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                -->
             </plugin>
         </plugins>
     </build>
