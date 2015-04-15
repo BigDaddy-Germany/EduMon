@@ -34,9 +34,30 @@ public class RoomState {
 
     @JsonIgnore
     public boolean isOutdated() {
-        if (timestamp.getTime() < new Date().getTime() - 3600 * 1000) {
-            return true;
-        }
-        return false;
+        return timestamp.getTime() < new Date().getTime() - 3600 * 1000;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RoomState roomState = (RoomState) o;
+
+        return !(name != null ? !name.equals(roomState.name) : roomState.name != null) &&
+                !(nameList != null ? !nameList.equals(roomState.nameList) : roomState.nameList != null) &&
+                !(seat != null ? !seat.equals(roomState.seat) : roomState.seat != null) &&
+                !(sessionId != null ? !sessionId.equals(roomState.sessionId) : roomState.sessionId != null) &&
+                !(timestamp != null ? !timestamp.equals(roomState.timestamp) : roomState.timestamp != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = sessionId != null ? sessionId.hashCode() : 0;
+        result = 31 * result + (nameList != null ? nameList.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (seat != null ? seat.hashCode() : 0);
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
+        return result;
     }
 }
