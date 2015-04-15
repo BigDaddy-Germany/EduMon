@@ -33,12 +33,8 @@
 
 	#frontdesk {
 		width: 100%;
-		height: 100px;
+		height: $frontdesk_height;
 		background-color: #DDDDDD;
-
-		input {
-			display: inline-block;
-		}
 	}
 }
 
