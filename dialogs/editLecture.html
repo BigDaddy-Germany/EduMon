@@ -44,7 +44,7 @@
 					.then(function(newCourse) {
 						EduMon.Prefs.courses[courseId] = newCourse;
 						var lectureCourse = $('#lectureCourse');
-						lectureCourse.find('[value=' + courseId + ']').html(newCourse.name).attr('selected', 'selected');
+						lectureCourse.find('[value=' + courseId + ']').html(newCourse.name);
 						lectureCourse.sortSelectBox();
 					})
 					.catch(function(data) { console.log(data); });
@@ -90,7 +90,7 @@
 					.then(function(newRoom) {
 						EduMon.Prefs.rooms[roomId] = newRoom;
 						var lectureRoom = $('#lectureRoom');
-						lectureRoom.find('[value=' + roomId + ']').html(newRoom.roomName).attr('selected', 'selected');
+						lectureRoom.find('[value=' + roomId + ']').html(newRoom.roomName);
 						lectureRoom.sortSelectBox();
 					})
 					.catch(function(data) { console.log(data); });

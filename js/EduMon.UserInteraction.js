@@ -77,7 +77,7 @@ EduMon.UserInteraction = new function() {
         var newArguments = Array.prototype.slice.call(arguments, 1);
 
         return new Promise(function(fulfill, reject) {
-            var oldDialog = $('#dialogContainer').clone(true, true);
+            var oldDialog = $('#dialogContainer').cloneWithSelectState(true, true);
             
             dialogOpener.apply(dialogOpener, newArguments)
                 .then(function(data) {
