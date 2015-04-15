@@ -462,7 +462,7 @@ EduMon = new function() {
 
 				var controller = new EduMon.XWindowRPC(wheelWindow, {
 					wheelFinished: function(segment) {
-						alert("Aand the winner is: " + segment);
+						EduMon.Gui.showToast("Aaaand the winner is: " + segment);
 					}
 				});
 
