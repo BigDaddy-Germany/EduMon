@@ -3,10 +3,9 @@ package org.cubyte.edumon.client;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.stage.Modality;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javafx.scene.image.Image;
 import org.cubyte.edumon.client.controller.OptionsController;
 import org.cubyte.edumon.client.messaging.MessageFactory;
 import org.cubyte.edumon.client.messaging.MessageQueue;
@@ -24,7 +23,12 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +37,16 @@ import static org.cubyte.edumon.client.Scene.*;
 
 public class Main extends Application {
     private static final String ICON = "/EduMon.png";
+    private static final String SVG = "/EduMon.svg";
+    private static final String SVG_LOCATION;
+    private static final String DESKTOP = "/edumon.desktop";
+    private static final String DESKTOP_LOCATION;
+
+    static {
+        String userHome = System.getProperty("user.home");
+        SVG_LOCATION = userHome + "/.local/share/pixmaps";
+        DESKTOP_LOCATION = userHome + "/.local/share/applications";
+    }
 
     private final KeyListener keyListener;
     private final MouseListener mouseListener;
@@ -62,6 +76,66 @@ public class Main extends Application {
 
         messageQueue = new MessageQueue(this);
         messageFactory = new MessageFactory(this, "MODERATOR");
+
+        if (isLinux()) {
+            File desktop = new File(DESKTOP_LOCATION + DESKTOP);
+            if (!desktop.exists()) {
+                File folder = new File(DESKTOP_LOCATION);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                try {
+                    Files.copy(getClass().getResourceAsStream(DESKTOP), Paths.get(DESKTOP_LOCATION + DESKTOP));
+                } catch (IOException e) {
+                    System.err.println("Could not copy desktop.");
+                    System.err.println(e.getMessage());
+                    e.printStackTrace(System.err);
+                }
+            }
+            File svg = new File(SVG_LOCATION + SVG);
+            if (!svg.exists()) {
+                File folder = new File(SVG_LOCATION);
+                if (!folder.exists()) {
+                    folder.mkdirs();
+                }
+                try {
+                    Files.copy(getClass().getResourceAsStream(SVG), Paths.get(SVG_LOCATION + SVG));
+                } catch (IOException e) {
+                    System.err.println("Could not copy svg.");
+                    System.err.println(e.getMessage());
+                }
+            }
+            try {
+                FileReader fileReader = new FileReader(desktop);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                List<String> lines = new ArrayList<>();
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (!line.startsWith("Exec=") && !line.startsWith("Icon=")) {
+                        lines.add(line);
+                    }
+                }
+                bufferedReader.close();
+                fileReader.close();
+                lines.add("Exec=java -cp " + System.getProperty("java.class.path") + " " + Main.class.getName());
+                lines.add("Icon=" + SVG_LOCATION + SVG);
+
+                FileWriter fileWriter = new FileWriter(desktop);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                for(String fuck: lines) {
+                    bufferedWriter.write(fuck + "\n");
+                }
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                fileWriter.close();
+            } catch (FileNotFoundException e) {
+                System.err.println("Could not find desktop file.");
+                System.err.println(e.getMessage());
+            } catch (IOException e) {
+                System.err.println("Could not read or write desktop file.");
+                System.err.println(e.getMessage());
+            }
+        }
 
         appIcon = new Image(ICON);
         try {
@@ -134,6 +208,7 @@ public class Main extends Application {
 
         scheduledExecutorService = Executors.newScheduledThreadPool(5, new ThreadFactory() {
             int id = 0;
+
             @Override
             public Thread newThread(Runnable r) {
                 id++;
@@ -215,9 +290,13 @@ public class Main extends Application {
         }
     }
 
-    public boolean canRunInBackground() {
+    public boolean isLinux() {
         String os = System.getProperty("os.name").toLowerCase();
-        return SystemTray.isSupported() && (os.contains("win") || os.contains("mac"));
+        return !(os.contains("win") || os.contains("mac"));
+    }
+
+    public boolean canRunInBackground() {
+        return SystemTray.isSupported() && !isLinux();
     }
 
     private void addAppToSystemTray() {
@@ -379,7 +458,7 @@ public class Main extends Application {
             if (!name.equals(roomState.name)) {
                 roomState.seat = null;
             }
-           roomState.name = name;
+            roomState.name = name;
         }
         clientConfig.name = name;
         clientConfig.save();
