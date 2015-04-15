@@ -108,6 +108,8 @@ EduMon = new function() {
 				client sends data to server
 				body: { keys: 69, mdist: 999, mclicks: 23, volume: 0.42 }
 				 */
+				var packageLogging = $('#packageLogging');
+				packageLogging.text(packageLogging.text() + ',' + JSON.stringify(packet));
 				EduMon.Analytics.processData(packet.from, packet.time, packet.body);
 				break;
 
