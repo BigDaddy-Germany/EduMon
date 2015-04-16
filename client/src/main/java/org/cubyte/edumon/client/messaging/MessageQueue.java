@@ -25,6 +25,7 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -57,36 +58,28 @@ public class MessageQueue extends Revolver<Message> {
 
     public void send() {
         int queueSize = queuedMessages.size();
-        ArrayList<Message> removedMessages = new ArrayList<>();
+        List<Message> messages = new ArrayList<>();
+        queuedMessages.drainTo(messages);
+        StringWriter writer = new StringWriter();
         String jsonString = "";
-        if (queueSize > 0) {
-            Message message;
-            StringWriter writer = new StringWriter();
-            jsonString = "[";
-            for (int i = 0; i < queueSize; i++) {
-                try {
-                    message = queuedMessages.poll();
-                    removedMessages.add(message);
-                    mapper.writeValue(writer, message);
-                } catch (IOException e) {
-                    System.err.println("Could not write Json value.");
-                    System.err.println(e.getMessage());
-                }
-                jsonString += writer.toString() + ((i < queueSize - 1) ? "," : "");
-                writer.flush();
-            }
-            jsonString += "]";
-            try {
-                writer.close();
-            } catch (IOException e) {
-                System.err.println("Could not close Json writer.");
-                System.err.println(e.getMessage());
-            }
+        try {
+            mapper.writeValue(writer, messages);
+            jsonString = writer.toString();
+        } catch (IOException e) {
+            System.err.println("Could not write Json value.");
+            System.err.println(e.getMessage());
+        }
+        writer.flush();
+        try {
+            writer.close();
+        } catch (IOException e) {
+            System.err.println("Could not close Json writer.");
+            System.err.println(e.getMessage());
         }
 
         URI uri;
         try {
-            uri = new URI("http://" + owner.getServer() + "/mailbox.php");
+            uri = new URI(owner.getServer() + "/mailbox.php");
             uri = new URIBuilder(uri).addParameter("room", owner.getRoom()).build();
         } catch (URISyntaxException e) {
             System.err.println("Invalid URI.");
@@ -100,7 +93,7 @@ public class MessageQueue extends Revolver<Message> {
         try (CloseableHttpResponse response = httpClient.execute(post)) {
             if (response.getStatusLine().getStatusCode() != 200) {
                 //System.err.println("Something didn't work!!!");
-                queuedMessages.addAll(removedMessages);
+                queuedMessages.addAll(messages);
                 return;
             }
             owner.incSent(queueSize);
