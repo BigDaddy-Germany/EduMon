@@ -300,18 +300,20 @@ EduMon = new function() {
 	};
 
 	/**
-	 * Initializes the current lecture: connect to server, refresh timeline, reload seating plan, broadcast setup
+	 * Initializes the current lecture: connect to server, refresh timeline, reload seating plan, restore gui, broadcast setup
 	 * @method initLecture
 	 * @param {boolean} [broadCastIt=true] should a broadcast be sended?
 	 * @return undefined
 	 */
 	this.initLecture = function(broadCastIt){
-		if (broadCastIt == undefined) {
-			broadCastIt = true;
-		}
+		broadCastIt = !!broadCastIt;
 
 		that.updateConnection();
 		EduMon.Gui.initSeating();
+		var pultup = EduMon.Prefs.currentLecture.gui.pultup;
+		if (pultup!==""){
+			EduMon.Gui.openPultUpMode(pultup,EduMon.Feedback.updateFeedback);
+		}
 		if (broadCastIt) {
 			EduMon.Timeline.reset();
 			broadcastCurrentLecture();

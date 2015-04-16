@@ -128,6 +128,8 @@ EduMon.Analytics = function() {
         });
 
         feedback.currentAverage = math.arithmeticAverage(values);
+
+		EduMon.Feedback.updateFeedback();
     };
 
 

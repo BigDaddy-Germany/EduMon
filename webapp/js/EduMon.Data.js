@@ -160,6 +160,7 @@ EduMon.Data = new function() {
 						}
 					*/},
 
+					currentFeedbackId: 0,
 					nextFeedbackId: 1,
 					studentFeedback: {/*
 						feedbackId: {
@@ -183,7 +184,8 @@ EduMon.Data = new function() {
 				},
 
 				gui: {
-					actionTime: -1
+					actionTime: -1,
+					pultup: ""
 				}
 			};
 		}

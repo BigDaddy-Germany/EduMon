@@ -2,7 +2,6 @@ EduMon.Feedback = new function() {
 	var that = this;
 	
 	var actionTimer = undefined;
-	var currentFeedbackId = undefined;
 
 	/**
 	 * Sends out a thumb feedback request
@@ -15,10 +14,10 @@ EduMon.Feedback = new function() {
 		setInterval(function(){$("#btnThumbs").removeClass("disabled");},5000);
 
 		var analytics = EduMon.Prefs.currentLecture.analytics;
-		currentFeedbackId = analytics.nextFeedbackId++;
+		analytics.currentFeedbackId = analytics.nextFeedbackId++;
 
-		var packet = EduMon.Data.createBasePacket(5,"BROADCAST",{"id": currentFeedbackId, "type": type});
-		analytics.studentFeedback[currentFeedbackId] = {
+		var packet = EduMon.Data.createBasePacket(5,"BROADCAST",{"id": analytics.currentFeedbackId, "type": type});
+		analytics.studentFeedback[analytics.currentFeedbackId] = {
 			"type": type,
 			"time": packet.time,
 			"currentAverage": 0,
@@ -27,7 +26,7 @@ EduMon.Feedback = new function() {
 
 		EduMon.sendPacket(packet);
 		EduMon.Gui.showToast("Daumenfeedback gestartet!");
-		EduMon.Gui.openPultUpMode("thumb",this.updateThumbFeedback);
+		EduMon.Gui.openPultUpMode("thumb",that.updateFeedback);
 
 		return packet;
 	};
@@ -60,14 +59,20 @@ EduMon.Feedback = new function() {
 	};
 
 
-	this.updateThumbFeedback = function(){
-		var feedback = EduMon.Prefs.currentLecture.analytics.studentFeedback[currentFeedbackId];
+	this.updateFeedback = function(){
+		var analytics = EduMon.Prefs.currentLecture.analytics;
+		var feedback = analytics.studentFeedback[analytics.currentFeedbackId];
+		if (feedback===undefined){
+			return;
+		}
 
 		var numAnswers = EduMon.Util.countFields(feedback.studentVoting);
 		var numOnline = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
 		$("#pultup .stats .participation .value").text(numAnswers+"/"+numOnline);
 
-		that.updateThumbs(feedback.currentAverage);
+		if (feedback.type==="thumb"){
+			that.updateThumbs(feedback.currentAverage);
+		}
 	};
 
 
