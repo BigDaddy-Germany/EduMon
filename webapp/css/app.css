@@ -150,14 +150,6 @@ body {
     background-repeat: no-repeat;
     background-size: 30px; }
 
-#devbox {
-  background-color: #A0C7F3;
-  font-size: 0.8em;
-  width: 110px;
-  z-index: 1;
-  flex-grow: 1;
-  overflow-x: visible; }
-
 #centerpanel {
   flex-grow: 1;
   display: flex;
@@ -564,3 +556,24 @@ body {
       flex-shrink: 1;
       text-align: right;
       font-size: 30px; }
+
+#devbox {
+  font-size: 0.8em;
+  position: absolute;
+  top: 90px;
+  left: 5px;
+  overflow: hidden;
+  z-index: 999;
+  height: 30px;
+  width: 110px;
+  transition: width 0.5s ease, height 0.5s ease, background-color 0.5s step-end; }
+  #devbox .devbutton {
+    height: 30px;
+    width: 110px; }
+  #devbox.opened {
+    overflow: scroll;
+    height: 200px;
+    width: 400px;
+    transition: width 0.5s ease, height 0.5s ease, background-color 0.5s step-start;
+    background-color: #A0C7F3;
+    border: 1px solid black; }
