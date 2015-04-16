@@ -560,8 +560,8 @@ body {
 #devbox {
   font-size: 0.8em;
   position: absolute;
-  top: 90px;
-  left: 5px;
+  top: 80px;
+  left: 145px;
   overflow: hidden;
   z-index: 999;
   height: 30px;
@@ -575,5 +575,5 @@ body {
     height: 200px;
     width: 400px;
     transition: width 0.5s ease, height 0.5s ease, background-color 0.5s step-start;
-    background-color: #A0C7F3;
+    background-color: #D9F2F2;
     border: 1px solid black; }
