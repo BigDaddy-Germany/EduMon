@@ -16,8 +16,10 @@
 	&.thumb  *.wheel, &.thumb  *.rating { display: none; }
 	&.rating *.thumb, &.rating *.wheel  { display: none; }
 
-	&.inactive       .handle i.glyphicon-menu-down  { display: none; }
-	&:not(.inactive) .handle i.glyphicon-menu-up    { display: none; }
+	&.inactive .handle i.glyphicon-menu-down  { 
+		transform: scaleY(-1);
+		transition: transform 1.0s ease;
+	}
 
 	.handle {
 		display: inline-block;
@@ -35,6 +37,11 @@
 		margin-bottom: -2px;
 		font-size: 20px;
 		cursor: pointer;
+
+		i {
+			transform: scaleY(1);
+			transition: transform 1.0s ease;
+		}
 	}
 
 	#drawer {

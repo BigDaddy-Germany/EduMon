@@ -470,9 +470,8 @@ body {
   #pultup.rating *.thumb, #pultup.rating *.wheel {
     display: none; }
   #pultup.inactive .handle i.glyphicon-menu-down {
-    display: none; }
-  #pultup:not(.inactive) .handle i.glyphicon-menu-up {
-    display: none; }
+    transform: scaleY(-1);
+    transition: transform 1.0s ease; }
   #pultup .handle {
     display: inline-block;
     width: 50px;
@@ -489,6 +488,9 @@ body {
     margin-bottom: -2px;
     font-size: 20px;
     cursor: pointer; }
+    #pultup .handle i {
+      transform: scaleY(1);
+      transition: transform 1.0s ease; }
   #pultup #drawer {
     border-radius: 20px 20px 0px 0px;
     border-top: 1px solid #222222;
