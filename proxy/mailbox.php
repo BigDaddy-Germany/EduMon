@@ -261,8 +261,6 @@
 // if everything is okay, we can start
 	if (http_response_code() == 200) {
 
-		$logging = '';
-
 		// delete old database entries
 		$stmt = $db->prepare("DELETE FROM packages WHERE time < :timestamp");
 		$stmt->bindValue(':timestamp', time() - 24 * 3600, SQLITE3_INTEGER);
@@ -277,15 +275,12 @@
 		}
 
 		// check, whether there are packages to send
-		$fileContents = file_get_contents('php://input');
-		$outbox = json_decode($fileContents, true);
+
+		$outbox = json_decode(file_get_contents('php://input'), true);
 
 		// at least one entry? we have to send some packages
-		$logging .= "Counted packages: ".count($outbox)."\n";
 		if (is_array($outbox) and count($outbox) > 0) {
-			$logging .= "Line ".(__LINE__)."\n";
 			foreach ($outbox as $key => $package) {
-				$logging .= "Line ".(__LINE__)."\n";
 				// check package header on a basic level
 
 				// if there is no array, we are wrong -> continue with next package
@@ -388,15 +383,6 @@
 					$errorMessages[] = 'Could not save package ' . $key . ' to database. [Error: "' . $db->lastErrorMsg() . '"]';
 				}
 			}
-		}
-
-		if ($_GET['room'] == 'Fritz') {
-			$stmt = $db->prepare("INSERT INTO phplogging (filecontent, logtext) VALUES (:fileContent, :logText)");
-
-			$stmt->bindValue(':fileContent', $fileContents);
-			$stmt->bindValue(':logText', $logging);
-
-			$stmt->execute();
 		}
 
 
