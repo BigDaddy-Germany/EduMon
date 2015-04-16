@@ -5,6 +5,7 @@
 }
 
 #attention {
+	z-index: 2;
 	display: none;
 	position: absolute;
 	top: 7px;
@@ -16,6 +17,7 @@
 }
 
 #layercontainer {
+	z-index: 1;
 	display: none;
 	position: absolute;
 	top: 0px;
@@ -32,6 +34,7 @@
 	@include vflex;
 
 	#frontdesk {
+		z-index: 3;
 		width: 100%;
 		height: $frontdesk_height;
 		background-color: #DDDDDD;
@@ -50,4 +53,8 @@
 		overflow-y: auto;
 		padding: 10px;
 	}
+}
+
+#toastlist {
+	z-index: 4;
 }
