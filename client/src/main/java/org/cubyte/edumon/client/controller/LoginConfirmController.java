@@ -12,6 +12,7 @@ import org.cubyte.edumon.client.messaging.messagebody.LoginFeedback;
 import org.cubyte.edumon.client.messaging.messagebody.WhoAmI;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,8 @@ import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
 public class LoginConfirmController implements Controller, Victim<Message> {
     private Main app;
+    ScheduledFuture<?> send;
+    Future<?> execute;
     private int seconds;
 
     @FXML
@@ -55,18 +58,18 @@ public class LoginConfirmController implements Controller, Victim<Message> {
 
         app.getQueue().send();
         app.getQueue().queue(app.getFactory().create(new WhoAmI(app.getName(), app.getSeat())));
-        final ScheduledFuture<?> scheduledFuture = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
+        send = app.getScheduledExecutorService().scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 app.getQueue().send();
             }
         }, 1, 3, TimeUnit.SECONDS);
 
-        app.getScheduledExecutorService().execute(new Runnable() {
+        execute = app.getScheduledExecutorService().submit(new Runnable() {
             @Override
             public void run() {
                 app.getQueue().execute();
-                scheduledFuture.cancel(true);
+                send.cancel(true);
             }
         });
     }
@@ -129,6 +132,8 @@ public class LoginConfirmController implements Controller, Victim<Message> {
 
     public void handleCancel() {
         app.changeScene(SEAT_CHOOSER);
+        send.cancel(true);
+        execute.cancel(true);
     }
 
     @Override

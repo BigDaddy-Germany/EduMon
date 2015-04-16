@@ -70,7 +70,7 @@ public class MessageQueue extends Revolver<Message> {
                     System.err.println("Could not write Json value.");
                     System.err.println(e.getMessage());
                 }
-                jsonString += writer.toString() + ((i == queueSize - 1) ? "" : ",");
+                jsonString += writer.toString() + ((i < queueSize - 1) ? "," : "");
                 writer.flush();
             }
             jsonString += "]";
