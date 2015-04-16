@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -22,6 +23,7 @@ import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -82,11 +84,17 @@ public class MessageQueue extends Revolver<Message> {
             }
         }
 
-        String address = owner.getServer() + "/mailbox.php?room=" + owner.getRoom();
-        if (isModerator) {
-            address += "&moderatorPassphrase=alohomora";
+        URI uri;
+        try {
+            uri = new URI("http://" + owner.getServer() + "/mailbox.php");
+            uri = new URIBuilder(uri).addParameter("room", owner.getRoom()).build();
+        } catch (URISyntaxException e) {
+            System.err.println("Invalid URI.");
+            System.err.println(e.getMessage());
+            return;
         }
-        HttpPost post = new HttpPost(address);
+
+        HttpPost post = new HttpPost(uri);
         post.setEntity(new StringEntity(jsonString, ContentType.create("application/json", "utf-8")));
 
         try (CloseableHttpResponse response = httpClient.execute(post)) {
