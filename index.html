@@ -9,7 +9,31 @@
         <link href="css/app.css" rel="stylesheet">
 	</head>
 	<body>
-        <div id="screen">
+	<div id="devbox">
+		<a href="#" class="devbutton btn btn-primary btn-fab btn-raised" onclick="$('#devbox').toggleClass('opened');">DEVELOPER</a><br>
+		Test:<br>
+		<input type="button" value="Start Lecture" onclick="EduMon.lectureStartDialog();">
+		<input type="button" value="Demo Data" onclick="EduMon.testAllThemAnalytics();">
+		<br>
+		System:<br>
+		<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})">
+		<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
+		<br>
+		UI Dialogs:<br>
+		<input type="button" value="Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
+		<input type="button" value="Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
+		<input type="button" value="Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
+		<input type="button" value="CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
+		<br>
+		Framework:<br>
+		<input type="button" value="Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+		<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')">
+		<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);},true)">
+		<br>
+		Package logging:<br>
+		<textarea id="packageLogging"></textarea>
+	</div>
+	<div id="screen">
             <div id="timepanel" class="panel mypanel">
                 <div id="logo">
                     <h1><img src="images/logo.png">EduMon</h1>
@@ -50,31 +74,6 @@
 							<a href="#" id="btnThumbs" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-thumbs-up"></a>
 							<a href="#" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-star"></a>
 							<a href="#" id="btnSettings" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-cog"></a>
-						</div>
-					</div>
-					<div id="devbox" class="panel panel-info">
-						<div class="panel-heading">
-							<h3 class="panel-title">DEVELOPER</h3>
-						</div>
-						<div class="panel-body">
-							Test:<br>
-							<input type="button" value="Start Lecture" onclick="EduMon.lectureStartDialog();"><br>
-							<input type="button" value="Demo Data" onclick="EduMon.testAllThemAnalytics();"><br>
-							System:<br>
-							<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})"><br>
-							<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})"><br>
-							UI Dialogs:<br>
-							<input type="button" value="Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })"><br>
-							<input type="button" value="Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })"><br>
-							<input type="button" value="Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });"><br>
-							<input type="button" value="CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });"><br>
-							Framework:<br>
-							<input type="button" value="Dialog" onclick="EduMon.Gui.showDialog('dummy')"><br>
-							<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')"><br>
-							<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);},true)"><br>
-							<br>
-							Package logging:<br>
-							<textarea id="packageLogging"></textarea>
 						</div>
 					</div>
 				</div>
