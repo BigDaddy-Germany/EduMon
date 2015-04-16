@@ -3,7 +3,6 @@ EduMon.Gui = new function() {
 
 	var seatUpdateInterval = 2000; //milliseconds
 	var seatUpdateTimer = undefined;
-	var actionTimer = undefined;
 
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
@@ -351,67 +350,6 @@ EduMon.Gui = new function() {
 
 
 	/**
-	 * Update the feedback thumbs and percentage display
-	 * @method updateThumbs
-	 * @param {Float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
-	 * @return undefined
-	 */
-	this.updateThumbs = function(voting){
-		var degrees = Math.round((1-voting)*180);
-		var percent = Math.round(voting*100);
-
-		$("#pultup .feedback .thumb img:first-of-type").css("transform","rotate("+degrees+"deg)");
-		$("#pultup .feedback .thumb img:last-of-type").css("transform","rotate(-"+degrees+"deg) scaleX(-1)");
-		$("#pultup .feedback .thumb .value").text(percent+"%");
-	};
-
-
-	/**
-	 * Update star rating
-	 * @method updateRating
-	 * @param {Float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
-	 * @return undefined
-	 */
-	this.updateRating = function(voting){
-		var percent = Math.round(voting*100);
-		var stars = Math.round(voting*5);
-
-		for(var i=1; i<=5; i++){
-			var fillStar = (i<=stars);
-			$("#pultup .feedback .rating i:nth-of-type(0n+"+i+")").toggleClass("glyphicon-star",fillStar).toggleClass("glyphicon-star-empty",!fillStar);
-		}
-		$("#pultup .feedback .rating .value").text(percent+"%");
-	};
-
-
-	/**
-	 * Starts (and optionally resets) the action timer in the pult-up display
-	 * @method restartActionTimer
-	 * @param {Boolean} reset Execute time reset (e.g. use false to restore app state)
-	 * @return undefined
-	 */
-	this.restartActionTimer = function(reset){
-		if (reset){
-			EduMon.Prefs.currentLecture.gui.actionTime = -1;
-		}
-
-		if (typeof actionTimer !== 'undefined'){
-			clearInterval(actionTimer);
-		}
-
-		var incrementor = function(){
-			var seconds = ++EduMon.Prefs.currentLecture.gui.actionTime;
-			var minutes = (seconds-(seconds%60))/60;
-			seconds -= minutes*60;
-			seconds = ("0"+seconds).slice(-2);
-			$("#pultup .stats .time .value").text(minutes+":"+seconds);
-		};
-		actionTimer = setInterval(incrementor,1000);
-		incrementor();
-	};
-
-
-	/**
 	 * Starts (and optionally resets) the action timer in the pult-up display
 	 * @method togglePultup
 	 * @param {Boolean} [state] Show (true) or hide (false) pult-up display, if not given the state is toggled
@@ -426,15 +364,16 @@ EduMon.Gui = new function() {
 	 * Present pult-up and initialize it
 	 * @method openPultUpMode
 	 * @param {string} mode Pult up mode to show
+	 * @param {function} firstUpdate Update function, is called once once pult-up was pulled down
 	 * @return undefined
 	 */
-	this.openPultUpMode = function(mode){
+	this.openPultUpMode = function(mode, firstUpdate){
 		$("#pultup").addClass("inactive");
 		setTimeout(function(){
 			$("#pultup").removeClass("wheel thumb rating").addClass(mode).removeClass("inactive");
-			that.restartActionTimer(true);
-			$("#pultup .stats .participation .value").text("0");
-		},500);
+			firstUpdate();
+			EduMon.Feedback.restartActionTimer(true);
+		},800);
 	};
 
 
