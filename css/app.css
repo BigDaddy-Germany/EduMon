@@ -180,7 +180,7 @@ body {
 #room {
   flex-grow: 1;
   width: 100%;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
   display: flex;
   flex-direction: column; }
   #room #frontdesk {
@@ -536,8 +536,8 @@ body {
       #pultup #drawer .feedback .thumb .value {
         font-size: 50px; }
       #pultup #drawer .feedback .thumb img {
-        margin-top: -2px;
-        height: 90px;
+        margin-top: -20px;
+        height: 80px;
         transition: transform 0.5s; }
       #pultup #drawer .feedback .thumb img:first-of-type {
         margin-right: 30px; }
