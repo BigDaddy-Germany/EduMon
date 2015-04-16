@@ -84,7 +84,8 @@ body {
     height: 100%;
     padding: 0px;
     text-align: right;
-    vertical-align: top; }
+    vertical-align: top;
+    transition: width 0.6s ease; }
     #hourdisplay .hour .start {
       position: absolute;
       top: 0px;
@@ -469,6 +470,10 @@ body {
   #pultup.thumb *.wheel, #pultup.thumb *.rating {
     display: none; }
   #pultup.rating *.thumb, #pultup.rating *.wheel {
+    display: none; }
+  #pultup.inactive .handle i.glyphicon-menu-down {
+    display: none; }
+  #pultup:not(.inactive) .handle i.glyphicon-menu-up {
     display: none; }
   #pultup .handle {
     display: inline-block;
