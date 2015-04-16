@@ -423,6 +423,22 @@ EduMon.Gui = new function() {
 
 
 	/**
+	 * Present pult-up and initialize it
+	 * @method openPultUpMode
+	 * @param {string} mode Pult up mode to show
+	 * @return undefined
+	 */
+	this.openPultUpMode = function(mode){
+		$("#pultup").addClass("inactive");
+		setTimeout(function(){
+			$("#pultup").removeClass("wheel thumb rating").addClass(mode).removeClass("inactive");
+			that.restartActionTimer(true);
+			$("#pultup .stats .participation .value").text("0");
+		},500);
+	};
+
+
+	/**
 	 * Initialize GUI (bind click handlers)
 	 * @method init
 	 * @return undefined
