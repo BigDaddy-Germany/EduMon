@@ -3,6 +3,7 @@ EduMon.Gui = new function() {
 
 	var seatUpdateInterval = 2000; //milliseconds
 	var seatUpdateTimer = undefined;
+	var actionTimer = undefined;
 
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
@@ -382,6 +383,43 @@ EduMon.Gui = new function() {
 		$("#pultup .feedback .rating .value").text(percent+"%");
 	};
 
+
+	/**
+	 * Starts (and optionally resets) the action timer in the pult-up display
+	 * @method restartActionTimer
+	 * @param {Boolean} reset Execute time reset (e.g. use false to restore app state)
+	 * @return undefined
+	 */
+	this.restartActionTimer = function(reset){
+		if (reset){
+			EduMon.Prefs.currentLecture.gui.actionTime = -1;
+		}
+
+		if (typeof actionTimer !== 'undefined'){
+			clearInterval(actionTimer);
+		}
+
+		var incrementor = function(){
+			var seconds = ++EduMon.Prefs.currentLecture.gui.actionTime;
+			var minutes = (seconds-(seconds%60))/60;
+			seconds -= minutes*60;
+			seconds = ("0"+seconds).slice(-2);
+			$("#pultup .stats .time .value").text(minutes+":"+seconds);
+		};
+		actionTimer = setInterval(incrementor,1000);
+		incrementor();
+	};
+
+
+	/**
+	 * Starts (and optionally resets) the action timer in the pult-up display
+	 * @method togglePultup
+	 * @param {Boolean} [state] Show (true) or hide (false) pult-up display, if not given the state is toggled
+	 * @return undefined
+	 */
+	this.togglePultup = function(state){
+		$("#pultup").toggleClass("inactive",(state===undefined?state:!state));
+	};
 
 
 	/**

@@ -16,6 +16,9 @@
 	&.thumb  *.wheel, &.thumb  *.rating { display: none; }
 	&.rating *.thumb, &.rating *.wheel  { display: none; }
 
+	&.inactive       .handle i.glyphicon-menu-down  { display: none; }
+	&:not(.inactive) .handle i.glyphicon-menu-up    { display: none; }
+
 	.handle {
 		display: inline-block;
 		width: 50px;

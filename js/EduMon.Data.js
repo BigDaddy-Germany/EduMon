@@ -180,6 +180,10 @@ EduMon.Data = new function() {
 					outgoingPackageId: 1,
 					serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
 					moderatorPassphrase: "alohomora"
+				},
+
+				gui: {
+					actionTime: -1
 				}
 			};
 		}

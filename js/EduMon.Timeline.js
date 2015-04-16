@@ -206,7 +206,7 @@ EduMon.Timeline = new function() {
 			progressDisplay.children().eq(i)
 				.width(barPercentage+"%")
 				.toggleClass("active",isLastBar && timeline.status!=="stop");
-			hourDisplay.children().eq(i).animate({"width":barPercentage+"%"},450);
+			hourDisplay.children().eq(i).css("width",barPercentage+"%");
 
 			//time only accumulates in the latest slice
 			if (i==timeline.slices.length-1){ 
