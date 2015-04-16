@@ -118,13 +118,15 @@ EduMon.Timeline = new function() {
 	 * @return undefined
 	 */
 	var tick = function(onlyUpdate) {
-		var timeline = EduMon.Prefs.currentLecture.timeline;
-		if (onlyUpdate!==true && EduMon.Prefs.currentLecture.timeline.status!=="stop"){
-			var currentSlice = timeline.slices[timeline.slices.length-1];
-			currentSlice.seconds += tick_value;
-			timeline.totalSeconds += tick_value;
+		if (typeof EduMon.Prefs.currentLecture.timeline !== "undefined"){
+			var timeline = EduMon.Prefs.currentLecture.timeline;
+			if (onlyUpdate!==true && EduMon.Prefs.currentLecture.timeline.status!=="stop"){
+				var currentSlice = timeline.slices[timeline.slices.length-1];
+				currentSlice.seconds += tick_value;
+				timeline.totalSeconds += tick_value;
+			}
+			updateTimeline();
 		}
-		updateTimeline();
 	};
 
 	/**
