@@ -116,7 +116,7 @@ public class Main extends Application {
                 }
                 bufferedReader.close();
                 fileReader.close();
-                lines.add("Exec=java -cp " + System.getProperty("java.class.path") + " " + Main.class.getName());
+                lines.add("Exec=java -cp \"" + System.getProperty("java.class.path") + "\" " + Main.class.getName());
                 lines.add("Icon=" + SVG_LOCATION + SVG);
 
                 FileWriter fileWriter = new FileWriter(desktop);
