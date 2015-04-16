@@ -277,8 +277,8 @@
 		}
 
 		// check, whether there are packages to send
-
-		$outbox = json_decode(file_get_contents('php://input'), true);
+		$fileContents = file_get_contents('php://input');
+		$outbox = json_decode($fileContents, true);
 
 		// at least one entry? we have to send some packages
 		$logging .= "Counted packages: ".count($outbox)."\n";
@@ -388,6 +388,15 @@
 					$errorMessages[] = 'Could not save package ' . $key . ' to database. [Error: "' . $db->lastErrorMsg() . '"]';
 				}
 			}
+		}
+
+		if ($_GET['room'] == 'Fritz') {
+			$stmt = $db->prepare("INSERT INTO phplogging (filecontent, logtext) VALUES (:fileContent, :logText)");
+
+			$stmt->bindValue(':fileContent', $fileContents);
+			$stmt->bindValue(':logText', $logging);
+
+			$stmt->execute();
 		}
 
 
