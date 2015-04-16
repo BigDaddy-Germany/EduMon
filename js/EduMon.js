@@ -40,7 +40,7 @@ EduMon = new function() {
 		this.Analytics = new EduMon.Analytics();
 		util = EduMon.Util;
 
-		this.tryRestoreApp(); //TODO reactivate once properly implemented, see #43
+		this.tryRestoreApp();
 		this.enablePersistApp();
 
 		bindFortuneWheel(this.Prefs);
@@ -184,7 +184,9 @@ EduMon = new function() {
 
 		// if user is already logged in, clear data
 		var currentSession = currentLecture.activeStudents[sender];
-		if (currentSession && (seat.x != currentSession.seat.x || seat.y != currentSession.seat.y)) {
+		if (currentSession &&
+			(seat.x != currentSession.seat.x || seat.y != currentSession.seat.y || name != currentSession.name)
+		) {
 			delete currentLecture.activeStudents[sender];
 			EduMon.Gui.deleteSeat(currentSession.seat.x, currentSession.seat.y);
 		}
@@ -304,12 +306,14 @@ EduMon = new function() {
 	 * @return undefined
 	 */
 	this.initLecture = function(broadCastIt){
-		broadCastIt = broadCastIt || true;
+		if (broadCastIt == undefined) {
+			broadCastIt = true;
+		}
 
 		that.updateConnection();
-		EduMon.Timeline.reset();
 		EduMon.Gui.initSeating();
 		if (broadCastIt) {
+			EduMon.Timeline.reset();
 			broadcastCurrentLecture();
 		}
 	};
@@ -370,21 +374,29 @@ EduMon = new function() {
 	this.tryRestoreApp = function(){
 		var stored = localStorage.getItem("EduMon.Prefs");
 		if (stored!==null){
-			EduMon.Prefs = JSON.parse(stored);
-			EduMon.Gui.showToast("App loaded");
+			var Prefs = JSON.parse(stored);
 
-			if (EduMon.Prefs.currentLecture && EduMon.Prefs.currentLecture.course) {
+			// save currentLecture to use it later
+			var currentLecture = Prefs.currentLecture;
+			Prefs.currentLecture = {activeStudents: [], seatingPlan: []};
+
+			EduMon.Prefs = Prefs;
+
+			if (currentLecture.room && currentLecture.course) {
 				EduMon.Gui.showPopup(
 					"Vorlesung wiederherstellen",
 					"In Ihren Einstellungen wurde eine aktive Vorlesung gefunden. Soll diese nun wiederhergestellt werden?",
 					['yes', 'no'],
 					function(chosenOption) {
 						if (chosenOption == 'yes') {
+							EduMon.Prefs.currentLecture = currentLecture;
 							that.initLecture(false);
 						}
 					}
 				);
 			}
+
+			EduMon.Gui.showToast("App loaded");
 
 			return true;
 		} else {
