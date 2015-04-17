@@ -84,6 +84,10 @@ EduMon = new function() {
 		}
 	};
 
+	this.processPacketPublic = function(packet) {
+		processPacket(packet);
+	};
+
 
 	/**
 	 * Process single packet 
