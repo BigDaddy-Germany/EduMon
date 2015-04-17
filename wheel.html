@@ -40,7 +40,7 @@
 			</div>
 			<div id="wheel_lower">
 				<div>
-					<span>Modus</span>
+					<label for="mode">Modus</label>
 					<select id="mode">
 						<option value="slim">Ausdünnend</option>
 						<option value="drop">Ausschließend</option>
@@ -48,10 +48,10 @@
 					</select>
 				</div>
 				<div>
-					<span>Auswahl</span>
+					<label for="selection">Auswahl</label>
 					<select id="selection">
-						<option value="0">Studenten</option>
-						<option value="1">Gruppen</option>
+						<option value="students">Studenten</option>
+						<option value="groups">Gruppen</option>
 					</select>
 				</div>
 			</div>
@@ -59,16 +59,16 @@
         <script>
 			var KEY = {
 				SPACE: 32,
-				M: 77,
 				A: 65,
+				M: 77,
 				F5: 116
 			};
 
 			var messages = [
-					'Glücksminister präsentiert',
-					'Exklusiv an der DHBW',
-					'Live und in Farbe',
-					'12345 ist kein sicheres Passwort'
+				'Glücksminister präsentiert',
+				'Exklusiv an der DHBW',
+				'Live und in Farbe',
+				'12345 ist kein sicheres Passwort'
 			];
 
 			$('#message').text(messages[Math.floor(Math.random() * messages.length)]);
@@ -101,6 +101,12 @@
 			var selectionSelection = $('#selection');
 			var wheel = new EduMon.Wheel(canvas[0], [["No segments yet :(", 1.0]]);
 			var selectedMode = modes[modeSelection.val()];
+			var selections = {
+				students: [],
+				groups: []
+			};
+
+			var selection = selections.students;
 
             var task = -1;
 			var minDelay = 2000;
@@ -163,15 +169,26 @@
 				}
 			}
 
-			function switchMode(mode) {
-				if (!mode) {
-					mode = modeSelection.find(':selected').next().val();
-					if (!mode) {
-						mode = modeSelection.find(':first').val();
+			function switchMode(modeName) {
+				if (!modeName) {
+					modeName = modeSelection.find(':selected').next().val();
+					if (!modeName) {
+						modeName = modeSelection.find(':first').val();
 					}
 				}
-				selectedMode = modes[mode];
-				modeSelection.val(mode);
+				selectedMode = modes[modeName];
+				modeSelection.val(modeName);
+			}
+
+			function switchSelection(selectionName) {
+				if (!selectionName) {
+					selectionName = selectionSelection.find(':selected').next().val();
+					if (!selectionName) {
+						selectionName = selectionSelection.find(':first').val();
+					}
+				}
+				selection = selections[selectionName];
+				selectionSelection.val(selectionName);
 			}
 
 			$(window).on('keydown', handleKeyDown).on('keyup', handleKeyUp);
