@@ -345,6 +345,9 @@ EduMon = new function() {
 	 */
 	this.stopLecture = function(){
 		EduMon.sendPacket({command:'stop'});
+		EduMon.Prefs.currentLecture = {
+			activeStudents: [], seatingPlan: []
+		};
 	};
 
 	/**
@@ -369,7 +372,7 @@ EduMon = new function() {
 			setInterval(function(){
 				localStorage.setItem("EduMon.Prefs",JSON.stringify(EduMon.Prefs));
 				//EduMon.Gui.showToast("App state saved");
-			},10000); //persist every 10sec
+			},1000); //persist every 1sec
 		},5000); //start persisting app after 5sec
 	};
 

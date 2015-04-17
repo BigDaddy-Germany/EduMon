@@ -53,6 +53,7 @@ EduMon.CSV = new function() {
 
 				if (char == separator) {
 					// got a separator? next col
+					csvArray[row][col] = csvArray[row][col].trim();
 					++col;
 					continue;
 				}
@@ -63,6 +64,7 @@ EduMon.CSV = new function() {
 				}
 				if (char == '\r' || char == '\n') {
 					// linebreak indicates new row, starting at col 0
+					csvArray[row][col] = csvArray[row][col].trim();
 					++row;
 					col = 0;
 					continue;
@@ -74,45 +76,15 @@ EduMon.CSV = new function() {
 					continue;
 				}
 
-				if (char != ' ' && char != '\t') {
-					// everything, which is no blank or tab can be added to the field
-					csvArray[row][col] += char;
-				}
+				// everything else can be added to the field
+				csvArray[row][col] += char;
 			}
 		}
 
+		if (csvArray[row] && csvArray[row][col]) {
+			csvArray[row][col] = csvArray[row][col].trim();
+		}
+
 		return csvArray;
-	};
-
-
-	/**
-	 * Creates a course from a given CSV String
-	 * @param {String} courseName the name, the new created course should get
-	 * @param {String} csvString A String containing the CSV to import
-	 * @param {String} [separator] The field separator of the CSV
-	 * @param {String} [delimiter] The field delimiter of the CSV
-	 * @param {Boolean} [headerLine=false] Does the CSV contain a header line?
-	 * @param {int} [positionName=0] on which position is the name field?
-	 * @param {int} [positionTeam=1] on which position is the team field?
-	 * @returns {EduMon.Data.Course} The generated course
-	 */
-	this.createCourseFromCsv = function createCourseFromCsv(courseName, csvString, separator, delimiter, headerLine, positionName, positionTeam) {
-		headerLine = headerLine || false;
-		positionName = positionName || 0;
-		positionTeam = positionTeam || 1;
-
-		var students = [];
-		var parsedCsv = that.parseCsv(csvString, separator, delimiter);
-
-		parsedCsv.forEach(function (csvLine) {
-			// skip first line, if headerLine is true
-			if (headerLine) {
-				headerLine = false;
-			} else {
-				students.push(EduMon.Data.Student(csvLine[positionName], csvLine[positionTeam]));
-			}
-		});
-
-		return EduMon.Data.Course(courseName, students);
 	};
 };

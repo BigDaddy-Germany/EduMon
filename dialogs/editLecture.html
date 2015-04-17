@@ -1,19 +1,36 @@
 <div id="dialogContainer">
 	<header>
-		<h2>Edit Lecture</h2>
-		<h3>Please insert your content here</h3>
+		<h2>Verwaltung</h2>
+		<h3>Vorlesung bearbeiten</h3>
 	</header>
 		<input type="hidden" id="whoami">
-		Please insert data etc.:<br><br>
-		Lecture name: <input type="text" id="lectureName"><br><br>
-		Room: <select id="lectureRoom" style="width: 200px;"></select>
-			<span id="lectureEditRoom">[edit]</span><span id="lectureNewRoom">[add]</span><span id="lectureDelRoom">[del]</span><br>
-		Course: <select id="lectureCourse" style="width: 200px;"></select>
-			<span id="lectureEditCourse">[edit]</span><span id="lectureNewCourse">[add]</span><span id="lectureDelCourse">[del]</span><br>
+		Bitte geben Sie hier die Daten zur Vorlesung an:<br><br>
+	<table border="0">
+		<tr><td><label for="lectureName">Name: </label></td><td><input style="width: 200px;" type="text" id="lectureName"></td></tr>
+		<tr>
+			<td>
+				<label for="lectureRoom">Raum: </label></td>
+			<td>
+				<select id="lectureRoom" style="width: 200px;"></select>
+				<span class="smallBtn glyphicon glyphicon-pencil" id="lectureEditRoom"></span>
+				<span class="smallBtn glyphicon glyphicon-plus" id="lectureNewRoom"></span>
+				<span class="smallBtn glyphicon glyphicon-remove" id="lectureDelRoom"></span>
+			</td>
+		</tr>
+		<tr>
+			<td><label for="lectureCourse">Kurs: </label></td>
+			<td>
+				<select id="lectureCourse" style="width: 200px;"></select>
+				<span class="smallBtn glyphicon glyphicon-pencil" id="lectureEditCourse"></span>
+				<span class="smallBtn glyphicon glyphicon-plus" id="lectureNewCourse"></span>
+				<span class="smallBtn glyphicon glyphicon-remove" id="lectureDelCourse"></span>
+			</td>
+		</tr>
+	</table>
 
 	<footer>
-		<button id="dialogBtnBack" type="button" class="btn btn-default">Abort</button>
-		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Save Data</button>
+		<button id="dialogBtnBack" type="button" class="btn btn-default">Abbrechen</button>
+		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Speichern</button>
 	</footer>
 </div>
 
@@ -56,7 +73,7 @@
 			if (!EduMon.Prefs.courses[courseId]) {
 				return;
 			}
-			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this course?', ['yes','no'], function(value) {
+			EduMon.Gui.showPopup('Löschen', 'Wollen Sie diesen Kurse wirklich löschen?', ['yes','no'], function(value) {
 				if (value == 'yes') {
 					EduMon.UserInteraction.checkAndDelete('course', courseId, $('#lectureCourse'));
 				}
@@ -102,7 +119,7 @@
 			if (!EduMon.Prefs.rooms[roomId]) {
 				return;
 			}
-			EduMon.Gui.showPopup('Delete', 'Do you really want to delete this room?', ['yes','no'], function(value) {
+			EduMon.Gui.showPopup('Löschen', 'Wollen Sie diesen Raum wirklich löschen?', ['yes','no'], function(value) {
 				if (value == 'yes') {
 					EduMon.UserInteraction.checkAndDelete('room', roomId, $('#lectureRoom'));
 				}

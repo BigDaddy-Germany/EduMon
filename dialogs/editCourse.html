@@ -1,25 +1,29 @@
 <div id="dialogContainer">
 	<header>
-		<h2>Edit Course</h2>
-		<h3>Please insert your content here</h3>
+		<h2>Verwaltung</h2>
+		<h3>Kurs bearbeiten</h3>
 	</header>
-		Please insert data etc.:<br><br>
-		Course name: <input type="text" id="courseName"><br><br>
-		Members:<br>
+		Bitte geben Sie hier die Daten des Kurses an:<br><br>
+		<label for="courseName">Name des Kurses: </label><input type="text" id="courseName"><br><br>
+		<h4>Mitglieder:</h4>
 
-
-		<div class="courseMemberLine">
-			Name: <input type="text" class="courseMemberName">
-			Group <input type="text" class="courseMemberGroup">
-			<span class="courseMemberDelete">[-]</span>
-		</div>
-		<div id="courseMemberAdd">[+]</div>
+		<table>
+			<tr class="courseMemberLine">
+				<td>Name: </td>
+				<td><input type="text" class="courseMemberName"></td>
+				<td>Gruppe: </td>
+				<td><input type="text" class="courseMemberGroup"></td>
+				<td><span class="courseMemberDelete smallBtn glyphicon glyphicon-remove"></span></td>
+			</tr>
+		</table>
+		<br><br>
+		<div id="courseMemberAdd" class="smallBtn"><span class="glyphicon glyphicon-plus"></span> Reihe einfügen</div>
 
 		<br><br>
-		<span id="courseCsvImport">[CSV Import]</span>
+		<span id="courseCsvImport" class="smallBtn"><span class="glyphicon glyphicon-import"></span> Mitglieder aus CSV importieren</span>
 	<footer>
-		<button id="dialogBtnBack" type="button" class="btn btn-default">Abort</button>
-		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Save Data</button>
+		<button id="dialogBtnBack" type="button" class="btn btn-default">Abbrechen</button>
+		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Speichern</button>
 	</footer>
 </div>
 
@@ -29,7 +33,7 @@
 	 * @param {{target: Object}} event the event triggered by the click on the minus button
 	 */
 	function courseDeleteMember(event) {
-		var member = $(event.target).parent();
+		var member = $(event.target).closest('.courseMemberLine');
 
 		var lineCount = $('.courseMemberLine').length;
 		if (lineCount > 1) {
@@ -83,7 +87,6 @@
 		});
 
 		// clear empty rows
-		debugger;
 		// has to be loaded again, because of changes
 		$('.courseMemberName').each(function() {
 			if ($(this).val().trim() == '') {

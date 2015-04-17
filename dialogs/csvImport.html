@@ -1,16 +1,20 @@
 <div id="dialogContainer">
 	<header>
-		<h2>CSV Import</h2>
-		<h3>Please insert your content here</h3>
+		<h2>Import</h2>
+		<h3>CSV-Daten importieren</h3>
 	</header>
-		To import users using CSV, please paste the CSV file's content here:<br><br>
-		<textarea id="csvContent" style="width: 80%; height: 400px;"></textarea><br><br>
-		Field separator: <input type="text" id="csvSeparator" value="," style="width: 20px;"><br>
-		Field delimiter: <input type="text" id="csvDelimiter" value='"' style="width: 20px;"><br><br>
-		Recognized sets of data: <span id="csvDataCount">0</span>
+		Zum Import von Daten, fügen Sie diese bitte in das untenstehende Eingabefeld ein.<br>
+		Die erste Spalte wird als Name des Mitglieds erkannt. Die zweite als dessen Gruppe.
+		<br><br>
+		<textarea id="csvContent" style="width: 95%; height: 250px;"></textarea><br><br>
+		<table>
+			<tr><td><label for="csvSeparator">Feld-Trennzeichen: </label></td><td><input type="text" id="csvSeparator" value="," style="width: 20px;"></td></tr>
+			<tr><td><label for="csvDelimiter">Feld-Begrenzer: </label></td><td><input type="text" id="csvDelimiter" value='"' style="width: 20px;"></td></tr>
+			<tr><td>Erkannte Datensätze: </td><td><span id="csvDataCount">0</span></td></tr>
+		</table>
 	<footer>
-		<button id="dialogBtnBack" type="button" class="btn btn-default">Abort</button>
-		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Import</button>
+		<button id="dialogBtnBack" type="button" class="btn btn-default">Abbrechen</button>
+		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Importieren</button>
 	</footer>
 </div>
 
