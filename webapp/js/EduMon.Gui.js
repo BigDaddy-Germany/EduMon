@@ -393,6 +393,9 @@ EduMon.Gui = new function() {
 		$("#btnThumbs").off("click").click(function(){
 			EduMon.Feedback.requestFeedback("thumb");
 		});
+		$("#btnRating").off("click").click(function(){
+			EduMon.Feedback.requestFeedback("rating");
+		});
 		$("#pultup .handle").off("click").click(function(){
 			EduMon.Gui.togglePultup();
 		});
