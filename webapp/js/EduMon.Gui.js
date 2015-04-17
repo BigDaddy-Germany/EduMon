@@ -200,8 +200,8 @@ EduMon.Gui = new function() {
 	 * @param {String} title Popup title
 	 * @param {String} message (HTML-)Message to be displayed
 	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
-	 * @param {Function} callback Function to call after popup has been answered, value of chosen button is passed as first parameter
-	 * @param {Boolean} attentionAbort Flash for attention if dialog cannot be opened
+	 * @param {Function} [callback=function() {}] Function to call after popup has been answered, value of chosen button is passed as first parameter
+	 * @param {Boolean} [attentionAbort=false] Flash for attention if dialog cannot be opened
 	 * @return undefined
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
@@ -396,8 +396,11 @@ EduMon.Gui = new function() {
 		$("#btnRating").off("click").click(function(){
 			EduMon.Feedback.requestFeedback("rating");
 		});
-		$("#pultup .handle").off("click").click(function(){
+		$("#pultup").find(".handle").off("click").click(function(){
 			EduMon.Gui.togglePultup();
+		});
+		$('#btnRemoveData').off('click').on('click', function() {
+			EduMon.Gui.showDialog('deleteData');
 		});
 	};
 };

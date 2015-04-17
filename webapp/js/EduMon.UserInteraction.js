@@ -25,7 +25,9 @@ EduMon.UserInteraction = new function() {
 
         // get the selected lecture
         var valueCalculator = function() {
-            return $('#startId').val().trim();
+            var val = $('#startId').val();
+
+            return val ? val.trim() : '';
         };
 
         // load all lectures and insert them into the select
@@ -53,7 +55,7 @@ EduMon.UserInteraction = new function() {
         // check, whether the given lecture exists
         var validator = function(value) {
             if (!EduMon.Prefs.lectures[value]) {
-                return 'Please select a valid lecture.';
+                return 'Bitte wählen Sie eine gültige Vorlesung aus oder legen Sie diese an.';
             }
             return true;
         };
@@ -166,10 +168,10 @@ EduMon.UserInteraction = new function() {
         // checks, that names are unique
         var validator = function(values) {
             if (values.name == '') {
-                return 'Every course must get a name.';
+                return 'Jedem Kurs muss ein Name zugewiesen werden.';
             }
             if (values.students.length == 0) {
-                return 'At least one student is needed.';
+                return 'Jeder Kurs benötigt mindestens einen Studenten.';
             }
             var givenNames = [];
             var duplicate = false;
@@ -182,7 +184,7 @@ EduMon.UserInteraction = new function() {
             });
 
             if (duplicate) {
-                return 'Names of students have to be unique.';
+                return 'Zur Identifikation müssen die Namen der Studenten eindeutig sein.';
             }
             return true;
         };
@@ -204,9 +206,12 @@ EduMon.UserInteraction = new function() {
 
         // get the values out of the fields
         var valueCalculator = function() {
+            var roomValue = $('#lectureRoom').val();
+            var courseValue = $('#lectureCourse').val();
+
             var lectureName = $('#lectureName').val().trim();
-            var lectureRoom = $('#lectureRoom').val().trim();
-            var lectureCourse = $('#lectureCourse').val().trim();
+            var lectureRoom = roomValue ? roomValue.trim() : '';
+            var lectureCourse = courseValue ? courseValue.trim() : '';
 
             return EduMon.Data.Lecture(lectureName, lectureRoom, lectureCourse);
         };
@@ -251,13 +256,13 @@ EduMon.UserInteraction = new function() {
         // checks, that all fields are selected and room and course do exist
         var validator  = function(values) {
             if (values.lectureName == '') {
-                return 'The lecture name may not be empty.';
+                return 'Der Name der Vorlesung darf nicht leer sein.';
             }
             if (!EduMon.Prefs.rooms[values.room]) {
-                return 'The selected room does not exist.';
+                return 'Der ausgewählte Raum existiert nicht.';
             }
             if (!EduMon.Prefs.courses[values.course]) {
-                return 'The selected course does not exist.';
+                return 'Die ausgewählte Kurs existiert nicht.';
             }
             return true;
         };
@@ -301,10 +306,10 @@ EduMon.UserInteraction = new function() {
         // check, that all values are valid
         var validator = function(values) {
             if (values.roomName == '') {
-                return 'The room name may not be empty.';
+                return 'Der Raum muss einen Namen tragen.';
             }
-            if (isNaN(values.width) || isNaN(values.height)) {
-                return 'Please enter valid values for width and height.';
+            if (isNaN(values.width) || isNaN(values.height) || values.width <= 0 || values.height <= 0) {
+                return 'Die Höhe und Breite muss in positiven Zahlen angegeben werden.';
             }
             return true;
         };
@@ -419,6 +424,7 @@ EduMon.UserInteraction = new function() {
                                     .catch(reject);
                             }
                         });
+                    $('.smallBtn').css('cursor', 'pointer');
                 })
                 .catch(reject);
         });
@@ -468,13 +474,13 @@ EduMon.UserInteraction = new function() {
             var errorMsg;
             switch(deletionErrors) {
                 case 1:
-                    errorMsg = 'There has to be at least one entity.';
+                    errorMsg = 'Es muss mindestens eine Ressource existieren.';
                     break;
                 case 2:
-                    errorMsg = 'This entity is still used.';
+                    errorMsg = 'Diese Ressource wird noch verwendet.';
                     break;
                 case 3:
-                    errorMsg = 'Unknown deletion error.';
+                    errorMsg = 'Unbekannter Fehler.';
                     break;
             }
 

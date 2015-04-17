@@ -1,15 +1,17 @@
 <div id="dialogContainer">
     <header>
-        <h2>Lectures</h2>
-        <h3>You can manage and start lectures here</h3>
+        <h2>Verwaltung</h2>
+        <h3>Alle Vorlesungen</h3>
     </header>
-    Please choose a lecture and your option:<br><br>
-    Lecture: <select id="startId" style="width: 200px;"></select>
-    <span id="startEdit">[edit]</span><span id="startNew">[add]</span><span id="startDel">[del]</span>
+    Bitte wählen Sie eine Vorlesungen und die gewünschte Option:<br><br>
+    Vorlesung: <select id="startId" style="width: 200px;"></select>
+    <span id="startEdit" class="smallBtn glyphicon glyphicon-pencil"></span>
+    <span id="startNew" class="smallBtn glyphicon glyphicon-plus"></span>
+    <span id="startDel" class="smallBtn glyphicon glyphicon-remove"></span>
 
     <footer>
-        <button id="dialogBtnBack" type="button" class="btn btn-default">Abort</button>
-        <button id="dialogBtnSubmit" type="button" class="btn btn-primary">Start Lecture</button>
+        <button id="dialogBtnBack" type="button" class="btn btn-default">Abbrechen</button>
+        <button id="dialogBtnSubmit" type="button" class="btn btn-primary">Vorlesung starten</button>
     </footer>
 </div>
 
@@ -55,7 +57,7 @@
             if (!EduMon.Prefs.lectures[startId]) {
                 return;
             }
-            EduMon.Gui.showPopup('Delete', 'Do you really want to delete this lecture?', ['yes','no'], function(value) {
+            EduMon.Gui.showPopup('Lösen', 'Wollen Sie die Vorlesung wirklich löschen?', ['yes','no'], function(value) {
                 if (value == 'yes') {
                     EduMon.UserInteraction.checkAndDelete('lecture', startId, $('#startId'));
                 }
