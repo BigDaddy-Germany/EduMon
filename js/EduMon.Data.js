@@ -72,6 +72,8 @@ EduMon.Data = new function() {
 			status: "stop", // "stop" | "play" | "pause"
 				totalSeconds: 1, //start value 1 is intended
 				start: "",
+				started: false, //lecture started yet
+				ended: false, //lecture over
 				slices: [/*
 							Elements:
 							seconds: 1337,
@@ -101,95 +103,102 @@ EduMon.Data = new function() {
 	 * @return 
 	 */
 	this.createCurrentLecture = function(lectureId) {
-		if (EduMon.Prefs.lectures[lectureId]) {
-			var lectureObject = EduMon.Prefs.lectures[lectureId];
-			var roomObject = EduMon.Prefs.rooms[lectureObject.room];
-			var courseObject = EduMon.Prefs.courses[lectureObject.course];
+		var lectureObject = undefined;
+		var roomObject = undefined;
+		var courseObject = undefined;
+		var lectureName = undefined;
+
+		if (lectureId !== undefined && EduMon.Prefs.lectures[lectureId]) {
+			lectureObject = EduMon.Prefs.lectures[lectureId];
+			roomObject = EduMon.Prefs.rooms[lectureObject.room];
+			courseObject = EduMon.Prefs.courses[lectureObject.course];
+			lectureName = lectureObject.lectureName;
 			/*
-				 we only need IDs inside the course, because it's only to start the broadcast once
-				 Everything, which is needed to calculate or something similar should be copied
-				 (like analytics or timeline)
-			 */
+			   we only need IDs inside the course, because it's only to start the broadcast once
+			   Everything, which is needed to calculate or something similar should be copied
+			   (like analytics or timeline)
+			   */
+		}
 
-			return {
-				lectureName: lectureObject.lectureName,
-				room: roomObject,
-				course: courseObject,
-				activeStudents: {/*
-					'44aa488f082b42f5fdc0090878f8ef3f': {
-						name: 'Steyer',
-						group: 'ShitGroup',
-						seat: {x: 3, y: 2},
-						disturbance: 0,
-						history: [
-							{
-								time: 1234566,
-								microphone: 12,
-								keyboard: 13,
-								mouseDistance: 145,
-								mouseClicks: 13
-							}
-						],
-						micHistory: [
-							{
-								time: 123456,
-								value: 123
-							}
-						]
-					},
+		return {
+			lectureName: lectureName,
+			room: roomObject,
+			course: courseObject,
+			activeStudents: {/*
+				'44aa488f082b42f5fdc0090878f8ef3f': {
+					name: 'Steyer',
+					group: 'ShitGroup',
+					seat: {x: 3, y: 2},
+					disturbance: 0,
+					history: [
+						{
+							time: 1234566,
+							microphone: 12,
+							keyboard: 13,
+							mouseDistance: 145,
+							mouseClicks: 13
+						}
+					],
+					micHistory: [
+						{
+							time: 123456,
+							value: 123
+						}
+					]
+				},
 
-					SESSID: { fancy stuff like above }
+				SESSID: { fancy stuff like above }
+			*/},
+
+			seatingPlan: [/*
+				// access via seatingPlan[x][y]
+				5: [
+					3: sessionId
+				]
+			*/],
+
+			timeline: new EduMon.Data.Timeline(),
+
+			analytics: {
+				globalReferenceValues: {/*
+					sender: {
+						microphone: 12,
+						keyboard: 32,
+						mouseDistance: 312,
+						mouseClicks: 123
+					}
 				*/},
 
-				seatingPlan: [/*
-					// access via seatingPlan[x][y]
-					5: [
-						3: sessionId
-					]
-				*/],
-
-				timeline: new EduMon.Data.Timeline(),
-
-				analytics: {
-					globalReferenceValues: {/*
-						sender: {
-							microphone: 12,
-							keyboard: 32,
-							mouseDistance: 312,
-							mouseClicks: 123
+				currentFeedbackId: 0,
+				nextFeedbackId: 1,
+				studentFeedback: {/*
+					feedbackId: {
+						type: "thumb"
+						time: 123456,
+						currentAverage: 0.175
+						studentVoting: {
+							sender1: 0.12,
+							sender2: 0.23
 						}
-					*/},
+					}
+				*/},
 
-					currentFeedbackId: 0,
-					nextFeedbackId: 1,
-					studentFeedback: {/*
-						feedbackId: {
-							type: "thumb"
-							time: 123456,
-							currentAverage: 0.175
-							studentVoting: {
-								sender1: 0.12,
-								sender2: 0.23
-							}
-						}
-					*/},
+				breakRequests: 0
+			},
 
-					breakRequests: 0
-				},
+			messaging: {
+				outgoingPackageId: 1,
+				serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
+				moderatorPassphrase: "alohomora"
+			},
 
-				messaging: {
-					outgoingPackageId: 1,
-					serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
-					moderatorPassphrase: "alohomora"
-				},
-
-				gui: {
-					actionTime: -1,
-					pultup: ""
-				}
-			};
-		}
+			gui: {
+				actionTime: -1,
+				pultup: ""
+			}
+		};
 	};
+
 
 	/**
 	 * Creates an empty packet (from "MODERATOR") with the common headers set
