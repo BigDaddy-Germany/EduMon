@@ -28,7 +28,7 @@ EduMon.Timeline = new function() {
 	}
 
 	/**
-	 * Clears the timeline, deletes timeline data and reinitialized timeline
+	 * Clears the timeline, deletes timeline data and reinitializes timeline; forces start of new lecture as intended side effect
 	 * @method reset
 	 * @return undefined
 	 */
@@ -137,7 +137,7 @@ EduMon.Timeline = new function() {
 		tick(true);
 
 		$("#btnPlay").off("click").click(function(){
-			if (typeof EduMon.Prefs.currentLecture.timeline !== "undefined"){
+			if (typeof EduMon.Prefs.currentLecture.timeline !== "undefined" && EduMon.Prefs.currentLecture.timeline.started){
 				that.play();
 			} else {
 				EduMon.lectureStartDialog();
