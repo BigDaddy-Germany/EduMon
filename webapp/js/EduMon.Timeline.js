@@ -4,8 +4,6 @@ EduMon.Timeline = new function() {
 	var tick_interval = 2; //in seconds
 	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
 	var timer = undefined;
-	var lectureStarted = false;
-	var lectureOver = false;
 
 	/**
 	 * Get the current time in the format H:MM (e.g. "9:23")
@@ -38,8 +36,6 @@ EduMon.Timeline = new function() {
 		if (timer!==undefined){
 			clearInterval(timer);
 		}
-		lectureStarted = false;
-		lectureOver = false;
 		$("#progressdisplay").empty();
 		$("#hourdisplay").empty();
 		EduMon.Prefs.currentLecture.timeline = new EduMon.Data.Timeline();
@@ -59,7 +55,7 @@ EduMon.Timeline = new function() {
 			EduMon.Gui.showToast("Vorlesung läuft!");
 			timeline.status = "play";
 			timeline.start = getTime();
-			lectureStarted = true;
+			timeline.started = true;
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
 		updateTimeline();
 	};
@@ -69,7 +65,7 @@ EduMon.Timeline = new function() {
 	 * @method pause
 	 * @return undefined
 	 */
-	this.pause = function() {
+	var pause = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		if (timeline.status==="play"){
 			timeline.slices.push({seconds:0,type:"break"});
@@ -86,7 +82,7 @@ EduMon.Timeline = new function() {
 	 * @method stop
 	 * @return undefined
 	 */
-	this.stop = function() {
+	var stop = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		EduMon.Gui.showPopup("Vorlesung beenden?","Eine beendete Vorlesung kann nicht wieder aufgenommen werden. Möchten Sie die Vorlesung jetzt beenden und die Auswertung einsehen?",
 				["yes","no"],function(result){
@@ -94,7 +90,7 @@ EduMon.Timeline = new function() {
 						clearInterval(timer);
 						EduMon.Gui.showToast("Vorlesung beendet.");
 						timeline.status = "stop";
-						lectureOver = true;
+						timeline.ended = true;
 						updateTimeline();
 						EduMon.stopLecture();
 					}
@@ -106,7 +102,7 @@ EduMon.Timeline = new function() {
 	 * @method restart
 	 * @return undefined
 	 */
-	this.restart = function(){
+	var restart = function(){
 		//TODO intended?
 		that.reset();
 	};
@@ -114,7 +110,7 @@ EduMon.Timeline = new function() {
 	/**
 	 * Timeline update timer tick
 	 * @method tick
-	 * @param {Boolean} onlyUpdate Only refresh the timeline display but do not alter timeline data
+	 * @param {Boolean} [onlyUpdate=true] Only refresh the timeline display but do not alter timeline data
 	 * @return undefined
 	 */
 	var tick = function(onlyUpdate) {
@@ -130,7 +126,7 @@ EduMon.Timeline = new function() {
 	};
 
 	/**
-	 * Initialize timeline: start updaate timer and bind click handlers
+	 * Initialize timeline module: start update timer and bind click handlers
 	 * @method init
 	 * @return undefined
 	 */
@@ -138,12 +134,18 @@ EduMon.Timeline = new function() {
 		//Timer is always active, but timer tick does not always trigger action
 		//this prevents seconds getting lost
 		timer = setInterval(tick, tick_interval*1000);
-		updateTimeline();
+		tick(true);
 
-		$("#btnPlay").off("click").click(function(){that.play();});
-		$("#btnPause").off("click").click(function(){that.pause();});
-		$("#btnStop").off("click").click(function(){that.stop();});
-		$("#btnRestart").off("click").click(function(){that.restart();});
+		$("#btnPlay").off("click").click(function(){
+			if (typeof EduMon.Prefs.currentLecture.timeline !== "undefined"){
+				that.play();
+			} else {
+				EduMon.lectureStartDialog();
+			}
+		});
+		$("#btnPause").off("click").click(function(){pause();});
+		$("#btnStop").off("click").click(function(){stop();});
+		$("#btnRestart").off("click").click(function(){restart();});
 	};
 
 	/**
@@ -172,13 +174,6 @@ EduMon.Timeline = new function() {
 				progressDisplay.append($("<div/>").addClass("progress-bar progress-bar-"+barType));
 				hourDisplay.append($("<span/>").addClass("hour"));
 
-				/*if (isFirstBar){ //insert lecture start time
-				  hourDisplay.children().eq(0).append(
-				  $("<span/>")
-				  .addClass("start")
-				  .text(timeline.start)
-				  );
-				  }*/
 				if (timeline.slices[i].type==="lecture"){ //when opening a new lecture slice, insert end time of the previous one as start
 					var startTime = timeline.start;
 					if (i>0){
@@ -210,19 +205,17 @@ EduMon.Timeline = new function() {
 				.toggleClass("active",isLastBar && timeline.status!=="stop");
 			hourDisplay.children().eq(i).css("width",barPercentage+"%");
 
-			//time only accumulates in the latest slice
-			if (i==timeline.slices.length-1){ 
-				var minutes = Math.floor(timeline.slices[i].seconds/60);
-				if (minutes>0){
-					var hours = (minutes-(minutes%60))/60;
-					if (hours > 0){
-						minutes -= hours*60;
-						hours = hours + " h ";
-					} else {
-						hours = "";
-					}
-					progressDisplay.children().eq(i).text(hours+minutes+" min");
+			//update all texts
+			var minutes = Math.floor(timeline.slices[i].seconds/60);
+			if (minutes>0){
+				var hours = (minutes-(minutes%60))/60;
+				if (hours > 0){
+					minutes -= hours*60;
+					hours = hours + " h ";
+				} else {
+					hours = "";
 				}
+				progressDisplay.children().eq(i).text(hours+minutes+" min");
 			}
 		}
 
@@ -233,9 +226,9 @@ EduMon.Timeline = new function() {
 			.addClass("glyphicon-"+timeline.status);
 
 		//display fitting control buttons
-		$("#btnPlay").toggle(timeline.status!=="play" && !lectureOver);
+		$("#btnPlay").toggle(timeline.status!=="play" && !timeline.ended);
 		$("#btnPause").toggle(timeline.status==="play");
 		$("#btnStop").toggle(timeline.status!=="stop");
-		$("#btnRestart").toggle(lectureOver);
+		$("#btnRestart").toggle(timeline.ended);
 	};
 };

@@ -31,7 +31,7 @@ EduMon = new function() {
 					]));
 		this.Prefs.lectures.push(new EduMon.Data.Lecture("DemoLecture",0,0));
 
-		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture(0);
+		this.Prefs.currentLecture = EduMon.Data.createCurrentLecture();
 
 		//UI preparations
 		this.Timeline.init();
@@ -297,6 +297,7 @@ EduMon = new function() {
 			.then(function(lectureId) {
 				EduMon.Prefs.currentLecture = EduMon.Data.createCurrentLecture(lectureId);
 				that.initLecture();
+				EduMon.Timeline.play();
 			})
 			.catch(function(err) {
 				console.log(err);
