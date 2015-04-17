@@ -1,0 +1,78 @@
+<div id="dialogContainer">
+	<header>
+		<h2>Daten löschen</h2>
+	</header>
+	<p>Hier haben Sie die Möglichkeit, die von EduMon gespeicherten Daten zu löschen. Dieser Vorgang kann nicht rückgängig gemacht werden. Bitte wählen Sie aus, was Sie löschen möchten:</p>
+	<form id="deletionForm">
+		<input type="radio" name="deletionMode" id="deletionModeLight" value="light" checked="checked"><label for="deletionModeLight"> Alles außer Kursen, Räumen und Vorlesungen</label><br><br>
+		<input type="radio" name="deletionMode" id="deletionModeWipe" value="wipe"><label for="deletionModeWipe"> Kompletter Reset (alle Daten werden gelöscht!)</label><br><br>
+	</form>
+	<footer>
+		<button id="dialogBtnCancel" type="button" class="btn btn-default">Abbrechen</button>
+		<button id="dialogBtnSubmit" type="button" class="btn btn-success">Daten löschen</button>
+	</footer>
+</div>
+
+<script type="text/javascript">
+	function deleteData() {
+		var deletionMode = $('input[name=deletionMode]:checked', '#deletionForm').val();
+		if (deletionMode != 'light' && deletionMode != 'wipe') {
+			EduMon.Gui.showPopup('Fehler', 'Bitte wählen Sie aus, was Sie löschen möchten.', ['ok']);
+			return;
+		}
+
+
+		var newPrefs = {
+			courses: [],        // an array of all courses
+			rooms: [],          // an array of all rooms
+			lectures: [],       // an array of all lectures
+
+			currentLecture: {
+				activeStudents: [], seatingPlan: []
+			},  // the current running lecture (copy everything!)
+
+			wheel: {
+				top: 0,
+				left: 0,
+				width: 1000,
+				height: 600
+			}
+		};
+
+		if (deletionMode == 'light') {
+			newPrefs.courses = EduMon.Prefs.courses;
+			newPrefs.rooms = EduMon.Prefs.rooms;
+			newPrefs.lectures = EduMon.Prefs.lectures;
+		}
+
+		EduMon.Prefs = newPrefs;
+		localStorage.setItem('EduMon.Prefs', newPrefs);
+
+		EduMon.Gui.showPopup(
+				'Löschen erfolgreich',
+				'Ihre Daten wurden erfolgreich gelöscht.',
+				['ok'],
+				function() {
+					EduMon.Gui.closeDialog();
+				}
+		)
+	}
+
+$(function() {
+	$("#dialogBtnSubmit").on('click', function(){
+		EduMon.Gui.showPopup(
+				'Wirklich löschen?',
+				'Sind Sie sich wirklich super sicher?',
+				['yes', 'no'],
+				function(returnValue) {
+					if (returnValue == 'yes') {
+						deleteData();
+					}
+				}
+		)
+	});
+	$("#dialogBtnCancel").click(function(){
+		EduMon.Gui.closeDialog();
+	});
+});
+</script>
