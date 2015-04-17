@@ -10,8 +10,9 @@ EduMon.Feedback = new function() {
 	 * @return packet Copy of the sent request packet
 	 */
 	this.requestFeedback = function(type){
-		$("#btnThumbs").addClass("disabled");
-		setInterval(function(){$("#btnThumbs").removeClass("disabled");},5000);
+		var buttonId = (type==="rating" ? "#btnRating" : "#btnThumbs");
+		$(buttonId).addClass("disabled");
+		setInterval(function(){$(buttonId).removeClass("disabled");},5000);
 
 		var analytics = EduMon.Prefs.currentLecture.analytics;
 		analytics.currentFeedbackId = analytics.nextFeedbackId++;
@@ -25,8 +26,8 @@ EduMon.Feedback = new function() {
 		};
 
 		EduMon.sendPacket(packet);
-		EduMon.Gui.showToast("Daumenfeedback gestartet!");
-		EduMon.Gui.openPultUpMode("thumb",that.updateFeedback);
+		EduMon.Gui.showToast((type==="rating" ? "Abstimmung" : "Daumenfeedback")+" gestartet!");
+		EduMon.Gui.openPultUpMode(type,that.updateFeedback);
 
 		return packet;
 	};
@@ -70,7 +71,9 @@ EduMon.Feedback = new function() {
 		var numOnline = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
 		$("#pultup .stats .participation .value").text(numAnswers+"/"+numOnline);
 
-		if (feedback.type==="thumb"){
+		if (feedback.type==="rating"){
+			that.updateRating(feedback.currentAverage);
+		} else {
 			that.updateThumbs(feedback.currentAverage);
 		}
 	};
