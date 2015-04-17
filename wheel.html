@@ -100,7 +100,7 @@
 			var modeSelection = $('#mode');
 			var selectionSelection = $('#selection');
 			var wheel = new EduMon.Wheel(canvas[0], [["No segments yet :(", 1.0]]);
-			var selectedMode = modes.noop;
+			var selectedMode = modes[modeSelection.val()];
 
             var task = -1;
 			var minDelay = 2000;
