@@ -1,7 +1,9 @@
 EduMon.Gui = new function() {
 	var that = this;
 
-	var seatUpdateInterval = 2000; //milliseconds
+	var debugging = false;
+
+	var seatUpdateInterval = debugging ? 50 : 1000; //milliseconds
 	var seatUpdateTimer = undefined;
 
 	var countFeedMessages = 0;

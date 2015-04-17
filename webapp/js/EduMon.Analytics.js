@@ -5,6 +5,7 @@
  */
 EduMon.Analytics = function() {
 
+    var debugging = false;
     var util = EduMon.Util;
     var math = EduMon.Math;
 
@@ -14,14 +15,14 @@ EduMon.Analytics = function() {
     var micNormalizationPeriod = 60*10;
     var micMinimumEntries = 10;
     var curValPeriod = 10;
-    var minimalGlobalReferenceValues = 4;
+    var minimalGlobalReferenceValues = debugging ? 2 : 5;
     
     var upperBoundGiniFactor = 0.8;
 
     var weights = {
-        microphone: 1,
-        keyboard: 1,
-        mouseDistance: 1,
+        microphone: 3,
+        keyboard: 3,
+        mouseDistance: 3,
         mouseClicks: 1
     };
 
@@ -97,7 +98,7 @@ EduMon.Analytics = function() {
     this.scaleDisturbanceToPercentage = math.linearIntervalFunction(
         [0,0],
         [3,0.05],
-        [6,0.3],
+        [6,0.4],
         [7,0.7],
         [8,0.95],
         [10,1]
@@ -169,8 +170,8 @@ EduMon.Analytics = function() {
                 minimumValues[propertyName] = math.min(values);
                 maximumValues[propertyName] = math.max(values);
 
-                var upperLimit = (1-math.giniIndex(values)) * maximumValues[propertyName] * upperBoundGiniFactor;
-                upperLimit = Math.max(upperLimit, maximumValues[propertyName]);
+                var lowerLimit = Math.min(minimumValues[propertyName] + 0.3 * averageValues[propertyName], averageValues[propertyName] * 0.99);
+                var upperLimit = averageValues[propertyName] * 1.9;
 
                 /**
                  * Creates the function to access the variables inside the closure
@@ -198,7 +199,7 @@ EduMon.Analytics = function() {
                 }
 
                 scales[propertyName] = scaleFunctionCreator(
-                    minimumValues[propertyName],
+                    lowerLimit,
                     averageValues[propertyName],
                     upperLimit
                 );
@@ -227,6 +228,12 @@ EduMon.Analytics = function() {
 
     };
 
+    var truncateHistoryByCount = function(history, isMic) {
+        var count = isMic ? micNormalizationPeriod : curValPeriod;
+
+        return history.slice(Math.max(0, history.length - count));
+    };
+
 
     /**
      * Deletes old values out of the history, which are older than the time configured above
@@ -235,6 +242,10 @@ EduMon.Analytics = function() {
      */
     var truncateHistory = function(history, isMicHistory) {
         isMicHistory = isMicHistory || false;
+
+        if (debugging) {
+            return truncateHistoryByCount(history, isMicHistory);
+        }
 
         var evaluationPeriod;
         if (!isMicHistory) {
