@@ -10,8 +10,14 @@
         <script src="js/EduMon.Wheel.js"></script>
         <script src="js/EduMon.XWindowRPC.js"></script>
 		<style>
+			html, body {
+				margin: 0;
+				padding: 0;
+				font-family: Arial,sans-serif;
+			}
 			#wheel {
 				position: relative;
+				margin: 10px;
 			}
 			#wheel > div {
 				position: absolute;
@@ -29,7 +35,7 @@
 		</style>
     </head>
     <body>
-		<h1>Course</h1>
+		<h1 id="course-name">Course</h1>
         <div id="wheel">
             <canvas id="canvas" width="1000" height="600"></canvas>
 			<div id="wheel_upper">
@@ -57,65 +63,80 @@
 			</div>
         </div>
         <script>
+			// the keys used in various keyboard controls
 			var KEY = {
 				SPACE: 32,
 				A: 65,
 				M: 77,
-				F5: 116
+				R: 82
 			};
 
+			// messages to be displaying randomly on page load
 			var messages = [
 				'Glücksminister präsentiert',
 				'Exklusiv an der DHBW',
 				'Live und in Farbe',
 				'12345 ist kein sicheres Passwort'
 			];
-
 			$('#message').text(messages[Math.floor(Math.random() * messages.length)]);
 
+			// the modes
 			var modes = {
+				// the slim mode decreases the relative weight of the selected segment (while maintaining numeric stability)
 				slim: function(segment) {
 					// half the weight of the selected segment
 					segment[1] *= .1;
 
 					// keep the weights in a stable range by keeping the smallest segment at weight 1 and scaling all other weights accordingly
-					var min = EduMon.Math.extremeValue(segments, function(a, b) { return b[1] - a[1]});
+					var min = EduMon.Math.extremeValue(selectedSelection, function(a, b) { return b[1] - a[1]});
 					if (min[1] < 1) {
 						var factor = 1 / min[1];
-						for (var i = 0; i < segments.length; ++i) {
-							segments[i][1] *= factor;
+						for (var i = 0; i < selectedSelection.length; ++i) {
+							selectedSelection[i][1] *= factor;
 						}
 					}
-
-					console.log("" + segments);
 				},
+				// the drop mode removes the selected segment from the wheel
 				drop: function(segment) {
-					console.log(segment);
 					wheel.removeSegment(segment);
 				},
+				// the noop mode simply does nothing
 				noop: function() {}
 			};
 
-            var canvas = $('canvas');
-			var modeSelection = $('#mode');
-			var selectionSelection = $('#selection');
-			var wheel = new EduMon.Wheel(canvas[0], [["No segments yet :(", 1.0]]);
-			var selectedMode = modes[modeSelection.val()];
+			// the segment selections
 			var selections = {
 				students: [],
 				groups: []
 			};
 
-			var selection = selections.students;
+			// the internal mode state
+			var modeSelection = $('#mode');
+			var selectedMode = null;
+			switchMode(modeSelection.val());
+			modeSelection.on('change', function(e) {
+				switchMode($(e.target).val());
+			});
 
+			// the internal segment selection state
+			var selectionSelection = $('#selection');
+			var selectedSelection = null;
+			switchSelection(selectionSelection.val());
+
+			// the wheel
+			var canvas = $('canvas');
+			var wheel = new EduMon.Wheel(canvas[0], [["No segments yet :(", 1.0]]);
+
+			// state used by beginSpinning() and endSpinning() to ensure safe usage
             var task = -1;
 			var minDelay = 2000;
 			var start = -1;
 
-			modeSelection.on('change', function(e) {
-				selectedMode = modes[$(e.target).val()];
-			});
-
+			/**
+			 * This function starts the wheel and make sure it can be started only once.
+			 *
+			 * @returns {boolean} only true if spinning could actually be started and was not already going
+			 */
 			function beginSpinning() {
 				if (start < 0 && task === -1) {
 					wheel.beginSpinning();
@@ -125,6 +146,11 @@
 				return false;
 			}
 
+			/**
+			 * This function stop the wheel if it running.
+			 *
+			 * @returns {boolean} true only is the wheel has been spinning and was not already slowing down
+			 */
 			function endSpinning() {
 				if (start >= 0 && task === -1) {
 					var delta = Date.now() - start;
@@ -142,6 +168,11 @@
 				return false;
 			}
 
+			/**
+			 * This function handles window-wide key down events for keyboard control
+			 *
+			 * @param {KeyboardEvent} e the keyboard event
+			 */
 			function handleKeyDown(e) {
 				switch (e.which) {
 					case KEY.SPACE:
@@ -152,6 +183,13 @@
 				}
 			}
 
+			/**
+			 * This function handles window-wide key up events for keyboard control.
+			 * This is where simple single-key controls will be handled as key up is only triggered once while key down
+			 * may be triggered until released.
+			 *
+			 * @param {KeyboardEvent} e the keyboard event
+			 */
 			function handleKeyUp(e) {
 				switch (e.which) {
 					case KEY.SPACE:
@@ -161,14 +199,23 @@
 						break;
 					case KEY.M:
 						e.preventDefault();
-							switchMode();
+						switchMode();
 						break;
 					case KEY.A:
 						e.preventDefault();
+						switchSelection();
+						break;
+					case KEY.R:
+						resetWheel(controller);
 						break;
 				}
 			}
 
+			/**
+			 * This function either sets the given mode or switches to the next one (based on the order select-options).
+			 *
+			 * @param {string} [modeName] the name of the mode as defined in the modes object
+			 */
 			function switchMode(modeName) {
 				if (!modeName) {
 					modeName = modeSelection.find(':selected').next().val();
@@ -180,6 +227,11 @@
 				modeSelection.val(modeName);
 			}
 
+			/**
+			 * This function either sets the given selection or switches to the next one (based on the order select-options).
+			 *
+			 * @param {string} [selectionName] the name of the segment selection as defined in the selections object
+			 */
 			function switchSelection(selectionName) {
 				if (!selectionName) {
 					selectionName = selectionSelection.find(':selected').next().val();
@@ -187,37 +239,86 @@
 						selectionName = selectionSelection.find(':first').val();
 					}
 				}
-				selection = selections[selectionName];
+				selectedSelection = selections[selectionName];
 				selectionSelection.val(selectionName);
+				if (controller) {
+					resetWheel(controller);
+				}
 			}
 
+			/**
+			 * This is a small helper function that checks whether a given name is in a list of segments (name-weight pairs)
+			 * using linear search.
+			 *
+			 * @param {Array} list the segment list
+			 * @param {string} name the name to search
+			 * @returns {boolean} true if a segment with the given name was found.
+			 */
+			function containsSegment(list, name) {
+				for (var i = 0; i < list.length; ++i) {
+					if (list[i][0] == name) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			/**
+			 * This function (re)sets the wheel by first getting the currently active lecture from the main window, then
+			 * updating the segment selections and finally populating the wheel
+			 * @param controller
+			 */
+			function resetWheel(controller) {
+				// invoke the getLecture() API from the main window
+				controller.invoke('getLecture').then(function(lecture) {
+					var course = lecture.course;
+					// update the course name
+					$('#course-name').text(course.name);
+
+					// update the segment selections
+					selections.students.splice(0, selections.students.length);
+					selections.groups.splice(0, selections.groups.length);
+					course.students.forEach(function(s) {
+						selections.students.push([s.name, 1.0]);
+						if (!containsSegment(selections.groups, s.group)) {
+							selections.groups.push([s.group, 1.0]);
+						}
+					});
+
+					// populate the wheel using the selected segment selection
+					wheel.setSegments(selectedSelection, true);
+				});
+			}
+
+			// bind the window-wide keyboard events for keyboard controls
 			$(window).on('keydown', handleKeyDown).on('keyup', handleKeyUp);
 
 			if (window.opener) {
-				// we were opened by another window, setup our messenger
+				// we were opened by another window, setup our RPC service
 				var controller = new EduMon.XWindowRPC(window.opener, {
-					showWheel: function (course) {
-
-						$(document.body).find('> h1').text(course.name);
-
-						var segments = [];
-						course.students.forEach(function(s) {
-							segments.push([s.name, 1.0]);
-						});
-						wheel.setSegments(segments, true);
+					reset: function() {
+						resetWheel(controller);
 					},
-					switchSelection: function() {
-
-					},
+					switchSelection: switchSelection,
 					switchMode: switchMode,
 
 					beginSpinning: beginSpinning,
 					endSpinning: endSpinning
 				});
-				wheel.onFinish = function (segment) {
+
+				// initial wheel population
+				resetWheel(controller);
+
+				// notify the main window when the wheel selected a segment and apply the current mode function
+				wheel.onFinish = function(segment) {
 					controller.invoke("wheelFinished", segment[0]);
 					selectedMode(segment);
 				};
+
+				// monitor the segment selection UI for changes and update our internal state accordingly
+				selectionSelection.on('change', function(e) {
+					switchSelection($(e.target).val());
+				});
 			} else {
 				// we were opened directly, loading some dummy data
 				var segments = [
@@ -245,7 +346,6 @@
 
 				wheel.setSegments(segments, true);
 				wheel.onFinish = function(segment) {
-					//modes.half(segment);
 					selectedMode(segment);
 				};
 			}
