@@ -87,14 +87,14 @@ EduMon.Gui = new function() {
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
 	 * @method showDialog
 	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
-	 * @param {Boolean} attentionAbort Flash for attention if dialog cannot be opened
+	 * @param {Boolean} [attentionAbort] Flash for attention if dialog cannot be opened
 	 * @return Promise
 	 */
 	this.showDialog = function(dialogid, attentionAbort) {
 		var that = this;
 		return new Promise(function(fulfill, reject) {
 			if (dialogOpened){
-				if (attentionAbort===true){
+				if (attentionAbort){
 					EduMon.Gui.attention();
 				}
 				reject();
@@ -358,7 +358,7 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.togglePultup = function(state){
-		$("#pultup").toggleClass("inactive",(state===undefined?state:!state));
+		$("#pultup").toggleClass("inactive",(state ? state : !state));
 	};
 
 
@@ -370,11 +370,12 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.openPultUpMode = function(mode, firstUpdate){
-		firstUpdate = firstUpdate || function(){};
 		$("#pultup").addClass("inactive");
 		setTimeout(function(){
 			$("#pultup").removeClass("wheel thumb rating").addClass(mode).removeClass("inactive");
-			firstUpdate();
+			if (firstUpdate) {
+				firstUpdate();
+			}
 			EduMon.Feedback.restartActionTimer(true);
 		},800);
 		EduMon.Prefs.currentLecture.gui.pultup = mode;
