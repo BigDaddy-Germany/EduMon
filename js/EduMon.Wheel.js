@@ -277,7 +277,7 @@ EduMon.Wheel = function(canvas, segments) {
 
 			if (segments.length === 1) {
 				currentAngle = PI;
-				draw();
+				drawWheel();
 				return;
 			}
 

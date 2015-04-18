@@ -4,7 +4,7 @@ EduMon.Gui = new function() {
 	var debugging = false;
 
 	var seatUpdateInterval = debugging ? 50 : 1000; //milliseconds
-	var seatUpdateTimer = undefined;
+	var seatUpdateTimer = -1;
 
 	var countFeedMessages = 0;
 	var dialogOpened = 0;
@@ -255,7 +255,7 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.initSeating = function(){
-		if (seatUpdateTimer!==undefined){
+		if (seatUpdateTimer >= 0){
 			clearInterval(seatUpdateTimer);
 		}
 

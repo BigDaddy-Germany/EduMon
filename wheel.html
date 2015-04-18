@@ -68,6 +68,7 @@
 				SPACE: 32,
 				A: 65,
 				M: 77,
+				Q: 81,
 				R: 82
 			};
 
@@ -208,6 +209,9 @@
 					case KEY.R:
 						resetWheel(controller);
 						break;
+					case KEY.Q:
+						window.close();
+						break;
 				}
 			}
 
@@ -311,7 +315,7 @@
 
 				// notify the main window when the wheel selected a segment and apply the current mode function
 				wheel.onFinish = function(segment) {
-					controller.invoke("wheelFinished", segment[0]);
+					controller.invoke("wheelFinished", segment[0], modeSelection.val(), selectionSelection.val());
 					selectedMode(segment);
 				};
 

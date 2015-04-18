@@ -470,9 +470,13 @@ EduMon = new function() {
 		window.setTimeout(function() { EduMon.testAllThemAnalytics(true); }, 200);
 	};
 
+	/**
+	 * This function binds the fortune wheel logic to the UI button and holds its state and RPC API
+	 */
 	function bindFortuneWheel() {
 		var button = $('#btnWheel');
 		var wheelWindow = null;
+		var controller = null;
 
 		button.on('click', function() {
 
@@ -486,6 +490,11 @@ EduMon = new function() {
 				wheelWindow = null;
 			}
 
+			if (controller) {
+				controller.shutdown();
+				controller = null;
+			}
+
 			var wheelData = EduMon.Prefs.wheel;
 
 			wheelWindow = EduMon.Util.openWindow("wheel.html", {
@@ -496,8 +505,8 @@ EduMon = new function() {
 				resizable: true
 			}, "blank");
 
-			var controller = new EduMon.XWindowRPC(wheelWindow, {
-				wheelFinished: function(segment, mode) {
+			controller = new EduMon.XWindowRPC(wheelWindow, {
+				wheelFinished: function(segment, name, mode, selection) {
 					EduMon.Gui.showToast("Selected using mode '" + mode + "': " + segment);
 				},
 				getLecture: function() {
@@ -513,6 +522,14 @@ EduMon = new function() {
 					wheelData.left = this.screenX;
 					wheelData.width = $(this).width();
 					wheelData.height = $(this).height();
+
+					setTimeout(function() {
+						if (wheelWindow.closed) {
+							controller.shutdown();
+							controller = null;
+							console.log("window closed, controller down!");
+						}
+					}, 1000);
 				};
 			};
 		});

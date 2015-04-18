@@ -1,3 +1,10 @@
+/**
+ * This class implements an RPC service to communicate between windows.
+ *
+ * @param {Window} target the window to send messages to
+ * @param {Object} functions a map of name -> function pairs.
+ * @constructor
+ */
 EduMon.XWindowRPC = function (target, functions) {
 
 	var nextId = 1;
@@ -7,7 +14,14 @@ EduMon.XWindowRPC = function (target, functions) {
 	var TYPE_RESULT = 2;
 	var TYPE_ERROR = 3;
 
-	window.addEventListener('message', function (e) {
+	/**
+	 * This function handles incoming messages.
+	 * It is intentionally declared as a var to have a different instance per XWindowRPC instance to safely remove the
+	 * listener from the current window.
+	 *
+	 * @param e the message event
+	 */
+	var handleMessage = function (e) {
 		var data = e.data;
 
 		var p;
@@ -38,7 +52,9 @@ EduMon.XWindowRPC = function (target, functions) {
 			var reject = p[1];
 			reject(data.message);
 		}
-	});
+	};
+
+	window.addEventListener('message', handleMessage);
 
 	function send(data) {
 		try {
@@ -97,4 +113,8 @@ EduMon.XWindowRPC = function (target, functions) {
 		}
 		return func.apply(functions, args);
 	};
+
+	this.shutdown = function() {
+		window.removeEventListener('message', handleMessage);
+	}
 };
