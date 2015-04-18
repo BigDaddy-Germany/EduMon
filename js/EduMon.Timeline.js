@@ -143,9 +143,9 @@ EduMon.Timeline = new function() {
 				EduMon.lectureStartDialog();
 			}
 		});
-		$("#btnPause").off("click").click(function(){pause();});
-		$("#btnStop").off("click").click(function(){stop();});
-		$("#btnRestart").off("click").click(function(){restart();});
+		$("#btnPause").off("click").on('click', pause);
+		$("#btnStop").off("click").on('click', stop);
+		$("#btnRestart").off("click").on('click', restart);
 	};
 
 	/**

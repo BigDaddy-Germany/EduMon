@@ -311,7 +311,9 @@ EduMon = new function() {
 	 * @return undefined
 	 */
 	this.initLecture = function(broadCastIt){
-		broadCastIt = !!broadCastIt;
+		if (broadCastIt === undefined) {
+			broadCastIt = true;
+		}
 
 		that.updateConnection();
 		EduMon.Gui.initSeating();
