@@ -11,6 +11,7 @@ EduMon.Prefs = {
 		top: 0,
 		left: 0,
 		width: 1048,
-		height: 652
+		height: 652,
+		lastMode: null
 	}
 };

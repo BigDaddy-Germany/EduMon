@@ -477,6 +477,32 @@ EduMon = new function() {
 		var button = $('#btnWheel');
 		var wheelWindow = null;
 		var controller = null;
+		var spaceKey = 32;
+
+		var messageShown = false;
+		$(window).on('keydown', function(e) {
+			if (e.which != spaceKey) {
+				return;
+			}
+			if (wheelWindow && !messageShown) {
+				if (wheelWindow.closed) {
+					wheelWindow = null;
+					return;
+				}
+				EduMon.Gui.showToast("Das Fenster ist leider nicht im Vordergrund!");
+				messageShown = true;
+			}
+		}).on('keyup', function(e) {
+			if (e.which != spaceKey || !messageShown) {
+				return;
+			}
+			messageShown = false;
+		}).on('unload', function() {
+			if (wheelWindow) {
+				wheelWindow.close();
+				wheelWindow = null;
+			}
+		});
 
 		button.on('click', function() {
 
@@ -495,6 +521,12 @@ EduMon = new function() {
 				controller = null;
 			}
 
+			var $nameField = $('#pultup').find('div.wheel.choice');
+
+			EduMon.Gui.openPultUpMode('wheel', function() {
+				$nameField.text("Noch nichts ausgewählt.");
+			});
+
 			var wheelData = EduMon.Prefs.wheel;
 
 			wheelWindow = EduMon.Util.openWindow("wheel.html", {
@@ -506,8 +538,10 @@ EduMon = new function() {
 			}, "blank");
 
 			controller = new EduMon.XWindowRPC(wheelWindow, {
-				wheelFinished: function(segment, name, mode, selection) {
-					EduMon.Gui.showToast("Selected using mode '" + mode + "': " + segment);
+				wheelFinished: function(name, mode, selection) {
+					wheelData.lastMode = mode;
+					var pre = (selection == 'groups' ? "Gruppe: " : "Student: ");
+					$nameField.text(pre + name);
 				},
 				getLecture: function() {
 					return EduMon.Prefs.currentLecture;
@@ -517,6 +551,11 @@ EduMon = new function() {
 
 			wheelWindow.onload = function() {
 				EduMon.Gui.showToast("Glückrad geöffnet!");
+
+				if (wheelData.lastMode) {
+					controller.invoke('switchMode', wheelData.lastMode);
+				}
+
 				wheelWindow.onunload = function() {
 					wheelData.top = this.screenY;
 					wheelData.left = this.screenX;

@@ -9,7 +9,7 @@ var room = encodeURIComponent("42A");
 var moderatorPassphrase = encodeURIComponent("secretpassword");
 var outgoing = [];
 var interval = 1000;
-var timer = -1; // TODO -1 under the assumption that only positive IDs are assigned by browsers
+var timer = -1; // under the assumption that only positive IDs are assigned by browsers
 var requests_failed = 0;
 var configured = false;
 
@@ -89,8 +89,6 @@ onmessage = function (input) {
 	}
 };
 
-
-//TODO what is the expected benefit of wrapping postMessage() with handleEvent() ?
 /**
  * Forward incoming data to main app
  * @method handleEvent
@@ -100,7 +98,6 @@ onmessage = function (input) {
 function handleEvent(event) {
 	postMessage(event);
 }
-
 
 /**
  * Send queued packets (called by queue timer)
