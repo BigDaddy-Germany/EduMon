@@ -14,8 +14,6 @@ EduMon = new function() {
 
 	/**
 	 * EduMon startup, to be called when DOM is ready
-	 * @method init
-	 * @return undefined
 	 */
 	this.init = function(){
 		that.debug("*** All Glory to the EduMon! ***");
@@ -45,15 +43,14 @@ EduMon = new function() {
 
 		bindFortuneWheel(this.Prefs);
 
-		EduMon.sendPacket({command:'start'});
+		that.messenger.start();
 	};
 
 
 	/**
-	 * Debug output to JS console 
-	 * @method debug
+	 * Debug output to JS console
+	 *
 	 * @param {String} msg Message to display
-	 * @return undefined
 	 */
 	this.debug = function(msg){
 		if (that.debugging){
@@ -64,9 +61,8 @@ EduMon = new function() {
 
 	/**
 	 * Process incoming container data (bundled packets+errors)
-	 * @method handleIncomingData
+	 *
 	 * @param {Object} event Incoming JSON as delivered by proxy server
-	 * @return undefined
 	 */
 	var handleIncomingData = function(event){
 		//Process packets received by message server
@@ -90,10 +86,9 @@ EduMon = new function() {
 
 
 	/**
-	 * Process single packet 
-	 * @method processPacket
+	 * Process single packet
+	 *
 	 * @param {Object} packet Packet as defined by architecture
-	 * @return undefined
 	 */
 	var processPacket = function(packet){
 		console.log(packet);
@@ -140,8 +135,6 @@ EduMon = new function() {
 
 	/**
 	 * React to a break request by incrementing a counter and displaying a newsfeed alert with varying intensity
-	 * @method processBreakRequest
-	 * @return undefined
 	 */
 	var processBreakRequest = function(){
 		if (EduMon.Prefs.currentLecture.timeline.status==="play"){
@@ -161,10 +154,10 @@ EduMon = new function() {
 
 	/**
 	 * Tries to login a client by its name and its seat and sends confirmation/denial message
-	 * @method processLogin
+	 *
 	 * @param {String} sender the client's session id
 	 * @param {Object} body The body sent with the package to the server
-	 * @return int Success code as delivered to client (0 = success, >0 error codes)
+	 * @return {int} Success code as delivered to client (0 = success, >0 error codes)
 	 */
 	var processLogin = function(sender, body) {
 		var seat = body.seat;
@@ -260,15 +253,15 @@ EduMon = new function() {
 
 		responsePacket.body.successCode = errorBits.bits;
 
-		that.sendPacket(responsePacket);
+		that.messenger.sendEvent(responsePacket);
 		return errorBits.bits;
 	};
 
 
 	/**
 	 * Broadcasts the current lecture (room dimensions + list of names)
-	 * @method broadcastCurrentLecture
-	 * @return packet Copy of the sent broadcast packet
+	 *
+	 * @return {Object} packet Copy of the sent broadcast packet
 	 */
 	var broadcastCurrentLecture = function(){
 		var room = EduMon.Prefs.currentLecture.room;
@@ -283,14 +276,12 @@ EduMon = new function() {
 		}
 
 		var packet = EduMon.Data.createBasePacket(1,"BROADCAST",body);
-		that.sendPacket(packet);
+		that.messenger.sendEvent(packet);
 		return packet;
 	};
 
 	/**
 	 * Opens the lecture starting dialog
-	 * @method lectureStartDialog
-	 * @return undefined
 	 */
 	this.lectureStartDialog = function() {
 		EduMon.UserInteraction.selectLecture()
@@ -306,9 +297,8 @@ EduMon = new function() {
 
 	/**
 	 * Initializes the current lecture: connect to server, refresh timeline, reload seating plan, restore gui, broadcast setup
-	 * @method initLecture
-	 * @param {boolean} [broadCastIt=true] should a broadcast be sended?
-	 * @return undefined
+	 *
+	 * @param {boolean} [broadCastIt=true] should a broadcast be sent?
 	 */
 	this.initLecture = function(broadCastIt){
 		if (broadCastIt === undefined) {
@@ -316,10 +306,11 @@ EduMon = new function() {
 		}
 
 		that.updateConnection();
+		that.messenger.start();
 		EduMon.Gui.initSeating();
-		var pultup = EduMon.Prefs.currentLecture.gui.pultup;
-		if (pultup!==""){
-			EduMon.Gui.openPultUpMode(pultup,EduMon.Feedback.updateFeedback);
+		var pultUp = EduMon.Prefs.currentLecture.gui.pultup;
+		if (pultUp!==""){
+			EduMon.Gui.openPultUpMode(pultUp,EduMon.Feedback.updateFeedback);
 		}
 		if (broadCastIt) {
 			EduMon.Timeline.reset();
@@ -333,7 +324,7 @@ EduMon = new function() {
 	 * @return undefined
 	 */
 	this.updateConnection = function(){
-		that.sendPacket({command:"config",
+		that.messenger.configure({
 			url: EduMon.Prefs.currentLecture.messaging.serverUrl,
 			room: EduMon.Prefs.currentLecture.room.roomName,
 			moderatorPassphrase: EduMon.Prefs.currentLecture.messaging.moderatorPassphrase
@@ -346,9 +337,10 @@ EduMon = new function() {
 	 * @return undefined
 	 */
 	this.stopLecture = function(){
-		EduMon.sendPacket({command:'stop'});
+		that.messenger.stop();
 		EduMon.Prefs.currentLecture = {
-			activeStudents: [], seatingPlan: []
+			activeStudents: [],
+			seatingPlan: []
 		};
 	};
 
@@ -360,7 +352,7 @@ EduMon = new function() {
 	 */
 	this.sendDemo = function(typenumber){
 		jQuery.getJSON("js/demoDataOut.json",function(data){
-			that.sendPacket(data["demo_type_"+typenumber]);
+			that.messenger.sendEvent(data["demo_type_"+typenumber]);
 		});
 	};
 
@@ -417,10 +409,9 @@ EduMon = new function() {
 	};
 
 	/**
-	 * Queue single packet for sending 
-	 * @method sendPacket
+	 * Queue single packet for sending
+	 *
 	 * @param {Object} packet
-	 * @return undefined
 	 */
 	this.sendPacket = function(packet){
 		that.messenger.sendEvent(packet);
@@ -578,7 +569,6 @@ EduMon = new function() {
 						if (wheelWindow.closed) {
 							controller.shutdown();
 							controller = null;
-							console.log("window closed, controller down!");
 						}
 					}, 1000);
 				};

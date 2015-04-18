@@ -53,7 +53,7 @@ var commands = {
 		} 
 		if (timer !== -1) {
 			clearInterval(timer);
-			console.log("Queue timer was already running, restarted it!");
+			console.log("Queue timer was already running, restarting it!");
 		}
 		timer = setInterval(processQueue, interval);
 		console.log('Queue timer started.');

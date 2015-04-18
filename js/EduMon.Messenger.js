@@ -1,10 +1,10 @@
 /**
- * Packet handling - Messager class connects with message worker 
- * @method Messenger
- * @param {} eventCallback
- * @return 
+ * Packet handling - Messenger class connects with message worker
+ * @constructor
+ * @param {Function} eventCallback
  */
 EduMon.Messenger = function(eventCallback){
+	var that = this;
 	var worker;
 
 	/**
@@ -17,11 +17,37 @@ EduMon.Messenger = function(eventCallback){
 		worker.postMessage(event);
 	};
 
+	/**
+	 * Starts the worker
+	 */
+	this.start = function() {
+		that.sendEvent({
+			command: 'start'
+		})
+	};
 
 	/**
-	 * [DEV] Destroy message worker - EMERGENCY EXIT!
-	 * @method kill
-	 * @return undefined
+	 * Stops the worker without terminating it
+	 */
+	this.stop = function() {
+		that.sendEvent({
+			command: 'stop'
+		})
+	};
+
+	/**
+	 * Configures the worker.
+	 *
+	 * @param {Object} options the options for the worker
+	 */
+	this.configure = function(options) {
+		options.command = 'config';
+		that.sendEvent(options);
+	};
+
+	/**
+	 * Terminates the web worker.
+	 * The worker can not be restarted with the same Messenger instance.
 	 */
 	this.kill = function(){
 		worker.terminate();
