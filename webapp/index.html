@@ -191,10 +191,13 @@
 		<script src="js/EduMon.Analytics.Debug.Data.Constant.js"></script>
 		<script src="js/EduMon.Analytics.Debug.js"></script>
         <script>
+			$(document.body).on('click', 'a[href=#]', function(e) {
+				e.preventDefault();
+			});
 			$(window).load(function(){
 				EduMon.init();
 				EduMon.Gui.showFeedMessage("info","Willkommen!","EduMon stets zu Diensten :)");
-				});
+			});
 		</script>
 
         </body>

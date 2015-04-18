@@ -496,7 +496,7 @@ EduMon = new function() {
 					EduMon.Gui.showToast("Selected using mode '" + mode + "': " + segment);
 				},
 				getLecture: function() {
-					return EduMon.Prefs.currentLecture.course;
+					return EduMon.Prefs.currentLecture;
 				}
 			});
 			wheelWindow.focus();
