@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="de" manifest="edumon.appcache">
+	<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+        <title>EduMon Moderator-WebApp</title>
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+        <link href="css/app.css" rel="stylesheet">
+	</head>
+	<body>
+	<div id="devbox">
+		<a href="#" class="devbutton btn btn-primary btn-fab btn-raised" onclick="$('#devbox').toggleClass('opened');">DEVELOPER</a><br>
+		Test:<br>
+		<input type="button" value="Start Lecture" onclick="EduMon.lectureStartDialog();">
+		<input type="button" value="Demo Data" onclick="EduMon.testAllThemAnalytics();">
+		<br>
+		UI Dialogs:<br>
+		<input type="button" value="Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
+		<input type="button" value="Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
+		<input type="button" value="Course edit" onclick="EduMon.UserInteraction.getCourseData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
+		<input type="button" value="CSV import" onclick="EduMon.UserInteraction.importCsvContent().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); });">
+		<br>
+		Framework:<br>
+		<input type="button" value="Dialog" onclick="EduMon.Gui.showDialog('dummy')">
+		<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')">
+		<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);},true)">
+		<br>
+		Package logging:<br>
+		<textarea id="packageLogging"></textarea>
+	</div>
+	<div id="screen">
+            <div id="timepanel" class="panel mypanel">
+                <div id="logo">
+                    <h1><img src="images/logo.png">EduMon</h1>
+                </div>
+                <div id="timeline">
+                        <div id="progressdisplay" class="progress progress-striped"></div>
+                        <div id="hourdisplay"></div>
+                </div>
+                <div id="currentbox">
+                        <div id="currentstate">
+                            <i class="glyphicon"></i>
+                        </div>
+                        <div id="currenttime">
+                            10:40
+                        </div>
+                </div>
+            </div>
+
+			<div id="maincontainer">
+				<div id="buttonpanel" class="panel mypanel">
+					<div id="flowbox" class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">Vorlesung</h3>
+						</div>
+						<div class="panel-body">
+							<a href="#" id="btnPlay"    class="btn btn-info btn-fab btn-raised glyphicon glyphicon-play"></a>
+							<a href="#" id="btnPause"   class="btn btn-info btn-fab btn-raised glyphicon glyphicon-pause"></a>
+							<a href="#" id="btnStop"    class="btn btn-info btn-fab btn-raised glyphicon glyphicon-stop"></a>
+							<a href="#" id="btnRestart" class="btn btn-danger btn-fab btn-raised glyphicon glyphicon-refresh"></a>
+						</div>
+					</div>
+					<div id="actionbox" class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">Aktionen</h3>
+						</div>
+						<div class="panel-body">
+							<a href="#" id="btnWheel" class="btn btn-info btn-fab btn-raised"></a>
+							<a href="#" id="btnThumbs" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-thumbs-up"></a>
+							<a href="#" id="btnRating" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-star"></a>
+							<a href="#" id="btnSettings" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-cog"></a>
+							<a href="#" id="btnRemoveData" class="btn btn-info btn-fab btn-raised glyphicon glyphicon-floppy-remove"></a>
+						</div>
+					</div>
+				</div>
+
+				<div id="centerpanel" class="panel mypanel">
+
+					<div id="room">
+						<div id="seatscontainer">
+							<div>
+								<div id="seats"></div>
+							</div>
+						</div>
+						<div id="frontdesk">
+							<div id="pultup" class="wheel">
+								<div class="handle">
+									<i class="glyphicon glyphicon-menu-down"></i>
+								</div>
+								<div id="drawer">
+									<div class="indicator">
+										<img src="images/wheel.png" class="wheel">
+										<i class="thumb  glyphicon glyphicon-info-sign"></i>
+										<i class="rating glyphicon glyphicon-info-sign"></i>
+									</div>
+									<div class="feedback">
+										<div class="wheel choice">Max Mustermann</div>
+										<div class="wheel help"><i class="glyphicon glyphicon-info-sign"></i>
+											Mit Glücksradfenster im Fokus: 
+											<b>Taste M</b> Modus
+											- <b>Taste A</b> Gruppe 
+											- <b>Leertaste</b> Rad drehen
+										</div>
+										<div class="thumb">
+											<img src="images/thumb.png">
+											<span class="value">42%</span>
+											<img src="images/thumb.png">
+										</div>
+										<div class="rating">
+											<i class="glyphicon glyphicon-star"></i>
+											<i class="glyphicon glyphicon-star"></i>
+											<i class="glyphicon glyphicon-star"></i>
+											<i class="glyphicon glyphicon-star-empty"></i>
+											<i class="glyphicon glyphicon-star-empty"></i>
+											<span class="value">64%</span>
+										</div>
+									</div>
+									<div class="stats">
+										<div class="time"><i class="glyphicon glyphicon-time"></i>&nbsp;<span class="value">00:42</span></div>
+										<div class="participation"><i class="glyphicon glyphicon-user"></i>&nbsp;<span class="value">15/17</span></div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="attention"></div>
+
+					<div id="layercontainer">
+						<div id="dialogcontainer">
+							<div id="dialogwindow">
+								<div id="dialogcontent"></div>
+								<div id="loadinglayer">
+									<div id="loadingbox">
+										<div id="loadingcircle_1"></div>
+										<div id="loadingcircle_2"></div>
+										<div id="loadingcircle_3"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="popupcontainer">
+							<div id="popupwindow">
+								<header id="popupheader">
+									<h3 id="popuptitle"></h3>
+								</header>
+								<p id="popupmessage"></p>
+								<footer id="popupfooter"></footer>
+							</div>
+						</div>
+					</div>
+
+					<ul id="toastlist"></ul>
+
+				</div>
+
+				<div id="feedpanel" class="panel panel-default mypanel">
+					<div class="panel-heading">Newsfeed</div>
+					<div class="panel-body">
+						<div id="alertcontainer"></div>
+					</div>
+					<div class="panel-footer" id="feedcounter"></div>
+				</div>
+			</div>
+		</div>
+
+        <script src="lib/jquery/js/jquery.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+        <script src="lib/es6-promise/js/es6-promise.min.js"></script>
+
+		<script src="js/EduMon.js"></script>
+		<script src="js/EduMon.Math.js"></script>
+		<script src="js/EduMon.Util.js"></script>
+		<script src="js/EduMon.Prefs.js"></script>
+		<script src="js/EduMon.Data.js"></script>
+		<script src="js/EduMon.Analytics.js"></script>
+        <script src="js/EduMon.Messenger.js"></script>
+        <script src="js/EduMon.CSV.js"></script>
+        <script src="js/EduMon.Gui.js"></script>
+        <script src="js/EduMon.UserInteraction.js"></script>
+        <script src="js/EduMon.Timeline.js"></script>
+        <script src="js/EduMon.Feedback.js"></script>
+		<script src="js/EduMon.XWindowRPC.js"></script>
+		<script src="js/EduMon.Analytics.Debug.Data.Real.js"></script>
+		<script src="js/EduMon.Analytics.Debug.Data.Constant.js"></script>
+		<script src="js/EduMon.Analytics.Debug.js"></script>
+        <script>
+			$(document.body).on('click', 'a[href=#]', function(e) {
+				e.preventDefault();
+			});
+			$(window).load(function(){
+				EduMon.init();
+				EduMon.Gui.showFeedMessage("info","Willkommen!","EduMon stets zu Diensten :)");
+			});
+		</script>
+
+        </body>
+</html>

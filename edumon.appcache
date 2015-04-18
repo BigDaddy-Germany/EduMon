@@ -1,1 +1,9 @@
 CACHE MANIFEST
+
+CACHE:
+*
+
+NETWORK:
+http://*
+https://*
+
