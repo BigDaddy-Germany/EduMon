@@ -21,31 +21,62 @@
 			}
 			#wheel > div {
 				position: absolute;
+				z-index: 10;
 				left: 620px;
-				height: 250px;
 				min-width: 300px;
-				background-color: red;
 			}
 			#wheel_upper {
-				top: 0;
+				bottom: 340px;
+				font-family: "Arial Black", sans-serif;
+				font-size: 2.5em;
+			}
+			#wheel_upper :first-child {
+
+			}
+			#wheel_upper :last-child {
+				position: relative;
 			}
 			#wheel_lower {
-				bottom: 0;
+				top: 340px;
+				padding: 4px;
+				text-align: right;
 			}
+
+			#wheel_lower > div > label {
+				display: block;
+			}
+
+			#wheel_lower > div:not(.first) {
+				margin-top: 5px;
+			}
+
+			#wheel_lower label {
+				float: left;
+				width: 30%;
+			}
+
+			#wheel_lower select {
+				width: 60%;
+			}
+
 		</style>
     </head>
     <body>
-		<h1 id="course-name">Course</h1>
         <div id="wheel">
             <canvas id="canvas" width="1000" height="600"></canvas>
 			<div id="wheel_upper">
 				<div>
-					<span id="message"></span>:
+					<div>
+						<span id="message"></span>:
+					</div>
+					<div>
+						Das Rad des Schicksals
+					</div>
 				</div>
 				<div></div>
 			</div>
 			<div id="wheel_lower">
-				<div>
+				<div class="first">
 					<label for="mode">Modus</label>
 					<select id="mode">
 						<option value="slim">Ausdünnend</option>
@@ -76,8 +107,7 @@
 			var messages = [
 				'Glücksminister präsentiert',
 				'Exklusiv an der DHBW',
-				'Live und in Farbe',
-				'12345 ist kein sicheres Passwort'
+				'Live und in Farbe'
 			];
 			$('#message').text(messages[Math.floor(Math.random() * messages.length)]);
 
@@ -277,7 +307,7 @@
 				controller.invoke('getLecture').then(function(lecture) {
 					var course = lecture.course;
 					// update the course name
-					$('#course-name').text(course.name);
+					document.title = course.name;
 
 					// update the segment selections
 					selections.students.splice(0, selections.students.length);
