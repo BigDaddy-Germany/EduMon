@@ -511,11 +511,13 @@ EduMon = new function() {
 				return;
 			}
 
+			// Close the wheel if it is still open
 			if (wheelWindow) {
 				wheelWindow.close();
 				wheelWindow = null;
 			}
 
+			// properly shutdown the last controller if not already done
 			if (controller) {
 				controller.shutdown();
 				controller = null;
@@ -529,6 +531,7 @@ EduMon = new function() {
 
 			var wheelData = EduMon.Prefs.wheel;
 
+			// open the window with its old location and size
 			wheelWindow = EduMon.Util.openWindow("wheel.html", {
 				top: wheelData.top,
 				left: wheelData.left,
@@ -537,6 +540,7 @@ EduMon = new function() {
 				resizable: true
 			}, "blank");
 
+			// connect to the wheel window
 			controller = new EduMon.XWindowRPC(wheelWindow, {
 				wheelFinished: function(name, mode, selection) {
 					wheelData.lastMode = mode;
@@ -552,17 +556,23 @@ EduMon = new function() {
 			wheelWindow.onload = function() {
 				EduMon.Gui.showToast("Glückrad geöffnet!");
 
+				// set the previously selected mode
 				if (wheelData.lastMode) {
 					controller.invoke('switchMode', wheelData.lastMode);
 				}
 
 				wheelWindow.onunload = function() {
+					// store the current location and size
 					wheelData.top = this.screenY;
 					wheelData.left = this.screenX;
 					wheelData.width = $(this).width();
 					wheelData.height = $(this).height();
 
+					// try shutting down the controller a second after the unload event, the window should be closed
+					// by then
 					setTimeout(function() {
+						// in case the user refreshed the window this will called as well, so prevent the shutdown in
+						// that case
 						if (wheelWindow.closed) {
 							controller.shutdown();
 							controller = null;
