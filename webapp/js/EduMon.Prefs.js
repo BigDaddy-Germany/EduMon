@@ -10,7 +10,7 @@ EduMon.Prefs = {
 	wheel: {
 		top: 0,
 		left: 0,
-		width: 1000,
-		height: 600
+		width: 1048,
+		height: 652
 	}
 };

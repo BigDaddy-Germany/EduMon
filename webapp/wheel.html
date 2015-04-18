@@ -17,7 +17,7 @@
 			}
 			#wheel {
 				position: relative;
-				margin: 10px;
+				margin: 15px;
 			}
 			#wheel > div {
 				position: absolute;
@@ -26,15 +26,11 @@
 				min-width: 300px;
 			}
 			#headlines {
-				bottom: 340px;
+				margin-left: -70px;
+				font-variant: small-caps;
+				bottom: 470px;
 				font-family: "Arial Black", sans-serif;
 				font-size: 2.5em;
-			}
-			#headlines :first-child {
-
-			}
-			#headlines :last-child {
-				position: relative;
 			}
 			#configuration {
 				top: 340px;
@@ -78,15 +74,7 @@
         <div id="wheel">
             <canvas id="canvas" width="1000" height="600"></canvas>
 			<div id="headlines">
-				<div>
-					<div>
-						<span id="message"></span>:
-					</div>
-					<div>
-						Das Rad des Schicksals
-					</div>
-				</div>
-				<div></div>
+				Das Rad des Schicksals
 			</div>
 			<div id="configuration">
 				<div class="first">
@@ -123,14 +111,6 @@
 				Q: 81,
 				R: 82
 			};
-
-			// messages to be displaying randomly on page load
-			var messages = [
-				'Glücksminister präsentiert',
-				'Exklusiv an der DHBW',
-				'Live und in Farbe'
-			];
-			$('#message').text(messages[Math.floor(Math.random() * messages.length)]);
 
 			// the modes
 			var modes = {
