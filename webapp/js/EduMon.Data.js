@@ -99,7 +99,7 @@ EduMon.Data = new function() {
 	 *  			activeStudents: {}
 	 *  		}}
 	 * @method createCurrentLecture
-	 * @param {int} lectureId the lecture's ID
+	 * @param {int} [lectureId] the lecture's ID
 	 * @return 
 	 */
 	this.createCurrentLecture = function(lectureId) {

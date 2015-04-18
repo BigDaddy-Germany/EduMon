@@ -15,10 +15,6 @@
 		<input type="button" value="Start Lecture" onclick="EduMon.lectureStartDialog();">
 		<input type="button" value="Demo Data" onclick="EduMon.testAllThemAnalytics();">
 		<br>
-		System:<br>
-		<input type="button" value="Start Worker" onclick="EduMon.sendPacket({command:'start'})">
-		<input type="button" value="Stop Worker" onclick="EduMon.sendPacket({command:'stop'})">
-		<br>
 		UI Dialogs:<br>
 		<input type="button" value="Lecture edit" onclick="EduMon.UserInteraction.getLectureData(0).then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
 		<input type="button" value="Lecture add" onclick="EduMon.UserInteraction.getLectureData().then(function(data) { console.log(data); }).catch(function() { console.log('Aborted by the user'); })">
