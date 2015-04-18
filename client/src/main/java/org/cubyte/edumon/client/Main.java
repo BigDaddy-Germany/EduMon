@@ -388,6 +388,7 @@ public class Main extends Application {
             @Override
             public void run() {
                 clientConfig.updateRoomStateTimeStamp();
+                clientConfig.save();
             }
         }, 5, 5, TimeUnit.MINUTES);
     }

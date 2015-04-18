@@ -12,18 +12,4 @@ public class BreakRequestConfirmController implements Controller {
     public void setApp(Main app) {
         this.app = app;
     }
-
-    public void show() {
-        app.getScheduledExecutorService().schedule(new Runnable() {
-            @Override
-            public void run() {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        app.getNotificationSystem().hide();
-                    }
-                });
-            }
-        }, 3, TimeUnit.SECONDS);
-    }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.geometry.*?>
@@ -11,8 +12,12 @@
   <children>
     <AnchorPane layoutX="5.0" layoutY="5.0" minHeight="86.0" prefHeight="90.0" prefWidth="290.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);">
       <children>
-        <Label layoutX="30.0" layoutY="37.0" text="Test" textFill="#0c9900" />
-            <Label layoutX="81.0" layoutY="14.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F9 bis der Daumen Ihrem Feedback entspricht." wrapText="true" />
+            <Label layoutX="81.0" layoutY="14.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht." wrapText="true" />
+            <ImageView fx:id="thumb" fitHeight="62.0" fitWidth="43.0" layoutX="22.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@thumb.png" />
+               </image>
+            </ImageView>
       </children>
     </AnchorPane>
   </children>
