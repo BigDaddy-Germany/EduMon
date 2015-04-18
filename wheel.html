@@ -25,38 +25,51 @@
 				left: 620px;
 				min-width: 300px;
 			}
-			#wheel_upper {
+			#headlines {
 				bottom: 340px;
 				font-family: "Arial Black", sans-serif;
 				font-size: 2.5em;
 			}
-			#wheel_upper :first-child {
+			#headlines :first-child {
 
 			}
-			#wheel_upper :last-child {
+			#headlines :last-child {
 				position: relative;
 			}
-			#wheel_lower {
+			#configuration {
 				top: 340px;
 				padding: 4px;
 				text-align: right;
 			}
 
-			#wheel_lower > div > label {
+			#configuration > div > label {
 				display: block;
 			}
 
-			#wheel_lower > div:not(.first) {
+			#configuration > div:not(.first) {
 				margin-top: 5px;
 			}
 
-			#wheel_lower label {
+			#configuration label {
 				float: left;
 				width: 30%;
 			}
 
-			#wheel_lower select {
+			#configuration select {
 				width: 60%;
+			}
+
+			#help {
+				bottom: 0;
+			}
+			#help > div {
+				text-align: right;
+			}
+			#help > div > strong {
+				display: block;
+				float: left;
+				width: 60px;
+				text-align: left;
 			}
 
 		</style>
@@ -64,7 +77,7 @@
     <body>
         <div id="wheel">
             <canvas id="canvas" width="1000" height="600"></canvas>
-			<div id="wheel_upper">
+			<div id="headlines">
 				<div>
 					<div>
 						<span id="message"></span>:
@@ -75,7 +88,7 @@
 				</div>
 				<div></div>
 			</div>
-			<div id="wheel_lower">
+			<div id="configuration">
 				<div class="first">
 					<label for="mode">Modus</label>
 					<select id="mode">
@@ -92,7 +105,15 @@
 					</select>
 				</div>
 			</div>
-        </div>
+			<div id="help">
+				<h2>Bedienung</h2>
+				<div><strong>Leertaste</strong> Rad drehen</div>
+				<div><strong>Taste A</strong> Studenten/Gruppen wechseln</div>
+				<div><strong>Taste M</strong> Modus wechseln</div>
+				<div><strong>Taste R</strong> Rad zurücksetzen</div>
+				<div><strong>Taste Q</strong> Fenster schließen</div>
+        	</div>
+		</div>
         <script>
 			// the keys used in various keyboard controls
 			var KEY = {
