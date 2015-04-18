@@ -66,17 +66,13 @@ EduMon = new function() {
 	 */
 	var handleIncomingData = function(event){
 		//Process packets received by message server
-		if ("inbox" in event && event.inbox.length > 0){
-			for (var i = 0; i < event.inbox.length; ++i) {
-				processPacket(event.inbox[i]);
-			}
+		if ("inbox" in event) {
+			event.inbox.forEach(processPacket);
 		}
 
 		//Handle any errors
-		if ("errorMessages" in event && event.errorMessages.length > 0){
-			for (i = 0; i < event.errorMessages.length; ++i) {
-				that.debug(event.errorMessages[i]);
-			}
+		if ("errorMessages" in event) {
+			event.errorMessages.forEach(that.debug);
 		}
 	};
 
@@ -136,19 +132,22 @@ EduMon = new function() {
 	/**
 	 * React to a break request by incrementing a counter and displaying a newsfeed alert with varying intensity
 	 */
-	var processBreakRequest = function(){
-		if (EduMon.Prefs.currentLecture.timeline.status==="play"){
+	var processBreakRequest = function() {
+		if (EduMon.Prefs.currentLecture.timeline.status == "play") {
 			var analytics = EduMon.Prefs.currentLecture.analytics;
 			var numStudents = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
 			analytics.breakRequests++;
 
 			var style = "info";
-			if (analytics.breakRequests>(numStudents*0.2)) style = "warning";
-			if (analytics.breakRequests>(numStudents*0.5)) style = "danger";
+			if (analytics.breakRequests > (numStudents*0.2)) {
+				style = "warning";
+			}
+			if (analytics.breakRequests > (numStudents*0.5)) {
+				style = "danger";
+			}
 
-			EduMon.Gui.showFeedMessage(style,"Pausenanfrage",
-					(analytics.breakRequests>1 ? analytics.breakRequests+" Teilnehmer bitten" : "Ein Teilnehmer bittet")+" um eine Pause."
-					);
+			var msgStart = (analytics.breakRequests > 1 ? analytics.breakRequests + " Teilnehmer bitten" : "Ein Teilnehmer bittet");
+			EduMon.Gui.showFeedMessage(style, "Pausenanfrage", msgStart + " um eine Pause.");
 		}
 	};
 
@@ -271,11 +270,11 @@ EduMon = new function() {
 			"dimensions": {"width": room.width, "height": room.height}
 		};
 		var students = EduMon.Prefs.currentLecture.course.students;
-		for (var i=0; i<students.length; i++){
+		for (var i=0; i < students.length; i++){
 			body.names.push(students[i].name);
 		}
 
-		var packet = EduMon.Data.createBasePacket(1,"BROADCAST",body);
+		var packet = EduMon.Data.createBasePacket(1, "BROADCAST", body);
 		that.messenger.sendEvent(packet);
 		return packet;
 	};
@@ -320,8 +319,6 @@ EduMon = new function() {
 
 	/**
 	 * Configures the message worker to use the connection settings of the current lecture
-	 * @method updateConnection
-	 * @return undefined
 	 */
 	this.updateConnection = function(){
 		that.messenger.configure({
@@ -333,8 +330,6 @@ EduMon = new function() {
 
 	/**
 	 * Stops the message worker to temporarily deactivate network communication
-	 * @method stopLecture
-	 * @return undefined
 	 */
 	this.stopLecture = function(){
 		that.messenger.stop();
@@ -346,9 +341,8 @@ EduMon = new function() {
 
 	/**
 	 * [DEV] Send demo packet - TESTING ONLY
-	 * @method sendDemo
+	 *
 	 * @param {int} typenumber Type of package to send
-	 * @return undefined
 	 */
 	this.sendDemo = function(typenumber){
 		jQuery.getJSON("js/demoDataOut.json",function(data){
@@ -358,26 +352,24 @@ EduMon = new function() {
 
 	/**
 	 * Activate continuous saving of app status to local storage
-	 * @method enablePersistApp
-	 * @return undefined
 	 */
 	this.enablePersistApp = function(){
-		setTimeout(function(){
-			setInterval(function(){
+		setTimeout(function() {
+			setInterval(function() {
 				localStorage.setItem("EduMon.Prefs",JSON.stringify(EduMon.Prefs));
 				//EduMon.Gui.showToast("App state saved");
-			},1000); //persist every 1sec
-		},5000); //start persisting app after 5sec
+			}, 1000); //persist every 1sec
+		}, 5000); //start persisting app after 5sec
 	};
 
 	/**
 	 * Restore a locally stored app status if available
-	 * @method tryRestoreApp
+	 *
 	 * @return {Boolean} stored status found
 	 */
 	this.tryRestoreApp = function(){
 		var stored = localStorage.getItem("EduMon.Prefs");
-		if (stored!==null){
+		if (stored) {
 			var Prefs = JSON.parse(stored);
 
 			// save currentLecture to use it later
