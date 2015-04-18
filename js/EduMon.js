@@ -476,6 +476,11 @@ EduMon = new function() {
 
 		button.on('click', function() {
 
+			if (!EduMon.Prefs.currentLecture || EduMon.Prefs.currentLecture.activeStudents.length == 0) {
+				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv!");
+				return;
+			}
+
 			if (wheelWindow) {
 				wheelWindow.close();
 				wheelWindow = null;
