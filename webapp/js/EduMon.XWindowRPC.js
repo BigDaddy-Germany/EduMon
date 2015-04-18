@@ -56,6 +56,11 @@ EduMon.XWindowRPC = function (target, functions) {
 
 	window.addEventListener('message', handleMessage);
 
+	/**
+	 * Sends a data packet to the target window
+	 *
+	 * @param data the data to send
+	 */
 	function send(data) {
 		try {
 			target.postMessage(data, '*')
@@ -65,6 +70,12 @@ EduMon.XWindowRPC = function (target, functions) {
 		}
 	}
 
+	/**
+	 * Sends a result packet to the target window with the given invocation ID and the result.
+	 *
+	 * @param id the id of the procedure call
+	 * @param result the result of the procedure
+	 */
 	function sendResult(id, result) {
 		send({
 			type: TYPE_RESULT,
@@ -73,6 +84,12 @@ EduMon.XWindowRPC = function (target, functions) {
 		});
 	}
 
+	/**
+	 * Sends an error packet to the target window with the given invocation ID and the error message.
+	 *
+	 * @param id the id of the procedure call
+	 * @param message the error message
+	 */
 	function sendError(id, message) {
 		send({
 			type: TYPE_ERROR,
@@ -81,7 +98,13 @@ EduMon.XWindowRPC = function (target, functions) {
 		})
 	}
 
-	function getVerifyArgs(args) {
+	/**
+	 * Verifies the arguments of the invoke call and returns the parameters for the
+	 *
+	 * @param {Array} args the invoke(Local) arguments.
+	 * @returns {Array} the procedure arguments
+	 */
+	function getVerifiedArgs(args) {
 		if (args.length === 0) {
 			throw "No name given!";
 		}
@@ -91,8 +114,15 @@ EduMon.XWindowRPC = function (target, functions) {
 		return [];
 	}
 
+	/**
+	 * Calls a remote procedure.
+	 *
+	 * @param {string} name the name of the remote procedure to call
+	 * @param {... *} args the arguments for the remote procedure
+	 * @returns {Promise} a promise of the RPC result
+	 */
 	this.invoke = function(name, args) {
-		args = getVerifyArgs(arguments);
+		args = getVerifiedArgs(arguments);
 		return new Promise(function (fulfill, reject) {
 			var id = nextId++;
 			outstandingResponses[id] = [fulfill, reject];
@@ -105,8 +135,15 @@ EduMon.XWindowRPC = function (target, functions) {
 		});
 	};
 
+	/**
+	 * Calls a local procedure.
+	 *
+	 * @param {string} name the name of the local procedure to call
+	 * @param {... *} args the arguments for the local procedure
+	 * @returns {*} The result of the procedure
+	 */
 	this.invokeLocal = function(name, args) {
-		args = getVerifyArgs(arguments);
+		args = getVerifiedArgs(arguments);
 		var func = functions[name];
 		if (!func) {
 			throw "Function not found!";
@@ -114,6 +151,9 @@ EduMon.XWindowRPC = function (target, functions) {
 		return func.apply(functions, args);
 	};
 
+	/**
+	 * Shuts down this RPC service.
+	 */
 	this.shutdown = function() {
 		window.removeEventListener('message', handleMessage);
 	}
