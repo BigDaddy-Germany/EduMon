@@ -43,6 +43,11 @@ EduMon = new function () {
 
 		bindFortuneWheel(this.Prefs);
 
+		if (applicationCache && applicationCache.status === 1) {
+			console.info("Updating the application cache...");
+			applicationCache.update();
+		}
+
 		that.messenger.start();
 	};
 
