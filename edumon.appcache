@@ -1,9 +1,54 @@
 CACHE MANIFEST
+# Build date: 
 
 CACHE:
-*
+css/app.css
+dialogs/editCourse.html
+dialogs/connectionSettings.html
+dialogs/deleteData.html
+dialogs/editRoom.html
+dialogs/csvImport.html
+dialogs/editLecture.html
+dialogs/lectureManager.html
+dialogs/dummy2.html
+dialogs/dummy.html
+edumon.appcache
+fonts/RobotoBold700.woff
+fonts/RobotoNormal400.woff
+images/wheel.png
+images/wheel.icon.png
+images/logo.png
+images/thumb.png
+index-cached.html
+index.html
+js/EduMon.Gui.js
+js/EduMon.Data.js
+js/EduMon.Feedback.js
+js/EduMon.Analytics.Debug.Data.Real.js
+js/EduMon.Timeline.js
+js/EduMon.Prefs.js
+js/EduMon.XWindowRPC.js
+js/EduMon.Math.js
+js/EduMon.Analytics.js
+js/EduMon.UserInteraction.js
+js/EduMon.js
+js/EduMon.Messenger.Worker.js
+js/EduMon.Util.js
+js/EduMon.Analytics.Debug.js
+js/EduMon.Wheel.js
+js/EduMon.Analytics.Debug.Data.Constant.js
+js/EduMon.Messenger.js
+js/EduMon.CSV.js
+lib/jquery/js/jquery.min.js
+lib/excanvas/js/excanvas.js
+lib/bootstrap/css/bootstrap.min.css
+lib/bootstrap/fonts/glyphicons-halflings-regular.woff
+lib/bootstrap/js/bootstrap.min.js
+lib/es6-promise/js/es6-promise.min.js
+test.html
+wheel.html
 
 NETWORK:
 http://*
 https://*
-
+*
