@@ -30,7 +30,7 @@ EduMon.Wheel = function(canvas, segments) {
 	var acceleration = speedUp;
 
 
-	var colors = ['#000000', '#ffff00', '#ffc700', '#ff9100', '#ff6301', '#ff0000', '#c6037e', '#713697', '#444ea1', '#2772b2', '#0297ba', '#008e5b', '#8ac819'];
+	var colors = generateColorsHSV();
 	var segmentColors = [];
 
 	var size = 290;
@@ -143,7 +143,12 @@ EduMon.Wheel = function(canvas, segments) {
 		var blue = (parseInt(color.substring(5), 16));
 
 		var hsv = EduMon.Math.rgbToHsv(red, green, blue);
-		var rgb = EduMon.Math.hsvToRgb(modulo((hsv[0] + 180), 360), hsv[1], hsv[1] < .5 ? 1 : 0);
+
+		var value = 1;
+		if (hsv[0] != 240) {
+			value = hsv[2] <= .7 || hsv[0] == 240 ? 1 : 0;
+		}
+		var rgb = EduMon.Math.hsvToRgb(0, 0, value);
 
 		return stringifyRGB.apply(stringifyRGB, rgb);
 	}
@@ -168,42 +173,15 @@ EduMon.Wheel = function(canvas, segments) {
 	/**
 	 * Ths function generates a list of colors by going around the HSV hue circle
 	 *
-	 * @param {number} step the step size
 	 * @returns {Array} the list of colors
 	 */
-	function generateColorsHSV(step) {
-		step = step || 30;
-
+	function generateColorsHSV() {
 		var colors = [];
-		for (var hue = 0; hue < 360; hue += step) {
-			var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 1, 1)));
-			if (colors.indexOf(c) < 0) {
-				colors.push(c);
-			}
-		}
-		return colors;
-	}
-
-	/**
-	 * Ths function generates a list of colors by iterating all RGB color components
-	 *
-	 * @param {number} step the step size
-	 * @returns {Array} the list of colors
-	 */
-	function generateColorsRGB(step) {
-		step = step || 128;
-		var base = [];
-		var i = 0;
-		do {
-			base.push(Math.min(i, 255));
-			i += step;
-		} while (i <= 256);
-
-		var colors = [];
-		for (var r = 0; r < base.length; ++r) {
-			for (var g = 0; g < base.length; ++g) {
-				for (var b = 0; b < base.length; ++b) {
-					colors.push(stringifyRGB(base[r], base[g], base[b]))
+		for (var hue = 0; hue < 360; hue += 60) {
+			for (var value = .5; value < .95; value += .08) {
+				var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 0.8, value)));
+				if (colors.indexOf(c) < 0) {
+					colors.push(c);
 				}
 			}
 		}
