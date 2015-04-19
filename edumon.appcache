@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sun Apr 19 23:27:50 CEST 2015
+# Build date: Sun Apr 19 23:30:00 CEST 2015
 
 CACHE:
 css/app.css
@@ -12,6 +12,7 @@ dialogs/editLecture.html
 dialogs/lectureManager.html
 dialogs/dummy2.html
 dialogs/dummy.html
+favicon.ico
 fonts/RobotoBold700.woff
 fonts/RobotoNormal400.woff
 images/wheel.png
