@@ -173,6 +173,7 @@
 				if (start < 0 && task === -1) {
 					wheel.beginSpinning();
 					start = Date.now();
+					minDelay = 2000 + Math.round(Math.random() * 1000);
 					return true;
 				}
 				return false;
