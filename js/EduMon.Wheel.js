@@ -233,14 +233,7 @@ EduMon.Wheel = function(canvas, segments) {
 	 * @returns {number} the string hash code
 	 */
 	function hashString(a) {
-		// See http://www.cse.yorku.ca/~oz/hash.html
-		var hash = 5381;
-		for (var i = 0; i < a.length; i++) {
-			var char = a.charCodeAt(i);
-			hash = ((hash << 5) + hash) + char;
-			hash = hash & hash; // Convert to 32bit integer
-		}
-		return hash;
+		return EduMon.Util.hashString(a, 20);
 	}
 
 	/**
