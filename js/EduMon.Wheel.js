@@ -377,13 +377,13 @@ EduMon.Wheel = function(canvas, segments) {
 		context.save();
 		context.beginPath();
 
-		// Start in the centre
+		// Start in the center
 		context.moveTo(centerX, centerY);
 		context.arc(centerX, centerY, size, startAngle, endAngle, false); // Draw a arc around the edge
 		context.lineTo(centerX, centerY); // Now draw a line back to the centre
 
 		// Clip anything that follows to this area
-		//ctx.clip(); // It would be best to clip, but we can double performance without it
+		//context.clip(); // It would be best to clip, but we can double performance without it TODO try 30fps with clipping
 		context.closePath();
 
 		var background = color[0];
@@ -394,12 +394,12 @@ EduMon.Wheel = function(canvas, segments) {
 		context.stroke();
 
 		// Now draw the text
-		context.save(); // The save ensures this works on Android devices
+		context.save();
 		context.translate(centerX, centerY);
 		context.rotate((startAngle + endAngle) / 2);
 
 		context.fillStyle = foreground;
-		context.fillText(text.substr(0, 20), size / 2 + 20, 0);
+		context.fillText(text, size / 2 + 20, 0);
 		context.restore();
 
 		if (modulo(startAngle, TAU) >= modulo(endAngle, TAU)) {
