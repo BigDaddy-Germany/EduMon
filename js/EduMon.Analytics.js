@@ -115,7 +115,7 @@ EduMon.Analytics = function () {
 		 Package body format:
 		 body: { id: 123, value: 0.69 }
 		 */
-		var feedback = analytics.feedbackValues[data.id];
+		var feedback = analytics.studentFeedback[data.id];
 		if (!feedback) {
 			return;
 		}

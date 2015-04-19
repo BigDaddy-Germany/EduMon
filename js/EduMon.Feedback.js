@@ -12,22 +12,27 @@ EduMon.Feedback = new function() {
 	this.requestFeedback = function(type){
 		var buttonId = (type==="rating" ? "#btnRating" : "#btnThumbs");
 		$(buttonId).addClass("disabled");
-		setInterval(function(){$(buttonId).removeClass("disabled");},5000);
+		setInterval(function() {
+			$(buttonId).removeClass("disabled");
+		}, 5000);
 
 		var analytics = EduMon.Prefs.currentLecture.analytics;
 		analytics.currentFeedbackId = analytics.nextFeedbackId++;
 
-		var packet = EduMon.Data.createBasePacket(5,"BROADCAST",{"id": analytics.currentFeedbackId, "type": type});
+		var packet = EduMon.Data.createBasePacket(5, "BROADCAST", {
+			id: analytics.currentFeedbackId,
+			type: type
+		});
 		analytics.studentFeedback[analytics.currentFeedbackId] = {
-			"type": type,
-			"time": packet.time,
-			"currentAverage": 0,
-			"studentVoting": {}
+			type: type,
+			time: packet.time,
+			currentAverage: 0,
+			studentVoting: {}
 		};
 
 		EduMon.sendPacket(packet);
-		EduMon.Gui.showToast((type==="rating" ? "Abstimmung" : "Daumenfeedback")+" gestartet!");
-		EduMon.Gui.openPultUpMode(type,that.updateFeedback);
+		EduMon.Gui.showToast((type === "rating" ? "Abstimmung" : "Daumenfeedback") + " gestartet!");
+		EduMon.Gui.openPultUpMode(type, that.updateFeedback);
 
 		return packet;
 	};
