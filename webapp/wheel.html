@@ -386,6 +386,16 @@
 					selectedMode(segment);
 				};
 			}
+
+			var mobileRegex = /mobile/i;
+			if (mobileRegex.test(navigator.userAgent)) {
+				var input = $('<input type="text">').css('visibility', 'hidden').css('position', 'absolute').appendTo(document.body);
+				$(window).on('touchstart', function(e) {
+					e.preventDefault();
+					$(window).off('touchstart');
+					input.focus();
+				});
+			}
         </script>
     </body>
 </html>
