@@ -17,6 +17,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
 public class LoginConfirmController implements Controller, Victim<Message> {
@@ -24,6 +25,7 @@ public class LoginConfirmController implements Controller, Victim<Message> {
     ScheduledFuture<?> send;
     Future<?> execute;
     private int seconds;
+    private boolean backToNameChooser = false;
 
     @FXML
     private Label infoBar;
@@ -131,7 +133,11 @@ public class LoginConfirmController implements Controller, Victim<Message> {
     }
 
     public void handleCancel() {
-        app.changeScene(SEAT_CHOOSER);
+        if (backToNameChooser) {
+            app.changeScene(NAME_CHOOSER);
+        } else {
+            app.changeScene(SEAT_CHOOSER);
+        }
         send.cancel(true);
         execute.cancel(true);
     }
@@ -140,17 +146,21 @@ public class LoginConfirmController implements Controller, Victim<Message> {
     public void take(Message bullet) {
         int successCode = ((LoginFeedback) bullet.body).successCode;
         String errors = "";
-        if ((successCode & 1) != 0) {
-            errors += "Dein Name ist bereits von einer anderen Person angegeben worden.\r\n";
-        }
         if ((successCode & 2) != 0) {
             errors += "Der Sitz ist bereits von einer anderen Person belegt.\r\n";
-        }
-        if ((successCode & 4) != 0) {
-            errors += "Der gewählte Name existiert in diesem Kurs nicht.\r\n";
+            backToNameChooser = false;
         }
         if ((successCode & 8) != 0) {
             errors += "Der gewählte Sitzplatz existiert in diesem Raum nicht.\r\n";
+            backToNameChooser = false;
+        }
+        if ((successCode & 1) != 0) {
+            errors += "Dein Name ist bereits von einer anderen Person angegeben worden.\r\n";
+            backToNameChooser = true;
+        }
+        if ((successCode & 4) != 0) {
+            errors += "Der gewählte Name existiert in diesem Kurs nicht.\r\n";
+            backToNameChooser = true;
         }
         if (successCode == 0) {
             confirmLogin();

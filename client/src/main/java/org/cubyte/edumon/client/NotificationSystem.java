@@ -86,7 +86,7 @@ public class NotificationSystem implements Victim<Message> {
     }
 
     private void cancelHideTimer() {
-        if (hideTimer != null && !hideTimer.isDone()) {
+        if (hideTimer != null) {
             hideTimer.cancel(true);
         }
     }

@@ -47,7 +47,7 @@
             <Insets left="14.0" top="14.0" />
          </GridPane.margin>
       </Label>
-      <Label fx:id="problems" alignment="CENTER" prefHeight="100.0" prefWidth="600.0" text="problems" textAlignment="JUSTIFY" visible="false" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+      <Label fx:id="problems" alignment="CENTER" prefHeight="100.0" prefWidth="600.0" text="problems" textAlignment="CENTER" visible="false" GridPane.halignment="CENTER" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets top="160.0" />
          </GridPane.margin>
