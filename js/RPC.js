@@ -1,11 +1,20 @@
 /**
  * This class implements an RPC service to communicate between windows.
  *
- * @param {Window} target the window to send messages to
- * @param {Object} functions a map of name -> function pairs.
+ * @param {Function} registerReceiver the function to send a packet of data to the remote node
+ * @param {Function} send the function to send a packet of data to the remote node
+ * @param {Object} procedures a map of name -> function pairs.
  * @constructor
  */
-EduMon.XWindowRPC = function (target, functions) {
+function RPC(registerReceiver, send, procedures) {
+
+	if (!(registerReceiver instanceof Function)) {
+		throw "registerReceiver must be a function!";
+	}
+
+	if (!(send instanceof Function)) {
+		throw "send must be a function!";
+	}
 
 	var nextId = 1;
 	var outstandingResponses = {};
@@ -14,6 +23,12 @@ EduMon.XWindowRPC = function (target, functions) {
 	var TYPE_RESULT = 2;
 	var TYPE_ERROR = 3;
 
+	var removeReceiver = registerReceiver(handleMessage);
+
+	if (!(removeReceiver instanceof Function)) {
+		throw "registerReceiver must return a function that removes the receiver";
+	}
+
 	/**
 	 * This function handles incoming messages.
 	 * It is intentionally declared as a var to have a different instance per XWindowRPC instance to safely remove the
@@ -21,18 +36,18 @@ EduMon.XWindowRPC = function (target, functions) {
 	 *
 	 * @param e the message event
 	 */
-	var handleMessage = function (e) {
+	function handleMessage(e) {
 		var data = e.data;
 
 		var p;
 		if (data.type === TYPE_INVOKE) {
-			var func = functions[data.name];
+			var func = procedures[data.name];
 			if (!func) {
 				sendError(data.id, "Function not found!");
 			}
 			var result;
 			try {
-				result = func.apply(functions, data.args);
+				result = func.apply(procedures, data.args);
 			} catch (e) {
 				sendError(data.id, e);
 			}
@@ -51,22 +66,6 @@ EduMon.XWindowRPC = function (target, functions) {
 			}
 			var reject = p[1];
 			reject(data.message);
-		}
-	};
-
-	window.addEventListener('message', handleMessage);
-
-	/**
-	 * Sends a data packet to the target window
-	 *
-	 * @param data the data to send
-	 */
-	function send(data) {
-		try {
-			target.postMessage(data, '*')
-		} catch (e) {
-			console.error(e);
-			console.error(data);
 		}
 	}
 
@@ -144,17 +143,83 @@ EduMon.XWindowRPC = function (target, functions) {
 	 */
 	this.invokeLocal = function(name, args) {
 		args = getVerifiedArgs(arguments);
-		var func = functions[name];
+		var func = procedures[name];
 		if (!func) {
 			throw "Function not found!";
 		}
-		return func.apply(functions, args);
+		return func.apply(procedures, args);
 	};
 
 	/**
 	 * Shuts down this RPC service.
 	 */
 	this.shutdown = function() {
-		window.removeEventListener('message', handleMessage);
+		removeReceiver();
 	}
+}
+
+/**
+ * Implements RPC for cross window communitcation.
+ *
+ * @param {Window} target the window that the data is send to
+ * @param {Object} procedures the API
+ * @returns {RPC} a new RPC instance configured for cross window communication
+ * @constructor
+ */
+RPC.xWindow = function(target, procedures) {
+
+	if (!(target instanceof Window)) {
+		throw "target must be a window!";
+	}
+
+	function registerMessageListener(func) {
+		window.addEventListener('message', func);
+		return function() {
+			window.removeEventListener('message', func);
+		}
+	}
+
+	function sender(data) {
+		try {
+			target.postMessage(data, '*')
+		} catch (e) {
+			console.error(e);
+			console.error(data);
+		}
+	}
+
+	return new RPC(registerMessageListener, sender, procedures);
+};
+
+/**
+ * Implements RPC to communicate with a Web Worker
+ *
+ * @param {Worker} worker the worker to communicate with
+ * @param {Object} procedures the API
+ * @returns {RPC} a new RPC instance
+ * @constructor
+ */
+RPC.WorkerRPC = function(worker, procedures) {
+	// verify a Worker-like object
+	if (!worker || worker.onmessage === undefined || !(worker.postMessage instanceof Function)) {
+		throw "worker must be a Web Worker " + Date.now();
+	}
+
+	function registerMessageListener(func) {
+		worker.onmessage = func;
+		return function() {
+			worker.onmessage = null;
+		}
+	}
+
+	function sender(data) {
+		try {
+			worker.postMessage(data)
+		} catch (e) {
+			console.error(e);
+			console.error(data);
+		}
+	}
+
+	return new RPC(registerMessageListener, sender, procedures);
 };

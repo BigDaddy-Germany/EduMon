@@ -8,7 +8,7 @@
         <script src="js/EduMon.Math.js"></script>
         <script src="js/EduMon.Util.js"></script>
         <script src="js/EduMon.Wheel.js"></script>
-        <script src="js/EduMon.XWindowRPC.js"></script>
+        <script src="js/RPC.js"></script>
 		<style>
 			html, body {
 				margin: 0;
@@ -331,7 +331,7 @@
 
 			if (window.opener) {
 				// we were opened by another window, setup our RPC service
-				var controller = new EduMon.XWindowRPC(window.opener, {
+				var controller = RPC.xWindow(window.opener, {
 					reset: function() {
 						resetWheel(controller);
 					},

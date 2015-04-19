@@ -1,6 +1,6 @@
 /* Message-Worker communicates with the message server */
 
-importScripts('EduMon.Util.js');
+importScripts('RPC.js');
 
 //config
 var debugging = true;
@@ -8,101 +8,130 @@ var url = "localhost";
 var room = encodeURIComponent("42A");
 var moderatorPassphrase = encodeURIComponent("secretpassword");
 var outgoing = [];
-var interval = 1000;
-var timer = -1; // under the assumption that only positive IDs are assigned by browsers
-var requests_failed = 0;
+var onlineInterval = 1000;
+var offlineInterval = 10 * 1000;
+var timer = -1;
 var configured = false;
+var failedRequests = 0;
+var failedRequestsForOffline = 20;
+var isOnline = true;
 
+var commands = {
+
+	/**
+	 * Configure connection
+	 *
+	 * @param {Object} options Setup parameters: url, room, moderatorPassphrase, interval (in msec)
+	 */
+	configure: function(options) {
+		if ("url" in options) {
+			url = options.url;
+		}
+		if ("room" in options) {
+			room = encodeURIComponent(options.room);
+		}
+		if ("moderatorPassphrase" in options) {
+			moderatorPassphrase = encodeURIComponent(options.moderatorPassphrase);
+		}
+		if ("interval" in options) {
+			onlineInterval = options.interval;
+		}
+
+		configured = true;
+		if (timer !== -1) {
+			console.log("Worker started and configured, queue will be processed");
+		}
+	},
+
+	/**
+	 * Enable queue processing (is automatically paused until first configuration)
+	 */
+	start: function() {
+		if (!configured) {
+			console.warn("Worker started, but will only send once configured");
+		} 
+		if (timer > -1) {
+			clearInterval(timer);
+			console.log("Queue timer was already running, restarting it!");
+		}
+		isOnline = true;
+		timer = setInterval(processQueue, onlineInterval);
+		console.log('Queue timer started.');
+	},
+
+	/**
+	 * Stop queue processing
+	 */
+	stop: function() {
+		clearInterval(timer);
+		timer = -1;
+	},
+
+	queueEvent: function(e) {
+		outgoing.push(e);
+	}
+};
+
+var rpc = RPC.WorkerRPC(self, commands);
 
 /**
- * Create a new JSON-POST-HTTP-Request 
- * @method createRequest
+ * Forward incoming data to main app
+ *
+ * @param {Object} event Data to forward
+ */
+function handleEvent(event) {
+	rpc.invoke('handleEvent', event);
+}
+
+/**
+ * Create a new JSON-POST-HTTP-Request
+ *
  * @return {XMLHttpRequest}
  */
 function createRequest() {
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", url + "?room=" + room + "&moderatorPassphrase=" + moderatorPassphrase, true);
 	xhr.withCredentials = true;
-	xhr.setRequestHeader("Content-type", "text/plain; charset=UTF-8"); //forged to force cross-site request of the "simple" type
+	// forged to force cross-site request of the "simple" type
+	xhr.setRequestHeader("Content-Type", "text/plain; charset=UTF-8");
 	xhr.setRequestHeader("Accept", "application/json");
 	return xhr;
 }
 
-/* fitting function is executed if "command" attribute is present in incoming data for worker */
-var commands = {
-	/**
-	 * Configure connection
-	 * @param {Object} data Setup parameters: url, room, moderatorPassphrase, interval (in msec)
-	 */
-	config: function(data) {
-		if ("url"                 in data) url = data.url;
-		if ("room"                in data) room = encodeURIComponent(data.room);
-		if ("moderatorPassphrase" in data) moderatorPassphrase = encodeURIComponent(data.moderatorPassphrase);
-		if ("interval"            in data) interval = data.interval;
-		configured = true;
-		if (timer!==-1){
-			console.log("Worker started and configured, queue will be processed");
-		} 
-	},
-	/**
-	 * Enable queue processing (is automatically paused until first configuration)
-	 */
-	start: function() {
-		if (!configured){
-			console.log("Warning: Worker started, but will only send once configured");
-		} 
-		if (timer !== -1) {
-			clearInterval(timer);
-			console.log("Queue timer was already running, restarting it!");
-		}
-		timer = setInterval(processQueue, interval);
-		console.log('Queue timer started.');
-	},
-	/**
-	 * Stop queue processing
-	 */
-	stop: function() {
-		clearInterval(timer);
-		timer = undefined;
-	}
-};
-
-
-/**
- * Handle call for action from main app 
- * @param {Object} input Inter-thread communication object
- */
-onmessage = function (input) {
-	//Configuration command
-	var data = input.data;
-	if ("command" in data) {
-		var cmd = data.command;
-		if (commands.hasOwnProperty(cmd)) {
-			commands[cmd](data);
+function checkOnline(error) {
+	if (isOnline) {
+		if (error) {
+			failedRequests++;
+			if (failedRequests >= failedRequestsForOffline) {
+				isOnline = false;
+				goOffline();
+			}
 		} else {
-			console.log("Received unknown command '" + cmd + "' ... ignoring it.")
+			failedRequests = 0;
 		}
-
 	} else {
-		//Packet to queue
-		outgoing.push(data);
+		if (!error) {
+			failedRequests = 0;
+			isOnline = true;
+			goOnline();
+		}
 	}
-};
+}
 
-/**
- * Forward incoming data to main app
- * @method handleEvent
- * @param {Object} event Data to forward
- * @return undefined
- */
-function handleEvent(event) {
-	postMessage(event);
+function goOffline() {
+	clearInterval(timer);
+	timer = setInterval(processQueue, offlineInterval);
+	rpc.invoke('goOffline');
+}
+
+function goOnline() {
+	clearInterval(timer);
+	timer = setInterval(processQueue, onlineInterval);
+	rpc.invoke('goOnline');
 }
 
 /**
  * Send queued packets (called by queue timer)
- * @method processQueue
- * @return undefined
  */
 function processQueue() {
 	if (!configured){
@@ -112,22 +141,24 @@ function processQueue() {
 	var toBeSent = outgoing;
 	outgoing = [];
 
-	var req = createRequest();
-
 	function onError() {
-		requests_failed++;
+		checkOnline(true);
 		outgoing = outgoing.concat(toBeSent);
-		if (debugging) console.log("Request failed (" + toBeSent.length + " packets waiting)");
+		if (debugging) {
+			console.debug("Request failed (" + toBeSent.length + " packets waiting)");
+		}
 	}
 
 	function onLoad() {
 		if (req.status == 200) {
+			checkOnline(false);
 			handleEvent(JSON.parse(req.responseText))
 		} else {
 			onError();
 		}
 	}
 
+	var req = createRequest();
 	req.onerror = onError;
 	req.onload = onLoad;
 	req.send(JSON.stringify(toBeSent));

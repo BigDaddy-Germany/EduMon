@@ -18,7 +18,11 @@ EduMon = new function () {
 	this.init = function () {
 		that.debug("*** All Glory to the EduMon! ***");
 		that.debug("EduMon awakening...");
-		that.messenger = new EduMon.Messenger(handleIncomingData);
+		that.messenger = new EduMon.Messenger({
+			handleEvent: handleIncomingData,
+			goOffline: messengerWentOffline,
+			goOnline: messengerWentOnline
+		});
 
 		this.Prefs.rooms.push(new EduMon.Data.Room("160C", 6, 4));
 		this.Prefs.courses.push(new EduMon.Data.Course("DemoCourse", [
@@ -79,6 +83,14 @@ EduMon = new function () {
 		if ("errorMessages" in event) {
 			event.errorMessages.forEach(that.debug);
 		}
+	};
+
+	var messengerWentOffline = function() {
+		EduMon.Gui.showFeedMessage("warning", "Offline", "Die Anwendung befindet sich zur Zeit aufgrund von anhaltenden Übertragungsproblemen im Offline-Modus.")
+	};
+
+	var messengerWentOnline = function() {
+		EduMon.Gui.showFeedMessage("success", "Online", "Die Anwendung befindet sich nun wieder im Online-Modus.")
 	};
 
 	this.processPacketPublic = function (packet) {
@@ -563,7 +575,7 @@ EduMon = new function () {
 			}, "blank");
 
 			// connect to the wheel window
-			controller = new EduMon.XWindowRPC(wheelWindow, {
+			controller = RPC.xWindow(wheelWindow, {
 				wheelFinished: function (name, mode, selection) {
 					wheelData.lastMode = mode;
 					var pre = (selection == 'groups' ? "Gruppe: " : "Student: ");

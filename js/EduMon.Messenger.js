@@ -1,48 +1,50 @@
 /**
  * Packet handling - Messenger class connects with message worker
+ *
+ * @param {Object} procedures a map of remote procedures
  * @constructor
- * @param {Function} eventCallback
  */
-EduMon.Messenger = function(eventCallback){
-	var that = this;
-	var worker;
+EduMon.Messenger = function(procedures) {
+	var worker = new Worker('js/EduMon.Messenger.Worker.js');
+	var rpc = RPC.WorkerRPC(worker, procedures);
 
 	/**
-	 * Send a packet or command to the message worker 
-	 * @method sendEvent
+	 * Send a packet or command to the message worker
+	 *
 	 * @param {Object} event Packet or command
-	 * @return undefined
+	 * @return {Promise} a promise
 	 */
 	this.sendEvent = function(event){
-		worker.postMessage(event);
+		console.log(event);
+		return rpc.invoke('queueEvent', event);
 	};
 
 	/**
-	 * Starts the worker
+	 * Starts the worker.
+	 *
+	 * @return {Promise} a promise
 	 */
 	this.start = function() {
-		that.sendEvent({
-			command: 'start'
-		})
+		return rpc.invoke('start');
 	};
 
 	/**
-	 * Stops the worker without terminating it
+	 * Stops the worker without terminating it.
+	 *
+	 * @return {Promise} a promise
 	 */
 	this.stop = function() {
-		that.sendEvent({
-			command: 'stop'
-		})
+		return rpc.invoke('stop');
 	};
 
 	/**
 	 * Configures the worker.
 	 *
 	 * @param {Object} options the options for the worker
+	 * @return {Promise} a promise
 	 */
 	this.configure = function(options) {
-		options.command = 'config';
-		that.sendEvent(options);
+		return rpc.invoke('configure', options);
 	};
 
 	/**
@@ -50,13 +52,8 @@ EduMon.Messenger = function(eventCallback){
 	 * The worker can not be restarted with the same Messenger instance.
 	 */
 	this.kill = function(){
+		rpc.shutdown();
 		worker.terminate();
 	};
 
-
-	//on construction initialize worker
-	worker = new Worker('js/EduMon.Messenger.Worker.js');
-	worker.onmessage = function(e) {
-		eventCallback(e.data);
-	};
 };
