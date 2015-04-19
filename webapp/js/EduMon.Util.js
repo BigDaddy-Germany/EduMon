@@ -207,7 +207,7 @@ EduMon.Util = new function () {
 		h1 ^= h1 >>> 16;
 
 		return h1 >>> 0;
-	}
+	};
 };
 
 

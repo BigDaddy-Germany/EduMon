@@ -392,16 +392,28 @@ EduMon.Gui = new function() {
 			EduMon.Gui.showDialog("connectionSettings",true);
 		});
 		$("#btnThumbs").off("click").click(function(){
-			EduMon.Feedback.requestFeedback("thumb");
+			if (EduMon.lectureIsActive()) {
+				EduMon.Feedback.requestFeedback("thumb");
+			} else {
+				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv");
+			}
 		});
 		$("#btnRating").off("click").click(function(){
-			EduMon.Feedback.requestFeedback("rating");
+			if (EduMon.lectureIsActive()) {
+				EduMon.Feedback.requestFeedback("rating");
+			} else {
+				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv");
+			}
 		});
 		$("#pultup").find(".handle").off("click").click(function(){
-			EduMon.Gui.togglePultup();
+			if (EduMon.lectureIsActive()) {
+				EduMon.Gui.togglePultup();
+			} else {
+				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv");
+			}
 		});
 		$('#btnRemoveData').off('click').on('click', function() {
-			EduMon.Gui.showDialog('deleteData');
+			EduMon.Gui.showDialog('deleteData', true);
 		});
 	};
 };
