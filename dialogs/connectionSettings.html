@@ -14,7 +14,8 @@
 
 <script type="text/javascript">
 $(function() {
-	var messaging = EduMon.Prefs.currentLecture.messaging;
+	var messaging = EduMon.Prefs.messaging;
+
 
 	var hasSuffix = messaging.serverUrl.endsWith("/mailbox.php");
 	$("#serverUrl").val(messaging.serverUrl.replace("/mailbox.php",""));
@@ -34,7 +35,6 @@ $(function() {
 					messaging.serverUrl = serverUrl;
 					messaging.moderatorPassphrase = moderatorPassphrase;
 					EduMon.Gui.showToast("Verbindungseinstellungen aktualisiert.");
-					EduMon.updateConnection();
 					EduMon.Gui.closeDialog();
 				} else {
 					var info = "Die Verbindung konnte nicht aufgebaut werden:<br><i>";

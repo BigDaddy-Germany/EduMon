@@ -127,7 +127,7 @@ EduMon = new function () {
 				 Client asks for break
 				 body: {}
 				 */
-				processBreakRequest();
+				processBreakRequest(packet.from);
 				break;
 
 			default:
@@ -137,23 +137,29 @@ EduMon = new function () {
 
 	/**
 	 * React to a break request by incrementing a counter and displaying a newsfeed alert with varying intensity
+	 * @param {String} sender the reqeust's sender
 	 */
-	var processBreakRequest = function () {
+	var processBreakRequest = function (sender) {
 		if (EduMon.Prefs.currentLecture.timeline.status == "play") {
-			var analytics = EduMon.Prefs.currentLecture.analytics;
-			var numStudents = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
-			analytics.breakRequests++;
+			// perform break request only if there was no request from this user before
+			if (!EduMon.Prefs.currentLecture.activeStudents[sender].sentBreakRequest) {
+				EduMon.Prefs.currentLecture.activeStudents[sender].sentBreakRequest = true;
 
-			var style = "info";
-			if (analytics.breakRequests > (numStudents * 0.2)) {
-				style = "warning";
-			}
-			if (analytics.breakRequests > (numStudents * 0.5)) {
-				style = "danger";
-			}
+				var analytics = EduMon.Prefs.currentLecture.analytics;
+				var numStudents = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
+				analytics.breakRequests++;
 
-			var msgStart = (analytics.breakRequests > 1 ? analytics.breakRequests + " Teilnehmer bitten" : "Ein Teilnehmer bittet");
-			EduMon.Gui.showFeedMessage(style, "Pausenanfrage", msgStart + " um eine Pause.");
+				var style = "info";
+				if (analytics.breakRequests > (numStudents * 0.2)) {
+					style = "warning";
+				}
+				if (analytics.breakRequests > (numStudents * 0.5)) {
+					style = "danger";
+				}
+
+				var msgStart = (analytics.breakRequests > 1 ? analytics.breakRequests + " Teilnehmer bitten" : "Ein Teilnehmer bittet");
+				EduMon.Gui.showFeedMessage(style, "Pausenanfrage", msgStart + " um eine Pause.");
+			}
 		}
 	};
 
@@ -248,7 +254,8 @@ EduMon = new function () {
 				seat: seat,
 				disturbance: 0,
 				history: [],
-				micHistory: []
+				micHistory: [],
+				sentBreakRequest: false
 			};
 
 			currentLecture.seatingPlan[seat.x] = currentLecture.seatingPlan[seat.x] || [];
@@ -327,9 +334,9 @@ EduMon = new function () {
 	 */
 	this.updateConnection = function () {
 		that.messenger.configure({
-			url: EduMon.Prefs.currentLecture.messaging.serverUrl,
+			url: EduMon.Prefs.messaging.serverUrl,
 			room: EduMon.Prefs.currentLecture.room.roomName,
-			moderatorPassphrase: EduMon.Prefs.currentLecture.messaging.moderatorPassphrase
+			moderatorPassphrase: EduMon.Prefs.messaging.moderatorPassphrase
 		});
 	};
 
@@ -361,10 +368,24 @@ EduMon = new function () {
 	this.enablePersistApp = function () {
 		setTimeout(function () {
 			setInterval(function () {
-				localStorage.setItem("EduMon.Prefs", JSON.stringify(EduMon.Prefs));
+				// create clone of prefs
+				var toStore = $.extend(true, {}, EduMon.Prefs);
+
+				// replace currentLecture by empty default, if the lecture is not running
+				if (
+					!EduMon.Prefs.currentLecture.timeline ||
+					(
+						EduMon.Prefs.currentLecture.timeline.status != "play" &&
+						EduMon.Prefs.currentLecture.timeline.status != "pause"
+					)
+				) {
+					toStore.currentLecture = EduMon.DefaultPrefs.get();
+				}
+
+				localStorage.setItem("EduMon.Prefs", JSON.stringify(toStore));
 				//EduMon.Gui.showToast("App state saved");
 			}, 1000); //persist every 1sec
-		}, 5000); //start persisting app after 5sec
+		}, 2000); //start persisting app after 2sec
 	};
 
 	/**
@@ -396,6 +417,15 @@ EduMon = new function () {
 					}
 				);
 			}
+
+			// todo remove dev area below after everybody has the new connection settings
+			// begin of dev area
+			EduMon.Prefs.messaging = EduMon.Prefs.messaging || {
+				outgoingPackageId: 1,
+				serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
+				moderatorPassphrase: "alohomora"
+			};
+			// end of dev area
 
 			EduMon.Gui.showToast("App loaded");
 
@@ -498,7 +528,7 @@ EduMon = new function () {
 
 		button.on('click', function () {
 
-			if (!EduMon.Prefs.currentLecture || EduMon.Prefs.currentLecture.activeStudents.length == 0) {
+			if (!that.lectureIsActive()) {
 				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv!");
 				return;
 			}
@@ -573,5 +603,18 @@ EduMon = new function () {
 				};
 			};
 		});
+	}
+
+
+	/**
+	 * Checks, whether there is an active lecture
+	 * @return {boolean} indicates, whether there is an active lecture
+	 */
+	this.lectureIsActive = function() {
+		return (
+			!!EduMon.Prefs.currentLecture &&
+			EduMon.Prefs.currentLecture.course &&
+			EduMon.Prefs.currentLecture.course.students.length != 0
+		);
 	}
 };

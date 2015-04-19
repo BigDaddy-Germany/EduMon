@@ -144,7 +144,8 @@ EduMon.Data = new function() {
 							time: 123456,
 							value: 123
 						}
-					]
+					],
+					sentBreakRequest: false
 				},
 
 				SESSID: { fancy stuff like above }
@@ -186,12 +187,6 @@ EduMon.Data = new function() {
 				breakRequests: 0
 			},
 
-			messaging: {
-				outgoingPackageId: 1,
-				serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
-				moderatorPassphrase: "alohomora"
-			},
-
 			gui: {
 				actionTime: -1,
 				pultup: ""
@@ -211,7 +206,7 @@ EduMon.Data = new function() {
 	this.createBasePacket = function(type, to, body){
 		return {
 			"type":+type,
-			"id":++EduMon.Prefs.currentLecture.messaging.outgoingPackageId,
+			"id":++EduMon.Prefs.messaging.outgoingPackageId,
 			"time":EduMon.Util.timestampNow(),
 			"from":"MODERATOR",
 			"to":to,

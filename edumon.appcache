@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sun Apr 19 04:30:19 CEST 2015
+# Build date: Sun Apr 19 18:32:57 CEST 2015
 
 CACHE:
 css/app.css
@@ -26,6 +26,7 @@ js/EduMon.Feedback.js
 js/EduMon.Timeline.js
 js/EduMon.Prefs.js
 js/EduMon.XWindowRPC.js
+js/EduMon.DefaultPrefs.js
 js/EduMon.Math.js
 js/EduMon.Analytics.js
 js/EduMon.UserInteraction.js
