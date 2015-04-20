@@ -57,7 +57,7 @@ EduMon.Timeline = new function() {
 			timeline.start = getTime();
 			timeline.started = true;
 		} else throw "Timeline-Play nicht erlaubt, Timer läuft bereits";
-		updateTimeline();
+		that.update();
 	};
 
 	/**
@@ -77,7 +77,7 @@ EduMon.Timeline = new function() {
 				EduMon.Prefs.currentLecture.activeStudents[id].sentBreakRequest = false;
 			});
 		} else throw "Timeline-Unterbrechung nicht erlaubt, Timer lief nicht";
-		updateTimeline();
+		that.update();
 	};
 
 	/**
@@ -94,7 +94,7 @@ EduMon.Timeline = new function() {
 						EduMon.Gui.showToast("Vorlesung beendet.");
 						timeline.status = "stop";
 						timeline.ended = true;
-						updateTimeline();
+						that.update();
 						EduMon.stopLecture();
 					}
 				},true);
@@ -124,7 +124,7 @@ EduMon.Timeline = new function() {
 				currentSlice.seconds += tick_value;
 				timeline.totalSeconds += tick_value;
 			}
-			updateTimeline();
+			that.update();
 		}
 	};
 
@@ -137,7 +137,7 @@ EduMon.Timeline = new function() {
 		//Timer is always active, but timer tick does not always trigger action
 		//this prevents seconds getting lost
 		timer = setInterval(tick, tick_interval*1000);
-		tick(true);
+		that.update();
 
 		$("#btnPlay").off("click").click(function(){
 			if (typeof EduMon.Prefs.currentLecture.timeline !== "undefined" && EduMon.Prefs.currentLecture.timeline.started){
@@ -150,13 +150,14 @@ EduMon.Timeline = new function() {
 		$("#btnStop").off("click").on('click', stop);
 		$("#btnRestart").off("click").on('click', restart);
 	};
+	
 
 	/**
 	 * Update the timeline display and the flow controls
-	 * @method updateTimeline
+	 * @method update
 	 * @return undefined
 	 */
-	var updateTimeline = function(){
+	this.update = function(){
 		var timeline = EduMon.Prefs.currentLecture.timeline;
 		var totalPercentage = 0; //remember how full the bar is
 		var barPercentage;

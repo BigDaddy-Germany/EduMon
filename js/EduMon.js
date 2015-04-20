@@ -332,6 +332,8 @@ EduMon = new function () {
 		if (newLecture) {
 			EduMon.Timeline.reset();
 			broadcastCurrentLecture();
+		} else {
+			EduMon.Timeline.update();
 		}
 	};
 
