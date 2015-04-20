@@ -30,6 +30,7 @@ $(function() {
 		$.ajax(serverUrl+"?ping&moderatorPassphrase="+moderatorPassphrase,{
 			cache: false,
 			dataType: "text",
+			timeout: 5000,
 			complete: function(xhr, status){
 				if (status==="success" && xhr.status===202 && xhr.responseText==="EduMon"){
 					messaging.serverUrl = serverUrl;
