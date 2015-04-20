@@ -306,7 +306,7 @@ EduMon = new function () {
 		EduMon.UserInteraction.selectLecture()
 			.then(function (lectureId) {
 				EduMon.Prefs.currentLecture = EduMon.Data.createCurrentLecture(lectureId);
-				that.initLecture();
+				that.initLecture(true);
 				EduMon.Timeline.play();
 			})
 			.catch(function (err) {
@@ -317,21 +317,19 @@ EduMon = new function () {
 	/**
 	 * Initializes the current lecture: connect to server, refresh timeline, reload seating plan, restore gui, broadcast setup
 	 *
-	 * @param {boolean} [broadCastIt=true] should a broadcast be sent?
+	 * @param {boolean} [newLecture=true] By default, start a new lecture. This implies sending a broadcast and not restoring the previous GUI
 	 */
-	this.initLecture = function (broadCastIt) {
-		if (broadCastIt === undefined) {
-			broadCastIt = true;
-		}
+	this.initLecture = function (newLecture) {
+		newLecture = !!newLecture
 
 		that.updateConnection();
 		that.messenger.start();
 		EduMon.Gui.initSeating();
 		var pultUp = EduMon.Prefs.currentLecture.gui.pultup;
 		if (pultUp !== "") {
-			EduMon.Gui.openPultUpMode(pultUp, EduMon.Feedback.updateFeedback);
+			EduMon.Gui.openPultUpMode(pultUp, EduMon.Feedback.updateFeedback, !newLecture);
 		}
-		if (broadCastIt) {
+		if (newLecture) {
 			EduMon.Timeline.reset();
 			broadcastCurrentLecture();
 		}

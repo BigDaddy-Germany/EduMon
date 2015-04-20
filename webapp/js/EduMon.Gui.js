@@ -367,16 +367,17 @@ EduMon.Gui = new function() {
 	 * @method openPultUpMode
 	 * @param {string} mode Pult up mode to show
 	 * @param {function} [firstUpdate] Update function, is called once once pult-up was pulled down
+	 * @param {function} [restoreActionTimer=false] If activated, the action timer will be restored from the saved value in currentLecture
 	 * @return undefined
 	 */
-	this.openPultUpMode = function(mode, firstUpdate){
+	this.openPultUpMode = function(mode, firstUpdate, restoreActionTimer){
 		$("#pultup").addClass("inactive");
 		setTimeout(function(){
 			$("#pultup").removeClass("wheel thumb rating").addClass(mode).removeClass("inactive");
 			if (firstUpdate) {
 				firstUpdate();
 			}
-			EduMon.Feedback.restartActionTimer(true);
+			EduMon.Feedback.restartActionTimer(!restoreActionTimer);
 		},800);
 		EduMon.Prefs.currentLecture.gui.pultup = mode;
 	};
