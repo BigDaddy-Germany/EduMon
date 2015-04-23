@@ -107,7 +107,9 @@ EduMon = new function () {
 	 * @param {Object} packet Packet as defined by architecture
 	 */
 	var processPacket = function (packet) {
-		EduMon.debug(packet);
+		if (that.debugging){
+			$("#packageLogging").append("\n"+packet);
+		}
 		var packetType = parseInt(packet.type);
 		switch (packetType) {
 			case 2:

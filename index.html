@@ -11,17 +11,15 @@
 	</head>
 	<body>
 	<div id="devbox">
-		<a href="#" class="devbutton btn btn-primary btn-fab btn-raised" onclick="$('#devbox').toggleClass('opened');">DEVELOPER</a><br>
-		Test:<br>
+		<a href="#" class="devbutton btn btn-primary btn-fab btn-raised" onclick="$('#devbox').toggleClass('opened');">DEVELOPER</a>
+		Test:
 		<input type="button" value="Start Lecture" onclick="EduMon.lectureStartDialog();">
 		<input type="button" value="Demo Data" onclick="EduMon.testAllThemAnalytics();">
-		<br>
-		Framework:<br>
+		Framework:
 		<input type="button" value="Dialog" onclick="EduMon.Gui.showDialog('dummy')">
 		<input type="button" value="Toast" onclick="EduMon.Gui.showToast('Testtoast')">
 		<input type="button" value="Popup" onclick="EduMon.Gui.showPopup('Wichtige Frage','Werden sie diese superwichtige Popupinformation ignorieren oder tatsächlich lesen und dann ihren Rat befolgen?',['yes','no',{text:'Hä?',value:'clueless',class:'default'}],function(rval){EduMon.Gui.showPopup('return value',rval,['ok']);},true)">
-		<br>
-		Package logging:<br>
+		Package logging below:
 		<textarea id="packageLogging"></textarea>
 	</div>
 	<div id="screen">

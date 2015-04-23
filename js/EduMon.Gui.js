@@ -270,6 +270,15 @@ EduMon.Gui = new function() {
 		seatUpdateTimer = setInterval(function(){
 			updateStudents();
 		},seatUpdateInterval);
+
+		if (EduMon.debugging){
+			$("#packageLogging").change(function() {
+				if ($("#devbox").hasClass("opened")){
+					$('#packageLogging').scrollTop($('#packageLogging')[0].scrollHeight);
+				}
+			});
+
+		}
 	};
 
 	/**
