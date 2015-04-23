@@ -45,13 +45,27 @@
 	flex-grow: 1;
 	position: relative;
 
-	& > div {
+	.limiter {
 		position:absolute;
 		width: 100%;
 		height: 100%;
 		overflow-x: hidden;
 		overflow-y: auto;
 		padding: 10px;
+	}
+
+	.bglogo {
+		position:absolute;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		bottom: 30px;
+		background-image: url(../images/logo.png);
+		background-position: 100%;
+		background-repeat: no-repeat;
+		background-size: contain;
+		filter:         blur(9px) opacity(0.5);
+		-webkit-filter: blur(9px) opacity(0.5);
 	}
 }
 
