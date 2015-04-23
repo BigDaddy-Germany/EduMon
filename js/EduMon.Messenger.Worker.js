@@ -39,7 +39,9 @@ var commands = {
 
 		configured = true;
 		if (timer !== -1) {
-			console.log("Worker started and configured, queue will be processed");
+			if (debugging) {
+				console.log("Worker started and configured, queue will be processed");
+			}
 		}
 	},
 
@@ -52,11 +54,15 @@ var commands = {
 		} 
 		if (timer > -1) {
 			clearInterval(timer);
-			console.log("Queue timer was already running, restarting it!");
+			if (debugging) {
+				console.log("Queue timer was already running, restarting it!");
+			}
 		}
 		isOnline = true;
 		timer = setInterval(processQueue, onlineInterval);
-		console.log('Queue timer started.');
+		if (debugging) {
+			console.log('Queue timer started.');
+		}
 	},
 
 	/**

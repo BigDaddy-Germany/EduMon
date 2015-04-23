@@ -47,7 +47,7 @@
 								.children().last().attr('selected', 'selected');
 						lectureCourse.sortSelectBox();
 					})
-					.catch(function(data) { console.log(data); });
+					.catch(function(data) { EduMon.debug(data); });
 
 		});
 
@@ -64,7 +64,7 @@
 						lectureCourse.find('[value=' + courseId + ']').html(newCourse.name);
 						lectureCourse.sortSelectBox();
 					})
-					.catch(function(data) { console.log(data); });
+					.catch(function(data) { EduMon.debug(data); });
 
 		});
 
@@ -93,7 +93,7 @@
 								.children().last().attr('selected', 'selected');
 						lectureRoom.sortSelectBox();
 					})
-					.catch(function(data) { console.log(data); });
+					.catch(function(data) { EduMon.debug(data); });
 
 		});
 
@@ -110,7 +110,7 @@
 						lectureRoom.find('[value=' + roomId + ']').html(newRoom.roomName);
 						lectureRoom.sortSelectBox();
 					})
-					.catch(function(data) { console.log(data); });
+					.catch(function(data) { EduMon.debug(data); });
 
 		});
 

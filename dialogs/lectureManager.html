@@ -30,7 +30,7 @@
 
                         startId.sortSelectBox();
                     })
-                    .catch(function(data) { console.log(data); });
+                    .catch(function(data) { EduMon.debug(data); });
 
         });
 
@@ -48,7 +48,7 @@
                         startIdSelect.find('[value=' + startId + ']').html(newLecture.lectureName);
                         startIdSelect.sortSelectBox();
                     })
-                    .catch(function(data) { console.log(data); });
+                    .catch(function(data) { EduMon.debug(data); });
 
         });
 

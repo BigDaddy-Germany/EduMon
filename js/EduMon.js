@@ -49,6 +49,8 @@ EduMon = new function () {
 		verifyAppCache();
 
 		that.messenger.start();
+
+		EduMon.Gui.showFeedMessage("info","Willkommen!","Das EduMon freut sich über Ihren Besuch :)");
 	};
 
 
@@ -100,7 +102,7 @@ EduMon = new function () {
 	 * @param {Object} packet Packet as defined by architecture
 	 */
 	var processPacket = function (packet) {
-		console.log(packet);
+		EduMon.debug(packet);
 		var packetType = parseInt(packet.type);
 		switch (packetType) {
 			case 2:
@@ -310,7 +312,7 @@ EduMon = new function () {
 				EduMon.Timeline.play();
 			})
 			.catch(function (err) {
-				console.log(err);
+				EduMon.debug(err);
 			})
 	};
 
@@ -435,7 +437,7 @@ EduMon = new function () {
 			};
 			// end of dev area
 
-			EduMon.Gui.showToast("App loaded");
+			EduMon.debug("App state restored from localStorage");
 
 			return true;
 		} else {
