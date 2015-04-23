@@ -15,7 +15,7 @@ EduMon.Messenger = function(procedures) {
 	 * @return {Promise} a promise
 	 */
 	this.sendEvent = function(event){
-		console.log(event);
+		EduMon.debug(event);
 		return rpc.invoke('queueEvent', event);
 	};
 
