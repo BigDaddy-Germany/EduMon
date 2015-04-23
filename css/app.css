@@ -572,6 +572,7 @@ body {
       font-size: 30px; }
 
 #devbox {
+  display: none;
   font-size: 0.8em;
   position: absolute;
   top: 80px;

@@ -10,14 +10,19 @@ EduMon = new function () {
 		seatNotAvailable: 1 << 3
 	};
 
-	this.debugging = true; //show debug messages in javascript console
+	this.debugging = true; //show debug messages in javascript console TODO: deactivate this and all similar flags
 
 	/**
 	 * EduMon startup, to be called when DOM is ready
 	 */
 	this.init = function () {
-		that.debug("*** All Glory to the EduMon! ***");
+		console.log("*** All Glory to the EduMon! ***");
+
+		if (that.debugging){
+			$("#devbox").fadeIn();
+		}
 		that.debug("EduMon awakening...");
+
 		that.messenger = new EduMon.Messenger({
 			handleEvent: handleIncomingData,
 			goOffline: messengerWentOffline,
@@ -621,7 +626,7 @@ EduMon = new function () {
 
 		function checkUpdate() {
 			applicationCache.update();
-			console.debug("Checking for updates...");
+			EduMon.debug("Checking for updates...");
 		}
 
 		// check for updates every 5 minutes;
