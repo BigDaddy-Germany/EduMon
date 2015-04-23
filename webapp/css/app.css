@@ -6,7 +6,7 @@ body {
   height: 100%;
   font-family: 'Roboto', sans-serif;
   min-width: 1275px;
-  min-height: 580px; }
+  min-height: 635px; }
 
 @font-face {
   font-family: 'Roboto';
@@ -129,7 +129,7 @@ body {
     padding: 0px;
     text-align: center; }
   #buttonpanel .panel-heading {
-    padding: 10px 0px; }
+    padding: 5px 0px; }
   #buttonpanel .panel-body {
     padding: 0px; }
   #buttonpanel > div {
@@ -138,17 +138,21 @@ body {
 
 #flowbox {
   text-align: center;
-  min-height: 170px; }
+  min-height: 150px; }
 
 #actionbox {
   text-align: center;
-  min-height: 280px;
+  min-height: 200px;
   flex-grow: 1; }
   #actionbox #btnWheel {
     background-image: url(../images/wheel.icon.png);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: 30px; }
+
+#optionbox {
+  text-align: center;
+  min-height: 150px; }
 
 #centerpanel {
   flex-grow: 1;

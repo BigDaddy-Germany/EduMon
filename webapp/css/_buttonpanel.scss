@@ -15,7 +15,7 @@
 	}
 
 	.panel-heading {
-		padding: 10px 0px;
+		padding: 5px 0px;
 	}
 
 	.panel-body {
@@ -30,12 +30,12 @@
 
 #flowbox {
 	text-align: center;
-	min-height: 170px;
+	min-height: 150px;
 }
 
 #actionbox {
 	text-align: center;
-	min-height: 280px;
+	min-height: 200px;
 	flex-grow: 1;
 
 	#btnWheel {
@@ -45,3 +45,9 @@
 		background-size: 30px;
 	}
 }
+
+#optionbox {
+	text-align: center;
+	min-height: 150px;
+}
+
