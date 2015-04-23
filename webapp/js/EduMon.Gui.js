@@ -260,9 +260,13 @@ EduMon.Gui = new function() {
 		}
 
 		var room = EduMon.Prefs.currentLecture.room;
-		$("#seats").html(new Array(room.height+1).join('<div class="srow">'+new Array(room.width+1).join(
+		$("#seats")
+			.hide()
+			.html(new Array(room.height+1).join('<div class="srow">'+new Array(room.width+1).join(
 						'<div class="scell"><div class="person"><div class="name"></div><div class="group"></div></div></div>'
-						)+'</div>'));
+						)+'</div>'))
+			.fadeIn();
+		$("#seatscontainer .bglogo").fadeOut();
 
 		seatUpdateTimer = setInterval(function(){
 			updateStudents();
