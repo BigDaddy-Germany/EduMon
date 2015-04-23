@@ -18,12 +18,13 @@ EduMon.Gui = new function() {
 		"cancel": {text:"Abbrechen",value:"cancel",class:"default"}
 	};
 	var seatsInfo = {width: -1, height: -1};
+	var msgNoLecture = "Es ist zur Zeit keine Vorlesung aktiv!";
 
 	/**
 	 * Add message to newsfeed
 	 * @method showFeedMessage
 	 * @param {String} type Message type can be "info", "success", "warning" and "danger"
-	 * @param {String} title The message title
+	 * @param {String} title The html message title
 	 * @param {String} message The html message to display
 	 * @return undefined
 	 */
@@ -46,7 +47,7 @@ EduMon.Gui = new function() {
 									$(e.target).remove();
 								});
 						}))
-					.append($("<h4/>").text(title))
+					.append($("<h4/>").html(title))
 					.append($("<p/>").html(message))
 					);
 	};
@@ -400,21 +401,23 @@ EduMon.Gui = new function() {
 			if (EduMon.lectureIsActive()) {
 				EduMon.Feedback.requestFeedback("thumb");
 			} else {
-				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv");
+				EduMon.Gui.showToast(msgNoLecture);
 			}
 		});
 		$("#btnRating").off("click").click(function(){
 			if (EduMon.lectureIsActive()) {
 				EduMon.Feedback.requestFeedback("rating");
 			} else {
-				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv");
+				EduMon.Gui.showToast(msgNoLecture);
 			}
 		});
 		$("#pultup").find(".handle").off("click").click(function(){
-			if (EduMon.lectureIsActive()) {
-				EduMon.Gui.togglePultup();
+			if (!EduMon.lectureIsActive()) {
+				EduMon.Gui.showToast(msgNoLecture);
+			} else if (EduMon.Prefs.currentLecture.gui.pultup==="") {
+				EduMon.Gui.showFeedMessage("info","Pult-Up-Display&trade;","Dieses Infomenü ist nur während einer Aktion verfügbar. Es öffnet sich automatisch.");
 			} else {
-				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv");
+				EduMon.Gui.togglePultup();
 			}
 		});
 		$('#btnRemoveData').off('click').on('click', function() {
