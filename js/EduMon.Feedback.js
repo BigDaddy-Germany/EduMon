@@ -10,11 +10,11 @@ EduMon.Feedback = new function() {
 	 * @return packet Copy of the sent request packet
 	 */
 	this.requestFeedback = function(type){
-		var buttonId = (type==="rating" ? "#btnRating" : "#btnThumbs");
+		var buttonId = "#btnRating, #btnThumbs"; //(type==="rating" ? "#btnRating" : "#btnThumbs");
 		$(buttonId).addClass("disabled");
 		setInterval(function() {
 			$(buttonId).removeClass("disabled");
-		}, 5000);
+		}, 10000); //cooldown 10 seconds
 
 		var analytics = EduMon.Prefs.currentLecture.analytics;
 		analytics.currentFeedbackId = analytics.nextFeedbackId++;
@@ -54,6 +54,10 @@ EduMon.Feedback = new function() {
 		}
 
 		var incrementor = function(){
+			if (!EduMon.lectureIsActive()){
+				clearInterval(actionTimer);
+				return;
+			}
 			var seconds = ++EduMon.Prefs.currentLecture.gui.actionTime;
 			var minutes = (seconds-(seconds%60))/60;
 			seconds -= minutes*60;

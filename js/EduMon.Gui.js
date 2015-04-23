@@ -361,7 +361,7 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.togglePultup = function(state){
-		$("#pultup").toggleClass("inactive",(state ? state : !state));
+		$("#pultup").toggleClass("inactive",(state===undefined ? state : !state));
 	};
 
 

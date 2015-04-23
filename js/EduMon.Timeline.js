@@ -87,11 +87,12 @@ EduMon.Timeline = new function() {
 	 */
 	var stop = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
-		EduMon.Gui.showPopup("Vorlesung beenden?","Eine beendete Vorlesung kann nicht wieder aufgenommen werden. Möchten Sie die Vorlesung jetzt beenden und die Auswertung einsehen?",
+		EduMon.Gui.showPopup("Vorlesung beenden?","Sind Sie sicher? Eine beendete Vorlesung kann nicht wieder aufgenommen werden.",
 				["yes","no"],function(result){
 					if (result==="yes"){
 						clearInterval(timer);
 						EduMon.Gui.showToast("Vorlesung beendet.");
+						EduMon.Gui.togglePultup(false);
 						timeline.status = "stop";
 						timeline.ended = true;
 						that.update();
