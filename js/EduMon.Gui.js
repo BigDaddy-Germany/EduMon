@@ -143,11 +143,11 @@ EduMon.Gui = new function() {
 	 */
 	this.setDialogBlock = function(blocked) {
 		if (blocked){
-			$("#loadingbox").hide().delay(500).fadeIn(500);
+			$("#loadinglayer img").hide().delay(500).fadeIn(500);
 			$("#loadinglayer").show();
 		} else {
 			$("#loadinglayer").hide();
-			$("#loadingbox").stop();
+			$("#loadinglayer img").stop();
 		}
 	};
 
