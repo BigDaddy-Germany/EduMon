@@ -404,13 +404,17 @@ EduMon.Gui = new function() {
 	var processKey = function(keyEvent){
 		//exclude events that bubbled up from actual input elements
 		if (!$(keyEvent.target).is("input,button,textarea,a")){
-			//now decide how to act
+			//now decide how to act: base idea is "act like the user would do" - button not there? cannot click! button disabled? cannot click
 			switch(keyEvent.key.toLowerCase()){
 				case "d": //D-aumenfeedback
-					$("#btnThumbs").trigger("click");
+					if (!$("#btnThumbs").hasClass("disabled")){
+						$("#btnThumbs").trigger("click");
+					}
 					break;
 				case "b": //B-ewertung
-					$("#btnRating").trigger("click");
+					if (!$("#btnRating").hasClass("disabled")){
+						$("#btnRating").trigger("click");
+					}
 					break;
 				case "g": //G-lücksrad
 				case "r": //R-ad
