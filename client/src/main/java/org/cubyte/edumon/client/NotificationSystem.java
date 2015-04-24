@@ -81,7 +81,7 @@ public class NotificationSystem implements Victim<Message> {
         }
         if (bullet.body.getClass().isAssignableFrom(ThumbRequest.class)) {
             final ThumbRequest body = ((ThumbRequest) bullet.body);
-            if (body.type == ThumbRequest.FeedbackType.thumb) {
+            if (body.type == ThumbRequest.FeedbackType.thumb ||body.type == ThumbRequest.FeedbackType.rating) {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -90,7 +90,7 @@ public class NotificationSystem implements Victim<Message> {
                         }
                         stage.setScene(THUMBFEEDBACK.getScene());
                         stage.show();
-                        ((ThumbfeedbackController) THUMBFEEDBACK.getController()).setId(body.id).resetThumb();
+                        ((ThumbfeedbackController) THUMBFEEDBACK.getController()).setId(body.id).setFeedbackType(body.type).resetThumb();
                     }
                 });
             }

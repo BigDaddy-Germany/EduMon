@@ -23,7 +23,7 @@
                   <Image url="@thumb.png" />
                </image>
             </ImageView>
-            <Label maxWidth="170.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht." wrapText="true" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+            <Label fx:id="text" maxWidth="170.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht." wrapText="true" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
          </children>
          <padding>
             <Insets left="30.0" right="30.0" />

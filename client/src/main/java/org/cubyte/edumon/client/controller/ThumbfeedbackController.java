@@ -2,9 +2,11 @@ package org.cubyte.edumon.client.controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.messaging.messagebody.ThumbFeedback;
+import org.cubyte.edumon.client.messaging.messagebody.ThumbRequest;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +20,8 @@ public class ThumbfeedbackController implements Controller {
 
     @FXML
     private ImageView thumb;
+    @FXML
+    private Label text;
 
     @Override
     public void setApp(Main app) {
@@ -71,6 +75,15 @@ public class ThumbfeedbackController implements Controller {
 
     public ThumbfeedbackController setId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public ThumbfeedbackController setFeedbackType(ThumbRequest.FeedbackType type) {
+        if (type == ThumbRequest.FeedbackType.thumb) {
+            text.setText("Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht.");
+        } else {
+            text.setText("Drücken und halten Sie F1 bis der Daumen Ihrem Rating entspricht.");
+        }
         return this;
     }
 }
