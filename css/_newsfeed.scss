@@ -9,7 +9,19 @@
 	}
 
 	.panel-footer {
-		text-align: right;
+		.btnHelp {
+			font-size: 30px;
+			float: right;
+
+			&:hover {
+				color: #777;
+				cursor: pointer;
+			}
+		}
+
+		#feedcounter {
+			float: left;
+		}
 	}
 }
 
