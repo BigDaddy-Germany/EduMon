@@ -30,12 +30,12 @@ public class NotificationSystem implements Victim<Message> {
             @Override
             public void run() {
                 stage = new Stage();
-                stage.initStyle(StageStyle.TRANSPARENT);
+                stage.initStyle(StageStyle.UNDECORATED);
                 BREAK_REQUEST_CONFIRM.getScene().setFill(null);
                 THUMBFEEDBACK.getScene().setFill(null);
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                stage.setX(screenSize.getWidth() - 350);
-                stage.setY(screenSize.getHeight() - 150);
+                stage.setX(screenSize.getWidth() - 320);
+                stage.setY(screenSize.getHeight() - 120);
                 stage.getIcons().add(app.getAppIcon());
             }
         });

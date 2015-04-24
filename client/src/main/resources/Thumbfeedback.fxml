@@ -10,16 +10,25 @@
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" style="" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.ThumbfeedbackController">
   <children>
-    <AnchorPane layoutX="5.0" layoutY="5.0" minHeight="86.0" prefHeight="90.0" prefWidth="290.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);">
-      <children>
-            <Label layoutX="81.0" layoutY="14.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht." wrapText="true" />
-            <ImageView fx:id="thumb" fitHeight="62.0" fitWidth="43.0" layoutX="22.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <GridPane minHeight="100.0" minWidth="300.0" style="-fx-border-color: #aaa;">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="thumb" fitHeight="62.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                <image>
                   <Image url="@thumb.png" />
                </image>
             </ImageView>
-      </children>
-    </AnchorPane>
+            <Label maxWidth="170.0" prefHeight="62.0" prefWidth="197.0" text="Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht." wrapText="true" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+         </children>
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+      </GridPane>
   </children>
   <padding>
     <Insets />

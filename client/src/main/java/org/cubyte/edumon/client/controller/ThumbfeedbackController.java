@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ThumbfeedbackController implements Controller {
-    private static final int THUMB_SPEED = 10;
+    private static final int THUMB_SPEED = 5;
     private Main app;
     private boolean countUp;
     private int id;

@@ -7,15 +7,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" style="" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="org.cubyte.edumon.client.controller.BreakRequestConfirmController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" style="" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.BreakRequestConfirmController">
   <children>
-    <AnchorPane layoutX="5.0" layoutY="5.0" minHeight="86.0" prefHeight="90.0" prefWidth="290.0" style="-fx-background-color: #fff;&#10;-fx-background-radius: 5;&#10;-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);">
-      <children>
-        <Label layoutX="25.0" layoutY="37.0" text="Pausenanfrage erfolgreich gesendet." textFill="#0c9900" />
-      </children>
-    </AnchorPane>
+      <GridPane minHeight="100.0" minWidth="300.0" style="-fx-border-color: #aaa;">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+        <Label text="Pausenanfrage erfolgreich gesendet." textFill="#0c9900" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
   </children>
-  <padding>
-    <Insets />
-  </padding>
 </AnchorPane>
