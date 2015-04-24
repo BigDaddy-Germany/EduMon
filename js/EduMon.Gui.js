@@ -396,6 +396,44 @@ EduMon.Gui = new function() {
 
 
 	/**
+	 * Process hotkey
+	 * @method processKey
+	 * @param {event} keyEvent jQuery Element that fired on key press
+	 * @return undefined
+	 */
+	var processKey = function(keyEvent){
+		//exclude events that bubbled up from actual input elements
+		if (!$(keyEvent.target).is("input,button,textarea,a")){
+			//now decide how to act
+			switch(keyEvent.key.toLowerCase()){
+				case "d": //D-aumenfeedback
+					$("#btnThumbs").trigger("click");
+					break;
+				case "b": //B-ewertung
+					$("#btnRating").trigger("click");
+					break;
+				case "g": //G-lücksrad
+				case "r": //R-ad
+				case "z": //Z-ufall
+					$("#btnWheel").trigger("click");
+					break;
+				case "p": //P-lay & P-ause
+					if ($("#btnPause").is(":visible")){
+						$("#btnPause").trigger("click");
+					} else if ($("#btnPlay").is(":visible")){
+						$("#btnPlay").trigger("click");
+					}
+					break;
+				case "shift":
+					$("#pultup .handle").trigger("click");
+					break;
+				default:
+					EduMon.debug("Pressed: "+keyEvent.key);
+			}
+		}
+	};
+
+	/**
 	 * Initialize GUI (bind click handlers)
 	 * @method init
 	 * @return undefined
@@ -430,5 +468,7 @@ EduMon.Gui = new function() {
 		$('#btnRemoveData').off('click').on('click', function() {
 			EduMon.Gui.showDialog('deleteData', true);
 		});
+		$("body").off().on("keydown",function(e){processKey(e)});
+
 	};
 };

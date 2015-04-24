@@ -546,7 +546,7 @@ EduMon = new function () {
 		button.on('click', function () {
 
 			if (!that.lectureIsActive()) {
-				EduMon.Gui.showToast("Es ist keine Vorlesung aktiv!");
+				EduMon.Gui.showToast("Es ist zur Zeit keine Vorlesung aktiv!");
 				return;
 			}
 
