@@ -93,6 +93,7 @@ public class LoginConfirmController implements Controller, Victim<Message> {
     }
 
     public void confirmLogin() {
+        app.getNotificationSystem().enable();
         if (app.canRunInBackground()) {
             switchWait(false);
             seconds = 2;

@@ -53,6 +53,7 @@ public class LoginController implements Controller {
 
     @FXML
     private void handleNext() {
+        app.getNotificationSystem().disable();
         String room = this.room.getText();
         app.setRoom(room);
         app.setServer(serverAddress);
