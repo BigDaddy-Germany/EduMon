@@ -400,42 +400,44 @@ EduMon.Gui = new function() {
 	/**
 	 * Process hotkey
 	 * @method processKey
-	 * @param {event} keyEvent jQuery Element that fired on key press
+	 * @param {event} e jQuery Element that fired on key press
 	 * @return undefined
 	 */
-	var processKey = function(keyEvent){
+	var processKey = function(e){
 		//exclude events that bubbled up from actual input elements
-		if (!$(keyEvent.target).is("input,button,textarea,a")){
-			//now decide how to act: base idea is "act like the user would do" - button not there? cannot click! button disabled? cannot click
-			switch(keyEvent.key.toLowerCase()){
-				case "d": //D-aumenfeedback
-					if (!$("#btnThumbs").hasClass("disabled")){
-						$("#btnThumbs").trigger("click");
-					}
-					break;
-				case "b": //B-ewertung
-					if (!$("#btnRating").hasClass("disabled")){
-						$("#btnRating").trigger("click");
-					}
-					break;
-				case "g": //G-lücksrad
-				case "r": //R-ad
-				case "z": //Z-ufall
-					$("#btnWheel").trigger("click");
-					break;
-				case "p": //P-lay & P-ause
-					if ($("#btnPause").is(":visible")){
-						$("#btnPause").trigger("click");
-					} else if ($("#btnPlay").is(":visible")){
-						$("#btnPlay").trigger("click");
-					}
-					break;
-				case "shift":
-					$("#pultup .handle").trigger("click");
-					break;
-				default:
-					EduMon.debug("Pressed: "+keyEvent.key);
-			}
+		if ($(e.target).is("input,button,textarea,a")){
+			return;
+		}
+		var KEY = EduMon.Util.keymap;
+		//now decide how to act: base idea is "act like the user would do" - button not there? cannot click! button disabled? cannot click
+		switch(e.which){
+			case KEY.D: //D-aumenfeedback
+				if (!$("#btnThumbs").hasClass("disabled")){
+					$("#btnThumbs").trigger("click");
+				}
+				break;
+			case KEY.B: //B-ewertung
+				if (!$("#btnRating").hasClass("disabled")){
+					$("#btnRating").trigger("click");
+				}
+				break;
+			case KEY.G: //G-lücksrad
+			case KEY.R: //R-ad
+			case KEY.Z: //Z-ufall
+				$("#btnWheel").trigger("click");
+				break;
+			case KEY.P: //P-lay & P-ause
+				if ($("#btnPause").is(":visible")){
+					$("#btnPause").trigger("click");
+				} else if ($("#btnPlay").is(":visible")){
+					$("#btnPlay").trigger("click");
+				}
+				break;
+			case KEY.SHIFT:
+				$("#pultup .handle").trigger("click");
+				break;
+			default:
+				EduMon.debug("Pressed: "+e.which);
 		}
 	};
 

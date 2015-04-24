@@ -4,6 +4,24 @@ EduMon.Util = new function () {
 	var that = this;
 
 	/**
+	 * the keys used in various keyboard controls
+	 * @type {{SHIFT: number, SPACE: number, A: number, B: number, D: number, G: number, M: number, P: number, Q: number, R: number, Z: number}}
+	 */
+	this.keymap = {
+		SHIFT: 16,
+		SPACE: 32,
+		A: 65,
+		B: 66,
+		D: 68,
+		G: 71,
+		M: 77,
+		P: 80,
+		Q: 81,
+		R: 82,
+		Z: 90
+	};
+
+	/**
 	 * Iterates over a field and calls the given functor
 	 * @param {object} object the object ot iterate over
 	 * @param {Function} functor the functor to call (first argument is the field's name, the second one the content)
