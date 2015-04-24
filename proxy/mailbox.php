@@ -170,9 +170,11 @@
 	try {
 		$db = new SQLite3(dirname(__FILE__) . '/'.DB_FILE, SQLITE3_OPEN_READWRITE);
 
+		$db->busyTimeout(1000 * intval(ini_get('max_execution_time')));
+
 		// check table packages to be available in the right structure
 		if ($stmt = @$db->prepare('PRAGMA table_info(packages)')) {
-			$result = executeLoopStmt($stmt);
+			$result = $stmt->execute();
 
 			$givenStructure = array();
 
@@ -264,7 +266,7 @@
 		// delete old database entries
 		$stmt = $db->prepare("DELETE FROM packages WHERE time < :timestamp");
 		$stmt->bindValue(':timestamp', time() - 24 * 3600, SQLITE3_INTEGER);
-		executeLoopStmt($stmt);
+		$stmt->execute();
 
 
 		// No one should be able to see the moderator's session id
@@ -368,7 +370,7 @@
 				if ($package['type'] == 1) {
 					$stmt = $db->prepare("DELETE FROM packages WHERE room = :room");
 					$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT);
-					executeLoopStmt($stmt);
+					$stmt->execute();
 				}
 
 				// insert new package into database
@@ -379,7 +381,7 @@
 				$stmt->bindValue(':toClient', $package['to'], SQLITE3_TEXT);
 				$stmt->bindValue(':data', json_encode($package, JSON_UNESCAPED_UNICODE), SQLITE3_TEXT);
 
-				if (!executeLoopStmt($stmt)) {
+				if ($stmt->execute()) {
 					$errorMessages[] = 'Could not save package ' . $key . ' to database. [Error: "' . $db->lastErrorMsg() . '"]';
 				}
 			}
@@ -405,7 +407,7 @@
 		$stmt->bindValue(':room', $_GET['room'], SQLITE3_TEXT);
 		$stmt->bindValue(':lastId', $_SESSION['lastDeliveredPackage'], SQLITE3_INTEGER);
 
-		$result = executeLoopStmt($stmt);
+		$result = $stmt->execute();
 		$receivedPackages = array();
 		// remember delivered ids to delete later
 		$deliveredIds = array();
@@ -423,7 +425,7 @@
 
 		// delete delivered ones
 		$stmt = $db->prepare("DELETE FROM packages WHERE id IN (" . implode(',', $deliveredIds) . ")");
-		executeLoopStmt($stmt);
+		$stmt->execute();
 
 		/*
 			prepare return
@@ -446,14 +448,3 @@
 	}
 
 	echo json_encode($returnedData, JSON_UNESCAPED_UNICODE);
-
-
-	/**
-	 * Executes a statement performing a buisy wait if execution is not possible
-	 * @param SQLite3Stmt $stmt the statement to execute
-	 * @return SQLite3Result the result
-	 */
-	function executeLoopStmt($stmt) {
-		while(!($result = @$stmt->execute())) {}
-		return $result;
-	}
