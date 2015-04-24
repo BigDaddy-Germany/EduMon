@@ -23,7 +23,7 @@ EduMon.Wheel = function(canvas, segments) {
 	var RPS = TAU / targetFPS;
 	var targetVelocity = 3.5 * RPS;
 	var speedUp  =  .1 * RPS;
-	var slowDown = -.08 * RPS;
+	var slowDown = .08 * RPS;
 
 	var currentAngle = 0;
 	var velocity = 0;
@@ -43,7 +43,7 @@ EduMon.Wheel = function(canvas, segments) {
 
 	this.onFinish = null;
 
-	setAndShuffledSegments(segments);
+	setAndShuffleSegments(segments);
 	updateState(true);
 
 	/**
@@ -74,7 +74,7 @@ EduMon.Wheel = function(canvas, segments) {
 	 *
 	 * @param {Array} newSegments the new segments to set
 	 */
-	function setAndShuffledSegments(newSegments) {
+	function setAndShuffleSegments(newSegments) {
 		if (!newSegments || newSegments.length < 1) {
 			throw "No segments given!";
 		}
@@ -89,7 +89,7 @@ EduMon.Wheel = function(canvas, segments) {
 	 * @param {boolean} [reset=true] true to reset the rotation of the wheel and start at the first segment
 	 */
 	this.setSegments = function(newSegments, reset) {
-		setAndShuffledSegments(newSegments);
+		setAndShuffleSegments(newSegments);
 		updateState(!!reset);
 	};
 
@@ -146,6 +146,7 @@ EduMon.Wheel = function(canvas, segments) {
 
 		var value = 1;
 		if (hsv[0] != 240) {
+			// make it black or white depending on the lightness and color (hue = 240 -> dark blue)
 			value = hsv[2] <= .7 || hsv[0] == 240 ? 1 : 0;
 		}
 		var rgb = EduMon.Math.hsvToRgb(0, 0, value);
@@ -263,7 +264,8 @@ EduMon.Wheel = function(canvas, segments) {
 	 * This function ends the spinning of the wheel by letting it slow down
 	 */
 	this.endSpinning = function() {
-		acceleration = slowDown;
+		var halfIntSlowDown = Math.floor(slowDown * 100 / 2);
+		acceleration = -(slowDown + EduMon.Util.randomIntFromInterval(-1 * halfIntSlowDown, halfIntSlowDown) / 100);
 	};
 
 	/**

@@ -208,6 +208,10 @@ EduMon.Util = new function () {
 
 		return h1 >>> 0;
 	};
+
+	this.randomIntFromInterval = function(min,max) {
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
 };
 
 
