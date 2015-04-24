@@ -478,16 +478,20 @@ EduMon.Gui = new function() {
 			}
 		});
 		$("#pultup").find(".handle").off("click").click(function(){
-			if (!EduMon.lectureIsActive()) {
-				EduMon.Gui.showToast(msgNoLecture);
-			} else if (EduMon.Prefs.currentLecture.gui.pultup==="") {
-				EduMon.Gui.showFeedMessage("info","Pult-Up-Display&trade;","Dieses Infomenü ist nur während einer Aktion verfügbar. Es öffnet sich automatisch.");
-			} else {
+			if (EduMon.lectureIsActive() && EduMon.Prefs.currentLecture.gui.pultup!=="") {
 				EduMon.Gui.togglePultup();
+			} else {
+				if (!EduMon.lectureIsActive()){
+					EduMon.Gui.showToast(msgNoLecture);
+				}
+				EduMon.Gui.showFeedMessage("info","Pult-Up-Display&trade;","Dieses Infomenü ist nur während einer Aktion verfügbar. Es öffnet sich automatisch.");
 			}
 		});
 		$('#btnRemoveData').off('click').on('click', function() {
 			EduMon.Gui.showDialog('deleteData', true);
+		});
+		$('.btnHelp').off('click').on('click', function() {
+			EduMon.Gui.showDialog('help', true);
 		});
 
 		//Hotkeys
