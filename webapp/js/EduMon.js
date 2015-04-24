@@ -568,7 +568,7 @@ EduMon = new function () {
 				$nameField.text("Noch nichts ausgewählt.");
 			});
 
-			var wheelData = EduMon.Prefs.wheel;
+			var wheelData = EduMon.Prefs.wheel || {};
 
 			// open the window with its old location and size
 			wheelWindow = EduMon.Util.openWindow("wheel.html", {
@@ -623,17 +623,11 @@ EduMon = new function () {
 	}
 
 	function verifyAppCache() {
-		var notificationShown = false;
-
-		function checkUpdate() {
-			EduMon.debug("Checking for updates...");
-			try {
-			applicationCache.update();
-			} catch (InvalidStateError) {
-				EduMon.debug("Update check failed, appcache manifest not found.");
-			}
+		if (!applicationCache) {
+			return;
 		}
 
+		var notificationShown = false;
 		applicationCache.addEventListener('updateready', function() {
 			if (applicationCache.status  == applicationCache.UPDATEREADY) {
 				applicationCache.swapCache();
@@ -648,10 +642,19 @@ EduMon = new function () {
 		applicationCache.addEventListener('cached', function() {
 			EduMon.Gui.showFeedMessage("info", "Offline verfügbar", "EduMon ist ab jetzt auch offline für Sie verfügbar, es wurde in diesem Browser zwischengespeichert.");
 		});
-		
+
+		function checkUpdate() {
+			EduMon.debug("Checking for updates...");
+			applicationCache.update();
+		}
+
 		// check for updates every 15 minutes;
-		setInterval(checkUpdate, 15 * 60 * 1000);
-		checkUpdate();
+		try {
+			checkUpdate();
+			setInterval(checkUpdate, 15 * 60 * 1000);
+		} catch (InvalidStateError) {
+			EduMon.debug("Update check failed, appcache manifest not found.");
+		}
 	}
 
 
