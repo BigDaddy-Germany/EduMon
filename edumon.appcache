@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sat Apr 25 00:51:17 CEST 2015
+# Build date: Sat Apr 25 01:59:43 CEST 2015
 
 CACHE:
 css/app.css
@@ -45,6 +45,10 @@ lib/bootstrap/fonts/glyphicons-halflings-regular.woff
 lib/bootstrap/js/bootstrap.min.js
 lib/es6-promise/js/es6-promise.min.js
 test.html
+testing/databaseSpam/clientWorker.js
+testing/databaseSpam/mod.html
+testing/databaseSpam/moderatorWorker.js
+testing/databaseSpam/client.html
 wheel.html
 
 NETWORK:
