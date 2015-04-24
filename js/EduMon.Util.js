@@ -129,6 +129,12 @@ EduMon.Util = new function () {
 		var splitter = '';
 		var features = '';
 		that.forEachField(options, function (k, v) {
+			if (v === true) {
+				v = 'yes';
+			}
+			if (v === false) {
+				v = 'no';
+			}
 			features += splitter + k + '=' + v;
 			splitter = ',';
 		});
