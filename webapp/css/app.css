@@ -134,7 +134,7 @@ body {
     padding: 0px; }
   #buttonpanel > div {
     margin: 0px;
-    overflow-y: auto; }
+    overflow: hidden; }
 
 #flowbox {
   text-align: center;
