@@ -623,31 +623,35 @@ EduMon = new function () {
 	}
 
 	function verifyAppCache() {
-
 		var notificationShown = false;
 
 		function checkUpdate() {
-			applicationCache.update();
 			EduMon.debug("Checking for updates...");
+			try {
+			applicationCache.update();
+			} catch (InvalidStateError) {
+				EduMon.debug("Update check failed, appcache manifest not found.");
+			}
 		}
-
-		// check for updates every 5 minutes;
-		setInterval(checkUpdate, 5 * 60 * 1000);
-		checkUpdate();
 
 		applicationCache.addEventListener('updateready', function() {
 			if (applicationCache.status  == applicationCache.UPDATEREADY) {
 				applicationCache.swapCache();
 				if (!notificationShown) {
 					notificationShown = true;
-					EduMon.Gui.showFeedMessage("info", "Update", "Eine Aktualisierung ist verfügbar. Laden Sie das Fenster neu, um die Änderungen anzuwenden.");
+					EduMon.Gui.showFeedMessage("success", "Update heruntergeladen", "Eine Anwendungs-Aktualisierung ist verfügbar. Laden Sie das Fenster neu, um die Änderungen anzuwenden."+
+						'<a href="#" class="btn btn-info btn-fab btn-raised" onclick="location.reload();">Anwendung neustarten</a>');
 				}
 			}
 		});
 
 		applicationCache.addEventListener('cached', function() {
-			EduMon.Gui.showFeedMessage("info", "Offline verfügbar", "EduMon ist ab jetzt auch offline für Sie verfügbar.");
+			EduMon.Gui.showFeedMessage("info", "Offline verfügbar", "EduMon ist ab jetzt auch offline für Sie verfügbar, es wurde in diesem Browser zwischengespeichert.");
 		});
+		
+		// check for updates every 15 minutes;
+		setInterval(checkUpdate, 15 * 60 * 1000);
+		checkUpdate();
 	}
 
 
