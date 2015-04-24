@@ -1,7 +1,7 @@
 <?php
 	/**
 	 *
-	 * This is the mailbox of edumon. Please access it as follows and remeber to hold the session!
+	 * This is the mailbox of edumon. Please access it as follows and remember to hold the session!
 	 *
 	 * Your request needs to contain the following GET data:
 	 *
@@ -44,8 +44,31 @@
 
 	error_reporting(-1);
 	ini_set("display_errors", true);
+
+	defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
+
 	define('PW_FILE', '.htedumonpassword');
 	define('DB_FILE', '.htedumondatabase');
+
+	set_error_handler('handle_error', -1);
+
+	function handle_error($errno, $errstr, $errfile, $errline, array $errcontext) {
+		http_response_code(500);
+
+		$returnedData = array(
+			'errorMessages' => array(
+				'errno' => $errno,
+				'errstr' => $errstr,
+				'errfile' => $errfile,
+				'errline' => $errline
+			)
+		);
+
+		header('Content-type: application/json; charset=utf-8');
+		die(json_encode($returnedData, JSON_UNESCAPED_UNICODE));
+	}
+
+	$myError = 1/0;
 
 	// if the .htedumon* files don't exist and the user accesses mailbox.php?setup, we will start the system's setup
 	if (isset($_GET['setup']) and !file_exists(dirname(__FILE__).'/'.DB_FILE) and !file_exists(dirname(__FILE__).'/'.PW_FILE)) {
