@@ -168,7 +168,7 @@ function RPC(registerReceiver, send, procedures) {
  */
 RPC.xWindow = function(target, procedures) {
 
-	if (!(target instanceof Window)) {
+	if (!(target && "onmessage" in target && "addEventListener" in target && target.postMessage instanceof Function)) {
 		throw "target must be a window!";
 	}
 
@@ -201,7 +201,7 @@ RPC.xWindow = function(target, procedures) {
  */
 RPC.WorkerRPC = function(worker, procedures) {
 	// verify a Worker-like object
-	if (!worker || worker.onmessage === undefined || !(worker.postMessage instanceof Function)) {
+	if (!(worker && "onmessage" in worker && worker.postMessage instanceof Function)) {
 		throw "worker must be a Web Worker " + Date.now();
 	}
 
