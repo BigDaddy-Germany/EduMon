@@ -18,9 +18,6 @@ EduMon = new function () {
 	this.init = function () {
 		console.log("*** All Glory to the EduMon! ***");
 
-		if (that.debugging){
-			$("#devbox").fadeIn();
-		}
 		that.debug("EduMon awakening...");
 
 		that.messenger = new EduMon.Messenger({
@@ -56,6 +53,11 @@ EduMon = new function () {
 		that.messenger.start();
 
 		EduMon.Gui.showFeedMessage("info","Willkommen!","Das EduMon freut sich über Ihren Besuch :)");
+
+		$("#apploader").fadeOut(500);
+		if (that.debugging){
+			$("#devbox").fadeIn();
+		}
 	};
 
 
