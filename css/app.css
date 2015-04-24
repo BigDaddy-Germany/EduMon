@@ -7,6 +7,9 @@ body {
   font-family: 'Roboto', sans-serif;
   min-width: 1275px;
   min-height: 635px; }
+  body.unfocussed #logo img {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%); }
 
 @font-face {
   font-family: 'Roboto';

@@ -18,6 +18,8 @@ EduMon.Gui = new function() {
 	var seatsInfo = {width: -1, height: -1};
 	var msgNoLecture = "Es ist zur Zeit keine Vorlesung aktiv!";
 
+	this.hasFocus = true;
+
 	/**
 	 * Add message to newsfeed
 	 * @method showFeedMessage
@@ -437,12 +439,25 @@ EduMon.Gui = new function() {
 		}
 	};
 
+
+	/**
+	 * React to a change of focus
+	 * @method processFocus
+	 * @param {Boolean} focus Has the document the focus? (i.e. will hotkeys work?)
+	 * @return undefined
+	 */
+	var processFocus = function(focus){
+		that.hasFocus = focus;
+		$("body").toggleClass("unfocussed",!focus);
+	};
+
 	/**
 	 * Initialize GUI (bind click handlers)
 	 * @method init
 	 * @return undefined
 	 */
 	this.init = function(){
+		//Buttons
 		$("#btnSettings").off("click").click(function(){
 			EduMon.Gui.showDialog("connectionSettings",true);
 		});
@@ -472,7 +487,13 @@ EduMon.Gui = new function() {
 		$('#btnRemoveData').off('click').on('click', function() {
 			EduMon.Gui.showDialog('deleteData', true);
 		});
+
+		//Hotkeys
 		$("body").off().on("keydown",function(e){processKey(e)});
 
+		//Window focus
+		$(window)
+			.focus(function(){processFocus(true);})
+			.blur( function(){processFocus(false);});
 	};
 };
