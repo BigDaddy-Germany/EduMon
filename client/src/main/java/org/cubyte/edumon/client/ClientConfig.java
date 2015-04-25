@@ -10,7 +10,6 @@ import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -20,6 +19,7 @@ public class ClientConfig {
     private static final File file;
     @JsonIgnore
     private static final ObjectMapper mapper;
+
     static {
         String separator = File.separator;
         if ("\\".equals(separator)) {
@@ -37,6 +37,7 @@ public class ClientConfig {
         }
         mapper = new ObjectMapper();
     }
+
     public final ConcurrentMap<String, RoomState> roomStateMap;
     public String server;
     public String room;

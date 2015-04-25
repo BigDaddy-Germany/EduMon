@@ -1,6 +1,5 @@
 package org.cubyte.edumon.client.sensorlistener;
 
-import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.Scene;
 import org.cubyte.edumon.client.controller.ThumbfeedbackController;
 import org.jnativehook.keyboard.NativeKeyEvent;

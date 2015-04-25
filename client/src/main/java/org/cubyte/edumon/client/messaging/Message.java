@@ -22,6 +22,7 @@ public class Message implements Bullet {
     public final String to;
     public final String room;
     public final MessageBody body;
+
     @JsonCreator
     public Message(@JsonProperty("time") Date time, @JsonProperty("from") String from,
                    @JsonProperty("to") String to, @JsonProperty("room") String room,
@@ -95,6 +96,7 @@ public class Message implements Bullet {
                     typeString += string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
                 }
                 try {
+                    @SuppressWarnings("unchecked")
                     Class<? extends MessageBody> clazz = (Class<? extends MessageBody>) Class.forName("org.cubyte.edumon.client.messaging.messagebody." + typeString);
                     Type.toClassMap.put(type, clazz);
                     Type.classToTypeMap.put(clazz, type);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ThumbRequest implements MessageBody {
     public final int id;
     public final FeedbackType type;
+
     @JsonCreator
     public ThumbRequest(@JsonProperty("id") int id, @JsonProperty("type") FeedbackType type) {
         this.id = id;

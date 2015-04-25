@@ -3,17 +3,14 @@ package org.cubyte.edumon.client;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.cubyte.edumon.client.controller.BreakRequestConfirmController;
 import org.cubyte.edumon.client.controller.ThumbfeedbackController;
 import org.cubyte.edumon.client.eventsystem.Victim;
 import org.cubyte.edumon.client.messaging.Message;
-import org.cubyte.edumon.client.messaging.messagebody.ThumbFeedback;
 import org.cubyte.edumon.client.messaging.messagebody.ThumbRequest;
 
 import java.awt.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.cubyte.edumon.client.Scene.BREAK_REQUEST_CONFIRM;
 import static org.cubyte.edumon.client.Scene.THUMBFEEDBACK;
@@ -81,7 +78,7 @@ public class NotificationSystem implements Victim<Message> {
         }
         if (bullet.body.getClass().isAssignableFrom(ThumbRequest.class)) {
             final ThumbRequest body = ((ThumbRequest) bullet.body);
-            if (body.type == ThumbRequest.FeedbackType.thumb ||body.type == ThumbRequest.FeedbackType.rating) {
+            if (body.type == ThumbRequest.FeedbackType.thumb || body.type == ThumbRequest.FeedbackType.rating) {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -139,6 +136,7 @@ public class NotificationSystem implements Victim<Message> {
     public void enable() {
         enabled = true;
     }
+
     public void disable() {
         enabled = false;
     }
