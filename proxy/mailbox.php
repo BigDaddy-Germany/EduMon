@@ -67,8 +67,7 @@
 		header('Content-type: application/json; charset=utf-8');
 		die(json_encode($returnedData, JSON_UNESCAPED_UNICODE));
 	}
-
-	$myError = 1/0;
+	
 
 	// if the .htedumon* files don't exist and the user accesses mailbox.php?setup, we will start the system's setup
 	if (isset($_GET['setup']) and !file_exists(dirname(__FILE__).'/'.DB_FILE) and !file_exists(dirname(__FILE__).'/'.PW_FILE)) {
