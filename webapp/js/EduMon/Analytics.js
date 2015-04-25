@@ -17,8 +17,6 @@ EduMon.Analytics = function () {
 	var curValPeriod = 10;
 	var minimalGlobalReferenceValues = debugging ? 2 : 5;
 
-	var upperBoundGiniFactor = 0.8;
-
 	var weights = {
 		microphone: 3,
 		keyboard: 3,

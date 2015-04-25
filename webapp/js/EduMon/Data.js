@@ -1,13 +1,13 @@
 /*
-	method createCurrentLecture depends on EduMon.Prefs
+ method createCurrentLecture depends on EduMon.Prefs
  */
 EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
-	 * @method Student
+	 *
 	 * @param {String} name the student's name
 	 * @param {String} group the group, the student is in
-	 * @return ObjectExpression
+	 * @return {Object}
 	 */
 	this.Student = function Student(name, group) {
 		return {
@@ -18,10 +18,10 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new course object
-	 * @method Course
+	 *
 	 * @param {String} name A name to identify the course
 	 * @param {Student[]} students
-	 * @return ObjectExpression
+	 * @return {Object}
 	 */
 	this.Course = function Course(name, students) {
 		return {
@@ -32,11 +32,11 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new room object
-	 * @method Room
+	 *
 	 * @param {String} roomName The room's name
 	 * @param {int} width The room's seats per row
 	 * @param {int} height The room's rows
-	 * @return ObjectExpression
+	 * @return {Object}
 	 */
 	this.Room = function Room(roomName, width, height) {
 		return {
@@ -48,11 +48,11 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new lecture object
-	 * @method Lecture
+	 *
 	 * @param {String} lectureName the lecture's display name
 	 * @param {int} room the room's ID
 	 * @param {int} course the course's ID
-	 * @return ObjectExpression
+	 * @return {Object}
 	 */
 	this.Lecture = function Lecture(lectureName, room, course) {
 		return {
@@ -64,8 +64,8 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a new timeline object
-	 * @method Timeline
-	 * @return ObjectExpression
+	 *
+	 * @return {Object}
 	 */
 	this.Timeline = function Timeline() {
 		return {
@@ -86,21 +86,21 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates a current lecture object containing the real data (not only IDs)
-	 * 				lectureName: {String},
-	 * 				room: {
+	 *                lectureName: {String},
+	 *                room: {
 	 * 					roomName: {String},
 	 * 					width: {int},
 	 * 					height: {int}
 	 * 				},
-	 * 				course: {
+	 *                course: {
 	 * 					name: {String},
 	 * 					students: Array({Student})
 	 *  			},
-	 *  			activeStudents: {}
-	 *  		}}
-	 * @method createCurrentLecture
+	 *            activeStudents: {}
+	 *        }}
+	 *
 	 * @param {int} [lectureId] the lecture's ID
-	 * @return 
+	 * @return
 	 */
 	this.createCurrentLecture = function(lectureId) {
 		var lectureObject = undefined;
@@ -114,10 +114,10 @@ EduMon.Data = new function() {
 			courseObject = EduMon.Prefs.courses[lectureObject.course];
 			lectureName = lectureObject.lectureName;
 			/*
-			   we only need IDs inside the course, because it's only to start the broadcast once
-			   Everything, which is needed to calculate or something similar should be copied
-			   (like analytics or timeline)
-			   */
+			 we only need IDs inside the course, because it's only to start the broadcast once
+			 Everything, which is needed to calculate or something similar should be copied
+			 (like analytics or timeline)
+			 */
 		}
 
 		return {
@@ -197,31 +197,31 @@ EduMon.Data = new function() {
 
 	/**
 	 * Creates an empty packet (from "MODERATOR") with the common headers set
-	 * @method createBasePacket
+	 *
 	 * @param {int} type Packet type number
 	 * @param {String} to Recipient
 	 * @param {Object} body Packet body
 	 * @return ObjectExpression
 	 */
-	this.createBasePacket = function(type, to, body){
+	this.createBasePacket = function(type, to, body) {
 		return {
-			"type":+type,
-			"id":++EduMon.Prefs.messaging.outgoingPackageId,
-			"time":EduMon.Util.timestampNow(),
-			"from":"MODERATOR",
-			"to":to,
-			"room":EduMon.Prefs.currentLecture.room.roomName,
-			"body":body
+			"type": +type,
+			"id": ++EduMon.Prefs.messaging.outgoingPackageId,
+			"time": EduMon.Util.timestampNow(),
+			"from": "MODERATOR",
+			"to": to,
+			"room": EduMon.Prefs.currentLecture.room.roomName,
+			"body": body
 		};
 	};
 
 	/**
 	 * Checks, whether the deletion of a resource is allowed
-	 * @method checkDeletionErrors
-	 * @param {String} resourceType the resource's type
+	 *
+	 * @param {string} resourceType the resource's type
 	 * @param {int} resourceId the resource's ID
-	 * @param {} allowedUser
-	 * @return Literal
+	 * @param {string} allowedUser
+	 * @return {int}
 	 */
 	this.checkDeletionErrors = function(resourceType, resourceId, allowedUser) {
 		allowedUser = allowedUser || false;

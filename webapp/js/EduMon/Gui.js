@@ -10,10 +10,10 @@ EduMon.Gui = new function() {
 	var popupOpened = 0;
 	var popupCallback;
 	var defaultButtons = {
-		"yes":    {text:"Ja",       value:"yes",   class:"success"},
-		"no":     {text:"Nein",     value:"no",    class:"danger" },
-		"ok":     {text:"OK",       value:"ok",    class:"primary"},
-		"cancel": {text:"Abbrechen",value:"cancel",class:"default"}
+		"yes": {text: "Ja", value: "yes", class: "success"},
+		"no": {text: "Nein", value: "no", class: "danger"},
+		"ok": {text: "OK", value: "ok", class: "primary"},
+		"cancel": {text: "Abbrechen", value: "cancel", class: "default"}
 	};
 	var seatsInfo = {width: -1, height: -1};
 	var msgNoLecture = "Es ist zur Zeit keine Vorlesung aktiv!";
@@ -32,24 +32,24 @@ EduMon.Gui = new function() {
 		countFeedMessages++;
 		this.updateFeedCountView();
 		$("#alertcontainer")
-			.prepend($("<div/>",{class:"alert alert-dismissable alert-"+type})
-					.css("opacity","0")
-					.slideDown(300,function(){
-						$(this).animate({opacity:1},200);
-					})
-					.append($("<button/>",{type:"button",class:"close"}).text("x")
-						.one("click",function(e){
-							countFeedMessages--;
-							that.updateFeedCountView();
-							$(this).parent()
-								.css("visibility","hidden")
-								.slideUp(200,function(){
-									$(e.target).remove();
-								});
-						}))
-					.append($("<h4/>").html(title))
-					.append($("<p/>").html(message))
-					);
+			.prepend($("<div/>", {class: "alert alert-dismissable alert-" + type})
+				.css("opacity", "0")
+				.slideDown(300, function() {
+					$(this).animate({opacity: 1}, 200);
+				})
+				.append($("<button/>", {type: "button", class: "close"}).text("x")
+					.one("click", function(e) {
+						countFeedMessages--;
+						that.updateFeedCountView();
+						$(this).parent()
+							.css("visibility", "hidden")
+							.slideUp(200, function() {
+								$(e.target).remove();
+							});
+					}))
+				.append($("<h4/>").html(title))
+				.append($("<p/>").html(message))
+		);
 	};
 
 	/**
@@ -58,7 +58,7 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.updateFeedCountView = function() {
-		$("#feedcounter").html("<span class=\"badge\">"+countFeedMessages+"</span> Nachricht"+(countFeedMessages!==1?"en":""));
+		$("#feedcounter").html("<span class=\"badge\">" + countFeedMessages + "</span> Nachricht" + (countFeedMessages !== 1 ? "en" : ""));
 	};
 
 	/**
@@ -69,9 +69,9 @@ EduMon.Gui = new function() {
 	 */
 	var loadDialog = function(dialogid) {
 		return new Promise(function(fulfill, reject) {
-			$("#dialogcontent").load("dialogs/"+dialogid+".html", function(response, status, xhr){
+			$("#dialogcontent").load("dialogs/" + dialogid + ".html", function(response, status) {
 				openedDialog = dialogid;
-				if (status==="success"){
+				if (status === "success") {
 					$("#dialogcontainer").scrollTop(0);
 					that.setDialogBlock(0);
 					fulfill();
@@ -94,8 +94,8 @@ EduMon.Gui = new function() {
 	this.showDialog = function(dialogid, attentionAbort) {
 		var that = this;
 		return new Promise(function(fulfill, reject) {
-			if (dialogOpened){
-				if (attentionAbort){
+			if (dialogOpened) {
+				if (attentionAbort) {
 					EduMon.Gui.attention();
 				}
 				reject();
@@ -105,7 +105,7 @@ EduMon.Gui = new function() {
 			$("#dialogcontent").empty();
 			that.setDialogBlock(true);
 			$("#layercontainer").show();
-			if (!popupOpened){
+			if (!popupOpened) {
 				$("#popupcontainer").hide();
 			}
 			$("#dialogcontainer").fadeIn(200);
@@ -124,7 +124,7 @@ EduMon.Gui = new function() {
 	this.switchDialog = function(dialogid) {
 		var that = this;
 		return new Promise(function(fulfill, reject) {
-			if (!dialogOpened){
+			if (!dialogOpened) {
 				reject();
 				throw "No dialog currently open to switch from. Use openDialog() instead";
 			}
@@ -142,12 +142,14 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.setDialogBlock = function(blocked) {
-		if (blocked){
-			$("#loadinglayer img").hide().delay(500).fadeIn(500);
-			$("#loadinglayer").show();
+		var $loadingPlayer = $("#loadinglayer");
+		var $img = $loadingPlayer.find("img");
+		if (blocked) {
+			$img.hide().delay(500).fadeIn(500);
+			$loadingPlayer.show();
 		} else {
-			$("#loadinglayer").hide();
-			$("#loadinglayer img").stop();
+			$loadingPlayer.hide();
+			$img.stop();
 		}
 	};
 
@@ -157,8 +159,8 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.closeDialog = function() {
-		$("#dialogcontainer").fadeOut(100,function(){
-			if (!popupOpened){
+		$("#dialogcontainer").fadeOut(100, function() {
+			if (!popupOpened) {
 				$("#layercontainer").hide();
 			}
 			$("#dialogcontent").empty();
@@ -185,14 +187,14 @@ EduMon.Gui = new function() {
 	this.showToast = function(message) {
 		$("#toastlist")
 			.prepend($("<li/>")
-					.append($("<div/>").text(message))
-					.one("click",function(e){
-						$(e.target).remove();
-					})
-					.delay(2000)
-					.fadeOut(1000,function(){
-						$(this).remove();
-					}));
+				.append($("<div/>").text(message))
+				.one("click", function(e) {
+					$(e.target).remove();
+				})
+				.delay(2000)
+				.fadeOut(1000, function() {
+					$(this).remove();
+				}));
 	};
 
 	/**
@@ -206,9 +208,9 @@ EduMon.Gui = new function() {
 	 * @return undefined
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
-		if (popupOpened && attentionAbort!==true){
+		if (popupOpened && attentionAbort !== true) {
 			throw "Cannot open another popup. The current one has to be closed first";
-		} else if (popupOpened && attentionAbort===true){
+		} else if (popupOpened && attentionAbort === true) {
 			this.attention();
 			return;
 		}
@@ -218,19 +220,20 @@ EduMon.Gui = new function() {
 		$("#popupmessage").html(message);
 		var popupfooter = $("#popupfooter");
 		popupfooter.empty();
-		for (var i = 0; i < buttons.length; i++){
-			if ((typeof (buttons[i])==="string") && (buttons[i] in defaultButtons)){
+		for (var i = 0; i < buttons.length; i++) {
+			if ((typeof (buttons[i]) === "string") && (buttons[i] in defaultButtons)) {
 				buttons[i] = defaultButtons[buttons[i]];
 			}
 			popupfooter.append(
-					$("<button/>",{type:"button"})
-					.addClass("btn btn-"+buttons[i].class)
+				$("<button/>", {type: "button"})
+					.addClass("btn btn-" + buttons[i].class)
 					.text(buttons[i].text)
-					.data("returnvalue",buttons[i].value)
-					);
+					.data("returnvalue", buttons[i].value)
+			);
 		}
-		popupCallback = callback || function(){};
-		popupfooter.find("button").one("click",function(){
+		popupCallback = callback || function() {
+		};
+		popupfooter.find("button").one("click", function() {
 			that.closePopup();
 			popupCallback($(this).data("returnvalue"));
 		});
@@ -244,7 +247,7 @@ EduMon.Gui = new function() {
 	 */
 	this.closePopup = function() {
 		$("#popupcontainer").hide();
-		if (!dialogOpened){
+		if (!dialogOpened) {
 			$("#layercontainer").hide();
 		}
 		popupOpened = 0;
@@ -255,28 +258,29 @@ EduMon.Gui = new function() {
 	 * @method initSeating
 	 * @return undefined
 	 */
-	this.initSeating = function(){
-		if (seatUpdateTimer >= 0){
+	this.initSeating = function() {
+		if (seatUpdateTimer >= 0) {
 			clearInterval(seatUpdateTimer);
 		}
 
 		var room = EduMon.Prefs.currentLecture.room;
 		$("#seats")
 			.hide()
-			.html(new Array(room.height+1).join('<div class="srow">'+new Array(room.width+1).join(
-						'<div class="scell"><div class="person"><div class="name"></div><div class="group"></div></div></div>'
-						)+'</div>'))
+			.html(new Array(room.height + 1).join('<div class="srow">' + new Array(room.width + 1).join(
+				'<div class="scell"><div class="person"><div class="name"></div><div class="group"></div></div></div>'
+			) + '</div>'))
 			.fadeIn();
-		$("#seatscontainer .bglogo").fadeOut();
+		$("#seatscontainer").find(".bglogo").fadeOut();
 
-		seatUpdateTimer = setInterval(function(){
+		seatUpdateTimer = setInterval(function() {
 			updateStudents();
-		},seatUpdateInterval);
+		}, seatUpdateInterval);
 
-		if (EduMon.debugging){
-			$("#packageLogging").change(function() {
-				if ($("#devbox").hasClass("opened")){
-					$('#packageLogging').scrollTop($('#packageLogging')[0].scrollHeight);
+		if (EduMon.debugging) {
+			var $packageLogging = $("#packageLogging");
+			$packageLogging.change(function() {
+				if ($("#devbox").hasClass("opened")) {
+					$packageLogging.scrollTop($packageLogging[0].scrollHeight);
 				}
 			});
 
@@ -288,13 +292,13 @@ EduMon.Gui = new function() {
 	 * @method getSeatElement
 	 * @param {int} number Seat number from 1 (at left from moderator view) to n (X index)
 	 * @param {int} row Row number from 1 (front desk) to n (Y index)
-	 * @return {jQuery-Element}
+	 * @return {Object}
 	 */
-	var getSeatElement = function(number, row){
+	var getSeatElement = function(number, row) {
 		var seats = $("#seats");
-        if (seatsInfo.height===-1) seatsInfo.height = seats.children().length;
-		if (seatsInfo.width ===-1) seatsInfo.width  = seats.children().first().children().length;
-		return seats.children().eq(seatsInfo.height-row).children().eq(number-1);
+		if (seatsInfo.height === -1) seatsInfo.height = seats.children().length;
+		if (seatsInfo.width === -1) seatsInfo.width = seats.children().first().children().length;
+		return seats.children().eq(seatsInfo.height - row).children().eq(number - 1);
 	};
 
 	/**
@@ -310,20 +314,20 @@ EduMon.Gui = new function() {
 	var updateSeat = function(number, row, name, group, activity) {
 		var seat = getSeatElement(number, row);
 
-		var colorCoding = {low:"#4CAF50",mid:"#FF5722",high:"#F44336"};
-		var color =                 colorCoding.low;
+		var colorCoding = {low: "#4CAF50", mid: "#FF5722", high: "#F44336"};
+		var color = colorCoding.low;
 		if (activity > 0.3) color = colorCoding.mid;
 		if (activity > 0.6) color = colorCoding.high;
-		
-		var transStart = Math.max(  0, Math.round((activity - 0.01)*100));
-		var transEnd   = Math.min(100, Math.round((activity + 0.01)*100));
 
-		var gradient = "linear-gradient(0deg, "+color+" 0%, "+color+" "+transStart+"%, #DDD "+transEnd+"%, #DDD 100%)";
-		seat.css("background",gradient);
+		var transStart = Math.max(0, Math.round((activity - 0.01) * 100));
+		var transEnd = Math.min(100, Math.round((activity + 0.01) * 100));
+
+		var gradient = "linear-gradient(0deg, " + color + " 0%, " + color + " " + transStart + "%, #DDD " + transEnd + "%, #DDD 100%)";
+		seat.css("background", gradient);
 
 		seat.find(".person .name").text(name);
 		seat.find(".person .group").text(group);
-	}
+	};
 
 	/**
 	 * Removes a seat from the seating plan (GUI and data base)
@@ -336,7 +340,7 @@ EduMon.Gui = new function() {
 			delete currentLecture.seatingPlan[x][y];
 		}
 		var seat = getSeatElement(x, y);
-		seat.css("background","#DDD");
+		seat.css("background", "#DDD");
 		seat.find("div.name").empty();
 		seat.find("div.group").empty();
 	};
@@ -346,11 +350,11 @@ EduMon.Gui = new function() {
 	 * @method updateStudents
 	 * @return undefined
 	 */
-	var updateStudents = function(){
-		EduMon.Util.forEachField(EduMon.Prefs.currentLecture.activeStudents,function(studentId,student){
+	var updateStudents = function() {
+		EduMon.Util.forEachField(EduMon.Prefs.currentLecture.activeStudents, function(studentId, student) {
 			updateSeat(student.seat.x, student.seat.y, student.name, student.group,
 				EduMon.Analytics.scaleDisturbanceToPercentage(student.disturbance)
-				);
+			);
 		});
 	};
 
@@ -360,8 +364,8 @@ EduMon.Gui = new function() {
 	 * @method attention
 	 * @return undefined
 	 */
-	this.attention = function(){
-		$("#attention").stop(true,true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
+	this.attention = function() {
+		$("#attention").stop(true, true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
 	};
 
 
@@ -371,8 +375,8 @@ EduMon.Gui = new function() {
 	 * @param {Boolean} [state] Show (true) or hide (false) pult-up display, if not given the state is toggled
 	 * @return undefined
 	 */
-	this.togglePultup = function(state){
-		$("#pultup").toggleClass("inactive",(state===undefined ? state : !state));
+	this.togglePultup = function(state) {
+		$("#pultup").toggleClass("inactive", (state === undefined ? state : !state));
 	};
 
 
@@ -384,41 +388,47 @@ EduMon.Gui = new function() {
 	 * @param {function} [restoreActionTimer=false] If activated, the action timer will be restored from the saved value in currentLecture
 	 * @return undefined
 	 */
-	this.openPultUpMode = function(mode, firstUpdate, restoreActionTimer){
+	this.openPultUpMode = function(mode, firstUpdate, restoreActionTimer) {
 		$("#pultup").addClass("inactive");
-		setTimeout(function(){
+		setTimeout(function() {
 			$("#pultup").removeClass("wheel thumb rating").addClass(mode).removeClass("inactive");
 			if (firstUpdate) {
 				firstUpdate();
 			}
 			EduMon.Feedback.restartActionTimer(!restoreActionTimer);
-		},800);
+		}, 800);
 		EduMon.Prefs.currentLecture.gui.pultup = mode;
 	};
 
 
 	/**
-	 * Process hotkey
+	 * Process hot key
 	 * @method processKey
 	 * @param {event} e jQuery Element that fired on key press
 	 * @return undefined
 	 */
-	var processKey = function(e){
+	var processKey = function(e) {
 		//exclude events that bubbled up from actual input elements
-		if ($(e.target).is("input,button,textarea,a")){
+		if ($(e.target).is("input,button,textarea,a")) {
 			return;
 		}
 		var KEY = EduMon.Util.keymap;
+
+		var $thumbButton = $("#btnThumbs");
+		var $ratingButton = $("#btnRating");
+		var $pauseButton = $("#btnPause");
+		var $playButton = $("#btnPlay");
+
 		//now decide how to act: base idea is "act like the user would do" - button not there? cannot click! button disabled? cannot click
-		switch(e.which){
+		switch (e.which) {
 			case KEY.D: //D-aumenfeedback
-				if (!$("#btnThumbs").hasClass("disabled")){
-					$("#btnThumbs").trigger("click");
+				if (!$thumbButton.hasClass("disabled")) {
+					$thumbButton.trigger("click");
 				}
 				break;
 			case KEY.B: //B-ewertung
-				if (!$("#btnRating").hasClass("disabled")){
-					$("#btnRating").trigger("click");
+				if (!$ratingButton.hasClass("disabled")) {
+					$ratingButton.trigger("click");
 				}
 				break;
 			case KEY.G: //G-lücksrad
@@ -427,17 +437,17 @@ EduMon.Gui = new function() {
 				$("#btnWheel").trigger("click");
 				break;
 			case KEY.P: //P-lay & P-ause
-				if ($("#btnPause").is(":visible")){
-					$("#btnPause").trigger("click");
-				} else if ($("#btnPlay").is(":visible")){
-					$("#btnPlay").trigger("click");
+				if ($pauseButton.is(":visible")) {
+					$pauseButton.trigger("click");
+				} else if ($playButton.is(":visible")) {
+					$playButton.trigger("click");
 				}
 				break;
 			case KEY.SHIFT:
-				$("#pultup .handle").trigger("click");
+				$("#pultup").find(".handle").trigger("click");
 				break;
 			default:
-				EduMon.debug("Pressed: "+e.which);
+				EduMon.debug("Pressed: " + e.which);
 		}
 	};
 
@@ -448,9 +458,9 @@ EduMon.Gui = new function() {
 	 * @param {Boolean} focus Has the document the focus? (i.e. will hotkeys work?)
 	 * @return undefined
 	 */
-	var processFocus = function(focus){
+	var processFocus = function(focus) {
 		that.hasFocus = focus;
-		$("body").toggleClass("unfocussed",!focus);
+		$("body").toggleClass("unfocussed", !focus);
 	};
 
 	/**
@@ -458,33 +468,33 @@ EduMon.Gui = new function() {
 	 * @method init
 	 * @return undefined
 	 */
-	this.init = function(){
+	this.init = function() {
 		//Buttons
-		$("#btnSettings").off("click").click(function(){
-			EduMon.Gui.showDialog("connectionSettings",true);
+		$("#btnSettings").off("click").click(function() {
+			EduMon.Gui.showDialog("connectionSettings", true);
 		});
-		$("#btnThumbs").off("click").click(function(){
+		$("#btnThumbs").off("click").click(function() {
 			if (EduMon.lectureIsActive()) {
 				EduMon.Feedback.requestFeedback("thumb");
 			} else {
 				EduMon.Gui.showToast(msgNoLecture);
 			}
 		});
-		$("#btnRating").off("click").click(function(){
+		$("#btnRating").off("click").click(function() {
 			if (EduMon.lectureIsActive()) {
 				EduMon.Feedback.requestFeedback("rating");
 			} else {
 				EduMon.Gui.showToast(msgNoLecture);
 			}
 		});
-		$("#pultup").find(".handle").off("click").click(function(){
-			if (EduMon.lectureIsActive() && EduMon.Prefs.currentLecture.gui.pultup!=="") {
+		$("#pultup").find(".handle").off("click").click(function() {
+			if (EduMon.lectureIsActive() && EduMon.Prefs.currentLecture.gui.pultup !== "") {
 				EduMon.Gui.togglePultup();
 			} else {
-				if (!EduMon.lectureIsActive()){
+				if (!EduMon.lectureIsActive()) {
 					EduMon.Gui.showToast(msgNoLecture);
 				}
-				EduMon.Gui.showFeedMessage("info","Pult-Up-Display&trade;","Dieses Infomenü ist nur während einer Aktion verfügbar. Es öffnet sich automatisch.");
+				EduMon.Gui.showFeedMessage("info", "Pult-Up-Display&trade;", "Dieses Infomenü ist nur während einer Aktion verfügbar. Es öffnet sich automatisch.");
 			}
 		});
 		$('#btnRemoveData').off('click').on('click', function() {
@@ -493,16 +503,22 @@ EduMon.Gui = new function() {
 		$('.btnHelp').off('click').on('click', function() {
 			EduMon.Gui.showDialog('help', true);
 		});
-		$("#logo img").off("click").click(function(){
+		$("#logo").find("img").off("click").click(function() {
 			EduMon.Gui.showDialog('credits', true);
 		});
 
-		//Hotkeys
-		$("body").off().on("keydown",function(e){processKey(e)});
+		// Hot keys
+		$("body").off().on("keydown", function(e) {
+			processKey(e)
+		});
 
-		//Window focus
+		// Window focus
 		$(window)
-			.focus(function(){processFocus(true);})
-			.blur( function(){processFocus(false);});
+			.focus(function() {
+				processFocus(true);
+			})
+			.blur(function() {
+				processFocus(false);
+			});
 	};
 };

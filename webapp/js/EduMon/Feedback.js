@@ -1,15 +1,15 @@
 EduMon.Feedback = new function() {
 	var that = this;
-	
+
 	var actionTimer = undefined;
 
 	/**
 	 * Sends out a thumb feedback request
 	 * @method requestThumbFeedback
 	 * @param {String} type Feedback type "thumb" | "rating"
-	 * @return packet Copy of the sent request packet
+	 * @return {Object} packet Copy of the sent request packet
 	 */
-	this.requestFeedback = function(type){
+	this.requestFeedback = function(type) {
 		var buttonId = "#btnRating, #btnThumbs"; //(type==="rating" ? "#btnRating" : "#btnThumbs");
 		$(buttonId).addClass("disabled");
 		setInterval(function() {
@@ -44,43 +44,43 @@ EduMon.Feedback = new function() {
 	 * @param {Boolean} reset Execute time reset (e.g. use false to restore app state)
 	 * @return undefined
 	 */
-	this.restartActionTimer = function(reset){
-		if (reset){
+	this.restartActionTimer = function(reset) {
+		if (reset) {
 			EduMon.Prefs.currentLecture.gui.actionTime = -1;
 		}
 
-		if (typeof actionTimer !== 'undefined'){
+		if (typeof actionTimer !== 'undefined') {
 			clearInterval(actionTimer);
 		}
 
-		var incrementor = function(){
-			if (!EduMon.lectureIsActive()){
+		var incrementor = function() {
+			if (!EduMon.lectureIsActive()) {
 				clearInterval(actionTimer);
 				return;
 			}
 			var seconds = ++EduMon.Prefs.currentLecture.gui.actionTime;
-			var minutes = (seconds-(seconds%60))/60;
-			seconds -= minutes*60;
-			seconds = ("0"+seconds).slice(-2);
-			$("#pultup .stats .time .value").text(minutes+":"+seconds);
+			var minutes = (seconds - (seconds % 60)) / 60;
+			seconds -= minutes * 60;
+			seconds = ("0" + seconds).slice(-2);
+			$("#pultup").find(".stats .time .value").text(minutes + ":" + seconds);
 		};
-		actionTimer = setInterval(incrementor,1000);
+		actionTimer = setInterval(incrementor, 1000);
 		incrementor();
 	};
 
 
-	this.updateFeedback = function(){
+	this.updateFeedback = function() {
 		var analytics = EduMon.Prefs.currentLecture.analytics;
 		var feedback = analytics.studentFeedback[analytics.currentFeedbackId];
-		if (feedback===undefined){
+		if (feedback === undefined) {
 			return;
 		}
 
 		var numAnswers = EduMon.Util.countFields(feedback.studentVoting);
 		var numOnline = EduMon.Util.countFields(EduMon.Prefs.currentLecture.activeStudents);
-		$("#pultup .stats .participation .value").text(numAnswers+"/"+numOnline);
+		$("#pultup").find(".stats .participation .value").text(numAnswers + "/" + numOnline);
 
-		if (feedback.type==="rating"){
+		if (feedback.type === "rating") {
 			that.updateRating(feedback.currentAverage);
 		} else {
 			that.updateThumbs(feedback.currentAverage);
@@ -91,34 +91,36 @@ EduMon.Feedback = new function() {
 	/**
 	 * Update the feedback thumbs and percentage display
 	 * @method updateThumbs
-	 * @param {Float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
+	 * @param {float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
 	 * @return undefined
 	 */
-	this.updateThumbs = function(voting){
-		var degrees = Math.round((1-voting)*180);
-		var percent = Math.round(voting*100);
+	this.updateThumbs = function(voting) {
+		var degrees = Math.round((1 - voting) * 180);
+		var percent = Math.round(voting * 100);
 
-		$("#pultup .feedback .thumb img:first-of-type").css("transform","rotate("+degrees+"deg)");
-		$("#pultup .feedback .thumb img:last-of-type").css("transform","rotate(-"+degrees+"deg) scaleX(-1)");
-		$("#pultup .feedback .thumb .value").text(percent+"%");
+		var $thumb = $('#pultup').find('.feedback .thumb');
+		$thumb.find("img:first-of-type").css("transform", "rotate(" + degrees + "deg)");
+		$thumb.find("img:last-of-type").css("transform", "rotate(-" + degrees + "deg) scaleX(-1)");
+		$thumb.find(".value").text(percent + "%");
 	};
 
 
 	/**
 	 * Update star rating
 	 * @method updateRating
-	 * @param {Float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
+	 * @param {float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
 	 * @return undefined
 	 */
-	this.updateRating = function(voting){
-		var percent = Math.round(voting*100);
-		var stars = Math.round(voting*5);
+	this.updateRating = function(voting) {
+		var percent = Math.round(voting * 100);
+		var stars = Math.round(voting * 5);
 
-		for(var i=1; i<=5; i++){
-			var fillStar = (i<=stars);
-			$("#pultup .feedback .rating i:nth-of-type(0n+"+i+")").toggleClass("glyphicon-star",fillStar).toggleClass("glyphicon-star-empty",!fillStar);
+		var $rating = $('#pultup').find('.feedback .rating');
+		for (var i = 1; i <= 5; i++) {
+			var fillStar = (i <= stars);
+			$rating.find("i:nth-of-type(0n+" + i + ")").toggleClass("glyphicon-star", fillStar).toggleClass("glyphicon-star-empty", !fillStar);
 		}
-		$("#pultup .feedback .rating .value").text(percent+"%");
+		$rating.find(".value").text(percent + "%");
 	};
 
 
