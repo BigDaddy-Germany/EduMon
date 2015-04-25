@@ -26,7 +26,7 @@
 		var delimiterField = $('#csvDelimiter');
 
 		$(document).on('keyup', '#csvContent', function() {
-			var parsedData = EduMon.CSV.parseCsv(
+			var parsedData = EduMon.CSV.parse(
 				contentField.val(),
 				separatorField.val(),
 				delimiterField.val()
