@@ -85,7 +85,7 @@ public class SeatChooserController implements Controller {
                 if (rowHeight > 75) {
                     rowHeight = 75;
                 }
-                seatingplan.setPrefHeight(rowHeight * dimensions.height);
+                seatingplan.setMinHeight(rowHeight * dimensions.height);
                 Position seat = app.getSeat();
 
                 for (int x = 0; x < dimensions.width; x++) {
@@ -95,7 +95,6 @@ public class SeatChooserController implements Controller {
 
                         final Label text = new Label(app.getName());
                         text.setMinWidth(columnWidth);
-                        text.setMaxWidth(columnWidth);
                         text.setMinHeight(rowHeight - (rowHeight / 4d));
                         text.setStyle("-fx-alignment: top-center");
                         text.setVisible(false);
@@ -129,7 +128,7 @@ public class SeatChooserController implements Controller {
 
                         final ImageView image = new ImageView(tableImage);
                         image.setFitWidth(Math.ceil(columnWidth));
-                        image.setFitHeight(rowHeight);
+                        image.setFitHeight(Math.ceil(rowHeight));
 
                         seatingplan.add(image, x, y);
                         seatingplan.add(text, x, y);
