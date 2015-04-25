@@ -5,7 +5,7 @@
  * @constructor
  */
 EduMon.Messenger = function(procedures) {
-	var worker = new Worker('js/EduMon.Messenger.Worker.js');
+	var worker = new Worker('js/EduMon/Messenger/Worker.js');
 	var rpc = RPC.WorkerRPC(worker, procedures);
 
 	/**
