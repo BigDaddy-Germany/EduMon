@@ -122,7 +122,7 @@ function RPC(registerReceiver, send, procedures) {
 	 */
 	this.invoke = function(name, args) {
 		args = getVerifiedArgs(arguments);
-		return new Promise(function (fulfill, reject) {
+		return new Promise(function(fulfill, reject) {
 			var id = nextId++;
 			outstandingResponses[id] = [fulfill, reject];
 			send({

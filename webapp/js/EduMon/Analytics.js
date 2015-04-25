@@ -3,7 +3,7 @@
  - EduMon.Prefs
  - EduMon.Math
  */
-EduMon.Analytics = function () {
+EduMon.Analytics = function() {
 
 	var debugging = false;
 	var util = EduMon.Util;
@@ -31,14 +31,13 @@ EduMon.Analytics = function () {
 		volume: 'microphone'
 	};
 
-
 	/**
 	 * Processes data sent by the client
-	 * @param {String} sender the sender
+	 * @param {string} sender the sender
 	 * @param {int} time the time
 	 * @param {Object} data the body
 	 */
-	this.processData = function (sender, time, data) {
+	this.processData = function(sender, time, data) {
 
 		currentLecture = EduMon.Prefs.currentLecture;
 		analytics = EduMon.Prefs.currentLecture.analytics;
@@ -55,7 +54,7 @@ EduMon.Analytics = function () {
 
 		// create new history entry for given set of data
 		var historyEntry = {time: time};
-		util.forEachField(data, function (key, value) {
+		util.forEachField(data, function(key, value) {
 			if (fieldMapping[key]) {
 				historyEntry[fieldMapping[key]] = value;
 			}
@@ -74,7 +73,6 @@ EduMon.Analytics = function () {
 		student.history = truncateHistory(student.history);
 		student.micHistory = truncateHistory(student.micHistory, true);
 
-
 		var currentValues = getAverageValueOfHistory(student.history);
 		currentValues.microphone = getNormalizedMicValue(currentValues.microphone, student.micHistory);
 
@@ -86,7 +84,6 @@ EduMon.Analytics = function () {
 
 		calculateAllDisturbances();
 	};
-
 
 	/**
 	 * Calculates a percentage with custom scaling out of the given disturbance index
@@ -102,13 +99,12 @@ EduMon.Analytics = function () {
 		[10, 1]
 	);
 
-
 	/**
 	 * Processes a feedback gotten by the user and calculates the new average
-	 * @param {String} sender the sender's session id
+	 * @param {string} sender the sender's session id
 	 * @param {Object} data the feedback package's body
 	 */
-	this.processFeedback = function (sender, data) {
+	this.processFeedback = function(sender, data) {
 		/*
 		 Package body format:
 		 body: { id: 123, value: 0.69 }
@@ -122,13 +118,12 @@ EduMon.Analytics = function () {
 
 		// calculate average again
 		var values = [];
-		util.forEachField(feedback.studentVoting, function (key, value) {
+		util.forEachField(feedback.studentVoting, function(key, value) {
 			values.push(value);
 		});
 
 		feedback.currentAverage = math.arithmeticAverage(values);
 	};
-
 
 	/**
 	 * Calculates the disturbance for all active students, if there are at least
@@ -136,15 +131,15 @@ EduMon.Analytics = function () {
 	 *
 	 * This is really fancy magic including but not limited to unicorns :)
 	 */
-	var calculateAllDisturbances = function () {
+	var calculateAllDisturbances = function() {
 		var setsOfValues = {};
 		var averageValues = {};
 		var minimumValues = {};
 		var maximumValues = {};
 
 		// iterate over all senders to get minimum, maximum average of each property
-		util.forEachField(analytics.globalReferenceValues, function (sender, referenceValue) {
-			util.forEachField(referenceValue, function (propertyName, value) {
+		util.forEachField(analytics.globalReferenceValues, function(sender, referenceValue) {
+			util.forEachField(referenceValue, function(propertyName, value) {
 				if (setsOfValues[propertyName]) {
 					setsOfValues[propertyName].push(value);
 				} else {
@@ -153,12 +148,11 @@ EduMon.Analytics = function () {
 			});
 		});
 
-
 		// functions to scale user later go here
 		var scales = {};
 
 		// iterate over properties to calculate scaling function
-		util.forEachField(setsOfValues, function (propertyName, values) {
+		util.forEachField(setsOfValues, function(propertyName, values) {
 			// only calculate the index, if the minimal number is reached
 			if (values.length >= minimalGlobalReferenceValues) {
 
@@ -179,7 +173,7 @@ EduMon.Analytics = function () {
 				 * @return {Function} the generated function
 				 */
 				function scaleFunctionCreator(lowerLimit, averageValue, upperLimit) {
-					return function (x) {
+					return function(x) {
 						if (x < lowerLimit) {
 							return 0;
 						}
@@ -202,14 +196,13 @@ EduMon.Analytics = function () {
 			}
 		});
 
-
 		// finally, iterate over all senders again to rate them per property and calculate final index
-		util.forEachField(analytics.globalReferenceValues, function (sender, senderValue) {
+		util.forEachField(analytics.globalReferenceValues, function(sender, senderValue) {
 			var theReallyFinalIndex = 0;
 			var sumPropertyWeights = 0;
 
 			// iterate over properties to calculate final rating now
-			util.forEachField(weights, function (propertyName, weight) {
+			util.forEachField(weights, function(propertyName, weight) {
 				if (senderValue[propertyName] && scales[propertyName]) {
 					theReallyFinalIndex += weight * scales[propertyName](senderValue[propertyName]);
 					sumPropertyWeights += weight;
@@ -224,19 +217,18 @@ EduMon.Analytics = function () {
 
 	};
 
-	var truncateHistoryByCount = function (history, isMic) {
+	var truncateHistoryByCount = function(history, isMic) {
 		var count = isMic ? micNormalizationPeriod : curValPeriod;
 
 		return history.slice(Math.max(0, history.length - count));
 	};
 
-
 	/**
 	 * Deletes old values out of the history, which are older than the time configured above
 	 * @param {Array} history The sender's history to update
-	 * @param {Boolean} [isMicHistory=false] should the microphone's history time be used?
+	 * @param {boolean} [isMicHistory=false] should the microphone's history time be used?
 	 */
-	var truncateHistory = function (history, isMicHistory) {
+	var truncateHistory = function(history, isMicHistory) {
 		isMicHistory = isMicHistory || false;
 
 		if (debugging) {
@@ -250,10 +242,9 @@ EduMon.Analytics = function () {
 			evaluationPeriod = micNormalizationPeriod;
 		}
 
-		var newHistory = history.filter(function (historyEntry) {
+		var newHistory = history.filter(function(historyEntry) {
 			return historyEntry.time > Math.round((new Date().getTime()) / 1000) - evaluationPeriod;
 		});
-
 
 		/*
 		 If it is not the microphone history, everything is okay
@@ -271,7 +262,6 @@ EduMon.Analytics = function () {
 		}
 	};
 
-
 	/**
 	 * Normalizes the given microphone value using the user's microphone history
 	 * @param {number} micValue the given microphone value
@@ -279,11 +269,11 @@ EduMon.Analytics = function () {
 	 * @return {number|Boolean} the normalized microphone value,
 	 *         if micHistory contains at least micMinimumEntries entries, false otherwise
 	 */
-	var getNormalizedMicValue = function (micValue, micHistory) {
+	var getNormalizedMicValue = function(micValue, micHistory) {
 		var historyAverage = 0;
 		var historyCount = 0;
 
-		micHistory.forEach(function (historyEntry) {
+		micHistory.forEach(function(historyEntry) {
 			if ($.isNumeric(historyEntry.value)) {
 				historyAverage += historyEntry.value;
 				++historyCount;
@@ -297,18 +287,17 @@ EduMon.Analytics = function () {
 		return micValue * historyCount / Math.max(historyAverage, 1);
 	};
 
-
 	/**
 	 * Calculate the average value for each entry of the given history
 	 * @param {Array} history the history
 	 * @returns {Object} An history object containing the averages for every key
 	 */
-	var getAverageValueOfHistory = function (history) {
+	var getAverageValueOfHistory = function(history) {
 		var historyAverage = {};
 		var historyCount = {};
 
-		history.forEach(function (historyEntry) {
-			util.forEachField(historyEntry, function (historyKey, value) {
+		history.forEach(function(historyEntry) {
+			util.forEachField(historyEntry, function(historyKey, value) {
 				if (historyKey != 'time' && $.isNumeric(value)) {
 					historyAverage[historyKey] = historyAverage[historyKey] + value || value;
 					historyCount[historyKey] = historyCount[historyKey] + 1 || 1;
@@ -316,7 +305,7 @@ EduMon.Analytics = function () {
 			});
 		});
 
-		util.forEachField(historyAverage, function (historyKey) {
+		util.forEachField(historyAverage, function(historyKey) {
 			historyAverage[historyKey] /= historyCount[historyKey];
 		});
 

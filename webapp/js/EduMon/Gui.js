@@ -22,11 +22,10 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Add message to newsfeed
-	 * @method showFeedMessage
-	 * @param {String} type Message type can be "info", "success", "warning" and "danger"
-	 * @param {String} title The html message title
-	 * @param {String} message The html message to display
-	 * @return undefined
+	 *
+	 * @param {string} type Message type can be "info", "success", "warning" and "danger"
+	 * @param {string} title The html message title
+	 * @param {string} message The html message to display
 	 */
 	this.showFeedMessage = function(type, title, message) {
 		countFeedMessages++;
@@ -54,8 +53,6 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Refresh the "n Messages"-Counter in the newsfeed panel
-	 * @method updateFeedCountView
-	 * @return undefined
 	 */
 	this.updateFeedCountView = function() {
 		$("#feedcounter").html("<span class=\"badge\">" + countFeedMessages + "</span> Nachricht" + (countFeedMessages !== 1 ? "en" : ""));
@@ -63,8 +60,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Performs the AJAX request for dialog content. [Deduplicating code in showDialog() and switchDialog()]
-	 * @method loadDialog
-	 * @param {String} dialogid [see showDialog()]
+	 *
+	 * @param {string} dialogid [see showDialog()]
 	 * @return Promise
 	 */
 	var loadDialog = function(dialogid) {
@@ -86,9 +83,9 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Open the given dialog in a modal on top of the seating plan (only when no dialog is open yet)
-	 * @method showDialog
-	 * @param {String} dialogid Name of the dialog file in the dialog folder without .html extension
-	 * @param {Boolean} [attentionAbort] Flash for attention if dialog cannot be opened
+	 *
+	 * @param {string} dialogid Name of the dialog file in the dialog folder without .html extension
+	 * @param {boolean} [attentionAbort] Flash for attention if dialog cannot be opened
 	 * @return Promise
 	 */
 	this.showDialog = function(dialogid, attentionAbort) {
@@ -117,8 +114,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Switch from the current dialog to another
-	 * @method switchDialog
-	 * @param {String} dialogid [see showDialog()]
+	 *
+	 * @param {string} dialogid [see showDialog()]
 	 * @return Promise
 	 */
 	this.switchDialog = function(dialogid) {
@@ -137,9 +134,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Display or hide the loading/busy indicator of the dialog
-	 * @method setDialogBlock
-	 * @param {Boolean} blocked Set to 1 for display and 0 to hide the blocker
-	 * @return undefined
+	 *
+	 * @param {boolean} blocked Set to 1 for display and 0 to hide the blocker
 	 */
 	this.setDialogBlock = function(blocked) {
 		var $loadingPlayer = $("#loadinglayer");
@@ -155,8 +151,6 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Close the active dialog
-	 * @method closeDialog
-	 * @return undefined
 	 */
 	this.closeDialog = function() {
 		$("#dialogcontainer").fadeOut(100, function() {
@@ -171,8 +165,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Returns the dialog's ID which is opened currently
-	 * @method getOpenedDialog
-	 * @return openedDialog
+	 *
+	 * @return openedDialog TODO type!
 	 */
 	this.getOpenedDialog = function() {
 		return openedDialog;
@@ -180,9 +174,8 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Display a toast notification that disappears after a little while
-	 * @method showToast
-	 * @param {String} message Message to be displayed
-	 * @return undefined
+	 *
+	 * @param {string} message Message to be displayed
 	 */
 	this.showToast = function(message) {
 		$("#toastlist")
@@ -199,13 +192,14 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Display a popup box
-	 * @method showPopup
-	 * @param {String} title Popup title
-	 * @param {String} message (HTML-)Message to be displayed
-	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes, please",value:"confirmdelete",class:"danger"},{...},...]
-	 * @param {Function} [callback=function() {}] Function to call after popup has been answered, value of chosen button is passed as first parameter
-	 * @param {Boolean} [attentionAbort=false] Flash for attention if dialog cannot be opened
-	 * @return undefined
+	 *
+	 * @param {string} title Popup title
+	 * @param {string} message (HTML-)Message to be displayed
+	 * @param {Array} buttons Collection of button objects to display in the popup: [{text:"Yes,
+	 *     please",value:"confirmdelete",class:"danger"},{...},...]
+	 * @param {Function} [callback=function() {}] Function to call after popup has been answered, value of chosen
+	 *     button is passed as first parameter
+	 * @param {boolean} [attentionAbort=false] Flash for attention if dialog cannot be opened
 	 */
 	this.showPopup = function(title, message, buttons, callback, attentionAbort) {
 		if (popupOpened && attentionAbort !== true) {
@@ -306,9 +300,9 @@ EduMon.Gui = new function() {
 	 * @method updateSeat
 	 * @param {int} number Seat number from 1 (at left from moderator view) to n (X index)
 	 * @param {int} row Row number from 1 (front desk) to n (Y index)
-	 * @param {String} name
-	 * @param {String} group
-	 * @param {float} activity Seat activity between 0 (dead) and 1 (most active)
+	 * @param {string} name
+	 * @param {string} group
+	 * @param {number} activity Seat activity between 0 (dead) and 1 (most active)
 	 * @return undefined
 	 */
 	var updateSeat = function(number, row, name, group, activity) {
@@ -347,8 +341,6 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Updates all seats with the active students data of the current lecture
-	 * @method updateStudents
-	 * @return undefined
 	 */
 	var updateStudents = function() {
 		EduMon.Util.forEachField(EduMon.Prefs.currentLecture.activeStudents, function(studentId, student) {
@@ -358,35 +350,30 @@ EduMon.Gui = new function() {
 		});
 	};
 
-
 	/**
-	 * Flash a red border around the seating plan and layer container, mostly to indicate that interaction with an open dialog or popup is necessary
-	 * @method attention
-	 * @return undefined
+	 * Flash a red border around the seating plan and layer container, mostly to indicate that interaction with an open
+	 * dialog or popup is necessary
 	 */
 	this.attention = function() {
 		$("#attention").stop(true, true).fadeIn(100).delay(200).fadeOut(200).delay(300).fadeIn(100).delay(200).fadeOut(200);
 	};
 
-
 	/**
 	 * Starts (and optionally resets) the action timer in the pult-up display
-	 * @method togglePultup
-	 * @param {Boolean} [state] Show (true) or hide (false) pult-up display, if not given the state is toggled
-	 * @return undefined
+	 *
+	 * @param {boolean} [state] Show (true) or hide (false) pult-up display, if not given the state is toggled
 	 */
 	this.togglePultup = function(state) {
 		$("#pultup").toggleClass("inactive", (state === undefined ? state : !state));
 	};
 
-
 	/**
 	 * Present pult-up and initialize it
-	 * @method openPultUpMode
+	 *
 	 * @param {string} mode Pult up mode to show
 	 * @param {function} [firstUpdate] Update function, is called once once pult-up was pulled down
-	 * @param {function} [restoreActionTimer=false] If activated, the action timer will be restored from the saved value in currentLecture
-	 * @return undefined
+	 * @param {function} [restoreActionTimer=false] If activated, the action timer will be restored from the saved
+	 *     value in currentLecture
 	 */
 	this.openPultUpMode = function(mode, firstUpdate, restoreActionTimer) {
 		$("#pultup").addClass("inactive");
@@ -400,12 +387,10 @@ EduMon.Gui = new function() {
 		EduMon.Prefs.currentLecture.gui.pultup = mode;
 	};
 
-
 	/**
 	 * Process hot key
-	 * @method processKey
-	 * @param {event} e jQuery Element that fired on key press
-	 * @return undefined
+	 *
+	 * @param {KeyboardEvent} e jQuery Element that fired on key press
 	 */
 	var processKey = function(e) {
 		//exclude events that bubbled up from actual input elements
@@ -419,7 +404,8 @@ EduMon.Gui = new function() {
 		var $pauseButton = $("#btnPause");
 		var $playButton = $("#btnPlay");
 
-		//now decide how to act: base idea is "act like the user would do" - button not there? cannot click! button disabled? cannot click
+		//now decide how to act: base idea is "act like the user would do" - button not there? cannot click! button
+		// disabled? cannot click
 		switch (e.which) {
 			case KEY.D: //D-aumenfeedback
 				if (!$thumbButton.hasClass("disabled")) {
@@ -451,12 +437,10 @@ EduMon.Gui = new function() {
 		}
 	};
 
-
 	/**
 	 * React to a change of focus
-	 * @method processFocus
-	 * @param {Boolean} focus Has the document the focus? (i.e. will hotkeys work?)
-	 * @return undefined
+	 *
+	 * @param {boolean} focus Has the document the focus? (i.e. will hot keys work?)
 	 */
 	var processFocus = function(focus) {
 		that.hasFocus = focus;
@@ -465,8 +449,6 @@ EduMon.Gui = new function() {
 
 	/**
 	 * Initialize GUI (bind click handlers)
-	 * @method init
-	 * @return undefined
 	 */
 	this.init = function() {
 		//Buttons

@@ -7,8 +7,8 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Get the current time in the format H:MM (e.g. "9:23")
-	 * @method getTime
-	 * @return {String} Time in hours and minutes
+	 *
+	 * @return {string} Time in hours and minutes
 	 */
 	var getTime = function() {
 		var now = new Date();
@@ -17,8 +17,6 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Set the end value of the previous (than the current) slice
-	 * @method setPreviousEnd
-	 * @return undefined
 	 */
 	var setPreviousEnd = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
@@ -28,9 +26,8 @@ EduMon.Timeline = new function() {
 	};
 
 	/**
-	 * Clears the timeline, deletes timeline data and reinitializes timeline; forces start of new lecture as intended side effect
-	 * @method reset
-	 * @return undefined
+	 * Clears the timeline, deletes timeline data and reinitializes timeline; forces start of new lecture as intended
+	 * side effect
 	 */
 	this.reset = function() {
 		if (timer !== undefined) {
@@ -44,8 +41,6 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Lecture-Flow-Control: start or resume a lecture block
-	 * @method play
-	 * @return undefined
 	 */
 	this.play = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
@@ -62,8 +57,6 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Lecture-Flow-Control: pauses the current lecture block
-	 * @method pause
-	 * @return undefined
 	 */
 	var pause = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
@@ -82,8 +75,6 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Lecture-Flow-Control: completely stops the lecture
-	 * @method stop
-	 * @return undefined
 	 */
 	var stop = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;
@@ -103,8 +94,6 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Wrapper around reset (called by restart button)
-	 * @method restart
-	 * @return undefined
 	 */
 	var restart = function() {
 		//TODO intended?
@@ -113,9 +102,8 @@ EduMon.Timeline = new function() {
 
 	/**
 	 * Timeline update timer tick
-	 * @method tick
-	 * @param {Boolean} [onlyUpdate=true] Only refresh the timeline display but do not alter timeline data
-	 * @return undefined
+	 *
+	 * @param {boolean} [onlyUpdate=true] Only refresh the timeline display but do not alter timeline data
 	 */
 	var tick = function(onlyUpdate) {
 		if (typeof EduMon.Prefs.currentLecture.timeline !== "undefined") {
@@ -130,9 +118,7 @@ EduMon.Timeline = new function() {
 	};
 
 	/**
-	 * Initialize timeline module: start update timer and bind click handlers
-	 * @method init
-	 * @return undefined
+	 * Initialize time line module: start update timer and bind click handlers
 	 */
 	this.init = function() {
 		//Timer is always active, but timer tick does not always trigger action
@@ -152,11 +138,8 @@ EduMon.Timeline = new function() {
 		$("#btnRestart").off("click").on('click', restart);
 	};
 
-
 	/**
-	 * Update the timeline display and the flow controls
-	 * @method update
-	 * @return undefined
+	 * Update the time line display and the flow controls
 	 */
 	this.update = function() {
 		var timeline = EduMon.Prefs.currentLecture.timeline;

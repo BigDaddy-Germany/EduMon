@@ -14,7 +14,7 @@ EduMon.Messenger = function(procedures) {
 	 * @param {Object} event Packet or command
 	 * @return {Promise} a promise
 	 */
-	this.sendEvent = function(event){
+	this.sendEvent = function(event) {
 		EduMon.debug(event);
 		return rpc.invoke('queueEvent', event);
 	};
@@ -51,7 +51,7 @@ EduMon.Messenger = function(procedures) {
 	 * Terminates the web worker.
 	 * The worker can not be restarted with the same Messenger instance.
 	 */
-	this.kill = function(){
+	this.kill = function() {
 		rpc.shutdown();
 		worker.terminate();
 	};

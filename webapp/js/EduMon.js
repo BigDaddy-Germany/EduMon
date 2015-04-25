@@ -64,7 +64,7 @@ EduMon = new function () {
 	/**
 	 * Debug output to JS console
 	 *
-	 * @param {String} msg Message to display
+	 * @param {string} msg Message to display
 	 */
 	this.debug = function (msg) {
 		if (that.debugging) {
@@ -156,7 +156,7 @@ EduMon = new function () {
 
 	/**
 	 * React to a break request by incrementing a counter and displaying a newsfeed alert with varying intensity
-	 * @param {String} sender the reqeust's sender
+	 * @param {string} sender the reqeust's sender
 	 */
 	var processBreakRequest = function (sender) {
 		if (EduMon.Prefs.currentLecture.timeline.status == "play") {
@@ -185,7 +185,7 @@ EduMon = new function () {
 	/**
 	 * Tries to login a client by its name and its seat and sends confirmation/denial message
 	 *
-	 * @param {String} sender the client's session id
+	 * @param {string} sender the client's session id
 	 * @param {Object} body The body sent with the package to the server
 	 * @return {int} Success code as delivered to client (0 = success, >0 error codes)
 	 */
@@ -411,7 +411,7 @@ EduMon = new function () {
 	/**
 	 * Restore a locally stored app status if available
 	 *
-	 * @return {Boolean} stored status found
+	 * @return {boolean} stored status found
 	 */
 	this.tryRestoreApp = function () {
 		var stored = localStorage.getItem("EduMon.Prefs");
