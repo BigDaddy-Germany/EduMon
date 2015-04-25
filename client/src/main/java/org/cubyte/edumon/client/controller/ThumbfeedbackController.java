@@ -64,13 +64,14 @@ public class ThumbfeedbackController implements Controller {
 
     public void handleKeyUp() {
         counter.cancel(true);
-        app.getNotificationSystem().hideNotification();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                app.getQueue().queue(app.getFactory().create(new ThumbFeedback(id, ((float) (thumb.getRotate()) / 180f - 0.5f) * -1 + 0.5f)));
-            }
-        });
+        if (app.getNotificationSystem().hideNotification()) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    app.getQueue().queue(app.getFactory().create(new ThumbFeedback(id, ((float) (thumb.getRotate()) / 180f - 0.5f) * -1 + 0.5f)));
+                }
+            });
+        }
     }
 
     public ThumbfeedbackController setId(int id) {
@@ -80,10 +81,14 @@ public class ThumbfeedbackController implements Controller {
 
     public ThumbfeedbackController setFeedbackType(ThumbRequest.FeedbackType type) {
         if (type == ThumbRequest.FeedbackType.thumb) {
-            text.setText("Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht.");
+            text.setText("Drücken und halten Sie F1 bis der Daumen Ihrem Feedback entspricht. Bei geistiger Abwesenheit F2 drücken.");
         } else {
-            text.setText("Drücken und halten Sie F1 bis der Daumen Ihrem Rating entspricht.");
+            text.setText("Drücken und halten Sie F1 bis der Daumen Ihrem Rating entspricht. Bei geistiger Abwesenheit F2 drücken.");
         }
         return this;
+    }
+
+    public void handleMentallyAbsent() {
+        app.getNotificationSystem().hideNotification();
     }
 }

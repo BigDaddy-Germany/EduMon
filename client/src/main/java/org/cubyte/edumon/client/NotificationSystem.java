@@ -27,6 +27,7 @@ public class NotificationSystem implements Victim<Message> {
     private boolean enabled;
     private final double littleY; // y pos of confirmStage when stage is not shown
     private final double bigY; // y pos of confirmStage when stage is shown
+    private boolean showing;
 
     public NotificationSystem(final Main app) {
         this.app = app;
@@ -52,6 +53,7 @@ public class NotificationSystem implements Victim<Message> {
             }
         });
         this.enabled = false;
+        this.showing = false;
     }
 
     public void showBreakRequestConfirm() {
@@ -87,6 +89,7 @@ public class NotificationSystem implements Victim<Message> {
                         }
                         stage.setScene(THUMBFEEDBACK.getScene());
                         stage.show();
+                        showing = true;
                         ((ThumbfeedbackController) THUMBFEEDBACK.getController()).setId(body.id).setFeedbackType(body.type).resetThumb();
                     }
                 });
@@ -115,16 +118,21 @@ public class NotificationSystem implements Victim<Message> {
         }
     }
 
-    public void hideNotification() {
+    public boolean hideNotification() {
+        if (!showing) {
+            return false;
+        }
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 stage.hide();
+                showing = false;
                 if (confirmStage.isShowing()) {
                     confirmStage.setY(littleY);
                 }
             }
         });
+        return true;
     }
 
     public void enable() {

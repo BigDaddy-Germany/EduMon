@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class KeyListener implements NativeKeyListener {
     private boolean f1Down = false;
+    private boolean f2Down = false;
     private AtomicInteger strokes = new AtomicInteger(0);
 
     @Override
@@ -18,6 +19,8 @@ public class KeyListener implements NativeKeyListener {
         if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_F1 && !f1Down) {
             f1Down = true;
             ((ThumbfeedbackController) Scene.THUMBFEEDBACK.getController()).handleKeyDown();
+        } else if (nativeKeyEvent.getKeyCode() == NativeKeyEvent.VC_F2 && !f2Down) {
+            ((ThumbfeedbackController) Scene.THUMBFEEDBACK.getController()).handleMentallyAbsent();
         }
     }
 
