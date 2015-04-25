@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sun Apr 26 00:05:29 CEST 2015
+# Build date: Sun Apr 26 00:46:09 CEST 2015
 
 CACHE:
 css/app.css
@@ -23,22 +23,25 @@ images/logo.png
 images/loader.gif
 images/thumb.png
 index.html
-js/EduMon.Gui.js
-js/EduMon.Data.js
-js/EduMon.Feedback.js
-js/EduMon.Timeline.js
-js/EduMon.Prefs.js
-js/EduMon.DefaultPrefs.js
-js/EduMon.Math.js
-js/EduMon.Analytics.js
-js/EduMon.UserInteraction.js
 js/EduMon.js
-js/EduMon.Messenger.Worker.js
-js/EduMon.Util.js
-js/EduMon.Wheel.js
-js/EduMon.Messenger.js
-js/EduMon.CSV.js
-js/RPC.js
+js/EduMon/DefaultPrefs.js
+js/EduMon/Prefs.js
+js/EduMon/Math.js
+js/EduMon/Messenger.js
+js/EduMon/Analytics/Debug/Data/Constant.js
+js/EduMon/Analytics/Debug/Data/Real.js
+js/EduMon/Analytics/Debug.js
+js/EduMon/Gui.js
+js/EduMon/Analytics.js
+js/EduMon/Feedback.js
+js/EduMon/UserInteraction.js
+js/EduMon/Timeline.js
+js/EduMon/CSV.js
+js/EduMon/Messenger/Worker.js
+js/EduMon/Messenger/RPC.js
+js/EduMon/Wheel.js
+js/EduMon/Util.js
+js/EduMon/Data.js
 lib/jquery/js/jquery.min.js
 lib/excanvas/js/excanvas.min.js
 lib/bootstrap/css/bootstrap.min.css
