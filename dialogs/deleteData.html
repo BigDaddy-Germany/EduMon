@@ -35,10 +35,10 @@
 
 		EduMon.Gui.showPopup(
 				'Löschen erfolgreich',
-				'Ihre Daten wurden erfolgreich gelöscht.',
+				'Ihre Daten wurden erfolgreich gelöscht. Die Seite wird nun neu geladen.',
 				['ok'],
 				function() {
-					EduMon.Gui.closeDialog();
+					location.reload(false);
 				}
 		)
 	}
