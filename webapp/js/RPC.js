@@ -168,7 +168,7 @@ function RPC(registerReceiver, send, procedures) {
  */
 RPC.xWindow = function(target, procedures) {
 
-	if (!(target && "onmessage" in target && "addEventListener" in target && target.postMessage instanceof Function)) {
+	if (!(target && "onmessage" in target && "addEventListener" in target && typeof target.postMessage == "function")) {
 		throw "target must be a window!";
 	}
 
@@ -194,27 +194,27 @@ RPC.xWindow = function(target, procedures) {
 /**
  * Implements RPC to communicate with a Web Worker
  *
- * @param {Worker} worker the worker to communicate with
+ * @param {Worker} target the worker to communicate with
  * @param {Object} procedures the API
  * @returns {RPC} a new RPC instance
  * @constructor
  */
-RPC.WorkerRPC = function(worker, procedures) {
+RPC.WorkerRPC = function(target, procedures) {
 	// verify a Worker-like object
-	if (!(worker && "onmessage" in worker && worker.postMessage instanceof Function)) {
+	if (!(target && "onmessage" in target && typeof target.postMessage == "function")) {
 		throw "worker must be a Web Worker " + Date.now();
 	}
 
 	function registerMessageListener(func) {
-		worker.onmessage = func;
+		target.onmessage = func;
 		return function() {
-			worker.onmessage = null;
+			target.onmessage = null;
 		}
 	}
 
 	function sender(data) {
 		try {
-			worker.postMessage(data)
+			target.postMessage(data)
 		} catch (e) {
 			console.error(e);
 			console.error(data);
