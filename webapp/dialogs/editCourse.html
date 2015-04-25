@@ -41,10 +41,35 @@
 		}
 	}
 
+
 	/**
-	 * Adds a new line to the form
+	 * Adds a new line, if this is the last line
+	 * Sets focus to next line otherwise
+	 * @param {event} event the triggered event
 	 */
-	function couseAddLine() {
+	function performKeyUp(event) {
+		// only enter key is of interest
+		if (event.keyCode != 13) {
+			return;
+		}
+
+		var nextLine = $(event.target).closest('.courseMemberLine').next();
+
+		if (nextLine.length) {
+			// there is another line
+			nextLine.children().find('.courseMemberName').focus();
+			return;
+		}
+
+		// there is no other line
+		courseAddLine();
+	}
+
+	/**
+	 * Adds a new line to the form and sets focus
+	 */
+	function courseAddLine() {
+
 		var lastLine = $('.courseMemberLine').last();
 		lastLine.after(lastLine[0].outerHTML);
 
@@ -52,6 +77,14 @@
 		$('.courseMemberDelete')
 				.off('click')
 				.on('click', courseDeleteMember);
+
+		// new selection is needed, because of changes inside the DOM
+		$('.courseMemberLine').find('input')
+				.off('keyup')
+				.on('keyup', performKeyUp);
+
+		// set focus to last name input field
+		$('.courseMemberName').last().focus();
 	}
 
 	/**
@@ -74,7 +107,7 @@
 			var nameIndex = existingNames.indexOf(dataLine[0]);
 
 			if (nameIndex == -1) {
-				couseAddLine();
+				courseAddLine();
 				existingNames.push(dataLine[0]);
 				nameIndex = existingNames.length - 1;
 			}
@@ -100,7 +133,7 @@
 	$(function() {
 
 		// add new lines to the member form by clicking on the add button
-		$('#courseMemberAdd').off('click').on('click', couseAddLine);
+		$('#courseMemberAdd').off('click').on('click', courseAddLine);
 
 		// set the delete listeners
 		$('.courseMemberDelete').off('click').on('click', courseDeleteMember);
@@ -117,5 +150,8 @@
 					});
 
 		});
+
+		// listener in case of enter key
+		$('.courseMemberLine').find('input').on('keyup', performKeyUp);
 	});
 </script>

@@ -61,7 +61,7 @@ EduMon.UserInteraction = new function() {
         };
 
         return new Promise(function(fulfill, reject) {
-            that.promisingDialog('lectureManager', valueCalculator, initializer, validator)
+            that.promisingDialog('lectureManager', valueCalculator, initializer, validator, true)
                 .then(fulfill)
                 .catch(reject);
         });
@@ -377,16 +377,18 @@ EduMon.UserInteraction = new function() {
      * @param {Function} [validator] a function, which validates the data before submitting it.
      *                      It returns true in case of success and an error message in case of failure
      *                      It gets the result of the valueCalculator
+     * @param {Boolean} [noOtherDialogAllowed=false] If set to true, there is no opened dialog allowed
      * @return {Promise} fulfill gets the calculated values
      */
-    this.promisingDialog = function(dialogId, valueCalculator, initializer, validator) {
+    this.promisingDialog = function(dialogId, valueCalculator, initializer, validator, noOtherDialogAllowed) {
         validator = validator || function() { return true; };
+        noOtherDialogAllowed = noOtherDialogAllowed || false;
 
         return new Promise(function(fulfill, reject) {
             var lastOpenedDialog = gui.getOpenedDialog();
             var promise;
-            if (!lastOpenedDialog) {
-                promise = gui.showDialog(dialogId);
+            if (!lastOpenedDialog || noOtherDialogAllowed) {
+                promise = gui.showDialog(dialogId, true);
             } else {
                 promise = gui.switchDialog(dialogId);
             }
