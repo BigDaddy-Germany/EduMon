@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sat Apr 25 23:47:48 CEST 2015
+# Build date: Sun Apr 26 00:00:15 CEST 2015
 
 CACHE:
 css/app.css
@@ -40,7 +40,7 @@ js/EduMon.Messenger.js
 js/EduMon.CSV.js
 js/RPC.js
 lib/jquery/js/jquery.min.js
-lib/excanvas/js/excanvas.js
+lib/excanvas/js/excanvas.min.js
 lib/bootstrap/css/bootstrap.min.css
 lib/bootstrap/fonts/glyphicons-halflings-regular.woff
 lib/bootstrap/js/bootstrap.min.js
