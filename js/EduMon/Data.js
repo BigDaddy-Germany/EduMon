@@ -5,8 +5,8 @@ EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
 	 *
-	 * @param {String} name the student's name
-	 * @param {String} group the group, the student is in
+	 * @param {string} name the student's name
+	 * @param {string} group the group, the student is in
 	 * @return {Object}
 	 */
 	this.Student = function Student(name, group) {
@@ -19,7 +19,7 @@ EduMon.Data = new function() {
 	/**
 	 * Creates a new course object
 	 *
-	 * @param {String} name A name to identify the course
+	 * @param {string} name A name to identify the course
 	 * @param {Student[]} students
 	 * @return {Object}
 	 */
@@ -33,7 +33,7 @@ EduMon.Data = new function() {
 	/**
 	 * Creates a new room object
 	 *
-	 * @param {String} roomName The room's name
+	 * @param {string} roomName The room's name
 	 * @param {int} width The room's seats per row
 	 * @param {int} height The room's rows
 	 * @return {Object}
@@ -49,7 +49,7 @@ EduMon.Data = new function() {
 	/**
 	 * Creates a new lecture object
 	 *
-	 * @param {String} lectureName the lecture's display name
+	 * @param {string} lectureName the lecture's display name
 	 * @param {int} room the room's ID
 	 * @param {int} course the course's ID
 	 * @return {Object}
@@ -83,17 +83,16 @@ EduMon.Data = new function() {
 		};
 	};
 
-
 	/**
 	 * Creates a current lecture object containing the real data (not only IDs)
-	 *                lectureName: {String},
+	 *                lectureName: {string},
 	 *                room: {
-	 * 					roomName: {String},
+	 * 					roomName: {string},
 	 * 					width: {int},
 	 * 					height: {int}
 	 * 				},
 	 *                course: {
-	 * 					name: {String},
+	 * 					name: {string},
 	 * 					students: Array({Student})
 	 *  			},
 	 *            activeStudents: {}
@@ -194,14 +193,13 @@ EduMon.Data = new function() {
 		};
 	};
 
-
 	/**
 	 * Creates an empty packet (from "MODERATOR") with the common headers set
 	 *
 	 * @param {int} type Packet type number
-	 * @param {String} to Recipient
+	 * @param {string} to Recipient
 	 * @param {Object} body Packet body
-	 * @return ObjectExpression
+	 * @return {Object}
 	 */
 	this.createBasePacket = function(type, to, body) {
 		return {
@@ -220,7 +218,7 @@ EduMon.Data = new function() {
 	 *
 	 * @param {string} resourceType the resource's type
 	 * @param {int} resourceId the resource's ID
-	 * @param {string} allowedUser
+	 * @param {string|boolean} allowedUser
 	 * @return {int}
 	 */
 	this.checkDeletionErrors = function(resourceType, resourceId, allowedUser) {

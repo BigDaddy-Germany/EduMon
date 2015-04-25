@@ -1,11 +1,12 @@
 EduMon = (typeof window !== "undefined" && window.EduMon) ? window.EduMon : {};
-EduMon.Util = new function () {
+EduMon.Util = new function() {
 
 	var that = this;
 
 	/**
 	 * the keys used in various keyboard controls
-	 * @type {{SHIFT: number, SPACE: number, A: number, B: number, D: number, G: number, M: number, P: number, Q: number, R: number, Z: number}}
+	 * @type {{SHIFT: number, SPACE: number, A: number, B: number, D: number, G: number, M: number, P: number, Q:
+	 *     number, R: number, Z: number}}
 	 */
 	this.keymap = {
 		SHIFT: 16,
@@ -26,7 +27,7 @@ EduMon.Util = new function () {
 	 * @param {object} object the object ot iterate over
 	 * @param {Function} functor the functor to call (first argument is the field's name, the second one the content)
 	 */
-	this.forEachField = function (object, functor) {
+	this.forEachField = function(object, functor) {
 		for (var propertyName in object) {
 			if (object.hasOwnProperty(propertyName)) {
 				functor(propertyName, object[propertyName]);
@@ -34,25 +35,23 @@ EduMon.Util = new function () {
 		}
 	};
 
-
 	/**
 	 * Counts the number of a given objects own properties
 	 * @param {object} object with attributes to count
 	 */
-	this.countFields = function (object) {
+	this.countFields = function(object) {
 		var count = 0;
-		this.forEachField(object, function () {
+		this.forEachField(object, function() {
 			count++;
 		});
 		return count;
 	};
 
-
 	/**
 	 * BitSet class to use bitwise operators without thinking about them
 	 * @param {int} [startValue=0] the start value
 	 */
-	this.BitSet = function (startValue) {
+	this.BitSet = function(startValue) {
 		var that = this;
 		this.bits = startValue || 0;
 
@@ -60,7 +59,7 @@ EduMon.Util = new function () {
 		 * Sets given bits
 		 * @param {int} b the given bits
 		 */
-		this.set = function (b) {
+		this.set = function(b) {
 			that.bits |= b;
 			return this;
 		};
@@ -69,7 +68,7 @@ EduMon.Util = new function () {
 		 * Clears given bits
 		 * @param {int} b the given bits
 		 */
-		this.clear = function (b) {
+		this.clear = function(b) {
 			that.bits &= ~b;
 			return this;
 		};
@@ -79,17 +78,16 @@ EduMon.Util = new function () {
 		 * @param {int} b the given bits
 		 * @return {boolean} true, if all given bits are set
 		 */
-		this.contain = function (b) {
+		this.contain = function(b) {
 			return (that.bits & b) == b;
 		};
-
 
 		/**
 		 * Calculates, whether all given bits are equal to the saved bits
 		 * @param {int} b the given bits
 		 * @return {boolean}
 		 */
-		this.equals = function (b) {
+		this.equals = function(b) {
 			return b == that.bits;
 		};
 
@@ -102,7 +100,7 @@ EduMon.Util = new function () {
 	 * @param {int} length
 	 * @returns {string} a string consisting of str that is at least length characters long
 	 */
-	var genPadding = function (str, length) {
+	var genPadding = function(str, length) {
 		var pre = "";
 		while (pre.length < length) {
 			pre += str;
@@ -118,7 +116,7 @@ EduMon.Util = new function () {
 	 * @param {int} length
 	 * @returns {string} the padding string
 	 */
-	this.padLeft = function (base, add, length) {
+	this.padLeft = function(base, add, length) {
 		return (genPadding(add, length) + base).slice(-length)
 	};
 
@@ -130,7 +128,7 @@ EduMon.Util = new function () {
 	 * @param {int} length
 	 * @returns {string} the padding string
 	 */
-	this.padRight = function (base, add, length) {
+	this.padRight = function(base, add, length) {
 		return (base + genPadding(add, length)).slice(length)
 	};
 
@@ -142,11 +140,11 @@ EduMon.Util = new function () {
 	 * @param {string} [name=blank] the name of the window ("blank", "parent", ...)
 	 * @returns {Window} the newly opened window
 	 */
-	this.openWindow = function (url, options, name) {
+	this.openWindow = function(url, options, name) {
 		name = name || "blank";
 		var splitter = '';
 		var features = '';
-		that.forEachField(options, function (k, v) {
+		that.forEachField(options, function(k, v) {
 			if (v === true) {
 				v = 'yes';
 			}
@@ -162,10 +160,10 @@ EduMon.Util = new function () {
 
 	/**
 	 * Get current unix timestamp (according to browser)
-	 * @method timestampNow
+	 *
 	 * @returns {int} timestamp in seconds
 	 */
-	this.timestampNow = function () {
+	this.timestampNow = function() {
 		return Math.floor(Date.now() / 1000);
 	};
 
@@ -181,7 +179,7 @@ EduMon.Util = new function () {
 	 * @param {number} seed Positive integer only
 	 * @return {number} 32-bit positive integer hash
 	 */
-	this.hashString = function (key, seed) {
+	this.hashString = function(key, seed) {
 		var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
 
 		remainder = key.length & 3; // key.length % 4
@@ -212,9 +210,12 @@ EduMon.Util = new function () {
 		k1 = 0;
 
 		switch (remainder) {
-			case 3: k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
-			case 2: k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
-			case 1: k1 ^= (key.charCodeAt(i) & 0xff);
+			case 3:
+				k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
+			case 2:
+				k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
+			case 1:
+				k1 ^= (key.charCodeAt(i) & 0xff);
 
 				k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
 				k1 = (k1 << 15) | (k1 >>> 17);
@@ -233,28 +234,26 @@ EduMon.Util = new function () {
 		return h1 >>> 0;
 	};
 
-	this.randomIntFromInterval = function(min,max) {
+	this.randomIntFromInterval = function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
 };
 
-
 /**
  * Checks, whether a String end with a given suffix
- * @param {String} suffix the given suffix
+ * @param {string} suffix the given suffix
  * @return {boolean} True, if the String ends with the given suffix
  */
-String.prototype.endsWith = function (suffix) {
+String.prototype.endsWith = function(suffix) {
 	return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
-
 
 /**
  * Inserts the given element into the first free slot (undefined)
  * @param {Object} element the element to insert
  * @return {int} The element's new index
  */
-Array.prototype.insertIntoFirstFreeSlot = function (element) {
+Array.prototype.insertIntoFirstFreeSlot = function(element) {
 	var newIndex;
 
 	for (var i = 0; i < this.length + 1; ++i) {
@@ -273,7 +272,7 @@ Array.prototype.insertIntoFirstFreeSlot = function (element) {
  * Calculates the first used index
  * @return {number} the calculated index
  */
-Array.prototype.firstUsedElement = function () {
+Array.prototype.firstUsedElement = function() {
 	for (var i = 0; i < this.length; ++i) {
 		if (this[i]) {
 			return i;
@@ -281,21 +280,23 @@ Array.prototype.firstUsedElement = function () {
 	}
 };
 
+
+// If jQuery is available, add our plugins
 if (typeof $ !== "undefined") {
 
 	/**
 	 * Sorts option tags by their values
 	 */
-	$.fn.sortSelectBox = function () {
+	$.fn.sortSelectBox = function() {
 		// copy elements into array
 		var elements = [];
-		this.children().each(function () {
+		this.children().each(function() {
 			var el = $(this);
 			elements.push({el: el, sort: el.html()});
 		});
 
 		// sort them using the sort key
-		elements.sort(function (a, b) {
+		elements.sort(function(a, b) {
 			var sortA = a.sort.toLowerCase();
 			var sortB = b.sort.toLowerCase();
 			if (sortA > sortB) {
@@ -312,11 +313,10 @@ if (typeof $ !== "undefined") {
 
 		// add all new elements
 		var that = this;
-		elements.forEach(function (el) {
+		elements.forEach(function(el) {
 			el.el.appendTo(that);
 		});
 	};
-
 
 	/**
 	 * Clones the jQuery object and sets all select values explicitly before (To make sure, they're selected later)
@@ -324,11 +324,11 @@ if (typeof $ !== "undefined") {
 	 * @param {boolean} deep like jQuery parameter
 	 * @return {*} the cloned jQuery object
 	 */
-	$.fn.cloneWithSelectState = function (dataAndEvents, deep) {
+	$.fn.cloneWithSelectState = function(dataAndEvents, deep) {
 		var initialClone = this.clone(dataAndEvents, deep);
 		var selects = $('select', this);
 		var selectsInClone = $('select', initialClone);
-		selects.each(function (i) {
+		selects.each(function(i) {
 			selectsInClone.eq(i).val($(this).val());
 		});
 		return initialClone;

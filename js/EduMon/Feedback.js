@@ -5,8 +5,8 @@ EduMon.Feedback = new function() {
 
 	/**
 	 * Sends out a thumb feedback request
-	 * @method requestThumbFeedback
-	 * @param {String} type Feedback type "thumb" | "rating"
+	 *
+	 * @param {string} type Feedback type "thumb" | "rating"
 	 * @return {Object} packet Copy of the sent request packet
 	 */
 	this.requestFeedback = function(type) {
@@ -40,9 +40,8 @@ EduMon.Feedback = new function() {
 
 	/**
 	 * Starts (and optionally resets) the action timer in the pult-up display
-	 * @method restartActionTimer
-	 * @param {Boolean} reset Execute time reset (e.g. use false to restore app state)
-	 * @return undefined
+	 *
+	 * @param {boolean} reset Execute time reset (e.g. use false to restore app state)
 	 */
 	this.restartActionTimer = function(reset) {
 		if (reset) {
@@ -90,9 +89,8 @@ EduMon.Feedback = new function() {
 
 	/**
 	 * Update the feedback thumbs and percentage display
-	 * @method updateThumbs
-	 * @param {float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
-	 * @return undefined
+	 *
+	 * @param {number} voting How good the feedback is (average), 0 = shitty to 1 = awesome
 	 */
 	this.updateThumbs = function(voting) {
 		var degrees = Math.round((1 - voting) * 180);
@@ -107,9 +105,8 @@ EduMon.Feedback = new function() {
 
 	/**
 	 * Update star rating
-	 * @method updateRating
-	 * @param {float} voting How good the feedback is (average), 0 = shitty to 1 = awesome
-	 * @return undefined
+	 *
+	 * @param {number} voting How good the feedback is (average), 0 = shitty to 1 = awesome
 	 */
 	this.updateRating = function(voting) {
 		var percent = Math.round(voting * 100);

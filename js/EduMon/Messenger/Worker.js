@@ -51,7 +51,7 @@ var commands = {
 	start: function() {
 		if (!configured) {
 			console.warn("Worker started, but will only send once configured");
-		} 
+		}
 		if (timer > -1) {
 			clearInterval(timer);
 			if (debugging) {
@@ -140,7 +140,7 @@ function goOnline() {
  * Send queued packets (called by queue timer)
  */
 function processQueue() {
-	if (!configured){
+	if (!configured) {
 		return;
 	}
 

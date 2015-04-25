@@ -22,13 +22,12 @@ EduMon.Wheel = function(canvas, segments) {
 
 	var RPS = TAU / targetFPS;
 	var targetVelocity = 3.5 * RPS;
-	var speedUp  =  .1 * RPS;
+	var speedUp = .1 * RPS;
 	var slowDown = .08 * RPS;
 
-	var currentAngle = 0;
+	var currentAngle = 0.0;
 	var velocity = 0;
 	var acceleration = speedUp;
-
 
 	var colors = generateColorsHSV();
 	var segmentColors = [];
@@ -55,7 +54,7 @@ EduMon.Wheel = function(canvas, segments) {
 		activeSegment = null;
 		updateUnit();
 		if (!!resetAngle) {
-			currentAngle = TAU - 0.5 * unit * segments[0][1] - (TAU/segments.length);
+			currentAngle = TAU - 0.5 * unit * segments[0][1] - (TAU / segments.length);
 		}
 
 		// Generate a color cache (so we have consistent coloring)
@@ -112,7 +111,6 @@ EduMon.Wheel = function(canvas, segments) {
 		}
 	};
 
-
 	/**
 	 * This function calculates a rotation unit based on the segment weights
 	 */
@@ -123,7 +121,7 @@ EduMon.Wheel = function(canvas, segments) {
 		if (segments.length === 1) {
 			weights = segments[0][1];
 		} else {
-			weights = EduMon.Math.sumOver(0, segments.length, function (i) {
+			weights = EduMon.Math.sumOver(0, segments.length, function(i) {
 				return segments[i][1]
 			});
 		}
@@ -230,7 +228,7 @@ EduMon.Wheel = function(canvas, segments) {
 	/**
 	 * Calculates the hash code
 	 *
-	 * @param {String} a the input string
+	 * @param {string} a the input string
 	 * @returns {number} the string hash code
 	 */
 	function hashString(a) {
@@ -240,7 +238,7 @@ EduMon.Wheel = function(canvas, segments) {
 	/**
 	 * This function starts the spinning of the wheel
 	 */
-	this.beginSpinning = function () {
+	this.beginSpinning = function() {
 
 		// Start the wheel only if it's not already spinning
 		if (timer == -1) {
@@ -284,7 +282,6 @@ EduMon.Wheel = function(canvas, segments) {
 			}
 		}
 	};
-
 
 	/**
 	 * This is the internal tick function (read as "main-loop")
@@ -367,8 +364,8 @@ EduMon.Wheel = function(canvas, segments) {
 	 *
 	 * @param {Array} segment the segment to draw
 	 * @param {Array} color the colors (a pair: (background,foreground))
-	 * @param {float} startAngle the angle (in radians) to draw the segment at
-	 * @returns {float} the end angle of the segment.
+	 * @param {number} startAngle the angle (in radians) to draw the segment at
+	 * @returns {number} the end angle of the segment.
 	 */
 	function drawSegment(segment, color, startAngle) {
 		var text = segment[0];
@@ -406,7 +403,7 @@ EduMon.Wheel = function(canvas, segments) {
 		context.restore();
 
 		if (modulo(startAngle, TAU) >= modulo(endAngle, TAU)) {
-			drawActive(text, startAngle, endAngle);
+			drawActive(text);
 			activeSegment = segment;
 		}
 
@@ -417,7 +414,7 @@ EduMon.Wheel = function(canvas, segments) {
 
 	/**
 	 * This function draws the active segment's name beside the needle
-	 * @param text
+	 * @param {string} text
 	 */
 	function drawActive(text) {
 		// Now draw the winning name

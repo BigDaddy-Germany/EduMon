@@ -4,9 +4,9 @@
 EduMon.CSV = new function() {
 	/**
 	 * Parses a given CSV String and returns it as an Array
-	 * @param {String} csvString The String, which should be parsed
-	 * @param {String} [separator=,] The CSV field separator
-	 * @param {String} [delimiter=;] The CSV field delimiter
+	 * @param {string} csvString The String, which should be parsed
+	 * @param {string} [separator=,] The CSV field separator
+	 * @param {string} [delimiter=;] The CSV field delimiter
 	 * @returns {Array} A nested array containing all rows and fields
 	 */
 	this.parse = function(csvString, separator, delimiter) {
