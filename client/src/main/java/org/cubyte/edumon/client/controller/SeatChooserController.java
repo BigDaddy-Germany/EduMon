@@ -40,7 +40,7 @@ public class SeatChooserController implements Controller {
     private GridPane seatingplan;
 
     static {
-        tableImage = new Image(Image.class.getResourceAsStream(TABLE_IMAGE));
+        tableImage = new Image(SeatChooserController.class.getResourceAsStream(TABLE_IMAGE));
     }
 
     @FXML

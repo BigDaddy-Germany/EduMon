@@ -39,9 +39,6 @@ public class NotificationSystem implements Victim<Message> {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                BREAK_REQUEST_CONFIRM.getScene().setFill(null);
-                THUMBFEEDBACK.getScene().setFill(null);
-
                 stage = new Stage();
                 stage.initStyle(StageStyle.UNDECORATED);
                 stage.setX(screenSize.getWidth() - 320);
