@@ -102,7 +102,7 @@ EduMon.UserInteraction = new function() {
         return new Promise(function(fulfill, reject) {
             that.simplePromisingFormDialog('csvImport', ['csvContent', 'csvSeparator', 'csvDelimiter'])
                 .then(function(data) {
-                    fulfill(EduMon.CSV.parseCsv(data['csvContent'], data['csvSeparator'], data['csvDelimiter']));
+                    fulfill(EduMon.CSV.parse(data['csvContent'], data['csvSeparator'], data['csvDelimiter']));
                 })
                 .catch(reject);
         });
@@ -489,5 +489,4 @@ EduMon.UserInteraction = new function() {
             EduMon.Gui.showPopup('Error', errorMsg, ['ok']);
         }
     }
-
 };

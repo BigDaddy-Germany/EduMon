@@ -2,8 +2,6 @@
 	method createCourseFromCsv depends on EduMon.Data
  */
 EduMon.CSV = new function() {
-	var that = this;
-
 	/**
 	 * Parses a given CSV String and returns it as an Array
 	 * @param {String} csvString The String, which should be parsed
@@ -11,7 +9,7 @@ EduMon.CSV = new function() {
 	 * @param {String} [delimiter=;] The CSV field delimiter
 	 * @returns {Array} A nested array containing all rows and fields
 	 */
-	this.parseCsv = function parseCsv(csvString, separator, delimiter) {
+	this.parse = function(csvString, separator, delimiter) {
 		var csvArray = [];				// will be returned later
 		var row = 0, col = 0;			// Where am I?
 		var inQuotes = false;			// Am I inside quotes?
