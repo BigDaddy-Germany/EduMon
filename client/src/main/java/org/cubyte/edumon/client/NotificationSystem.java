@@ -34,8 +34,8 @@ public class NotificationSystem implements Victim<Message> {
         app.getQueue().aimAt(ThumbRequest.class, this);
 
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        littleY = screenSize.getHeight() - 120;
-        bigY = screenSize.getHeight() - 240;
+        littleY = screenSize.getHeight() - 170;
+        bigY = screenSize.getHeight() - 290;
 
         Platform.runLater(new Runnable() {
             @Override
@@ -45,11 +45,13 @@ public class NotificationSystem implements Victim<Message> {
                 stage.setX(screenSize.getWidth() - 320);
                 stage.setY(littleY);
                 stage.getIcons().add(app.getAppIcon());
+                stage.setScene(THUMBFEEDBACK.getScene());
 
                 confirmStage = new Stage();
                 confirmStage.initStyle(StageStyle.UNDECORATED);
                 confirmStage.setX(screenSize.getWidth() - 320);
                 confirmStage.getIcons().add(app.getAppIcon());
+                confirmStage.setScene(BREAK_REQUEST_CONFIRM.getScene());
             }
         });
         this.enabled = false;
@@ -66,7 +68,6 @@ public class NotificationSystem implements Victim<Message> {
                 } else {
                     confirmStage.setY(littleY);
                 }
-                confirmStage.setScene(BREAK_REQUEST_CONFIRM.getScene());
                 confirmStage.show();
                 setHideTimer();
             }
@@ -87,7 +88,7 @@ public class NotificationSystem implements Victim<Message> {
                         if (confirmStage.isShowing()) {
                             confirmStage.setY(bigY);
                         }
-                        stage.setScene(THUMBFEEDBACK.getScene());
+                        stage.hide();
                         stage.show();
                         showing = true;
                         ((ThumbfeedbackController) THUMBFEEDBACK.getController()).setId(body.id).setFeedbackType(body.type).resetThumb();
