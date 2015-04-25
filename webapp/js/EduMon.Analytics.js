@@ -62,7 +62,7 @@ EduMon.Analytics = function () {
 				historyEntry[fieldMapping[key]] = value;
 			}
 		});
-		// todo better way?
+
 		student.history = student.history || [];
 		student.history.push(historyEntry);
 
@@ -282,9 +282,6 @@ EduMon.Analytics = function () {
 	 *         if micHistory contains at least micMinimumEntries entries, false otherwise
 	 */
 	var getNormalizedMicValue = function (micValue, micHistory) {
-		// todo which algorithm to normalize the microphone value?
-		// dummy algorithm: calculate average and set in relation to current value
-
 		var historyAverage = 0;
 		var historyCount = 0;
 
