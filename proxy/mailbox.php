@@ -53,21 +53,24 @@
 	set_error_handler('handle_error', -1);
 
 	function handle_error($errno, $errstr, $errfile, $errline, array $errcontext) {
-		http_response_code(500);
+		// don't handle error, if suppressed via @
+		if (error_reporting()) {
+			http_response_code(500);
 
-		$returnedData = array(
-			'errorMessages' => array(
-				'errno' => $errno,
-				'errstr' => $errstr,
-				'errfile' => $errfile,
-				'errline' => $errline
-			)
-		);
+			$returnedData = array(
+				'errorMessages' => array(
+					'errno' => $errno,
+					'errstr' => $errstr,
+					'errfile' => $errfile,
+					'errline' => $errline
+				)
+			);
 
-		header('Content-type: application/json; charset=utf-8');
-		die(json_encode($returnedData, JSON_UNESCAPED_UNICODE));
+			header('Content-type: application/json; charset=utf-8');
+			die(json_encode($returnedData, JSON_UNESCAPED_UNICODE));
+		}
 	}
-	
+
 
 	// if the .htedumon* files don't exist and the user accesses mailbox.php?setup, we will start the system's setup
 	if (isset($_GET['setup']) and !file_exists(dirname(__FILE__).'/'.DB_FILE) and !file_exists(dirname(__FILE__).'/'.PW_FILE)) {
