@@ -18,7 +18,7 @@ EduMon.Wheel = function(canvas, segments) {
 	var TAU = 2 * PI;
 
 	var timer = -1;
-	var targetFPS = 60;
+	var targetFPS = 30;
 
 	var RPS = TAU / targetFPS;
 	var targetVelocity = 3.5 * RPS;
@@ -385,7 +385,8 @@ EduMon.Wheel = function(canvas, segments) {
 		context.lineTo(centerX, centerY); // Now draw a line back to the centre
 
 		// Clip anything that follows to this area
-		//context.clip(); // It would be best to clip, but we can double performance without it TODO try 30fps with clipping
+		// Remove this, if it is too slow
+		context.clip();
 		context.closePath();
 
 		var background = color[0];
