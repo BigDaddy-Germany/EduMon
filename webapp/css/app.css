@@ -69,7 +69,8 @@ body {
     font-weight: bold; }
     #logo h1 img {
       height: 80px;
-      border-radius: 5px; }
+      border-radius: 5px;
+      cursor: help; }
 
 #timeline {
   flex-grow: 1;
@@ -266,20 +267,7 @@ body {
       padding: 10px 2px 0px 2px;
       word-break: break-word;
       overflow: hidden;
-      background: #DDDDDD;
-      			/*.stats {
-      
-      			@include hflex; 
-      			flex-wrap: nowrap;
-      			justify-content: space-around;
-      			align-content: flex-start;
-      			align-items: center;
-      
-      			& > div {
-      				flex-grow: 0;
-      				flex-shrink: 1;
-      			}
-      		}*/ }
+      background: #DDDDDD; }
       #seats .srow .scell .person {
         text-align: center; }
         #seats .srow .scell .person .name {
@@ -408,6 +396,32 @@ body {
         margin-left: -10px;
         margin-right: -10px;
         margin-bottom: -10px; }
+
+header.credits {
+  width: 400px; }
+  header.credits img {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 100px; }
+
+ul.credits {
+  list-style-type: none;
+  padding: 0px 20px 0px 20px; }
+  ul.credits li {
+    overflow: auto;
+    margin: 20px; }
+    ul.credits li div:first-child {
+      text-align: left;
+      font-size: 20px;
+      padding-left: 40px; }
+    ul.credits li div:last-child {
+      text-align: right;
+      font-size: 15px;
+      padding-right: 40px;
+      font-variant: small-caps;
+      text-shadow: 0px 1px 1px #969696;
+      color: transparent; }
 
 #popupcontainer {
   display: flex;
