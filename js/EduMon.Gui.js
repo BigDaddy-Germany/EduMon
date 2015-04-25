@@ -493,6 +493,9 @@ EduMon.Gui = new function() {
 		$('.btnHelp').off('click').on('click', function() {
 			EduMon.Gui.showDialog('help', true);
 		});
+		$("#logo img").off("click").click(function(){
+			EduMon.Gui.showDialog('credits', true);
+		});
 
 		//Hotkeys
 		$("body").off().on("keydown",function(e){processKey(e)});

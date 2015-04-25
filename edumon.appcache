@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sat Apr 25 20:48:33 CEST 2015
+# Build date: Sat Apr 25 21:03:23 CEST 2015
 
 CACHE:
 css/app.css
@@ -10,6 +10,7 @@ dialogs/deleteData.html
 dialogs/editRoom.html
 dialogs/csvImport.html
 dialogs/editLecture.html
+dialogs/credits.html
 dialogs/lectureManager.html
 dialogs/dummy2.html
 dialogs/dummy.html

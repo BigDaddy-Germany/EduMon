@@ -1,0 +1,35 @@
+<header class="credits">
+	<h2>About EduMon</h2>
+	<img src="images/logo.png">
+</header>
+<p>
+<i>This project was brought to you by</i><br>
+<ul class="credits">
+	<li>
+		<div>Jonas Dann</div>
+		<div>Multi-Platform Client</div>
+	</li>
+	<li>
+		<div>Phillip Schichtel</div>
+		<div>Wheel &amp; Analytics</div>
+	</li>
+	<li>
+		<div>Marco Dörfler</div>
+		<div>Analytics &amp; Message-Proxy</div>
+	</li>
+	<li>
+		<div>Niko Berkmann</div>
+		<div>UI &amp; Feedback</div>
+	</li>
+</ul>
+</p>
+<footer>
+	<button id="creditsClose" type="button" class="btn btn-info">OK</button>
+</footer>
+<script>
+$(document).ready(function(){
+		$("#creditsClose").on('click',function(){
+			EduMon.Gui.closeDialog();
+			});
+		});
+</script>
