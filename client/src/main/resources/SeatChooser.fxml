@@ -9,9 +9,13 @@
 
 <AnchorPane id="container" fx:id="pane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cubyte.edumon.client.controller.SeatChooserController">
   <children>
-    <Label alignment="CENTER" layoutX="14.0" layoutY="30.0" prefWidth="572.0" text="Tafel" textAlignment="LEFT" />
+      <ImageView fitHeight="60.0" fitWidth="572.0" layoutX="14.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@front.png" />
+         </image>
+      </ImageView>
     <Label fx:id="roomAndName" layoutX="14.0" layoutY="14.0" text="Label" />
-    <GridPane id="seatingPlan" fx:id="seatingplan" alignment="TOP_LEFT" gridLinesVisible="true" layoutX="14.0" layoutY="53.0" prefHeight="300.0" prefWidth="573.0">
+    <GridPane id="seatingPlan" fx:id="seatingplan" alignment="TOP_LEFT" gridLinesVisible="true" layoutX="14.0" layoutY="93.0" prefHeight="260.0" prefWidth="573.0">
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
