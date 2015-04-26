@@ -326,7 +326,10 @@
 					}
 				}
 
-				$validatedPackage['room'] = mb_strtolower($validatedPackage['room']);
+				$package = $validatedPackage;
+				unset($validatedPackage);
+
+				$package['room'] = mb_strtolower($package['room']);
 
 
 				// if an error is registered, continue with next package
@@ -365,8 +368,7 @@
 				}
 
 				// otherwise, we can continue
-				$package = $validatedPackage;
-				unset($validatedPackage);
+
 
 				/*
 					If we are here, the package has the right rough structure
