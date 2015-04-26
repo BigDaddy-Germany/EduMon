@@ -54,7 +54,7 @@ public class LoginController implements Controller {
     @FXML
     private void handleNext() {
         app.getNotificationSystem().disable();
-        String room = this.room.getText();
+        String room = this.room.getText().toLowerCase();
         app.setRoom(room);
         app.setServer(serverAddress);
         ((NameChooserController) NAME_CHOOSER.getController()).setInfoBar();
