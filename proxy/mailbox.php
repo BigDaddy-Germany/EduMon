@@ -260,6 +260,8 @@
 	if (!isset($_GET['room']) or !is_string($_GET['room'])) {
 		$errorMessages[] = 'Please select a valid room.';
 		http_response_code(400);
+	} else {
+		$_GET['room'] = mb_strtolower($_GET['room']);
 	}
 
 
@@ -383,6 +385,23 @@
 				$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT) or die($db->lastErrorMsg());
 				$stmt->bindValue(':toClient', $package['to'], SQLITE3_TEXT);
 				$stmt->bindValue(':data', json_encode($package, JSON_UNESCAPED_UNICODE), SQLITE3_TEXT);
+
+
+				// save for debug purposes
+				if ($_GET['room'] == 'testraum') {
+					$stmt = $db->prepare("CREATE TABLE IF NOT EXISTS 'packages_debug' ('id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 'room' TEXT NOT NULL, 'to_client' TEXT NOT NULL, 'time' INTEGER NOT NULL DEFAULT (strftime('%s', 'now')), 'data' TEXT NOT NULL)");
+					$stmt->execute();
+
+					unset($stmt);
+
+					$stmt = $db->prepare("INSERT INTO packages_debug (room, to_client, data) VALUES (:room, :toClient, :data)");
+
+					$stmt->bindValue(':room', $package['room'], SQLITE3_TEXT) or die($db->lastErrorMsg());
+					$stmt->bindValue(':toClient', $package['to'], SQLITE3_TEXT);
+					$stmt->bindValue(':data', json_encode($package, JSON_UNESCAPED_UNICODE), SQLITE3_TEXT);
+
+					$stmt->execute();
+				}
 
 				if (!$stmt->execute()) {
 					$errorMessages[] = 'Could not save package ' . $key . ' to database. [Error: "' . $db->lastErrorMsg() . '"]';
