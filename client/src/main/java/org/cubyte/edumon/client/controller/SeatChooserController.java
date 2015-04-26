@@ -53,6 +53,7 @@ public class SeatChooserController implements Controller {
     @FXML
     private void handleBack() {
         app.changeScene(NAME_CHOOSER);
+        System.out.println("Back in seatchooser view.");
     }
 
     @Override
