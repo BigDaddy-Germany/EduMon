@@ -327,6 +327,8 @@
 					}
 				}
 
+				$package['room'] = mb_strtolower($package['room']);
+
 				// if an error is registered, continue with next package
 				if ($packageError) {
 					$errorMessages[] = 'Ignored package ' . $key . ' because of errors.';
