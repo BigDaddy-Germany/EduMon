@@ -395,8 +395,8 @@ EduMon = new function () {
 				if (
 					!EduMon.Prefs.currentLecture.timeline ||
 					(
-						EduMon.Prefs.currentLecture.timeline.status != "play" &&
-						EduMon.Prefs.currentLecture.timeline.status != "pause"
+						toStore.currentLecture.timeline.status != "play" &&
+						toStore.currentLecture.timeline.status != "pause"
 					)
 				) {
 					toStore.currentLecture = EduMon.DefaultPrefs.get();
