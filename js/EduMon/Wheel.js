@@ -383,7 +383,7 @@ EduMon.Wheel = function(canvas, segments) {
 
 		// Clip anything that follows to this area
 		// Remove this, if it is too slow
-		context.clip();
+		//context.clip();
 		context.closePath();
 
 		var background = color[0];
