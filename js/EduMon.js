@@ -337,6 +337,15 @@ EduMon = new function () {
 		that.messenger.start();
 		EduMon.Gui.initSeating();
 		$("#frontdesk .intro").fadeOut(500);
+		$("#frontdesk .lectureinfo")
+			.html("<b>"
+					+EduMon.Prefs.currentLecture.lectureName
+					+"</b>, "
+					+EduMon.Prefs.currentLecture.room.roomName
+					+"<br><i>"
+					+EduMon.Prefs.currentLecture.course.name
+				+"</i>")
+			.fadeIn(500);
 		var pultUp = EduMon.Prefs.currentLecture.gui.pultup;
 		if (pultUp !== "") {
 			EduMon.Gui.openPultUpMode(pultUp, EduMon.Feedback.updateFeedback, !newLecture);
