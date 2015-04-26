@@ -84,19 +84,18 @@
 		</head>
 		<body>
 		<?php if (!is_writable(dirname(__FILE__))): // no access to write folder ?>
-			<h1>Error</h1>
-			<p>It seems, as if EduMon cannot write to the folder, it is located in...</p>
+			<h1>Fehler</h1>
+			<p>Es sieht so aus, als hätte EduMon nicht die nötigen Schreibrechte...</p>
 		<?php elseif (!isset($_POST['passphrase'])): // initial page ?>
 			<h1>Setup</h1>
-			<p>Welcome to EduMon's Setup page. Please enter the passphrase, you want to use: </p>
+			<p>Herzlich Willkommen zum Setup von EduMon. Bitte definieren Sie nun Ihr Passwort: </p>
 
 			<form action="" method="post">
 				<input type="password" name="passphrase">
 
-				<h2>Start Setup</h2>
+				<h2>Installation Starten</h2>
 
-				<p>In order to create the database and to start the system, please click on the following
-					button:</p>
+				<p>Um das Setup zu starten, klicken Sie bitte auf den folgenden Button:</p>
 				<input type="submit" name="submit" value="Start Setup">
 			</form>
 		<?php else: // Create the two needed files
@@ -117,16 +116,16 @@
 				'data' TEXT NOT NULL
 			)");
 			?>
-			<h1>Finished</h1>
-			<p>Congratulations! Your setup was successful. You are now able to use EduMon.</p>
-			<p>Please notice the following points:</p>
+			<h1>Fertig</h1>
+			<p>Herzlichen Glückwunsch! Sie können EduMon ab jetzt benutzen.</p>
+			<p>Bitte beachten Sie die folgenden Punkte:</p>
 			<ul>
 				<li>
-					To re-enter this setup and set a new master passphrase, you can just delete the files
-					<i><?php echo DB_FILE . '</i> and <i>' . PW_FILE; ?></i>
+					Um dieses Setup erneut aufzurufen und das Passwort zu ändern, löschen Sie einfach die beiden folgenden Dateien:
+					<i><?php echo DB_FILE . '</i> und <i>' . PW_FILE; ?></i>
 				</li>
 				<li>
-					To change your passphrase, you can just edit the file <i><?php echo PW_FILE; ?></i>
+					Um nur das Passwort zu ändern, können Sie einfach den Inhalt der Datei <i><?php echo PW_FILE; ?></i> bearbeiten.
 				</li>
 			</ul>
 		<?php endif ?>
@@ -327,7 +326,8 @@
 					}
 				}
 
-				$package['room'] = mb_strtolower($package['room']);
+				$validatedPackage['room'] = mb_strtolower($validatedPackage['room']);
+
 
 				// if an error is registered, continue with next package
 				if ($packageError) {
