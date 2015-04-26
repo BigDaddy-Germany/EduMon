@@ -15,7 +15,7 @@ EduMon.Analytics = function() {
 	var micNormalizationPeriod = 60 * 10;
 	var micMinimumEntries = 10;
 	var curValPeriod = 10;
-	var minimalGlobalReferenceValues = debugging ? 2 : 5;
+	var minimalGlobalReferenceValues = debugging ? 2 : 4;
 
 	var weights = {
 		microphone: 3,
