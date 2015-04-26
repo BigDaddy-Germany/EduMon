@@ -386,6 +386,9 @@
 				$stmt->bindValue(':toClient', $package['to'], SQLITE3_TEXT);
 				$stmt->bindValue(':data', json_encode($package, JSON_UNESCAPED_UNICODE), SQLITE3_TEXT);
 
+				if (!$stmt->execute()) {
+					$errorMessages[] = 'Could not save package ' . $key . ' to database. [Error: "' . $db->lastErrorMsg() . '"]';
+				}
 
 				// save for debug purposes
 				if ($_GET['room'] == 'testraum') {
@@ -401,10 +404,6 @@
 					$stmt->bindValue(':data', json_encode($package, JSON_UNESCAPED_UNICODE), SQLITE3_TEXT);
 
 					$stmt->execute();
-				}
-
-				if (!$stmt->execute()) {
-					$errorMessages[] = 'Could not save package ' . $key . ' to database. [Error: "' . $db->lastErrorMsg() . '"]';
 				}
 			}
 		}
