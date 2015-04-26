@@ -221,6 +221,16 @@ body {
       padding: 10px 15px 0px 15px;
       text-align: center;
       font-size: 20px; }
+    #room #frontdesk .lectureinfo {
+      display: none;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      bottom: 30px;
+      padding: 10px 15px 0px 15px;
+      text-align: center;
+      font-size: 20px; }
 
 #seatscontainer {
   flex-grow: 1;
