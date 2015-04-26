@@ -10,7 +10,7 @@ EduMon = new function () {
 		seatNotAvailable: 1 << 3
 	};
 
-	this.debugging = true; //show debug messages in javascript console TODO: deactivate this and all similar flags
+	this.debugging = false; //show debug messages in javascript console TODO: deactivate this and all similar flags
 
 	/**
 	 * EduMon startup, to be called when DOM is ready

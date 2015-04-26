@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Sun Apr 26 22:19:51 CEST 2015
+# Build date: Mon Apr 27 01:13:22 CEST 2015
 
 CACHE:
 css/app.css
@@ -48,6 +48,14 @@ lib/bootstrap/css/bootstrap.min.css
 lib/bootstrap/fonts/glyphicons-halflings-regular.woff
 lib/bootstrap/js/bootstrap.min.js
 lib/es6-promise/js/es6-promise.min.js
+presentation/Shuffle.js
+presentation/jquery-ui.structure.min.css
+presentation/excel.png
+presentation/jquery-ui.min.js
+presentation/index.html
+presentation/jquery-ui.min.css
+presentation/style.css
+presentation/background.jpg
 wheel.html
 
 NETWORK:

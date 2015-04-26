@@ -1,0 +1,44 @@
+html {
+    background: url("background.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    overflow: hidden;
+}
+
+#excel {
+    background: url("excel.png");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    position: relative;
+    left: -660px;
+    top: 30px;
+    width: 700px;
+    height: 495px;
+}
+
+#resName, #resGroup {
+    position: relative;
+    font-size: 26px;
+    font-weight: bold;
+    font-family: Calibri, sans-serif;
+    width: 370px;
+    border: 0;
+    background: none;
+    padding: 0;
+    margin: 0;
+
+    left: 194px;
+}
+
+#resName {
+    top: 238px;
+}
+
+#resGroup {
+    top: 272px;
+}
