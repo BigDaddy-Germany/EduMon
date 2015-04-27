@@ -15,10 +15,10 @@ html {
     background-size: cover;
 
     position: relative;
-    left: -660px;
-    top: 30px;
-    width: 700px;
-    height: 495px;
+    left: -700px;
+    top: 140px;
+    width: 771px;
+    height: 546px;
 }
 
 #resName, #resGroup {
@@ -26,19 +26,19 @@ html {
     font-size: 26px;
     font-weight: bold;
     font-family: Calibri, sans-serif;
-    width: 370px;
+    width: 410px;
     border: 0;
     background: none;
     padding: 0;
     margin: 0;
 
-    left: 194px;
+    left: 210px;
 }
 
 #resName {
-    top: 238px;
+    top: 264px;
 }
 
 #resGroup {
-    top: 272px;
+    top: 305px;
 }
