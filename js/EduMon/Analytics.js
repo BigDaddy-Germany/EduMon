@@ -14,14 +14,14 @@ EduMon.Analytics = function() {
 
 	var micNormalizationPeriod = 60 * 10;
 	var micMinimumEntries = 10;
-	var curValPeriod = 2;
-	var minimalGlobalReferenceValues = debugging ? 2 : 1;
+	var curValPeriod = 10;
+	var minimalGlobalReferenceValues = debugging ? 2 : 4;
 
 	var weights = {
-		microphone: 0,
+		microphone: 3,
 		keyboard: 3,
-		mouseDistance: 1,
-		mouseClicks: 3
+		mouseDistance: 3,
+		mouseClicks: 1
 	};
 
 	var fieldMapping = {
@@ -82,60 +82,7 @@ EduMon.Analytics = function() {
 
 		analytics.globalReferenceValues[sender] = currentValues;
 
-		//calculateAllDisturbances();
-		// todo dummy data
-		calculateDummyDisturbances();
-	};
-
-	var calculateDummyDisturbances = function() {
-		EduMon.Util.forEachField(analytics.globalReferenceValues, function(sender, referenceValues) {
-			var disturbance = 0;
-			var weightSum = 0;
-			var singles = '';
-
-			EduMon.Util.forEachField(referenceValues, function(propertyName, propertyValue) {
-				var lowerLimit, upperLimit;
-				switch (propertyName) {
-					case 'keyboard':
-						lowerLimit = 0;
-						upperLimit = 15;
-						break;
-					case 'mouseDistance':
-						lowerLimit = 0;
-						upperLimit = 5;
-						break;
-					case 'mouseClicks':
-						lowerLimit = 0;
-						upperLimit = 5;
-						break;
-					default:
-						return;
-				}
-
-
-				propertyValue = Math.min(Math.max(propertyValue, lowerLimit), upperLimit);
-
-				disturbance += weights[propertyName] * math.linearIntervalFunction(
-					[lowerLimit, 0],
-					[upperLimit, 20]
-				)(propertyValue);
-
-				weightSum += weights[propertyName];
-
-				singles += propertyValue + '---';
-			});
-
-			if (weightSum == 0) {
-				return;
-			}
-
-			disturbance /= weightSum;
-			disturbance = Math.min(disturbance, 10);
-
-			currentLecture.activeStudents[sender].disturbance = disturbance;
-			console.log(singles);
-			console.log(disturbance);
-		});
+		calculateAllDisturbances();
 	};
 
 	/**
@@ -143,15 +90,14 @@ EduMon.Analytics = function() {
 	 * @param {number} disturbanceIndex The given disturbance index
 	 * @return {number} the calculated percentage
 	 */
-	this.scaleDisturbanceToPercentage = function(x) {
-		//console.log(x);
-		return math.linearIntervalFunction(
-			[0, 0],
-			[1, 0.2],
-			[4, 0.9],
-			[10, 1]
-		)(x);
-	};
+	this.scaleDisturbanceToPercentage = math.linearIntervalFunction(
+		[0, 0],
+		[3, 0.05],
+		[6, 0.4],
+		[7, 0.7],
+		[8, 0.95],
+		[10, 1]
+	);
 
 	/**
 	 * Processes a feedback gotten by the user and calculates the new average
@@ -216,28 +162,6 @@ EduMon.Analytics = function() {
 
 				var lowerLimit = Math.min(minimumValues[propertyName] + 0.3 * averageValues[propertyName], averageValues[propertyName] * 0.99);
 				var upperLimit = averageValues[propertyName] * 1.9;
-
-				// todo fake values
-				/*keys: 'keyboard',
-				 mdist: 'mouseDistance',
-				 mclicks: 'mouseClicks',
-				 volume: 'microphone'*/
-				switch (propertyName) {
-					case 'keyboard':
-						lowerLimit = 0;
-						upperLimit = 30;
-						break;
-					case 'mouseDistance':
-						lowerLimit = 0;
-						upperLimit = 4;
-						break;
-					case 'mouseClicks':
-						lowerLimit = 0;
-						upperLimit = 10;
-						break;
-				}
-				averageValues[propertyName] = (upperLimit + lowerLimit) / 2;
-				// todo end fake values
 
 				/**
 				 * Creates the function to access the variables inside the closure
