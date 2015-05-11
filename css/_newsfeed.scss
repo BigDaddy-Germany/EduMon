@@ -6,6 +6,16 @@
 	.panel-body {
 		flex-grow: 1;
 		position: relative;
+
+		.version {
+			margin-top: 10px;
+			font-style: italic;
+			font-size: 0.7em;
+
+			a {
+				text-decoration: underline;
+			}
+		}
 	}
 
 	.panel-footer {
