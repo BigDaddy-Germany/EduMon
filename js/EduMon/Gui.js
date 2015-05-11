@@ -1,3 +1,8 @@
+/**
+ * Gui Class - UI Framework for dialogs, popups, ... and general UI bindings
+ *
+ * @author Niko
+ */
 EduMon.Gui = new function() {
 	var that = this;
 

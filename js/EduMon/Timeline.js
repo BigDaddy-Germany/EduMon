@@ -1,3 +1,8 @@
+/**
+ * Timeline Class - Smart display of the relative lecture progress
+ *
+ * @author Niko
+ */
 EduMon.Timeline = new function() {
 	var that = this;
 

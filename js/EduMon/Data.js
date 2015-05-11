@@ -65,6 +65,7 @@ EduMon.Data = new function() {
 	/**
 	 * Creates a new timeline object
 	 *
+	 * @author Niko
 	 * @return {Object}
 	 */
 	this.Timeline = function Timeline() {
@@ -98,6 +99,7 @@ EduMon.Data = new function() {
 	 *            activeStudents: {}
 	 *        }}
 	 *
+	 * @author Team
 	 * @param {int} [lectureId] the lecture's ID
 	 * @return
 	 */
@@ -125,8 +127,8 @@ EduMon.Data = new function() {
 			course: courseObject,
 			activeStudents: {/*
 				'44aa488f082b42f5fdc0090878f8ef3f': {
-					name: 'Steyer',
-					group: 'ShitGroup',
+					name: 'Max Mustermann',
+					group: 'Muster Group',
 					seat: {x: 3, y: 2},
 					disturbance: 0,
 					history: [
@@ -196,6 +198,7 @@ EduMon.Data = new function() {
 	/**
 	 * Creates an empty packet (from "MODERATOR") with the common headers set
 	 *
+	 * @author Niko
 	 * @param {int} type Packet type number
 	 * @param {string} to Recipient
 	 * @param {Object} body Packet body

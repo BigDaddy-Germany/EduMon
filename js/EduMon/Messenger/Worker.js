@@ -1,4 +1,5 @@
 /* Message-Worker communicates with the message server */
+/* @author Phillip, Niko */
 
 importScripts('RPC.js');
 
