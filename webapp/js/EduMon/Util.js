@@ -1,3 +1,8 @@
+/**
+ * Utility Class - A mix of useful functions for reuse
+ *
+ * @author Team
+ */
 EduMon = (typeof window !== "undefined" && window.EduMon) ? window.EduMon : {};
 EduMon.Util = new function() {
 
@@ -37,6 +42,7 @@ EduMon.Util = new function() {
 
 	/**
 	 * Counts the number of a given objects own properties
+	 * @author Niko
 	 * @param {object} object with attributes to count
 	 */
 	this.countFields = function(object) {
@@ -161,6 +167,7 @@ EduMon.Util = new function() {
 	/**
 	 * Get current unix timestamp (according to browser)
 	 *
+	 * @author Niko
 	 * @returns {int} timestamp in seconds
 	 */
 	this.timestampNow = function() {
@@ -241,6 +248,7 @@ EduMon.Util = new function() {
 
 /**
  * Checks, whether a String end with a given suffix
+ * @author Niko
  * @param {string} suffix the given suffix
  * @return {boolean} True, if the String ends with the given suffix
  */

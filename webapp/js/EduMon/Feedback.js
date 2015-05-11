@@ -1,3 +1,8 @@
+/**
+ * Feedback Class - Handles interactive thumb/rating feedback
+ *
+ * @author Niko
+ */
 EduMon.Feedback = new function() {
 	var that = this;
 
