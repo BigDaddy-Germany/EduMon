@@ -52,7 +52,18 @@ EduMon = new function () {
 
 		that.messenger.start();
 
-		EduMon.Gui.showFeedMessage("info","Willkommen!","Das EduMon freut sich über Ihren Besuch :)");
+		$.ajax("https://bigdaddy-germany.github.io/EduMon/edumon.appcache",{
+			timeout: 5000,
+			complete: function(xhr, status){
+				var version = '';
+				if (xhr.status==200){
+					//extract second line from cache manifest (Jenkins-inserted build date) from cache manifest (Jenkins-inserted build date)
+					version = 'Latest version on <a href="https://github.com/BigDaddy-Germany/EduMon">GitHub</a>:<br>'+xhr.responseText.substring(xhr.responseText.indexOf("\n")+1,xhr.responseText.indexOf("\n",xhr.responseText.indexOf("\n")+1));
+				}
+				var welcome = 'Das EduMon freut sich über Ihren Besuch :)<div class="version">'+version+'</div>';
+				EduMon.Gui.showFeedMessage("info","Willkommen!",welcome);
+			}
+		});
 
 		$("#apploader").fadeOut(500);
 		if (that.debugging){

@@ -299,6 +299,12 @@ body {
   #feedpanel .panel-body {
     flex-grow: 1;
     position: relative; }
+    #feedpanel .panel-body .version {
+      margin-top: 10px;
+      font-style: italic;
+      font-size: 0.7em; }
+      #feedpanel .panel-body .version a {
+        text-decoration: underline; }
   #feedpanel .panel-footer .btnHelp {
     font-size: 30px;
     float: right; }
