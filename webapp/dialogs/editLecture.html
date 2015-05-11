@@ -73,8 +73,8 @@
 			if (!EduMon.Prefs.courses[courseId]) {
 				return;
 			}
-			EduMon.Gui.showPopup('Löschen', 'Wollen Sie diesen Kurse wirklich löschen?', ['yes','no'], function(value) {
-				if (value == 'yes') {
+			EduMon.Gui.showPopup('Kurs entfernen', 'Wollen Sie diesen Kurs wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden!', ['cancel',{text:'Löschen bestätigen',value:'confirm',class:'danger'}], function(value) {
+				if (value == 'confirm') {
 					EduMon.UserInteraction.checkAndDelete('course', courseId, $('#lectureCourse'));
 				}
 			});
@@ -119,8 +119,8 @@
 			if (!EduMon.Prefs.rooms[roomId]) {
 				return;
 			}
-			EduMon.Gui.showPopup('Löschen', 'Wollen Sie diesen Raum wirklich löschen?', ['yes','no'], function(value) {
-				if (value == 'yes') {
+			EduMon.Gui.showPopup('Raum entfernen', 'Wollen Sie diesen Raum wirklich löschen?', ['cancel',{text:'Löschen bestätigen',value:'confirm',class:'danger'}], function(value) {
+				if (value == 'confirm') {
 					EduMon.UserInteraction.checkAndDelete('room', roomId, $('#lectureRoom'));
 				}
 			});

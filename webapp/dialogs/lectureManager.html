@@ -57,8 +57,8 @@
             if (!EduMon.Prefs.lectures[startId]) {
                 return;
             }
-            EduMon.Gui.showPopup('Lösen', 'Wollen Sie die Vorlesung wirklich löschen?', ['yes','no'], function(value) {
-                if (value == 'yes') {
+            EduMon.Gui.showPopup('Vorlesungskonfiguration entfernen', 'Wollen Sie die Vorlesung wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.', ['cancel',{text:'Löschen bestätigen',value:'confirm',class:'danger'}], function(value) {
+                if (value == 'confirm') {
                     EduMon.UserInteraction.checkAndDelete('lecture', startId, $('#startId'));
                 }
             });
