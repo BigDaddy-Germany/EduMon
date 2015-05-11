@@ -9,7 +9,7 @@
 	</form>
 	<footer>
 		<button id="dialogBtnCancel" type="button" class="btn btn-default">Abbrechen</button>
-		<button id="dialogBtnSubmit" type="button" class="btn btn-success">Daten löschen</button>
+		<button id="dialogBtnSubmit" type="button" class="btn btn-danger">Daten löschen</button>
 	</footer>
 </div>
 
@@ -47,10 +47,10 @@ $(function() {
 	$("#dialogBtnSubmit").on('click', function(){
 		EduMon.Gui.showPopup(
 				'Wirklich löschen?',
-				'Sind Sie sich wirklich super sicher?',
-				['yes', 'no'],
+				'Sind Sie sich wirklich sicher? Diese Aktion kann nicht rückgängig gemacht werden.',
+				['cancel', {text:'Löschen bestätigen',value:'confirm',class:'danger'}],
 				function(returnValue) {
-					if (returnValue == 'yes') {
+					if (returnValue == 'confirm') {
 						deleteData();
 					}
 				}

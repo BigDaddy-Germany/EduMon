@@ -451,6 +451,11 @@ EduMon.Gui = new function() {
 	 * Initialize GUI (bind click handlers)
 	 */
 	this.init = function() {
+		//Links
+		$(document.body).on('click', 'a[href=#]', function(e) {
+			e.preventDefault();
+		});
+
 		//Buttons
 		$("#btnSettings").off("click").click(function() {
 			EduMon.Gui.showDialog("connectionSettings", true);
