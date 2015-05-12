@@ -158,7 +158,7 @@ EduMon.UserInteraction = new function() {
 			// add new lines to the member form by clicking on the add button
 			// set the delete listeners
 			$('.courseMemberDelete').off('click').on('click', courseDeleteMember);
-
+			$('.courseMemberLine').find('input').on('keyup', performKeyUp);
 		};
 
 		// checks, that names are unique
