@@ -7,6 +7,9 @@ import org.jnativehook.keyboard.NativeKeyListener;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author Jonas
+ */
 public class KeyListener implements NativeKeyListener {
     private boolean f1Down = false;
     private boolean f2Down = false;

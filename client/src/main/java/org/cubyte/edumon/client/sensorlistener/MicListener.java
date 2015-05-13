@@ -4,6 +4,9 @@ import javax.sound.sampled.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Jonas
+ */
 public class MicListener {
     private TargetDataLine line;
 

@@ -3,6 +3,12 @@
  - EduMon.Prefs
  - EduMon.Math
  */
+/**
+ * @author Marco
+ * @author Phillip
+ *
+ * @constructor
+ */
 EduMon.Analytics = function() {
 
 	var debugging = false;

@@ -20,6 +20,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
+/**
+ * @author Jonas
+ */
 public class LoginConfirmController implements Controller, Victim<Message> {
     private Main app;
     ScheduledFuture<?> send;

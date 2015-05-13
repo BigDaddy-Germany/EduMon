@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
+/**
+ * @author Jonas
+ */
 public class WhoAmI implements MessageBody {
     public final String name;
     public final Position seat;

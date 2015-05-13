@@ -3,6 +3,9 @@ package org.cubyte.edumon.client.messaging.messagebody;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author Jonas
+ */
 public class SensorData implements MessageBody {
     public final int keys;
     public final double mdist;

@@ -3,6 +3,9 @@ package org.cubyte.edumon.client.messaging.messagebody;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author Jonas
+ */
 public class ThumbResult implements MessageBody {
     public final int id;
     public final float average;

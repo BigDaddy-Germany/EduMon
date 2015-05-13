@@ -1,9 +1,12 @@
 EduMon = window.EduMon || {};
 /**
- * This class hols the logic and state for the wheel of fortune which can be used to select any of its segments.
+ * This class holds the logic and state for the wheel of fortune which can be used to select any of its segments.
  *
  * The implementation (especially the drawing code) is based on http://bramp.net/javascript/lunchwheel.html
  * heavily modified though
+ *
+ * @author Phillip
+ * @author Jonas (helped with color tweaking)
  *
  * @param {HTMLCanvasElement} canvas the canvas to draw into
  * @param {Array} segments the initial segments (as pairs of (name,weight))

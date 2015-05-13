@@ -1,4 +1,11 @@
 EduMon = window.EduMon || {};
+
+/**
+ * A collections of advanced mathematical functions implemented in a functional style
+ *
+ * @author Marco
+ * @author Phillip
+ */
 EduMon.Math = new function() {
 	var that = this;
 

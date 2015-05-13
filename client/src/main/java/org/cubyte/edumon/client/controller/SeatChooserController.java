@@ -22,6 +22,9 @@ import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOGIN_CONFIRM;
 import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 
+/**
+ * @author Jonas
+ */
 public class SeatChooserController implements Controller {
     private static final String TABLE_IMAGE = "/table.png";
     private static final Image tableImage;

@@ -34,6 +34,9 @@ import java.util.logging.Logger;
 
 import static org.cubyte.edumon.client.Scene.*;
 
+/**
+ * @author Jonas
+ */
 public class Main extends Application {
     private static final String ICON = "/EduMon.png";
     private static final String SVG = "/EduMon.svg";

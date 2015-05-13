@@ -8,6 +8,9 @@ import javafx.scene.control.Separator;
 import org.cubyte.edumon.client.Main;
 import org.cubyte.edumon.client.messaging.messagebody.BreakRequest;
 
+/**
+ * @author Jonas
+ */
 public class OptionsController implements Controller {
     private Main app;
     @FXML

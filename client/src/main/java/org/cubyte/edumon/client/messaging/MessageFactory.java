@@ -5,6 +5,9 @@ import org.cubyte.edumon.client.messaging.messagebody.MessageBody;
 
 import java.util.Date;
 
+/**
+ * @author Jonas
+ */
 public class MessageFactory {
     private final Main owner;
     private final String to;

@@ -11,6 +11,9 @@ import org.cubyte.edumon.client.messaging.messagebody.ThumbRequest;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Jonas
+ */
 public class ThumbfeedbackController implements Controller {
     private static final int THUMB_SPEED = 5;
     private Main app;

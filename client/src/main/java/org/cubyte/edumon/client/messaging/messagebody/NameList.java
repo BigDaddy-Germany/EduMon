@@ -6,6 +6,9 @@ import org.cubyte.edumon.client.messaging.messagebody.util.Dimensions;
 
 import java.util.List;
 
+/**
+ * @author Jonas
+ */
 public class NameList implements MessageBody {
     public final List<String> names;
     public final String room;

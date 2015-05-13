@@ -1,3 +1,10 @@
+/**
+ * The root class
+ *
+ * @author Niko (inital setup, UI, persistence)
+ * @author Marco (packet processing)
+ * @author Phillip (Wheel integration, caching, updater)
+ */
 EduMon = new function () {
 	var that = this;
 

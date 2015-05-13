@@ -13,6 +13,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @author Jonas
+ */
 public class Message implements Bullet {
     @JsonSerialize(converter = TypeToIntegerConverter.class)
     public final Type type;

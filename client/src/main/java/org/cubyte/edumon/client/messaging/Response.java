@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 
+/**
+ * @author Jonas
+ */
 public class Response {
     public final ArrayList<Message> inbox;
     public final ArrayList<String> errorMessages;

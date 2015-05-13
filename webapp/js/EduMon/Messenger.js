@@ -1,7 +1,8 @@
 /**
  * Packet handling - Messenger class connects with message worker
  *
- * @author Niko, Phillip
+ * @author Phillip
+ * @author Niko (configuration API)
  * @param {Object} procedures a map of remote procedures
  * @constructor
  */

@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * @author Jonas
+ */
 public class Revolver<T extends Bullet> {
     private final BlockingQueue<T> bullets;
     private final Map<Class, List<Victim>> bulletVictimMap;

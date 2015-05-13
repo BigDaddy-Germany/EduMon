@@ -8,6 +8,9 @@ import org.cubyte.edumon.client.messaging.messagebody.util.Position;
 
 import java.util.Date;
 
+/**
+ * @author Jonas
+ */
 public class RoomState {
     public final String sessionId;
     public final NameList nameList;

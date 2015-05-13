@@ -20,6 +20,9 @@ import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOGIN;
 import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 
+/**
+ * @author Jonas
+ */
 public class LoadingController implements Victim<Message>, Controller {
     private Main app;
     private ScheduledFuture<?> send;

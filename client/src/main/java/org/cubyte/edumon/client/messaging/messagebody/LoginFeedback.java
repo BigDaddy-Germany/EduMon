@@ -3,6 +3,9 @@ package org.cubyte.edumon.client.messaging.messagebody;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author Jonas
+ */
 public class LoginFeedback implements MessageBody {
     public final int successCode;
 

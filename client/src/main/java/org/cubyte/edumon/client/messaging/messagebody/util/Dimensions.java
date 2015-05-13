@@ -3,6 +3,9 @@ package org.cubyte.edumon.client.messaging.messagebody.util;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * @author Jonas
+ */
 public class Dimensions {
     public final int width;
     public final int height;

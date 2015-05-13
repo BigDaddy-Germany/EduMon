@@ -1,5 +1,7 @@
 /**
- * This class implements an RPC service to communicate between windows.
+ * This class implements an RPC service to communicate between two entities.
+ *
+ * @author Phillip
  *
  * @param {Function} registerReceiver the function to send a packet of data to the remote node
  * @param {Function} send the function to send a packet of data to the remote node

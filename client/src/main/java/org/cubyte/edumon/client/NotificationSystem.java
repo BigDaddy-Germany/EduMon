@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 import static org.cubyte.edumon.client.Scene.BREAK_REQUEST_CONFIRM;
 import static org.cubyte.edumon.client.Scene.THUMBFEEDBACK;
 
+/**
+ * @author Jonas
+ */
 public class NotificationSystem implements Victim<Message> {
     private final static int HIDE_TIMER = 3;
     private Stage stage;

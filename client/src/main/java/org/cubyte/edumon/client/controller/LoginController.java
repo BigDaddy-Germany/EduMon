@@ -13,6 +13,9 @@ import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOADING;
 import static org.cubyte.edumon.client.Scene.NAME_CHOOSER;
 
+/**
+ * @author Jonas
+ */
 public class LoginController implements Controller {
     private Main app;
     private String serverAddress;

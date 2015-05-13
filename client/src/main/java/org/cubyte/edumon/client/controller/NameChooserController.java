@@ -18,6 +18,9 @@ import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.cubyte.edumon.client.Scene.LOGIN;
 import static org.cubyte.edumon.client.Scene.SEAT_CHOOSER;
 
+/**
+ * @author Jonas
+ */
 public class NameChooserController implements Controller {
     private Main app;
     @FXML

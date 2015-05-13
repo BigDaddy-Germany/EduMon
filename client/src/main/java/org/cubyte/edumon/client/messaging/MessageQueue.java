@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * @author Jonas
+ */
 public class MessageQueue extends Revolver<Message> {
     private Main owner;
 

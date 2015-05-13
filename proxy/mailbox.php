@@ -39,6 +39,9 @@
 	 * If you want to set up the system or reset it, please delete the files .htedumondatabase and .htedumonpassword
 	 * from your server (located in the same folder as this script) and access mailbox.php?setup. Afterwards, follow
 	 * the given instructions.
+	 *
+	 * @author Marco (main author)
+	 * @author Phillip (CORS Headers and DB)
 	 */
 
 	error_reporting(-1);

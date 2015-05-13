@@ -6,6 +6,9 @@ import org.jnativehook.mouse.NativeMouseInputListener;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author Jonas
+ */
 public class MouseListener implements NativeMouseInputListener {
     private AtomicInteger clicks;
     private double distance;

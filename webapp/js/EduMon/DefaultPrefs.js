@@ -1,7 +1,8 @@
 EduMon.DefaultPrefs = {};
 /**
  * Returns the default prefs. Inside a function, so that they cannot be changed at any time.
- * @author Team
+ * @author Niko
+ * @author Marco
  * @return {{courses: Array, rooms: Array, lectures: Array, currentLecture: {activeStudents: Array, seatingPlan:
  *     Array}, wheel: {top: number, left: number, width: number, height: number, lastMode: null}, messaging:
  *     {outgoingPackageId: number, serverUrl: string, moderatorPassphrase: string}}}
