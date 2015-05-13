@@ -1,6 +1,9 @@
 /*
 	method createCourseFromCsv depends on EduMon.Data
  */
+/**
+ * @author Marco
+ */
 EduMon.CSV = new function() {
 	/**
 	 * Parses a given CSV String and returns it as an Array

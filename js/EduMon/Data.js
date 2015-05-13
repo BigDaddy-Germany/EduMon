@@ -1,6 +1,10 @@
 /*
  method createCurrentLecture depends on EduMon.Prefs
  */
+/**
+ * @author Marco
+ * @author Niko
+ */
 EduMon.Data = new function() {
 	/**
 	 * Creates a new student object
