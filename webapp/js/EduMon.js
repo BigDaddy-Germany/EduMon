@@ -55,7 +55,7 @@ EduMon = new function () {
 		this.enablePersistApp();
 
 		bindFortuneWheel(this.Prefs);
-		verifyAppCache();
+		that.verifyAppCache();
 
 		that.messenger.start();
 
@@ -645,7 +645,10 @@ EduMon = new function () {
 		});
 	}
 
-	function verifyAppCache() {
+	/**
+	 * Schedules update checks and recommends reloading if a new version is found
+	 */
+	this.verifyAppCache() {
 		if (!applicationCache) {
 			return;
 		}
