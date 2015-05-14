@@ -648,7 +648,7 @@ EduMon = new function () {
 	/**
 	 * Schedules update checks and recommends reloading if a new version is found
 	 */
-	this.verifyAppCache() {
+	this.verifyAppCache = function() {
 		if (!applicationCache) {
 			return;
 		}
@@ -681,7 +681,7 @@ EduMon = new function () {
 		} catch (InvalidStateError) {
 			EduMon.debug("Update check failed, appcache manifest not found.");
 		}
-	}
+	};
 
 
 	/**
