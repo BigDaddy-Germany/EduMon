@@ -98,14 +98,6 @@ EduMon.Timeline = new function() {
 	};
 
 	/**
-	 * Wrapper around reset (called by restart button)
-	 */
-	var restart = function() {
-		//TODO intended?
-		that.reset();
-	};
-
-	/**
 	 * Timeline update timer tick
 	 *
 	 * @param {boolean} [onlyUpdate=true] Only refresh the timeline display but do not alter timeline data
@@ -140,7 +132,7 @@ EduMon.Timeline = new function() {
 		});
 		$("#btnPause").off("click").on('click', pause);
 		$("#btnStop").off("click").on('click', stop);
-		$("#btnRestart").off("click").on('click', restart);
+		$("#btnRestart").off("click").on('click', that.reset);
 	};
 
 	/**

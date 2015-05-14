@@ -2,7 +2,7 @@
  * Utility Class - A mix of useful functions for reuse (contains third party code)
  *
  * @author Marco (jquery plugins, BitSet, object utils)
- * @author Phillip (keymap, window, string padding
+ * @author Phillip (keymap, window, string padding)
  */
 EduMon = (typeof window !== "undefined" && window.EduMon) ? window.EduMon : {};
 EduMon.Util = new function() {
