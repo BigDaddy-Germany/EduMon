@@ -1,7 +1,21 @@
 CACHE MANIFEST
-# Build date: Thu May 14 21:44:25 CEST 2015
+# Build date: Thu May 14 22:03:20 CEST 2015
 
 CACHE:
+archive/presentation/Shuffle.js
+archive/presentation/jquery-ui.structure.min.css
+archive/presentation/excel.png
+archive/presentation/jquery-ui.min.js
+archive/presentation/index.html
+archive/presentation/jquery-ui.min.css
+archive/presentation/style.css
+archive/presentation/background.jpg
+archive/dialogs/dummy2.html
+archive/dialogs/dummy.html
+archive/lib/excanvas/js/excanvas.min.js
+archive/js/EduMon/Analytics/Debug/Data/Constant.js
+archive/js/EduMon/Analytics/Debug/Data/Real.js
+archive/js/EduMon/Analytics/Debug.js
 css/app.css
 dialogs/editCourse.html
 dialogs/connectionSettings.html
@@ -12,8 +26,6 @@ dialogs/csvImport.html
 dialogs/editLecture.html
 dialogs/credits.html
 dialogs/lectureManager.html
-dialogs/dummy2.html
-dialogs/dummy.html
 favicon.ico
 fonts/RobotoBold700.woff
 fonts/RobotoNormal400.woff
@@ -28,9 +40,6 @@ js/EduMon/DefaultPrefs.js
 js/EduMon/Prefs.js
 js/EduMon/Math.js
 js/EduMon/Messenger.js
-js/EduMon/Analytics/Debug/Data/Constant.js
-js/EduMon/Analytics/Debug/Data/Real.js
-js/EduMon/Analytics/Debug.js
 js/EduMon/Gui.js
 js/EduMon/Analytics.js
 js/EduMon/Feedback.js
@@ -43,19 +52,10 @@ js/EduMon/Wheel.js
 js/EduMon/Util.js
 js/EduMon/Data.js
 lib/jquery/js/jquery.min.js
-lib/excanvas/js/excanvas.min.js
 lib/bootstrap/css/bootstrap.min.css
 lib/bootstrap/fonts/glyphicons-halflings-regular.woff
 lib/bootstrap/js/bootstrap.min.js
 lib/es6-promise/js/es6-promise.min.js
-presentation/Shuffle.js
-presentation/jquery-ui.structure.min.css
-presentation/excel.png
-presentation/jquery-ui.min.js
-presentation/index.html
-presentation/jquery-ui.min.css
-presentation/style.css
-presentation/background.jpg
 wheel.html
 
 NETWORK:
