@@ -7,7 +7,7 @@
 		<h3>Kurs bearbeiten</h3>
 	</header>
 		Bitte geben Sie hier die Daten des Kurses an:<br><br>
-		<label for="courseName">Name des Kurses: </label><input type="text" id="courseName"><br><br>
+		<label for="courseName">Name des Kurses:&nbsp;</label><input type="text" id="courseName"><br><br>
 		<h4>Mitglieder:</h4>
 
 		<table>
@@ -19,11 +19,9 @@
 				<td><span class="courseMemberDelete smallBtn glyphicon glyphicon-remove"></span></td>
 			</tr>
 		</table>
+		<button id="courseMemberAdd" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> <span>Reihe einfügen (Enter)</span></button>
 		<br><br>
-		<div id="courseMemberAdd" class="smallBtn"><span class="glyphicon glyphicon-plus"></span> Reihe einfügen</div>
-
-		<br><br>
-		<span id="courseCsvImport" class="smallBtn"><span class="glyphicon glyphicon-import"></span> Mitglieder aus CSV importieren</span>
+		<button id="courseCsvImport" class="btn btn-info"><i class="glyphicon glyphicon-import"></i> <span>Mitglieder aus CSV importieren</span></button>
 	<footer>
 		<button id="dialogBtnBack" type="button" class="btn btn-default">Abbrechen</button>
 		<button id="dialogBtnSubmit" type="button" class="btn btn-primary">Speichern</button>
