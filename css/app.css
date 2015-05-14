@@ -188,7 +188,7 @@ body {
 
 #optionbox {
   text-align: center;
-  min-height: 150px; }
+  min-height: 100px; }
 
 /*
 	@author Niko
@@ -443,7 +443,8 @@ body {
         margin-right: -10px;
         margin-bottom: -10px; }
       #dialogcontainer #dialogwindow #dialogcontent table td {
-        padding: 1px 3px 1px 3px; }
+        padding: 1px 3px 1px 3px;
+        vertical-align: top; }
 
 header.credits {
   width: 400px; }

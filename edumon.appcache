@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Build date: Thu May 14 22:40:06 CEST 2015
+# Build date: Thu May 14 23:20:21 CEST 2015
 
 CACHE:
 archive/presentation/Shuffle.js
@@ -26,6 +26,7 @@ dialogs/csvImport.html
 dialogs/editLecture.html
 dialogs/credits.html
 dialogs/lectureManager.html
+dialogs/settings.html
 favicon.ico
 fonts/RobotoBold700.woff
 fonts/RobotoNormal400.woff

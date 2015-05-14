@@ -1,0 +1,28 @@
+<!--
+	@author Niko
+-->
+<div id="dialogContainer">
+	<header>
+		<h2>Optionen</h2>
+	</header>
+		<button id="dialogBtnConnection" class="btn btn-primary btn-lg"><i class="glyphicon glyphicon-signal"></i> <span>Verbindungseinstellungen</span></button>
+		<br><br>
+		<button id="dialogBtnClearData" class="btn btn-danger btn-lg"><i class="glyphicon glyphicon-floppy-remove"></i> <span>Lokale Daten löschen</span></button>
+	<footer>
+		<button id="dialogBtnCancel" type="button" class="btn btn-default">Schließen</button>
+	</footer>
+</div>
+
+<script>
+$(document).ready(function(){
+		$("#dialogBtnConnection").click(function(){
+			EduMon.Gui.switchDialog("connectionSettings");
+			});
+		$("#dialogBtnClearData").click(function(){
+			EduMon.Gui.switchDialog("deleteData");
+			});
+		$("#dialogBtnCancel").click(function(){
+			EduMon.Gui.closeDialog();
+			});
+		});
+</script>

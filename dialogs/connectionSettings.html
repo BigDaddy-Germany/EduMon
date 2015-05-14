@@ -13,7 +13,11 @@
 			</tr>
 			<tr>
 				<td>Passwort: </td>
-				<td><input type="text" id="moderatorPassphrase"></td>
+				<td>
+					<input type="password" id="moderatorPassphrase">
+					<br>
+					<button id="btnShowPassword" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-lock"></i> <span>Passwort zeigen</span></button>
+				</td>
 			</tr>
 		</table>
 	</form>
@@ -64,6 +68,9 @@ $(function() {
 				}
 			}
 		});
+	});
+	$("#btnShowPassword").click(function(){
+			EduMon.Gui.showPopup("Aktuelles Passwort im Feld", $("#moderatorPassphrase").val(), ['ok'], function(){});
 	});
 	$("#dialogBtnCancel").click(function(){
 		EduMon.Gui.closeDialog();
