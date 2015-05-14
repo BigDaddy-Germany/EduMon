@@ -1,21 +1,7 @@
 CACHE MANIFEST
-# Build date: Thu May 14 23:33:30 CEST 2015
+# Build date: Fri May 15 00:40:51 CEST 2015
 
 CACHE:
-archive/presentation/Shuffle.js
-archive/presentation/jquery-ui.structure.min.css
-archive/presentation/excel.png
-archive/presentation/jquery-ui.min.js
-archive/presentation/index.html
-archive/presentation/jquery-ui.min.css
-archive/presentation/style.css
-archive/presentation/background.jpg
-archive/dialogs/dummy2.html
-archive/dialogs/dummy.html
-archive/lib/excanvas/js/excanvas.min.js
-archive/js/EduMon/Analytics/Debug/Data/Constant.js
-archive/js/EduMon/Analytics/Debug/Data/Real.js
-archive/js/EduMon/Analytics/Debug.js
 css/app.css
 dialogs/editCourse.html
 dialogs/connectionSettings.html
