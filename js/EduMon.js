@@ -1,8 +1,8 @@
 /**
  * The root class
  *
- * @author Niko (inital setup, UI, persistence)
- * @author Marco (packet processing)
+ * @author Niko (inital setup, UI, persistence, broadcast, break requests)
+ * @author Marco (login, packet processing)
  * @author Phillip (Wheel integration, caching, updater)
  */
 EduMon = new function () {
@@ -17,7 +17,7 @@ EduMon = new function () {
 		seatNotAvailable: 1 << 3
 	};
 
-	this.debugging = true; //show debug messages in javascript console TODO: deactivate this and all similar flags
+	this.debugging = false; //show debug messages in javascript console
 
 	/**
 	 * EduMon startup, to be called when DOM is ready
@@ -464,15 +464,6 @@ EduMon = new function () {
 					}
 				);
 			}
-
-			// todo remove dev area below after everybody has the new connection settings
-			// begin of dev area
-			EduMon.Prefs.messaging = EduMon.Prefs.messaging || {
-				outgoingPackageId: 1,
-				serverUrl: "http://vps2.code-infection.de/edumon/mailbox.php",
-				moderatorPassphrase: "alohomora"
-			};
-			// end of dev area
 
 			EduMon.debug("App state restored from localStorage");
 

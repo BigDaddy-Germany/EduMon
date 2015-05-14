@@ -7,7 +7,7 @@
 importScripts('RPC.js');
 
 //config
-var debugging = true;
+var debugging = false;
 var url = "localhost";
 var room = encodeURIComponent("42A");
 var moderatorPassphrase = encodeURIComponent("secretpassword");
@@ -53,7 +53,7 @@ var commands = {
 	 * Enable queue processing (is automatically paused until first configuration)
 	 */
 	start: function() {
-		if (!configured) {
+		if (!configured && debugging) {
 			console.warn("Worker started, but will only send once configured");
 		}
 		if (timer > -1) {

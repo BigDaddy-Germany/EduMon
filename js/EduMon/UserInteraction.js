@@ -8,6 +8,8 @@ Promise = Promise || {};
 /**
  * This class performs the interaction with the user via pop ups etc.
  * E.g. to import users via a CSV file or to add new rooms/courses etc.
+ *
+ * @author Marco
  */
 EduMon.UserInteraction = new function() {
 	var gui = EduMon.Gui;

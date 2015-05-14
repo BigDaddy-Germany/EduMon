@@ -171,7 +171,7 @@ EduMon.Gui = new function() {
 	/**
 	 * Returns the dialog's ID which is opened currently
 	 *
-	 * @return openedDialog TODO type!
+	 * @return {Promise} openedDialog
 	 */
 	this.getOpenedDialog = function() {
 		return openedDialog;
