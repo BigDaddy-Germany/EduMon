@@ -6,8 +6,8 @@
 EduMon.Timeline = new function() {
 	var that = this;
 
-	var tick_interval = 2; //in seconds
-	var tick_value = 60; //in seconds, set != tick_interval for non-realtime testing
+	var tick_interval = 3; //in seconds
+	var tick_value = 3; //in seconds, set != tick_interval for non-realtime testing
 	var timer = undefined;
 
 	/**
