@@ -362,7 +362,9 @@ EduMon = new function () {
 					+EduMon.Prefs.currentLecture.room.roomName
 					+"<br><i>"
 					+EduMon.Prefs.currentLecture.course.name
-				+"</i>")
+					+" ("
+					+EduMon.Prefs.currentLecture.course.students.length
+				+" Mitglieder)</i>")
 			.fadeIn(500);
 		var pultUp = EduMon.Prefs.currentLecture.gui.pultup;
 		if (pultUp !== "") {
