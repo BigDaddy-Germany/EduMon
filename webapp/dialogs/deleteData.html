@@ -5,10 +5,10 @@
 	<header>
 		<h2>Daten löschen</h2>
 	</header>
-	<p>Hier haben Sie die Möglichkeit, die von EduMon gespeicherten Daten zu löschen. Dieser Vorgang kann nicht rückgängig gemacht werden. Bitte wählen Sie aus, was Sie löschen möchten:</p>
+	<p>Hier haben Sie die Möglichkeit, die von EduMon lokal im Browser gespeicherten Daten zu löschen. Dies kann die Funktionalität der Anwendung wiederherstellen, falls diese aufgrund eines korrupten Zwischenspeichers nicht mehr ordnungsgemäß funktioniert. Dieser Vorgang kann nicht rückgängig gemacht werden!</p>
 	<form id="deletionForm">
-		<input type="radio" name="deletionMode" id="deletionModeLight" value="light" checked="checked"><label for="deletionModeLight"> Alles außer Kursen, Räumen und Vorlesungen</label><br><br>
-		<input type="radio" name="deletionMode" id="deletionModeWipe" value="wipe"><label for="deletionModeWipe"> Kompletter Reset (alle Daten werden gelöscht!)</label><br><br>
+		<input type="radio" name="deletionMode" id="deletionModeLight" value="light" checked="checked"><label for="deletionModeLight">Temporäre Daten löschen, aber Kurse, Räume und Vorlesungen behalten</label><br><br>
+		<input type="radio" name="deletionMode" id="deletionModeWipe" value="wipe"><label for="deletionModeWipe">KOMPLETTER RESET (alle Daten werden gelöscht!)</label><br><br>
 	</form>
 	<footer>
 		<button id="dialogBtnCancel" type="button" class="btn btn-default">Abbrechen</button>

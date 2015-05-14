@@ -463,7 +463,7 @@ EduMon.Gui = new function() {
 
 		//Buttons
 		$("#btnSettings").off("click").click(function() {
-			EduMon.Gui.showDialog("connectionSettings", true);
+			EduMon.Gui.showDialog("settings", true);
 		});
 		$("#btnThumbs").off("click").click(function() {
 			if (EduMon.lectureIsActive()) {
