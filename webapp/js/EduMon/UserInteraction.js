@@ -407,7 +407,7 @@ EduMon.UserInteraction = new function() {
 							var status = validator(values);
 
 							if (status != true) {
-								gui.showPopup("Error", status, ['ok']);
+								gui.showPopup("Error", status, ['ok'], function(){});
 							} else {
 								switchOrClose(lastOpenedDialog)
 									.then(function() {
@@ -474,7 +474,7 @@ EduMon.UserInteraction = new function() {
 					break;
 			}
 
-			EduMon.Gui.showPopup('Error', errorMsg, ['ok']);
+			EduMon.Gui.showPopup('Error', errorMsg, ['ok'], function(){});
 		}
 	}
 };
