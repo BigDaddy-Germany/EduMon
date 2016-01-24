@@ -319,52 +319,51 @@ EduMon.Math = new function() {
 	 * @returns {*[]} an array with the 3 RGB components
 	 */
 	this.hsvToRgb = function(hue, saturation, value) {
+		hue /= 60;
+		var hi = Math.floor(hue);
+		var f = (hue - hi);
 
-		hue = Math.floor(hue / 60);
-
-		var c = value * saturation;
-		var x = c * (1 - Math.abs((hue % 2) - 1));
-		var m = value - c;
+		var p = value * (1 - saturation);
+		var q = value * (1 - saturation+f);
+		var t = value * (1 - saturation*(1 - f));
 
 		var r = 0;
 		var g = 0;
 		var b = 0;
 
-		switch (Math.floor(hue)) {
+		switch (hi) {
 			case 0:
-				r = c;
-				g = x;
-				b = 0;
+				r = value;
+				g = t;
+				b = p;
 				break;
 			case 1:
-				r = x;
-				g = c;
-				b = 0;
+				r = q;
+				g = value;
+				b = p;
 				break;
 			case 2:
-				r = 0;
-				g = c;
-				b = x;
+				r = p;
+				g = value;
+				b = t;
 				break;
 			case 3:
-				r = 0;
-				g = x;
-				b = c;
+				r = p;
+				g = q;
+				b = value;
 				break;
 			case 4:
-				r = x;
-				g = 0;
-				b = c;
-				break;
-			case 5:
-				r = c;
-				g = 0;
-				b = x;
+				r = t;
+				g = p;
+				b = value;
 				break;
 			default:
-				throw "HSV to RGB conversion failed!";
-		}
+				r = value;
+				g = p;
+				b = q;
+				break;
+			}
 
-		return [Math.round((r + m) * 255), Math.round((g + m) * 255), Math.round((b + m) * 255)];
+		return [Math.round(r*255), Math.round(g*255), Math.round(b*255)];
 	};
 };
