@@ -42,6 +42,7 @@ EduMon.Wheel = function(canvas, segments) {
 	var weights = 0;
 	var unit = 1;
 	var activeSegment = null;
+	var engageNice = false;
 
 	this.onFinish = null;
 
@@ -114,6 +115,14 @@ EduMon.Wheel = function(canvas, segments) {
 		}
 	};
 
+	/** 
+	* This function helps to make the wheel look nicer.
+	*/
+	this.switchKMode = function() {
+		console.log("Japp");
+		engageNice = !(engageNice);
+	};
+
 	/**
 	 * This function calculates a rotation unit based on the segment weights
 	 */
@@ -179,12 +188,10 @@ EduMon.Wheel = function(canvas, segments) {
 	 */
 	function generateColorsHSV() {
 		var colors = [];
-		for (var hue = 0; hue < 360; hue += 60) {
-			for (var value = .5; value < .95; value += .08) {
-				var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 0.8, value)));
+		for (var hue = 0; hue < 360; hue += 5) {
+				var c = stringifyRGB.apply(stringifyRGB, (EduMon.Math.hsvToRgb(hue, 0.80, 0.80)));
 				if (colors.indexOf(c) < 0) {
 					colors.push(c);
-				}
 			}
 		}
 		return colors;
@@ -389,7 +396,7 @@ EduMon.Wheel = function(canvas, segments) {
 		//context.clip();
 		context.closePath();
 
-		var background = color[0];
+		var background = color[0]
 		var foreground = color[1];
 
 		context.fillStyle = background;
@@ -406,7 +413,7 @@ EduMon.Wheel = function(canvas, segments) {
 		context.restore();
 
 		if (modulo(startAngle, TAU) >= modulo(endAngle, TAU)) {
-			drawActive(text);
+			drawActive(text, background);
 			activeSegment = segment;
 		}
 
@@ -419,12 +426,15 @@ EduMon.Wheel = function(canvas, segments) {
 	 * This function draws the active segment's name beside the needle
 	 * @param {string} text
 	 */
-	function drawActive(text) {
+	function drawActive(text, color) {
 		// Now draw the winning name
 		context.textAlign = "left";
 		context.textBaseline = "middle";
-		context.fillStyle = '#000000';
-		context.font = "2em Arial";
+		context.fillStyle = color;
+		context.strokeStyle = "black";
+		context.font = "bold 3em Arial";
+		if(engageNice) { text = "Eckhard Kruse"; }
 		context.fillText(text, centerX + size + 25, centerY);
+		context.strokeText(text, centerX + size + 25, centerY);
 	}
 };
