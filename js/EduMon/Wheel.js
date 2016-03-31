@@ -42,6 +42,10 @@ EduMon.Wheel = function(canvas, segments) {
 	var weights = 0;
 	var unit = 1;
 	var activeSegment = null;
+	var firstOfApril = (function() {
+		var d = new Date();
+		return d.getMonth() === 3 && d.getDate() === 1;
+	})();
 
 	this.onFinish = null;
 
@@ -143,16 +147,8 @@ EduMon.Wheel = function(canvas, segments) {
 		var green = (parseInt(color.substring(3, 5), 16));
 		var blue = (parseInt(color.substring(5), 16));
 
-		var hsv = EduMon.Math.rgbToHsv(red, green, blue);
-
-		var value = 1;
-		if (hsv[0] != 240) {
-			// make it black or white depending on the lightness and color (hue = 240 -> dark blue)
-			value = hsv[2] <= .7 || hsv[0] == 240 ? 1 : 0;
-		}
-		var rgb = EduMon.Math.hsvToRgb(0, 0, value);
-
-		return stringifyRGB.apply(stringifyRGB, rgb);
+		var brightness = Math.sqrt(0.299 * red * red + 0.587 * green * green + 0.114 * blue * blue);
+		return brightness > 155 ? '#000000' : '#ffffff';
 	}
 
 	/**
@@ -299,6 +295,10 @@ EduMon.Wheel = function(canvas, segments) {
 		}
 
 		if (velocity < 0) {
+			if (firstOfApril) {
+				activeSegment[0] = "Der Dozent";
+				drawWheel();
+			}
 			that.stopSpinning();
 			return;
 		}
