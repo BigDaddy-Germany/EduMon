@@ -303,7 +303,7 @@ EduMon.Wheel = function(canvas, segments) {
 			return;
 		}
 
-		currentAngle += velocity;
+		currentAngle -= velocity;
 		currentAngle = modulo(currentAngle, 360);
 	}
 
