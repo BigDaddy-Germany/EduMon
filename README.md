@@ -5,7 +5,7 @@
 **Projektstatus** | *Abgeschlossen :white_check_mark:*
 **Kurzbeschreibung** | EduMon sorgt für mehr Aufmerksamkeit, Faires Feedback und Entertainment für alle! *Studentenmonitoring, von dem nicht nur Dozenten sondern auch Studenten profitieren*
 **Anwendung für Studenten** | **[>>> Zum Download <<<](https://github.com/BigDaddy-Germany/EduMon/releases/tag/v1.0.0.0)**
-**WebApp für Dozent** | **[>>> Zur WebApp <<<](http://bigdaddy-germany.github.io/EduMon/)**
+**WebApp für Dozent** | **[>>> Zur WebApp <<<](https://bigdaddy-germany.github.io/EduMon/)**
 
 ## Über das Programm
 ###Ausschnitt aus dem Pflichtenheft:
